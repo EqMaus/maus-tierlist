@@ -386,3 +386,53 @@ body.theme-info-open{overflow:hidden}
   .theme-info-meta,.theme-lore-grid{grid-template-columns:1fr}
   .theme-info-meta{margin:18px 0}.theme-lore-section{padding:15px}
 }
+
+
+/* ===== v4.3.2 navegación entre reviews + entrada cinematográfica + información musical ampliada ===== */
+.review-journey-nav{
+  margin-top:20px;border:1px solid rgba(255,255,255,.07);border-radius:21px;padding:18px;
+  background:linear-gradient(155deg,rgba(8,21,31,.76),rgba(5,14,21,.67));
+  box-shadow:0 18px 50px rgba(0,0,0,.14);backdrop-filter:blur(14px) saturate(118%)
+}
+.review-journey-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:12px;padding:0 2px}
+.review-journey-head>span{color:#9fc7b9;font-size:.68rem;font-weight:950;letter-spacing:.16em}
+.review-journey-head>small{color:#6f8492;font-size:.72rem}
+.review-journey-links{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:10px;align-items:stretch}
+.journey-link{position:relative;min-width:0;border:1px solid rgba(255,255,255,.07);border-radius:15px;padding:13px 14px;background:rgba(255,255,255,.025);text-align:left;cursor:pointer;transition:transform .16s ease,border-color .16s ease,background .16s ease}
+.journey-link:hover{transform:translateY(-2px);border-color:rgba(113,218,181,.24);background:rgba(255,255,255,.047)}
+.journey-link>span{display:block;color:#77bca5;font-size:.61rem;font-weight:950;letter-spacing:.13em}
+.journey-link>strong{display:block;margin-top:5px;color:#eef5f8;font-size:.94rem;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.journey-link>small{display:block;margin-top:4px;color:#778b98;font-size:.68rem}
+.journey-link-next{text-align:right}
+.journey-current{display:grid;place-items:center;align-content:center;min-width:118px;padding:8px 13px;border-left:1px solid rgba(255,255,255,.05);border-right:1px solid rgba(255,255,255,.05);text-align:center}
+.journey-current small{color:#647987;font-size:.56rem;font-weight:950;letter-spacing:.15em}.journey-current strong{max-width:150px;margin-top:4px;color:#aebcc5;font-size:.72rem;line-height:1.25}
+.journey-edge{display:flex;align-items:center;color:#607582;font-size:.75rem;line-height:1.4;padding:0 10px}.journey-edge-end{justify-content:flex-end;text-align:right}
+
+.game-page .detail-top{animation:gameUiIn .5s cubic-bezier(.2,.75,.25,1) both}
+.game-page .detail-hero{animation:gameUiIn .72s .08s cubic-bezier(.2,.75,.25,1) both}
+.game-page .detail-grid{animation:gameUiIn .78s .18s cubic-bezier(.2,.75,.25,1) both}
+.game-page .review-journey-nav{animation:gameUiIn .78s .28s cubic-bezier(.2,.75,.25,1) both}
+@keyframes gameUiIn{from{opacity:0;transform:translateY(13px)}to{opacity:1;transform:none}}
+.scene-art .scene-photo{--scene-photo-opacity:.78;opacity:var(--scene-photo-opacity);animation:gameSceneIn 1.05s cubic-bezier(.18,.7,.22,1) both;will-change:opacity,transform,filter}
+@keyframes gameSceneIn{0%{opacity:.12;transform:scale(1.022);filter:saturate(.9) contrast(.98) brightness(.48)}100%{opacity:var(--scene-photo-opacity);transform:scale(1);filter:saturate(1.08) contrast(1.04) brightness(.68)}}
+.music-widget:not([hidden]){animation:musicWidgetIn .52s .42s cubic-bezier(.2,.75,.25,1) both}
+@keyframes musicWidgetIn{from{opacity:0;transform:translateY(9px) scale(.985)}to{opacity:1;transform:none}}
+
+.theme-thesis{position:relative;overflow:hidden;margin:3px 0 14px;border:1px solid rgba(113,218,181,.15);border-radius:18px;padding:17px 18px;background:linear-gradient(135deg,rgba(91,191,157,.085),rgba(255,255,255,.016))}
+.theme-thesis:after{content:'';position:absolute;right:-36px;top:-54px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(105,217,178,.12),transparent 68%);pointer-events:none}
+.theme-thesis small{display:block;color:#77bda6;font-size:.61rem;font-weight:950;letter-spacing:.14em}
+.theme-thesis strong{position:relative;z-index:1;display:block;max-width:820px;margin-top:7px;color:#f1f6f8;font-family:Georgia,serif;font-size:1.08rem;line-height:1.58;font-weight:600}
+.theme-lore-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.theme-lore-section{min-height:100%}
+.theme-lore-section:nth-child(6),.theme-lore-section:nth-child(7),.theme-lore-section:nth-child(8),.theme-lore-section:nth-child(9){background:linear-gradient(180deg,rgba(111,193,166,.032),rgba(255,255,255,.011))}
+
+@media(max-width:700px){
+  .review-journey-nav{padding:14px}.review-journey-head{display:block}.review-journey-head>small{display:block;margin-top:4px}
+  .review-journey-links{grid-template-columns:1fr 1fr}.journey-current{display:none}.journey-edge{min-height:66px;padding:10px}.journey-link>strong{white-space:normal}
+  .scene-art .scene-photo{--scene-photo-opacity:.6}
+  .theme-thesis{padding:15px}.theme-thesis strong{font-size:1rem}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .game-page .detail-top,.game-page .detail-hero,.game-page .detail-grid,.game-page .review-journey-nav,.scene-art .scene-photo,.music-widget:not([hidden]){animation:none!important}
+}

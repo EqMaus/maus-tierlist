@@ -32,6 +32,7 @@
   const games = Array.isArray(window.MAUS_GAMES) ? window.MAUS_GAMES : [];
   const scale = Array.isArray(window.MAUS_SCALE) ? window.MAUS_SCALE : [];
   const builtInMusic = window.MAUS_GAME_MUSIC && typeof window.MAUS_GAME_MUSIC === 'object' ? window.MAUS_GAME_MUSIC : {};
+  const musicDeepDive = window.MAUS_GAME_MUSIC_DEEP && typeof window.MAUS_GAME_MUSIC_DEEP === 'object' ? window.MAUS_GAME_MUSIC_DEEP : {};
 
   const coverFiles = {
     'gow1': 'gow1.png',
@@ -1405,7 +1406,7 @@
     const titleDisplay = editMode ? `<input class="title-editor" data-edit-game="${esc(game.id)}" data-edit-field="title" value="${esc(game.title)}" aria-label="Título del juego">` : esc(game.title);
     const cover = coverSrc(game);
 
-    app.innerHTML = `<div class="page">
+    app.innerHTML = `<div class="page game-page">
       <div class="detail-top"><button class="back-button" type="button" data-go="tierlist">← Volver a la tier list</button><span class="eyebrow">${rankingMode ? 'RANKING · LECTURA EN ORDEN' : 'REVIEW PERSONAL'}</span></div>
       <section class="detail-hero" style="--tier:${esc(tier.color)}">
         ${cover ? `<img class="detail-cover" src="${esc(cover)}" alt="Portada de ${esc(game.title)}">` : ''}
@@ -1420,9 +1421,23 @@
           ${editMode ? themeEditor(game, themeTitle) : ''}
         </aside>
       </div>
+      ${journeyIndex >= 0 ? reviewJourneyNav(journeyPrev, game, journeyNext, rankingMode) : ''}
     </div>`;
 
     void startGameTheme(game.id);
+  }
+
+  function reviewJourneyNav(previous, current, next, rankingMode) {
+    const prevAttr = rankingMode ? 'data-ranking-open' : 'data-open-game';
+    const nextAttr = rankingMode ? 'data-ranking-open' : 'data-open-game';
+    return `<nav class="review-journey-nav" aria-label="Navegación entre reviews">
+      <div class="review-journey-head"><span>SEGUIR RECORRIENDO</span><small>Ordenado según la tier list actual</small></div>
+      <div class="review-journey-links">
+        ${previous ? `<button class="journey-link journey-link-prev" type="button" ${prevAttr}="${esc(previous.id)}"><span>← ANTERIOR</span><strong>${esc(previous.title)}</strong><small>${esc(previous.score)}/10</small></button>` : `<span class="journey-edge">Estás en el primer juego del ranking.</span>`}
+        <div class="journey-current"><small>AHORA</small><strong>${esc(current.title)}</strong></div>
+        ${next ? `<button class="journey-link journey-link-next" type="button" ${nextAttr}="${esc(next.id)}"><span>SIGUIENTE →</span><strong>${esc(next.title)}</strong><small>${esc(next.score)}/10</small></button>` : `<span class="journey-edge journey-edge-end">Has llegado al final del ranking.</span>`}
+      </div>
+    </nav>`;
   }
 
   function rankingPanel(journey, index, previous, next) {
@@ -1503,7 +1518,9 @@
 
   function themeInfoFor(gameId) {
     const built = builtInMusic[gameId];
-    return built && typeof built === 'object' ? built : null;
+    if (!built || typeof built !== 'object') return null;
+    const deep = musicDeepDive[gameId];
+    return deep && typeof deep === 'object' ? { ...built, ...deep } : built;
   }
 
   function infoSection(title, text) {
@@ -1524,15 +1541,20 @@
         ${info.composer ? `<span><small>CRÉDITOS</small>${esc(info.composer)}</span>` : ''}
         ${info.context ? `<span><small>CONTEXTO</small>${esc(info.context)}</span>` : ''}
       </div>
+      ${info.thesis ? `<div class="theme-thesis"><small>LECTURA DEL TEMA</small><strong>${esc(info.thesis)}</strong></div>` : ''}
       <div class="theme-lore-grid">
         ${infoSection('Dónde suena', info.where)}
         ${infoSection('Cómo suena', info.sound)}
         ${infoSection('Qué representa', info.meaning)}
         ${infoSection('Qué hace sentir', info.feeling)}
         ${infoSection('Función e intención musical', info.intent)}
+        ${infoSection('Cómo dialoga con el gameplay', info.gameplay)}
+        ${infoSection('Detalle musical clave', info.craft)}
+        ${infoSection('El contraste que crea', info.contrast)}
+        ${infoSection('Por qué se queda en la memoria', info.memory)}
         ${infoSection('Por qué funciona', info.detail)}
       </div>
-      <p class="theme-info-note">Cuando no existe una declaración pública que fije la intención exacta del compositor, la sección “Función e intención musical” describe la lectura narrativa que se desprende del uso del tema dentro del juego.</p>`;
+      <p class="theme-info-note">Las secciones de uso y créditos describen datos del juego y su banda sonora. Cuando no existe una declaración pública que fije la intención exacta del compositor, las secciones interpretativas explican la lectura narrativa y musical que se desprende de cómo se utiliza el tema.</p>`;
     themeInfoModal.hidden = false;
     body.classList.add('theme-info-open');
   }
