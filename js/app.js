@@ -10,12 +10,21 @@
   const playerTitle = byId('playerTitle');
   const playerGame = byId('playerGame');
   const playerVolume = byId('playerVolume');
+  const playerSeek = byId('playerSeek');
+  const playerCurrentTime = byId('playerCurrentTime');
+  const playerDuration = byId('playerDuration');
   const themeInfoButton = byId('themeInfoButton');
   const themeInfoModal = byId('themeInfoModal');
   const themeInfoClose = byId('themeInfoClose');
   const themeInfoContent = byId('themeInfoContent');
   const backgroundViewButton = byId('backgroundViewButton');
   const restoreUiButton = byId('restoreUiButton');
+  const presentationModeButton = byId('presentationModeButton');
+  const presentationMode = byId('presentationMode');
+  const presentationTiers = byId('presentationTiers');
+  const presentationStats = byId('presentationStats');
+  const presentationCloseButton = byId('presentationCloseButton');
+  const presentationFullscreenButton = byId('presentationFullscreenButton');
   const editModeButton = byId('editModeButton');
   const adminGate = byId('adminGate');
   const adminGateForm = byId('adminGateForm');
@@ -131,6 +140,7 @@
   let volume = clamp(Number(safeGet(localStore, MUSIC_VOLUME_KEY, '.52')), 0, 1, .52);
   let toastTimer = 0;
   let themeRequestId = 0;
+  let currentGameSceneId = null;
   let currentGameMusicId = null;
   let currentThemeSignature = '';
   let activeObjectUrl = null;
@@ -1234,15 +1244,37 @@
     return svgs[key] || '';
   }
 
+  let backgroundUiTimer = 0;
+
   function setBackgroundOnly(enabled) {
-    const active = Boolean(enabled && body.classList.contains('scene-active'));
-    body.classList.toggle('background-only', active);
-    if (restoreUiButton) restoreUiButton.hidden = !active;
-    if (active && adminGate && !adminGate.hidden) closeAdminGate();
+    const canShow = body.classList.contains('scene-active') && Boolean(scenePhotoFiles[currentGameSceneId || '']);
+    const active = Boolean(enabled && canShow);
+    window.clearTimeout(backgroundUiTimer);
+
+    if (active) {
+      if (restoreUiButton) restoreUiButton.hidden = false;
+      body.classList.remove('background-restoring');
+      requestAnimationFrame(() => requestAnimationFrame(() => body.classList.add('background-only')));
+      if (adminGate && !adminGate.hidden) closeAdminGate();
+      return;
+    }
+
+    if (!body.classList.contains('background-only')) {
+      if (restoreUiButton) restoreUiButton.hidden = true;
+      return;
+    }
+
+    body.classList.add('background-restoring');
+    body.classList.remove('background-only');
+    backgroundUiTimer = window.setTimeout(() => {
+      body.classList.remove('background-restoring');
+      if (restoreUiButton) restoreUiButton.hidden = true;
+    }, 720);
   }
 
   function clearScene() {
     setBackgroundOnly(false);
+    currentGameSceneId = null;
     body.classList.remove('scene-active');
     body.dataset.scene = 'default';
     if (backgroundViewButton) backgroundViewButton.hidden = true;
@@ -1251,20 +1283,99 @@
 
   function applyScene(gameId) {
     const key = gameScenes[gameId];
+    currentGameSceneId = scenePhotoFiles[gameId] ? gameId : null;
     if (!key) {
       clearScene();
       return;
     }
     body.classList.add('scene-active');
     body.dataset.scene = key;
-    if (backgroundViewButton) backgroundViewButton.hidden = false;
-    if (!sceneArt) return;
     const photoSrc = scenePhotoFiles[gameId];
+    // "Ver fondo" solo tiene sentido cuando existe una imagen de fondo dedicada e inspeccionable.
+    if (backgroundViewButton) backgroundViewButton.hidden = !photoSrc;
+    if (!sceneArt) return;
     if (photoSrc) {
       sceneArt.innerHTML = `<img class="scene-photo" src="${photoSrc}" alt="">`;
       return;
     }
     sceneArt.innerHTML = sceneSvg(key);
+  }
+
+
+  function presentationRows() {
+    const ranked = rankedJourney();
+    const rankById = new Map(ranked.map((game, index) => [game.id, index + 1]));
+    return scale
+      .map((row) => ({
+        ...row,
+        games: ranked
+          .filter((game) => Number(game.score) === Number(row.score))
+          .sort((a, b) => ((a.tierOrder ?? 999) - (b.tierOrder ?? 999)) || a.title.localeCompare(b.title, 'es'))
+          .map((game) => ({ ...game, globalRank: rankById.get(game.id) || 0 }))
+      }))
+      .filter((row) => row.games.length);
+  }
+
+  function renderPresentationMode() {
+    if (!presentationMode || !presentationTiers || !presentationStats) return;
+    const ranked = rankedJourney();
+    const rows = presentationRows();
+    const topScore = ranked.length ? Math.max(...ranked.map((game) => Number(game.score))) : 0;
+    presentationStats.innerHTML = `
+      <div><strong>${ranked.length}</strong><span>JUEGOS</span></div>
+      <div><strong>${rows.length}</strong><span>TIERS OCUPADOS</span></div>
+      <div><strong>${esc(topScore)}/10</strong><span>NOTA MÁS ALTA</span></div>`;
+    presentationTiers.innerHTML = rows.map((row) => `
+      <section class="presentation-tier" style="--tier:${esc(row.color)}">
+        <div class="presentation-tier-label">
+          <strong class="tier-font-${esc(row.tone)}">${esc(row.label)}</strong>
+          <span>${esc(row.score)}/10</span>
+        </div>
+        <div class="presentation-tier-games">
+          ${row.games.map((game) => {
+            const cover = coverSrc(game);
+            return `<button class="presentation-game" type="button" data-presentation-game="${esc(game.id)}" title="Abrir review de ${esc(game.title)}">
+              <span class="presentation-rank">#${game.globalRank}</span>
+              ${cover ? `<img src="${esc(cover)}" alt="Portada de ${esc(game.title)}">` : ''}
+              <span class="presentation-game-copy"><strong>${esc(game.title)}</strong><small>${esc(game.score)}/10 · ${esc(row.label)}</small></span>
+            </button>`;
+          }).join('')}
+        </div>
+      </section>`).join('');
+  }
+
+  async function requestPresentationFullscreen() {
+    if (!presentationMode || document.fullscreenElement) return;
+    try {
+      await presentationMode.requestFullscreen?.({ navigationUI: 'hide' });
+    } catch (_) {
+      try { await presentationMode.requestFullscreen?.(); } catch (_) {}
+    }
+  }
+
+  async function openPresentationMode() {
+    if (!presentationMode) return;
+    setBackgroundOnly(false);
+    closeThemeInfo();
+    stopGameTheme(true);
+    renderPresentationMode();
+    presentationMode.hidden = false;
+    body.classList.add('presentation-active');
+    requestAnimationFrame(() => presentationMode.classList.add('is-open'));
+    await requestPresentationFullscreen();
+  }
+
+  async function closePresentationMode(options = {}) {
+    if (!presentationMode || presentationMode.hidden) return;
+    presentationMode.classList.remove('is-open');
+    body.classList.remove('presentation-active');
+    if (document.fullscreenElement === presentationMode) {
+      try { await document.exitFullscreen(); } catch (_) {}
+    }
+    window.setTimeout(() => {
+      if (!body.classList.contains('presentation-active')) presentationMode.hidden = true;
+    }, 420);
+    if (options.gameId) go(`game/${options.gameId}`);
   }
 
   function parseRoute() {
@@ -1308,6 +1419,9 @@
       } else if (route.section === 'games') {
         updateNav('games');
         renderGames();
+      } else if (route.section === 'features') {
+        updateNav('features');
+        renderFeatures();
       } else {
         if (route.section !== 'tierlist' || route.id) history.replaceState(null, '', '#tierlist');
         updateNav('tierlist');
@@ -1373,6 +1487,25 @@
     </div>`;
   }
 
+  function renderFeatures() {
+    stopGameTheme(true);
+    app.innerHTML = `<div class="page features-page">
+      <section class="features-hero">
+        <div><span class="eyebrow">GUÍA DE LA WEB</span><h1 class="page-title">Qué hay aquí y dónde tocar.</h1><p class="page-lead">Una guía rápida para saber qué puedes explorar sin tener que descubrir cada función por accidente.</p></div>
+        <div class="features-hero-mark" aria-hidden="true"><span>?</span></div>
+      </section>
+      <div class="features-grid">
+        <article class="feature-card"><span class="feature-index">01</span><h2>Tier list</h2><p>Es el ranking principal. Cada juego es clicable y abre su ficha completa. Dentro de un mismo tier, el orden de izquierda a derecha también importa.</p><button type="button" data-go="tierlist">Ir a Tier list →</button></article>
+        <article class="feature-card"><span class="feature-index">02</span><h2>Reviews</h2><p>Reúne todas las fichas en una biblioteca más directa. Puedes buscar por nombre y abrir cualquier tarjeta para entrar en la review.</p><button type="button" data-go="games">Ir a Reviews →</button></article>
+        <article class="feature-card"><span class="feature-index">03</span><h2>Dentro de una ficha</h2><p>Encontrarás mi texto completo, la nota actual, el tier y navegación para seguir recorriendo juegos sin volver atrás constantemente.</p><small>DÓNDE · Abriendo cualquier juego</small></article>
+        <article class="feature-card"><span class="feature-index">04</span><h2>Música</h2><p>Cada ficha puede tener su propio tema. El reproductor flotante permite cambiar volumen, avanzar o retroceder en la canción y abrir una ficha dedicada con contexto musical.</p><small>DÓNDE · Reproductor flotante</small></article>
+        <article class="feature-card"><span class="feature-index">05</span><h2>Fondos</h2><p>Cuando una ficha tiene un fondo dedicado, aparece <strong>Ver fondo</strong> en la cabecera. Ese botón oculta la interfaz para dejar la imagen completamente a la vista.</p><small>DÓNDE · Esquina superior derecha de las fichas compatibles</small></article>
+        <article class="feature-card"><span class="feature-index">06</span><h2>Recorrido del ranking</h2><p>Desde la Tier list puedes iniciar una lectura de arriba a abajo. La web conserva el orden global y te deja avanzar o retroceder entre posiciones.</p><small>DÓNDE · “Leer ranking de arriba a abajo”</small></article>
+      </div>
+      <section class="features-foot"><span>CONSEJO</span><p>Si algo parece interactivo, normalmente lo es: tarjetas, navegación entre juegos, reproductor y controles del fondo reaccionan al pasar el ratón o al pulsarlos.</p></section>
+    </div>`;
+  }
+
   function gameCard(game) {
     const tier = tierInfo(game.score);
     const cover = coverSrc(game);
@@ -1401,7 +1534,7 @@
 
     const reviewRead = reviewHtml(game.review, game.id);
     const reviewEditor = reviewEditorHtml(game.review, game.id);
-    const reviewDisplay = editMode ? reviewEditor : (game.spoilers ? `<details class="spoiler-review"><summary>⚠ Esta review contiene spoilers · abrir review</summary>${reviewRead}</details>` : reviewRead);
+    const reviewDisplay = editMode ? reviewEditor : `<details class="spoiler-review"><summary><span class="spoiler-open-label">⚠ Esta review contiene spoilers · abrir review</span><span class="spoiler-close-label">Cerrar review</span></summary>${reviewRead}</details>`;
     const scoreEditor = editMode ? `<select class="score-editor" data-edit-game="${esc(game.id)}" data-edit-field="score">${scale.map((row) => `<option value="${esc(row.score)}" ${Number(row.score) === Number(game.score) ? 'selected' : ''}>${esc(row.score)} · ${esc(row.label)}</option>`).join('')}</select>` : `<strong>${esc(game.score)}/10</strong>`;
     const titleDisplay = editMode ? `<input class="title-editor" data-edit-game="${esc(game.id)}" data-edit-field="title" value="${esc(game.title)}" aria-label="Título del juego">` : esc(game.title);
     const cover = coverSrc(game);
@@ -1413,7 +1546,7 @@
         <div class="detail-hero-copy"><span class="eyebrow">${esc(tier.label)}</span><h1>${titleDisplay}</h1><div class="detail-scoreline"><span class="score-badge">${scoreEditor}</span><span class="tier-badge tier-font-${esc(tier.tone)}">${esc(tier.label)}</span>${themeTitle ? `<span class="music-badge">♫ ${esc(themeTitle)}</span>` : ''}</div></div>
       </section>
       <div class="detail-grid">
-        <article class="review-card"><div class="review-card-head"><div><span class="eyebrow">MI REVIEW</span><h2>Review</h2></div><span class="original-badge">TEXTO ORIGINAL · MEJOR MAQUETADO</span></div>${reviewDisplay}</article>
+        <article class="review-card"><div class="review-card-head"><div><span class="eyebrow">MI REVIEW</span><h2>Review</h2></div></div>${reviewDisplay}</article>
         <aside class="side-stack">
           <section class="side-card" style="--tier:${esc(tier.color)}"><h3>Nota actual</h3><div class="big-score">${esc(game.score)}<small>/10</small></div><strong class="side-tier tier-font-${esc(tier.tone)}">${esc(tier.label)}</strong></section>
           ${tierIndex >= 0 && (tierPrev || tierNext) ? `<section class="side-card"><h3>Dentro de este tier</h3><div class="rank-nav">${tierPrev ? `<button type="button" data-open-game="${esc(tierPrev.id)}"><small>← Por encima</small>${esc(tierPrev.title)}</button>` : ''}${tierNext ? `<button type="button" data-open-game="${esc(tierNext.id)}"><small>Por debajo →</small>${esc(tierNext.title)}</button>` : ''}</div></section>` : ''}
@@ -1648,9 +1781,28 @@
     currentGameMusicId = gameId;
     currentThemeSignature = theme.signature;
     audio.src = source;
-    audio.currentTime = 0;
+    if (playerSeek) playerSeek.value = '0';
+    if (playerCurrentTime) playerCurrentTime.textContent = '0:00';
+    if (playerDuration) playerDuration.textContent = '0:00';
     audio.muted = false;
+
+    const requestedStart = Math.max(0, Number(theme.startAt) || 0);
+    const seekToRequestedStart = () => {
+      const duration = audio.duration;
+      const safeStart = Number.isFinite(duration) && duration > 0 ? Math.min(requestedStart, Math.max(0, duration - .05)) : requestedStart;
+      try { audio.currentTime = safeStart; } catch (_) {}
+      if (playerCurrentTime) playerCurrentTime.textContent = formatTime(safeStart);
+    };
+
+    const metadataReady = new Promise((resolve) => {
+      if (audio.readyState >= 1) { seekToRequestedStart(); resolve(); return; }
+      const finish = () => { seekToRequestedStart(); resolve(); };
+      audio.addEventListener('loadedmetadata', finish, { once: true });
+      audio.addEventListener('error', resolve, { once: true });
+    });
     audio.load();
+    await metadataReady;
+    if (requestId !== themeRequestId) return;
 
     player.hidden = false;
     body.classList.add('player-visible');
@@ -1678,6 +1830,9 @@
       currentThemeSignature = '';
       playerTitle.textContent = '—';
       playerGame.textContent = '—';
+      if (playerSeek) playerSeek.value = '0';
+      if (playerCurrentTime) playerCurrentTime.textContent = '0:00';
+      if (playerDuration) playerDuration.textContent = '0:00';
       if (activeObjectUrl) {
         URL.revokeObjectURL(activeObjectUrl);
         activeObjectUrl = null;
@@ -1803,6 +1958,31 @@
     app.addEventListener('focusout', handleAppBlur);
     app.addEventListener('keydown', handleAppKeydown);
 
+    if (playerSeek) {
+      playerSeek.value = '0';
+      playerSeek.addEventListener('input', () => {
+        const duration = audio.duration;
+        if (!Number.isFinite(duration) || duration <= 0) return;
+        const next = (Number(playerSeek.value) / 1000) * duration;
+        if (Number.isFinite(next)) audio.currentTime = Math.min(duration, Math.max(0, next));
+      });
+    }
+
+    const syncMusicTimeline = () => {
+      const duration = audio.duration;
+      const current = Number.isFinite(audio.currentTime) ? audio.currentTime : 0;
+      if (playerCurrentTime) playerCurrentTime.textContent = formatTime(current);
+      if (playerDuration) playerDuration.textContent = Number.isFinite(duration) && duration > 0 ? formatTime(duration) : '0:00';
+      if (playerSeek) {
+        const ratio = Number.isFinite(duration) && duration > 0 ? current / duration : 0;
+        playerSeek.value = String(Math.round(Math.min(1, Math.max(0, ratio)) * 1000));
+      }
+    };
+    audio.addEventListener('loadedmetadata', syncMusicTimeline);
+    audio.addEventListener('durationchange', syncMusicTimeline);
+    audio.addEventListener('timeupdate', syncMusicTimeline);
+    audio.addEventListener('emptied', syncMusicTimeline);
+
     if (playerVolume) {
       playerVolume.value = String(Math.round(volume * 100));
       playerVolume.addEventListener('input', () => {
@@ -1837,8 +2017,17 @@
 
     backgroundViewButton?.addEventListener('click', () => setBackgroundOnly(true));
     restoreUiButton?.addEventListener('click', () => setBackgroundOnly(false));
+
+    presentationModeButton?.addEventListener('click', () => { void openPresentationMode(); });
+    presentationCloseButton?.addEventListener('click', () => { void closePresentationMode(); });
+    presentationFullscreenButton?.addEventListener('click', () => { void requestPresentationFullscreen(); });
+    presentationMode?.addEventListener('click', (event) => {
+      const gameButton = event.target.closest('[data-presentation-game]');
+      if (gameButton) void closePresentationMode({ gameId: gameButton.dataset.presentationGame });
+    });
     document.addEventListener('keydown', (event) => {
       if (event.key !== 'Escape') return;
+      if (body.classList.contains('presentation-active')) { void closePresentationMode(); return; }
       if (themeInfoModal && !themeInfoModal.hidden) { closeThemeInfo(); return; }
       if (body.classList.contains('background-only')) setBackgroundOnly(false);
     });

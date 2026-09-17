@@ -115,7 +115,7 @@
       detail: 'La asociación con el Mercader le da además una cualidad casi doméstica: con el tiempo, escuchar Serenity puede sentirse como encontrarte a un personaje conocido en mitad de un lugar completamente hostil.'
     },
     're9': {
-      title: 'Respite', src: 'assets/audio/re9-save-room.mp3',
+      title: 'Respite', src: 'assets/audio/re9-save-room.mp3', startAt: 2,
       composer: 'Masahiro Ohki',
       context: 'Tema de las habitaciones seguras de Resident Evil Requiem.',
       where: 'Se utiliza como tema de save room en Resident Evil Requiem. Como en los Resident Evil clásicos, aparece en momentos donde el juego permite reorganizarse y respirar entre zonas de tensión y peligro.',
@@ -137,7 +137,7 @@
       detail: 'Su efecto está muy unido al diseño de Resident Evil: cuanto más pesado resulta el viaje hasta un baúl o una máquina de escribir, más valor adquiere el momento en que esta música empieza a sonar.'
     },
     'sotc': {
-      title: 'The Opened Way', src: 'assets/audio/sotc-the-opened-way.mp3',
+      title: 'The Opened Way', src: 'assets/audio/sotc-the-opened-way.mp3', startAt: 5,
       composer: 'Kow Otani',
       context: 'Tema de batalla contra los colosos.',
       where: 'Forma parte de la música de combate de Shadow of the Colossus y aparece en enfrentamientos donde la relación con el coloso deja de ser simple observación para convertirse en avance, escalada y conquista.',
@@ -159,7 +159,7 @@
       detail: 'Es una pieza que representa muy bien el primer God of War: la épica no depende siempre de gritar y golpear; también puede venir de sentir que estás penetrando en un lugar que no fue construido para seres humanos.'
     },
     'twilight-princess': {
-      title: 'Twilight', src: 'assets/audio/twilight-princess-twilight.mp3',
+      title: 'Twilight', src: 'assets/audio/twilight-princess-twilight.mp3', startAt: 76,
       composer: 'Banda sonora de Toru Minegishi y Asuka Ohta, con Kōji Kondō como supervisor',
       context: 'Lenguaje musical asociado al Crepúsculo en Twilight Princess.',
       where: 'Está ligado a los espacios dominados por el Crepúsculo y a la identidad sonora de ese otro estado de Hyrule. Es el mundo en el que Link adopta su forma de lobo y Midna pasa a ser la guía fundamental.',

@@ -22,3 +22,11 @@ Incluye los 15 temas MP3 definitivos y el nuevo fondo de God of War III.
 - Se mantienen los 15 MP3, los fondos reales y el nuevo fondo de God of War III.
 - Build pública.
 
+
+## v4.5.2
+- “Ver fondo” solo se ofrece cuando la ficha tiene una imagen de fondo dedicada.
+- Nuevo slider temporal en el reproductor para avanzar y retroceder dentro de la canción, con tiempo actual y duración.
+- Fade-in de las fichas más lento y escalonado para dar más presencia a fondo, cabecera, review y reproductor.
+- Nueva sección “Features” en la navegación principal con una guía rápida de las partes interactivas de la web.
+- Las tarjetas de Reviews crecen ligeramente al pasar el ratón para reforzar que son clicables.
+- Recursos CSS/JS versionados como 4.4.0 para evitar caché antigua tras publicar.

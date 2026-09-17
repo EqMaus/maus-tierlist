@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#071018">
   <meta name="description" content="Tier list personal e interactiva de videojuegos de Maus.">
-  <title>Tier List de Maus — v4.3.3</title>
-  <link rel="stylesheet" href="css/styles.css?v=4.3.3">
+  <title>Tier List de Maus — v4.5.2</title>
+  <link rel="stylesheet" href="css/styles.css?v=4.5.2">
 </head>
 <body data-scene="default">
   <canvas id="stormCanvas" class="storm-canvas" aria-hidden="true"></canvas>
@@ -27,6 +27,8 @@
       <nav class="main-nav" aria-label="Navegación principal">
         <a href="#tierlist" data-nav="tierlist">Tier list</a>
         <a href="#games" data-nav="games">Reviews</a>
+        <a href="#features" data-nav="features">Features</a>
+        <button id="presentationModeButton" class="nav-presentation-button" type="button">Modo presentación</button>
       </nav>
       <button id="backgroundViewButton" class="background-view-button" type="button" aria-label="Ocultar interfaz y ver el fondo" title="Ver fondo" hidden>◫ <span>Ver fondo</span></button>
     </div>
@@ -36,9 +38,35 @@
 
   <button id="restoreUiButton" class="restore-ui-button" type="button" hidden>Devolver interfaz</button>
 
+  <section id="presentationMode" class="presentation-mode" hidden aria-label="Tier list en modo presentación">
+    <div class="presentation-stage">
+      <header class="presentation-header">
+        <div class="presentation-title-block">
+          <span class="presentation-kicker">TIER LIST · EDICIÓN DE MAUS</span>
+          <h1>Mi ranking de videojuegos</h1>
+          <p>Una vista limpia para enseñar el ranking completo de un vistazo.</p>
+        </div>
+        <div class="presentation-actions">
+          <button id="presentationFullscreenButton" class="presentation-ghost-button" type="button">⛶ Pantalla completa</button>
+          <button id="presentationCloseButton" class="presentation-close-button" type="button">Salir</button>
+        </div>
+      </header>
+      <div id="presentationStats" class="presentation-stats" aria-label="Resumen del ranking"></div>
+      <div id="presentationTiers" class="presentation-tiers"></div>
+      <footer class="presentation-footer">
+        <span>Dentro de cada tier, el orden va de izquierda a derecha.</span>
+        <span>Pulsa una portada para abrir su review.</span>
+      </footer>
+    </div>
+  </section>
+
   <section id="player" class="music-widget" hidden aria-label="Tema musical del juego">
     <strong id="playerTitle" class="music-widget-title">—</strong>
     <small id="playerGame" class="music-widget-game">—</small>
+    <div class="music-widget-progress">
+      <input id="playerSeek" class="range music-seek-range" type="range" min="0" max="1000" step="1" value="0" aria-label="Posición de la canción">
+      <div class="music-widget-times"><span id="playerCurrentTime">0:00</span><span id="playerDuration">0:00</span></div>
+    </div>
     <label class="music-widget-volume">
       <span>Volumen</span>
       <input id="playerVolume" class="range volume-range" type="range" min="0" max="100" value="52" aria-label="Volumen">
@@ -56,9 +84,9 @@
 
   <div id="saveToast" class="save-toast" hidden>Guardado</div>
 
-  <script src="js/site-data.js?v=4.3.3"></script>
-  <script src="js/theme-music.js?v=4.3.3"></script>
-  <script src="js/app.js?v=4.3.3"></script>
-  <script src="js/storm.js?v=4.3.3"></script>
+  <script src="js/site-data.js?v=4.5.2"></script>
+  <script src="js/theme-music.js?v=4.5.2"></script>
+  <script src="js/app.js?v=4.5.2"></script>
+  <script src="js/storm.js?v=4.5.2"></script>
 </body>
 </html>
