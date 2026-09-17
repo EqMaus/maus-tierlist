@@ -55,3 +55,11 @@ Incluye los 15 temas MP3 definitivos y el nuevo fondo de God of War III.
 - La imagen de previsualización es la captura del Modo presentación elegida por Maus (`social-preview-v4.6.2.png`).
 - Añadidos metadatos Twitter Card como compatibilidad adicional.
 - Build y recursos CSS/JS actualizados a `v4.6.2`.
+
+
+## v4.6.3
+
+- Corregida la miniatura de WhatsApp: la captura social se exporta como JPEG optimizado de 1200×675.
+- Peso reducido por debajo de 300 KB para evitar que WhatsApp descarte la imagen del enlace.
+- Añadidos `og:image:url` y `image_src` como compatibilidad extra para crawlers de previsualización.
+- Build y recursos CSS/JS actualizados a `v4.6.3`.
