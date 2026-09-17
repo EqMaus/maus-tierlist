@@ -25,6 +25,9 @@
   const presentationStats = byId('presentationStats');
   const presentationCloseButton = byId('presentationCloseButton');
   const presentationFullscreenButton = byId('presentationFullscreenButton');
+  const appearanceButton = byId('appearanceButton');
+  const appearancePopover = byId('appearancePopover');
+  const appearanceCloseButton = byId('appearanceCloseButton');
   const editModeButton = byId('editModeButton');
   const adminGate = byId('adminGate');
   const adminGateForm = byId('adminGateForm');
@@ -137,7 +140,9 @@
   let editMode = false;
   const MUSIC_VOLUME_KEY = 'mausTierVolumeV2';
   const MUSIC_WIDGET_POS_KEY = 'mausTierMusicWidgetPositionV1';
+  const UI_THEME_KEY = 'mausTierUiThemeV1';
   let volume = clamp(Number(safeGet(localStore, MUSIC_VOLUME_KEY, '.52')), 0, 1, .52);
+  let uiTheme = String(safeGet(localStore, UI_THEME_KEY, 'default') || 'default');
   let toastTimer = 0;
   let themeRequestId = 0;
   let currentGameSceneId = null;
@@ -165,6 +170,47 @@
   function formatTime(seconds) {
     if (!Number.isFinite(seconds) || seconds < 0) return '0:00';
     return `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`;
+  }
+
+  const UI_THEMES = {
+    default: { label: 'Original', color: '#071018' },
+    'black-red': { label: 'Negro & Rojo', color: '#08090c' },
+    'blue-yellow': { label: 'Azul & Amarillo', color: '#07142c' }
+  };
+
+  function normalizeUiTheme(value) {
+    return Object.prototype.hasOwnProperty.call(UI_THEMES, value) ? value : 'default';
+  }
+
+  function syncAppearanceUi() {
+    if (appearanceButton) {
+      appearanceButton.dataset.theme = uiTheme;
+      appearanceButton.title = `Apariencia actual: ${UI_THEMES[uiTheme].label}`;
+    }
+    appearancePopover?.querySelectorAll('[data-ui-theme-choice]').forEach((option) => {
+      const selected = option.dataset.uiThemeChoice === uiTheme;
+      option.setAttribute('aria-pressed', selected ? 'true' : 'false');
+      option.classList.toggle('is-selected', selected);
+    });
+  }
+
+  function applyUiTheme(value, persist = true) {
+    uiTheme = normalizeUiTheme(value);
+    body.dataset.uiTheme = uiTheme;
+    document.documentElement.dataset.uiTheme = uiTheme;
+    const themeColor = document.querySelector('meta[name="theme-color"]');
+    if (themeColor) themeColor.setAttribute('content', UI_THEMES[uiTheme].color);
+    if (persist) safeSet(localStore, UI_THEME_KEY, uiTheme);
+    syncAppearanceUi();
+  }
+
+  function setAppearanceOpen(open) {
+    if (!appearancePopover || !appearanceButton) return;
+    const active = Boolean(open);
+    appearancePopover.hidden = !active;
+    appearanceButton.setAttribute('aria-expanded', active ? 'true' : 'false');
+    body.classList.toggle('appearance-open', active);
+    if (active) syncAppearanceUi();
   }
 
   function tierInfo(score) {
@@ -1247,6 +1293,7 @@
   let backgroundUiTimer = 0;
 
   function setBackgroundOnly(enabled) {
+    if (enabled) setAppearanceOpen(false);
     const canShow = body.classList.contains('scene-active') && Boolean(scenePhotoFiles[currentGameSceneId || '']);
     const active = Boolean(enabled && canShow);
     window.clearTimeout(backgroundUiTimer);
@@ -1355,6 +1402,7 @@
 
   async function openPresentationMode() {
     if (!presentationMode) return;
+    setAppearanceOpen(false);
     setBackgroundOnly(false);
     closeThemeInfo();
     stopGameTheme(true);
@@ -1407,6 +1455,7 @@
 
   function renderRoute() {
     try {
+      setAppearanceOpen(false);
       const route = parseRoute();
       clearScene();
 
@@ -1501,8 +1550,10 @@
         <article class="feature-card"><span class="feature-index">04</span><h2>Música</h2><p>Cada ficha puede tener su propio tema. El reproductor flotante permite cambiar volumen, avanzar o retroceder en la canción y abrir una ficha dedicada con contexto musical.</p><small>DÓNDE · Reproductor flotante</small></article>
         <article class="feature-card"><span class="feature-index">05</span><h2>Fondos</h2><p>Cuando una ficha tiene un fondo dedicado, aparece <strong>Ver fondo</strong> en la cabecera. Ese botón oculta la interfaz para dejar la imagen completamente a la vista.</p><small>DÓNDE · Esquina superior derecha de las fichas compatibles</small></article>
         <article class="feature-card"><span class="feature-index">06</span><h2>Recorrido del ranking</h2><p>Desde la Tier list puedes iniciar una lectura de arriba a abajo. La web conserva el orden global y te deja avanzar o retroceder entre posiciones.</p><small>DÓNDE · “Leer ranking de arriba a abajo”</small></article>
+        <article class="feature-card"><span class="feature-index">07</span><h2>Apariencia</h2><p>La interfaz tiene tres paletas: <strong>Original</strong>, <strong>Negro &amp; Rojo</strong> y <strong>Azul &amp; Amarillo</strong>. La elección se recuerda en este navegador sin alterar los fondos ni el color propio de los tiers.</p><small>DÓNDE · Botón “Apariencia” de la cabecera</small></article>
+        <article class="feature-card"><span class="feature-index">08</span><h2>Modo presentación</h2><p>Abre una versión a pantalla completa del ranking, pensada para enseñarlo de forma limpia: tiers, posiciones, portadas y notas sin el resto de la navegación.</p><small>DÓNDE · Botón “Modo presentación” de la cabecera</small></article>
       </div>
-      <section class="features-foot"><span>CONSEJO</span><p>Si algo parece interactivo, normalmente lo es: tarjetas, navegación entre juegos, reproductor y controles del fondo reaccionan al pasar el ratón o al pulsarlos.</p></section>
+      <section class="features-foot"><span>CONSEJO</span><p>Si algo parece interactivo, normalmente lo es: tarjetas, navegación entre juegos, reproductor, fondos y selector de apariencia reaccionan al pasar el ratón o al pulsarlos.</p></section>
     </div>`;
   }
 
@@ -2018,6 +2069,23 @@
     backgroundViewButton?.addEventListener('click', () => setBackgroundOnly(true));
     restoreUiButton?.addEventListener('click', () => setBackgroundOnly(false));
 
+    appearanceButton?.addEventListener('click', (event) => {
+      event.stopPropagation();
+      setAppearanceOpen(appearancePopover?.hidden !== false);
+    });
+    appearanceCloseButton?.addEventListener('click', () => setAppearanceOpen(false));
+    appearancePopover?.addEventListener('click', (event) => {
+      const option = event.target.closest('[data-ui-theme-choice]');
+      if (!option) return;
+      applyUiTheme(option.dataset.uiThemeChoice);
+      setAppearanceOpen(false);
+    });
+    document.addEventListener('pointerdown', (event) => {
+      if (!appearancePopover || appearancePopover.hidden) return;
+      if (appearancePopover.contains(event.target) || appearanceButton?.contains(event.target)) return;
+      setAppearanceOpen(false);
+    });
+
     presentationModeButton?.addEventListener('click', () => { void openPresentationMode(); });
     presentationCloseButton?.addEventListener('click', () => { void closePresentationMode(); });
     presentationFullscreenButton?.addEventListener('click', () => { void requestPresentationFullscreen(); });
@@ -2027,9 +2095,13 @@
     });
     document.addEventListener('keydown', (event) => {
       if (event.key !== 'Escape') return;
+      if (appearancePopover && !appearancePopover.hidden) { setAppearanceOpen(false); return; }
       if (body.classList.contains('presentation-active')) { void closePresentationMode(); return; }
       if (themeInfoModal && !themeInfoModal.hidden) { closeThemeInfo(); return; }
       if (body.classList.contains('background-only')) setBackgroundOnly(false);
+    });
+    window.addEventListener('storage', (event) => {
+      if (event.key === UI_THEME_KEY) applyUiTheme(event.newValue || 'default', false);
     });
 
     editModeButton?.addEventListener('click', () => editMode ? exitEditMode() : openAdminGate());
@@ -2084,6 +2156,7 @@
   };
 
   validateInitialData();
+  applyUiTheme(uiTheme, false);
   bindStaticEvents();
   updateEditUi();
   if (!location.hash) history.replaceState(null, '', '#tierlist');

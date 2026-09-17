@@ -30,3 +30,13 @@ Incluye los 15 temas MP3 definitivos y el nuevo fondo de God of War III.
 - Nueva sección “Features” en la navegación principal con una guía rápida de las partes interactivas de la web.
 - Las tarjetas de Reviews crecen ligeramente al pasar el ratón para reforzar que son clicables.
 - Recursos CSS/JS versionados como 4.4.0 para evitar caché antigua tras publicar.
+
+
+## v4.6.0
+- El contador del slider musical se presenta como una sola lectura: `1:37 / 5:00`.
+- Nuevo selector “Apariencia” con tres paletas persistentes por navegador: Original, Negro & Rojo y Azul & Amarillo.
+- Las paletas cambian la interfaz, pero conservan los fondos propios de cada juego y el color individual de los tiers.
+- La guía Features documenta también Apariencia y Modo presentación.
+- Corregido el bloque CSS heredado de v4.4 que contenía saltos de línea escapados (`\n`) y podía impedir que se aplicasen hover, fade-in, Features y estilos del timeline.
+- Caché forzada a v4.6.0 para CSS y JavaScript.
+- Se mantienen los avisos de spoilers universales con “Cerrar review”, Modo presentación, transición elegante de “Ver fondo” y los inicios musicales: RE Requiem 0:02, Shadow of the Colossus 0:05 y Twilight Princess 1:16.
