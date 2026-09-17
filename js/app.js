@@ -218,8 +218,21 @@
   }
 
   function coverSrc(game) {
+    if (game && typeof game.cover === 'string' && game.cover.trim()) return game.cover.trim();
     const file = game && coverFiles[game.id];
     return file ? `assets/covers/${file}` : '';
+  }
+
+  function backgroundSrcFor(gameId) {
+    const game = gameById.get(gameId);
+    if (game && typeof game.background === 'string' && game.background.trim()) return game.background.trim();
+    return scenePhotoFiles[gameId] || '';
+  }
+
+  function musicConfigFor(gameId) {
+    const built = builtInMusic[gameId] && typeof builtInMusic[gameId] === 'object' ? builtInMusic[gameId] : {};
+    const custom = gameById.get(gameId)?.music;
+    return custom && typeof custom === 'object' ? { ...built, ...custom } : built;
   }
 
   function visibleTierGames() {
@@ -1150,7 +1163,7 @@
   }
 
   function themeLabelFor(gameId) {
-    return themeMeta[gameId]?.title || builtInMusic[gameId]?.title || '';
+    return themeMeta[gameId]?.title || musicConfigFor(gameId)?.title || '';
   }
 
   function sceneSvg(key) {
@@ -1294,7 +1307,7 @@
 
   function setBackgroundOnly(enabled) {
     if (enabled) setAppearanceOpen(false);
-    const canShow = body.classList.contains('scene-active') && Boolean(scenePhotoFiles[currentGameSceneId || '']);
+    const canShow = body.classList.contains('scene-active') && Boolean(backgroundSrcFor(currentGameSceneId || ''));
     const active = Boolean(enabled && canShow);
     window.clearTimeout(backgroundUiTimer);
 
@@ -1329,20 +1342,20 @@
   }
 
   function applyScene(gameId) {
-    const key = gameScenes[gameId];
-    currentGameSceneId = scenePhotoFiles[gameId] ? gameId : null;
+    const photoSrc = backgroundSrcFor(gameId);
+    const key = gameScenes[gameId] || (photoSrc ? 'custom' : '');
+    currentGameSceneId = photoSrc ? gameId : null;
     if (!key) {
       clearScene();
       return;
     }
     body.classList.add('scene-active');
     body.dataset.scene = key;
-    const photoSrc = scenePhotoFiles[gameId];
     // "Ver fondo" solo tiene sentido cuando existe una imagen de fondo dedicada e inspeccionable.
     if (backgroundViewButton) backgroundViewButton.hidden = !photoSrc;
     if (!sceneArt) return;
     if (photoSrc) {
-      sceneArt.innerHTML = `<img class="scene-photo" src="${photoSrc}" alt="">`;
+      sceneArt.innerHTML = `<img class="scene-photo" src="${esc(photoSrc)}" alt="">`;
       return;
     }
     sceneArt.innerHTML = sceneSvg(key);
@@ -1651,7 +1664,7 @@
         return { title: stored.title || themeMeta[gameId]?.title || 'Tema del juego', blob: stored.blob, signature: `custom:${gameId}:${stored.updatedAt || 0}` };
       }
     } catch (_) {}
-    const built = builtInMusic[gameId];
+    const built = musicConfigFor(gameId);
     if (built?.src) return { ...built, title: built.title || 'Tema del juego', src: built.src, signature: `built:${gameId}:${built.src}` };
     return null;
   }
@@ -1701,10 +1714,11 @@
   }
 
   function themeInfoFor(gameId) {
-    const built = builtInMusic[gameId];
-    if (!built || typeof built !== 'object') return null;
-    const deep = musicDeepDive[gameId];
-    return deep && typeof deep === 'object' ? { ...built, ...deep } : built;
+    const built = builtInMusic[gameId] && typeof builtInMusic[gameId] === 'object' ? builtInMusic[gameId] : {};
+    const deep = musicDeepDive[gameId] && typeof musicDeepDive[gameId] === 'object' ? musicDeepDive[gameId] : {};
+    const custom = gameById.get(gameId)?.music;
+    const info = custom && typeof custom === 'object' ? { ...built, ...deep, ...custom } : { ...built, ...deep };
+    return Object.keys(info).length ? info : null;
   }
 
   function infoSection(title, text) {

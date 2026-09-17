@@ -6,13 +6,70 @@
   const BRANCH = 'main';
   const API = `https://api.github.com/repos/${OWNER}/${REPO}`;
   const TOKEN_KEY = 'mausTierGithubAdminToken';
+  const REMEMBER_KEY = 'mausTierGithubAdminRemember';
   const API_VERSION = '2022-11-28';
+  const MAX_IMAGE_BYTES = 15 * 1024 * 1024;
+  const MAX_AUDIO_BYTES = 50 * 1024 * 1024;
+
+  const LEGACY_COVERS = {
+    'gow1': 'assets/covers/gow1.png',
+    'gow2': 'assets/covers/gow2.webp',
+    'gow3': 'assets/covers/gow3.jpg',
+    're3-og': 'assets/covers/re3-og.webp',
+    'majoras-mask': 'assets/covers/majoras-mask.webp',
+    'sotc': 'assets/covers/sotc.jpg',
+    're9': 'assets/covers/re9.jpg',
+    're2-og': 'assets/covers/re2-og.jpg',
+    're4-og': 'assets/covers/re4-og.jpg',
+    'medievil': 'assets/covers/medievil.webp',
+    're3-remake': 'assets/covers/re3-remake.webp',
+    're1-remaster': 'assets/covers/re1-remaster.webp',
+    'pokemon-diamond': 'assets/covers/pokemon-diamond.webp',
+    'pokemon-black': 'assets/covers/pokemon-black.webp',
+    'twilight-princess': 'assets/covers/twilight-princess.jpg'
+  };
+
+  const LEGACY_BACKGROUNDS = {
+    'gow1': 'assets/backgrounds/gow1-real-bg.webp',
+    'gow2': 'assets/backgrounds/gow2-real-bg.webp',
+    'gow3': 'assets/backgrounds/gow3-real-bg.webp',
+    'sotc': 'assets/backgrounds/sotc-real-bg.webp',
+    're9': 'assets/backgrounds/re9-real-bg.webp',
+    're1-remaster': 'assets/backgrounds/re1-remaster-real-bg.webp',
+    'medievil': 'assets/backgrounds/medievil-real-bg.webp',
+    'pokemon-black': 'assets/backgrounds/pokemon-black-real-bg.webp',
+    'pokemon-diamond': 'assets/backgrounds/pokemon-diamond-real-bg.webp',
+    're4-og': 'assets/backgrounds/re4-og-real-bg.webp',
+    're3-remake': 'assets/backgrounds/re3-remake-real-bg.webp',
+    're3-og': 'assets/backgrounds/re3-og-real-bg.webp',
+    're2-og': 'assets/backgrounds/re2-og-real-bg.webp',
+    'twilight-princess': 'assets/backgrounds/twilight-princess-real-bg.webp',
+    'majoras-mask': 'assets/backgrounds/majoras-mask-real-bg.webp'
+  };
+
+  const LEGACY_MUSIC = {
+    'gow2': { title: 'Battle of Perseus', src: 'assets/audio/gow2-battle-of-perseus.mp3' },
+    'pokemon-diamond': { title: 'Lake', src: 'assets/audio/pokemon-diamond-lake.mp3' },
+    'majoras-mask': { title: 'Final Hours', src: 'assets/audio/majoras-mask-final-hours.mp3' },
+    'medievil': { title: 'Crypt & Graveyard', src: 'assets/audio/medievil-crypt-graveyard.mp3' },
+    'gow3': { title: 'Melody of Pandora', src: 'assets/audio/gow3-melody-of-pandora.mp3' },
+    'pokemon-black': { title: 'Route 10', src: 'assets/audio/pokemon-black-route-10.mp3' },
+    're2-og': { title: 'Secure Place', src: 'assets/audio/re2-save-room.mp3' },
+    're3-og': { title: 'Free From Fear', src: 'assets/audio/re3-og-free-from-fear.mp3' },
+    're3-remake': { title: 'Save Room Theme', src: 'assets/audio/re3-remake-save-room.mp3' },
+    're4-og': { title: 'Serenity', src: 'assets/audio/re4-serenity.mp3' },
+    're9': { title: 'Respite', src: 'assets/audio/re9-save-room.mp3', startAt: 2 },
+    're1-remaster': { title: 'Safe Heaven', src: 'assets/audio/re1-remaster-safe-heaven.mp3' },
+    'sotc': { title: 'The Opened Way', src: 'assets/audio/sotc-the-opened-way.mp3', startAt: 5 },
+    'twilight-princess': { title: 'Twilight', src: 'assets/audio/twilight-princess-twilight.mp3', startAt: 76 }
+  };
 
   const $ = (id) => document.getElementById(id);
   const loginPanel = $('loginPanel');
   const editorPanel = $('editorPanel');
   const tokenInput = $('tokenInput');
   const connectButton = $('connectButton');
+  const rememberSession = $('rememberSession');
   const logoutButton = $('logoutButton');
   const loginError = $('loginError');
   const connectionBadge = $('connectionBadge');
@@ -20,10 +77,12 @@
   const gameCount = $('gameCount');
   const gameSearch = $('gameSearch');
   const gameList = $('gameList');
+  const addGameButton = $('addGameButton');
   const gameForm = $('gameForm');
   const editorTitle = $('editorTitle');
   const editorSubtitle = $('editorSubtitle');
   const gameIdBadge = $('gameIdBadge');
+  const newGameBadge = $('newGameBadge');
   const fieldTitle = $('fieldTitle');
   const fieldYear = $('fieldYear');
   const fieldPlatform = $('fieldPlatform');
@@ -47,6 +106,42 @@
   const busyTitle = $('busyTitle');
   const busyText = $('busyText');
 
+  const coverPreview = $('coverPreview');
+  const coverPlaceholder = $('coverPlaceholder');
+  const coverStatus = $('coverStatus');
+  const coverFile = $('coverFile');
+  const clearCoverButton = $('clearCoverButton');
+  const backgroundPreview = $('backgroundPreview');
+  const backgroundPlaceholder = $('backgroundPlaceholder');
+  const backgroundStatus = $('backgroundStatus');
+  const backgroundFile = $('backgroundFile');
+  const clearBackgroundButton = $('clearBackgroundButton');
+  const musicFile = $('musicFile');
+  const musicFileName = $('musicFileName');
+  const musicFileStatus = $('musicFileStatus');
+  const musicPreview = $('musicPreview');
+  const clearMusicButton = $('clearMusicButton');
+
+  const musicFields = {
+    title: $('fieldMusicTitle'),
+    startAt: $('fieldMusicStart'),
+    composer: $('fieldMusicComposer'),
+    context: $('fieldMusicContext'),
+    where: $('fieldMusicWhere'),
+    sound: $('fieldMusicSound'),
+    meaning: $('fieldMusicMeaning'),
+    feeling: $('fieldMusicFeeling'),
+    intent: $('fieldMusicIntent'),
+    detail: $('fieldMusicDetail')
+  };
+
+  const newGameModal = $('newGameModal');
+  const newGameTitle = $('newGameTitle');
+  const newGameId = $('newGameId');
+  const newGameError = $('newGameError');
+  const cancelNewGameButton = $('cancelNewGameButton');
+  const createNewGameButton = $('createNewGameButton');
+
   let token = '';
   let games = [];
   let scale = [];
@@ -54,6 +149,10 @@
   let currentVersion = '';
   let baseSnapshot = '';
   let baseShas = { siteData: '', index: '', version: '' };
+  let pendingFiles = {};
+  let previewUrls = {};
+  let newGameIds = new Set();
+  let idEditedManually = false;
 
   function esc(value) {
     return String(value ?? '').replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
@@ -61,6 +160,13 @@
 
   function normalize(value) {
     return String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  }
+
+  function slugify(value) {
+    return normalize(value)
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 70);
   }
 
   function clone(value) {
@@ -71,8 +177,12 @@
     return JSON.stringify({ games, scale });
   }
 
+  function hasPendingFiles() {
+    return Object.values(pendingFiles).some((entry) => entry && (entry.cover || entry.background || entry.music));
+  }
+
   function isDirty() {
-    return Boolean(baseSnapshot) && currentSnapshot() !== baseSnapshot;
+    return (Boolean(baseSnapshot) && currentSnapshot() !== baseSnapshot) || hasPendingFiles();
   }
 
   function updateDirtyUi() {
@@ -140,9 +250,15 @@
     const bytes = new TextEncoder().encode(value);
     let binary = '';
     const size = 0x8000;
-    for (let i = 0; i < bytes.length; i += size) {
-      binary += String.fromCharCode(...bytes.subarray(i, i + size));
-    }
+    for (let i = 0; i < bytes.length; i += size) binary += String.fromCharCode(...bytes.subarray(i, i + size));
+    return btoa(binary);
+  }
+
+  async function fileToBase64(file) {
+    const bytes = new Uint8Array(await file.arrayBuffer());
+    let binary = '';
+    const size = 0x8000;
+    for (let i = 0; i < bytes.length; i += size) binary += String.fromCharCode(...bytes.subarray(i, i + size));
     return btoa(binary);
   }
 
@@ -157,12 +273,30 @@
     const encoded = path.split('/').map(encodeURIComponent).join('/');
     return apiFetch(`${API}/contents/${encoded}`, {
       method: 'PUT',
-      body: JSON.stringify({
-        message,
-        content: encodeBase64(content),
-        sha,
-        branch: BRANCH
-      })
+      body: JSON.stringify({ message, content: encodeBase64(content), sha, branch: BRANCH })
+    });
+  }
+
+  async function getPathSha(path) {
+    const encoded = path.split('/').map(encodeURIComponent).join('/');
+    try {
+      const data = await apiFetch(`${API}/contents/${encoded}?ref=${encodeURIComponent(BRANCH)}&_=${Date.now()}`);
+      return data && data.type === 'file' ? String(data.sha || '') : '';
+    } catch (error) {
+      if (error.status === 404) return '';
+      throw error;
+    }
+  }
+
+  async function putBinaryFile(path, file, message) {
+    const encoded = path.split('/').map(encodeURIComponent).join('/');
+    const content = await fileToBase64(file);
+    const sha = await getPathSha(path);
+    const body = { message, content, branch: BRANCH };
+    if (sha) body.sha = sha;
+    return apiFetch(`${API}/contents/${encoded}`, {
+      method: 'PUT',
+      body: JSON.stringify(body)
     });
   }
 
@@ -241,13 +375,84 @@
       <button class="game-list-button${game.id === selectedId ? ' active' : ''}" type="button" data-game-id="${esc(game.id)}" role="option" aria-selected="${game.id === selectedId ? 'true' : 'false'}">
         <span class="game-score">${esc(game.score)}</span>
         <span class="game-list-copy"><strong>${esc(game.title)}</strong><small>${esc(game.franchise || game.platform || '')}</small></span>
-        <span class="game-list-order">#${esc(game.tierOrder ?? '—')}</span>
+        ${newGameIds.has(game.id) ? '<span class="game-new-dot">NUEVO</span>' : `<span class="game-list-order">#${esc(game.tierOrder ?? '—')}</span>`}
       </button>`).join('');
   }
 
   function updateCounts() {
     excerptCount.textContent = `${fieldExcerpt.value.length} caracteres`;
     reviewCount.textContent = `${fieldReview.value.length} caracteres`;
+  }
+
+  function legacyOrCustomCover(game) {
+    return game?.cover || LEGACY_COVERS[game?.id] || '';
+  }
+
+  function legacyOrCustomBackground(game) {
+    return game?.background || LEGACY_BACKGROUNDS[game?.id] || '';
+  }
+
+  function musicForEditor(game) {
+    return { ...(LEGACY_MUSIC[game?.id] || {}), ...(game?.music || {}) };
+  }
+
+  function revokePreview(key) {
+    if (previewUrls[key]) {
+      URL.revokeObjectURL(previewUrls[key]);
+      delete previewUrls[key];
+    }
+  }
+
+  function setImagePreview(img, placeholder, src) {
+    if (src) {
+      img.src = src;
+      img.hidden = false;
+      placeholder.hidden = true;
+    } else {
+      img.removeAttribute('src');
+      img.hidden = true;
+      placeholder.hidden = false;
+    }
+  }
+
+  function renderMedia() {
+    const game = selectedGame();
+    if (!game) return;
+    const pending = pendingFiles[game.id] || {};
+
+    const coverSrc = pending.cover ? previewUrls[`${game.id}:cover`] : legacyOrCustomCover(game);
+    setImagePreview(coverPreview, coverPlaceholder, coverSrc);
+    coverStatus.textContent = pending.cover
+      ? `${pending.cover.name} · ${(pending.cover.size / 1024 / 1024).toFixed(2)} MB · pendiente de publicar`
+      : (legacyOrCustomCover(game) ? `Actual: ${legacyOrCustomCover(game)}` : 'Usa JPG, PNG, WEBP o AVIF.');
+    clearCoverButton.hidden = !pending.cover;
+
+    const backgroundSrc = pending.background ? previewUrls[`${game.id}:background`] : legacyOrCustomBackground(game);
+    setImagePreview(backgroundPreview, backgroundPlaceholder, backgroundSrc);
+    backgroundStatus.textContent = pending.background
+      ? `${pending.background.name} · ${(pending.background.size / 1024 / 1024).toFixed(2)} MB · pendiente de publicar`
+      : (legacyOrCustomBackground(game) ? `Actual: ${legacyOrCustomBackground(game)}` : 'Imagen horizontal recomendada.');
+    clearBackgroundButton.hidden = !pending.background;
+
+    const musicInfo = musicForEditor(game);
+    if (pending.music) {
+      musicFileName.textContent = pending.music.name;
+      musicFileStatus.textContent = `${(pending.music.size / 1024 / 1024).toFixed(2)} MB · pendiente de publicar`;
+      musicPreview.src = previewUrls[`${game.id}:music`] || '';
+      musicPreview.hidden = false;
+      clearMusicButton.hidden = false;
+    } else {
+      musicFileName.textContent = musicInfo.src ? (musicInfo.title || 'Tema actual') : 'Sin MP3 nuevo seleccionado';
+      musicFileStatus.textContent = musicInfo.src ? `Actual: ${musicInfo.src}` : 'Puedes añadir un MP3 para esta ficha.';
+      musicPreview.src = musicInfo.src || '';
+      musicPreview.hidden = !musicInfo.src;
+      clearMusicButton.hidden = true;
+    }
+
+    Object.entries(musicFields).forEach(([key, input]) => {
+      const value = musicInfo[key];
+      input.value = key === 'startAt' ? (Number.isFinite(Number(value)) ? String(Number(value)) : '') : (value || '');
+    });
   }
 
   function renderSelectedGame() {
@@ -258,12 +463,14 @@
       editorTitle.textContent = 'Selecciona un juego';
       editorSubtitle.textContent = 'Los cambios no se publican hasta pulsar “Guardar y publicar”.';
       gameIdBadge.textContent = '—';
+      newGameBadge.hidden = true;
       return;
     }
 
     editorTitle.textContent = game.title;
     editorSubtitle.textContent = `${game.platform || 'Sin plataforma'} · ${game.year || 'Sin año'}`;
     gameIdBadge.textContent = game.id;
+    newGameBadge.hidden = !newGameIds.has(game.id);
     fieldTitle.value = game.title || '';
     fieldYear.value = game.year || '';
     fieldPlatform.value = game.platform || '';
@@ -277,6 +484,7 @@
     fieldExcerpt.value = game.excerpt || '';
     fieldReview.value = game.review || '';
     updateCounts();
+    renderMedia();
   }
 
   function selectGame(id) {
@@ -301,13 +509,36 @@
     } else if (field === 'tierOrder') {
       const parsed = Number.parseInt(target.value, 10);
       game.tierOrder = Number.isFinite(parsed) ? parsed : 0;
-    } else {
-      game[field] = target.value;
-    }
+    } else game[field] = target.value;
+
     editorTitle.textContent = game.title || game.id;
     editorSubtitle.textContent = `${game.platform || 'Sin plataforma'} · ${game.year || 'Sin año'}`;
     updateCounts();
     renderGameList();
+    updateDirtyUi();
+    clearNotice();
+  }
+
+  function ensureMusicPatch(game) {
+    if (!game.music || typeof game.music !== 'object') game.music = {};
+    return game.music;
+  }
+
+  function syncMusicField(target) {
+    const game = selectedGame();
+    if (!game || !target.dataset.musicField) return;
+    const field = target.dataset.musicField;
+    const music = ensureMusicPatch(game);
+    if (field === 'startAt') {
+      const raw = target.value.trim();
+      if (!raw) delete music.startAt;
+      else music.startAt = Math.max(0, Number(raw) || 0);
+    } else {
+      const value = target.value;
+      if (value.trim()) music[field] = value;
+      else delete music[field];
+    }
+    if (!Object.keys(music).length) delete game.music;
     updateDirtyUi();
     clearNotice();
   }
@@ -336,26 +567,57 @@
     const ids = new Set();
     for (const game of games) {
       if (!game.id || ids.has(game.id)) throw new Error(`ID inválido o duplicado: ${game.id || '(vacío)'}`);
+      if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(game.id)) throw new Error(`El ID ${game.id} solo puede usar minúsculas, números y guiones.`);
       ids.add(game.id);
       if (!String(game.title || '').trim()) throw new Error(`El juego ${game.id} no puede quedarse sin título.`);
       if (!tierForScore(game.score)) throw new Error(`La nota ${game.score} de ${game.title} no existe en la escala.`);
+      if (game.music?.startAt !== undefined && (!Number.isFinite(Number(game.music.startAt)) || Number(game.music.startAt) < 0)) {
+        throw new Error(`El segundo inicial de la música de ${game.title} no es válido.`);
+      }
     }
     for (const row of scale) {
       if (!String(row.label || '').trim()) throw new Error(`El tier ${row.score} no puede quedarse sin nombre.`);
     }
   }
 
+  function clearSavedToken() {
+    try { sessionStorage.removeItem(TOKEN_KEY); } catch (_) {}
+    try { localStorage.removeItem(TOKEN_KEY); localStorage.removeItem(REMEMBER_KEY); } catch (_) {}
+  }
+
+  function saveAuthenticatedToken() {
+    const remember = Boolean(rememberSession?.checked);
+    try {
+      if (remember) {
+        localStorage.setItem(TOKEN_KEY, token);
+        localStorage.setItem(REMEMBER_KEY, 'true');
+        sessionStorage.removeItem(TOKEN_KEY);
+      } else {
+        sessionStorage.setItem(TOKEN_KEY, token);
+        localStorage.removeItem(TOKEN_KEY);
+        localStorage.removeItem(REMEMBER_KEY);
+      }
+    } catch (_) {}
+  }
+
   async function authenticate(candidateToken) {
     token = String(candidateToken || '').trim();
     if (!token) throw new Error('Introduce un token de GitHub.');
     const user = await apiFetch('https://api.github.com/user');
-    if (!user || String(user.login || '').toLowerCase() !== OWNER.toLowerCase()) {
-      throw new Error(`Este editor solo acepta la cuenta ${OWNER}.`);
-    }
+    if (!user || String(user.login || '').toLowerCase() !== OWNER.toLowerCase()) throw new Error(`Este editor solo acepta la cuenta ${OWNER}.`);
     const repo = await apiFetch(API);
     if (!repo?.permissions?.push) throw new Error('La cuenta autenticada no tiene permiso de escritura en este repositorio.');
-    try { sessionStorage.setItem(TOKEN_KEY, token); } catch (_) {}
+    saveAuthenticatedToken();
     return user;
+  }
+
+  function resetPendingFiles() {
+    Object.keys(previewUrls).forEach(revokePreview);
+    pendingFiles = {};
+    previewUrls = {};
+    coverFile.value = '';
+    backgroundFile.value = '';
+    musicFile.value = '';
   }
 
   async function loadRemoteData() {
@@ -372,6 +634,8 @@
       currentVersion = parseVersion(versionFile.content);
       baseShas = { siteData: siteDataFile.sha, index: indexFile.sha, version: versionFile.sha };
       baseSnapshot = currentSnapshot();
+      newGameIds = new Set();
+      resetPendingFiles();
       selectedId = games[0]?.id || '';
       versionBadge.textContent = `v${currentVersion}`;
       renderScoreOptions();
@@ -398,7 +662,7 @@
       await loadRemoteData();
     } catch (error) {
       token = '';
-      try { sessionStorage.removeItem(TOKEN_KEY); } catch (_) {}
+      clearSavedToken();
       loginError.textContent = error.message || 'No se pudo conectar con GitHub.';
       loginPanel.hidden = false;
       editorPanel.hidden = true;
@@ -416,7 +680,10 @@
     currentVersion = '';
     baseSnapshot = '';
     baseShas = { siteData: '', index: '', version: '' };
-    try { sessionStorage.removeItem(TOKEN_KEY); } catch (_) {}
+    newGameIds = new Set();
+    resetPendingFiles();
+    clearSavedToken();
+    if (rememberSession) rememberSession.checked = false;
     tokenInput.value = '';
     connectionBadge.textContent = 'Sin conectar';
     connectionBadge.classList.remove('connected');
@@ -426,10 +693,111 @@
     clearNotice();
   }
 
+  function imageExtension(file) {
+    const type = String(file.type || '').toLowerCase();
+    if (type === 'image/jpeg') return 'jpg';
+    if (type === 'image/png') return 'png';
+    if (type === 'image/webp') return 'webp';
+    if (type === 'image/avif') return 'avif';
+    const ext = String(file.name || '').split('.').pop().toLowerCase();
+    return ['jpg', 'jpeg', 'png', 'webp', 'avif'].includes(ext) ? (ext === 'jpeg' ? 'jpg' : ext) : '';
+  }
+
+  function validateAssetFile(kind, file) {
+    if (!file) return;
+    if (kind === 'music') {
+      if (file.size > MAX_AUDIO_BYTES) throw new Error('El MP3 supera 50 MB. Comprímelo antes de subirlo.');
+      const isMp3 = file.type === 'audio/mpeg' || /\.mp3$/i.test(file.name);
+      if (!isMp3) throw new Error('La música debe estar en formato MP3.');
+      return;
+    }
+    if (file.size > MAX_IMAGE_BYTES) throw new Error('La imagen supera 15 MB. Redúcela antes de subirla.');
+    if (!imageExtension(file)) throw new Error('La imagen debe ser JPG, PNG, WEBP o AVIF.');
+  }
+
+  function stageFile(kind, file) {
+    const game = selectedGame();
+    if (!game || !file) return;
+    try {
+      validateAssetFile(kind, file);
+    } catch (error) {
+      showNotice(esc(error.message), true);
+      return;
+    }
+    pendingFiles[game.id] ||= {};
+    pendingFiles[game.id][kind] = file;
+    const key = `${game.id}:${kind}`;
+    revokePreview(key);
+    previewUrls[key] = URL.createObjectURL(file);
+    clearNotice();
+    renderMedia();
+    updateDirtyUi();
+  }
+
+  function unstageFile(kind) {
+    const game = selectedGame();
+    if (!game || !pendingFiles[game.id]?.[kind]) return;
+    delete pendingFiles[game.id][kind];
+    if (!Object.keys(pendingFiles[game.id]).length) delete pendingFiles[game.id];
+    revokePreview(`${game.id}:${kind}`);
+    if (kind === 'cover') coverFile.value = '';
+    if (kind === 'background') backgroundFile.value = '';
+    if (kind === 'music') musicFile.value = '';
+    renderMedia();
+    updateDirtyUi();
+  }
+
+  function versionSlug(version) {
+    return String(version).replace(/[^0-9a-z]+/gi, '-');
+  }
+
+  async function uploadPendingAssets(publishGames, nextVersion) {
+    const total = Object.values(pendingFiles).reduce((count, entry) => count + ['cover', 'background', 'music'].filter((kind) => entry?.[kind]).length, 0);
+    if (!total) return;
+    let done = 0;
+
+    for (const [gameId, files] of Object.entries(pendingFiles)) {
+      const game = publishGames.find((item) => item.id === gameId);
+      if (!game) continue;
+      const suffix = versionSlug(nextVersion);
+
+      if (files.cover) {
+        done += 1;
+        busyText.textContent = `Subiendo portada ${done}/${total}: ${game.title}`;
+        const path = `assets/covers/${game.id}-v${suffix}.${imageExtension(files.cover)}`;
+        await putBinaryFile(path, files.cover, `Editor: portada de ${game.title} v${nextVersion}`);
+        game.cover = path;
+      }
+
+      if (files.background) {
+        done += 1;
+        busyText.textContent = `Subiendo fondo ${done}/${total}: ${game.title}`;
+        const path = `assets/backgrounds/${game.id}-bg-v${suffix}.${imageExtension(files.background)}`;
+        await putBinaryFile(path, files.background, `Editor: fondo de ${game.title} v${nextVersion}`);
+        game.background = path;
+      }
+
+      if (files.music) {
+        done += 1;
+        busyText.textContent = `Subiendo música ${done}/${total}: ${game.title}`;
+        const path = `assets/audio/${game.id}-theme-v${suffix}.mp3`;
+        await putBinaryFile(path, files.music, `Editor: música de ${game.title} v${nextVersion}`);
+        game.music ||= {};
+        game.music.src = path;
+        if (!String(game.music.title || '').trim()) game.music.title = files.music.name.replace(/\.mp3$/i, '').replace(/[_-]+/g, ' ').trim() || 'Tema del juego';
+      }
+    }
+  }
+
   async function publish() {
     if (!isDirty()) return;
     try {
       validateData();
+      Object.values(pendingFiles).forEach((entry) => {
+        if (entry.cover) validateAssetFile('cover', entry.cover);
+        if (entry.background) validateAssetFile('background', entry.background);
+        if (entry.music) validateAssetFile('music', entry.music);
+      });
     } catch (error) {
       showNotice(esc(error.message), true);
       return;
@@ -453,19 +821,24 @@
 
       const remoteVersion = parseVersion(freshVersion.content);
       const nextVersion = nextPatchVersion(remoteVersion);
+      const publishGames = clone(games);
+
+      await uploadPendingAssets(publishGames, nextVersion);
+
       const nextIndex = bumpIndexVersion(freshIndex.content, remoteVersion, nextVersion);
-      const nextSiteData = serializeSiteData(games, scale);
+      const nextSiteData = serializeSiteData(publishGames, scale);
       const nextVersionJson = `${JSON.stringify({ version: nextVersion }, null, 2)}\n`;
 
       busyText.textContent = `Preparando v${nextVersion}…`;
       const indexResult = await putFile('index.html', nextIndex, freshIndex.sha, `Editor: prepara v${nextVersion}`);
 
-      busyText.textContent = 'Guardando juegos, notas y reviews…';
+      busyText.textContent = 'Guardando juegos, notas, reviews y recursos…';
       const dataResult = await putFile('js/site-data.js', nextSiteData, freshSiteData.sha, `Editor: actualiza contenido v${nextVersion}`);
 
       busyText.textContent = 'Activando la nueva versión para todos…';
       const versionResult = await putFile('version.json', nextVersionJson, freshVersion.sha, `Editor: publica v${nextVersion}`);
 
+      games = publishGames;
       currentVersion = nextVersion;
       versionBadge.textContent = `v${currentVersion}`;
       baseShas = {
@@ -474,8 +847,12 @@
         version: versionResult?.content?.sha || ''
       };
       baseSnapshot = currentSnapshot();
+      newGameIds = new Set();
+      resetPendingFiles();
+      renderGameList();
+      renderSelectedGame();
       updateDirtyUi();
-      showNotice(`Publicado como <strong>v${esc(nextVersion)}</strong>. GitHub Pages puede tardar unos segundos en desplegarlo. <a href="./?v=${encodeURIComponent(nextVersion)}#tierlist" target="_blank" rel="noreferrer">Abrir la versión publicada ↗</a>`);
+      showNotice(`Publicado como <strong>v${esc(nextVersion)}</strong>. Las portadas, fondos y MP3 nuevos ya forman parte del repositorio. GitHub Pages puede tardar unos segundos en desplegarlo. <a href="./?v=${encodeURIComponent(nextVersion)}#tierlist" target="_blank" rel="noreferrer">Abrir la versión publicada ↗</a>`);
     } catch (error) {
       showNotice(esc(error.message || 'No se pudieron publicar los cambios.'), true);
     } finally {
@@ -488,6 +865,65 @@
     if (isDirty() && !window.confirm('¿Descartar todos los cambios que todavía no has publicado?')) return;
     clearNotice();
     await loadRemoteData();
+  }
+
+  function openNewGameModal() {
+    newGameModal.hidden = false;
+    newGameTitle.value = '';
+    newGameId.value = '';
+    newGameError.textContent = '';
+    idEditedManually = false;
+    requestAnimationFrame(() => newGameTitle.focus());
+  }
+
+  function closeNewGameModal() {
+    newGameModal.hidden = true;
+    newGameError.textContent = '';
+  }
+
+  function createNewGame() {
+    const title = newGameTitle.value.trim();
+    const id = newGameId.value.trim();
+    if (!title) {
+      newGameError.textContent = 'Escribe el nombre del juego.';
+      return;
+    }
+    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(id)) {
+      newGameError.textContent = 'El ID solo puede contener minúsculas, números y guiones.';
+      return;
+    }
+    if (games.some((game) => game.id === id)) {
+      newGameError.textContent = 'Ya existe un juego con ese ID.';
+      return;
+    }
+
+    const defaultTier = scale.find((row) => Number(row.score) === 7) || scale[0];
+    const score = Number(defaultTier?.score ?? 7);
+    const order = Math.max(0, ...games.filter((game) => Number(game.score) === score).map((game) => Number(game.tierOrder) || 0)) + 1;
+    const game = {
+      id,
+      title,
+      year: '',
+      platform: '',
+      franchise: '',
+      score,
+      label: defaultTier?.label || 'Muy bueno',
+      tierOrder: order,
+      tierVisible: true,
+      reviewDate: '',
+      spoilers: false,
+      excerpt: '',
+      review: ''
+    };
+    games.push(game);
+    newGameIds.add(id);
+    selectedId = id;
+    gameSearch.value = '';
+    closeNewGameModal();
+    renderGameList();
+    renderSelectedGame();
+    updateDirtyUi();
+    showNotice('Borrador creado. Completa la ficha, añade los archivos que quieras y pulsa <strong>Guardar y publicar</strong>.');
   }
 
   connectButton.addEventListener('click', () => void connect(tokenInput.value));
@@ -503,13 +939,54 @@
     const button = event.target.closest('[data-game-id]');
     if (button) selectGame(button.dataset.gameId);
   });
+
   gameForm.addEventListener('input', (event) => {
     if (event.target.matches('[data-field]')) syncFormField(event.target);
     if (event.target.matches('[data-tier-index]')) syncTierLabel(event.target);
+    if (event.target.matches('[data-music-field]')) syncMusicField(event.target);
   });
   gameForm.addEventListener('change', (event) => {
     if (event.target.matches('[data-field]')) syncFormField(event.target);
+    if (event.target.matches('[data-music-field]')) syncMusicField(event.target);
   });
+
+  coverFile.addEventListener('change', () => {
+    const file = coverFile.files?.[0];
+    if (file) stageFile('cover', file);
+  });
+  backgroundFile.addEventListener('change', () => {
+    const file = backgroundFile.files?.[0];
+    if (file) stageFile('background', file);
+  });
+  musicFile.addEventListener('change', () => {
+    const file = musicFile.files?.[0];
+    if (file) stageFile('music', file);
+  });
+  clearCoverButton.addEventListener('click', () => unstageFile('cover'));
+  clearBackgroundButton.addEventListener('click', () => unstageFile('background'));
+  clearMusicButton.addEventListener('click', () => unstageFile('music'));
+
+  addGameButton.addEventListener('click', openNewGameModal);
+  cancelNewGameButton.addEventListener('click', closeNewGameModal);
+  createNewGameButton.addEventListener('click', createNewGame);
+  newGameTitle.addEventListener('input', () => {
+    if (!idEditedManually) newGameId.value = slugify(newGameTitle.value);
+  });
+  newGameId.addEventListener('input', () => {
+    idEditedManually = true;
+    const clean = slugify(newGameId.value);
+    if (newGameId.value !== clean) newGameId.value = clean;
+  });
+  newGameTitle.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') { event.preventDefault(); createNewGame(); }
+  });
+  newGameId.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') { event.preventDefault(); createNewGame(); }
+  });
+  newGameModal.addEventListener('click', (event) => {
+    if (event.target === newGameModal) closeNewGameModal();
+  });
+
   discardButton.addEventListener('click', () => void discard());
   publishButton.addEventListener('click', () => void publish());
   window.addEventListener('beforeunload', (event) => {
@@ -517,9 +994,12 @@
     event.preventDefault();
     event.returnValue = '';
   });
+  window.addEventListener('unload', () => Object.keys(previewUrls).forEach(revokePreview));
 
   try {
-    const savedToken = sessionStorage.getItem(TOKEN_KEY);
+    const remembered = localStorage.getItem(REMEMBER_KEY) === 'true';
+    const savedToken = remembered ? localStorage.getItem(TOKEN_KEY) : sessionStorage.getItem(TOKEN_KEY);
+    if (rememberSession) rememberSession.checked = remembered;
     if (savedToken) void connect(savedToken);
   } catch (_) {}
 })();

@@ -65,6 +65,20 @@ Incluye los 15 temas MP3 definitivos y el nuevo fondo de God of War III.
 - Build y recursos CSS/JS actualizados a `v4.6.3`.
 
 
+
+## Editor de juegos y recursos (v4.7.0)
+
+- El panel privado permite crear juegos nuevos sin tocar código.
+- Portadas y fondos se pueden seleccionar desde el editor y se suben al repositorio al publicar.
+- También se pueden subir MP3, elegir el segundo inicial y editar la información del tema.
+- Los nuevos juegos guardan sus rutas de portada, fondo y música dentro de `js/site-data.js`, por lo que funcionan automáticamente en la tier list, reviews y modo presentación.
+- Los nombres de archivo de recursos nuevos incluyen la versión para evitar problemas de caché.
+
 ## Editor privado (v4.6.4)
 
 Existe en `admin.html`. Requiere autenticación mediante un Fine-grained Personal Access Token de GitHub limitado exclusivamente al repositorio `maus-tierlist` con permiso `Contents: Read and write`. El token se conserva solo durante la pestaña/sesión del navegador y no está incluido en el código.
+
+
+## Sesión persistente del editor (v4.7.1)
+
+El login de `admin.html` incluye **Recordar sesión en este dispositivo**. Si se activa, el token de GitHub se conserva en el almacenamiento local del navegador y el editor vuelve a conectar automáticamente al abrirlo de nuevo. **Cerrar sesión** elimina tanto la sesión temporal como la persistente. Usa esta opción únicamente en un dispositivo personal.

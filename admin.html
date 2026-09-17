@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow,noarchive">
   <meta name="theme-color" content="#071018">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://api.github.com; img-src 'self' data: https://avatars.githubusercontent.com; style-src 'self'; script-src 'self'; base-uri 'self'; form-action 'none';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://api.github.com; img-src 'self' data: blob: https://avatars.githubusercontent.com; media-src 'self' blob:; style-src 'self'; script-src 'self'; base-uri 'self'; form-action 'none';">
   <title>Editor privado · Tier List de Maus</title>
-  <link rel="stylesheet" href="css/admin.css">
+  <link rel="stylesheet" href="css/admin.css?v=4.7.1">
 </head>
 <body>
   <header class="admin-header">
@@ -37,6 +37,10 @@
           <span>Token de GitHub</span>
           <input id="tokenInput" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_…">
         </label>
+        <label class="remember-session">
+          <input id="rememberSession" type="checkbox">
+          <span><strong>Recordar sesión en este dispositivo</strong><small>Guarda el token en este navegador para que no tengas que pegarlo cada vez. Úsalo solo en tu PC personal.</small></span>
+        </label>
         <div class="login-actions">
           <button id="connectButton" class="primary-button" type="button">Conectar</button>
           <a class="text-link" href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noreferrer">Crear token en GitHub ↗</a>
@@ -63,10 +67,13 @@
           </div>
           <span id="versionBadge" class="version-badge">v—</span>
         </div>
-        <label class="search-box">
-          <span class="sr-only">Buscar juego</span>
-          <input id="gameSearch" type="search" placeholder="Buscar juego…" autocomplete="off">
-        </label>
+        <div class="sidebar-tools">
+          <label class="search-box">
+            <span class="sr-only">Buscar juego</span>
+            <input id="gameSearch" type="search" placeholder="Buscar juego…" autocomplete="off">
+          </label>
+          <button id="addGameButton" class="add-game-button" type="button">＋ Añadir juego</button>
+        </div>
         <div id="gameList" class="game-list" role="listbox" aria-label="Juegos"></div>
       </aside>
 
@@ -93,7 +100,10 @@
                 <span class="eyebrow">FICHA</span>
                 <h2>Datos del juego</h2>
               </div>
-              <span id="gameIdBadge" class="id-badge">—</span>
+              <div class="card-head-badges">
+                <span id="newGameBadge" class="new-game-badge" hidden>NUEVO</span>
+                <span id="gameIdBadge" class="id-badge">—</span>
+              </div>
             </div>
 
             <div class="form-grid">
@@ -142,6 +152,106 @@
             </div>
           </section>
 
+          <section class="form-card media-card">
+            <div class="form-card-head">
+              <div>
+                <span class="eyebrow">IMÁGENES</span>
+                <h2>Portada y fondo</h2>
+              </div>
+              <span class="muted-note">Se subirán a GitHub al publicar.</span>
+            </div>
+            <div class="media-grid">
+              <div class="asset-panel">
+                <div class="asset-preview cover-preview">
+                  <img id="coverPreview" alt="Previsualización de portada" hidden>
+                  <span id="coverPlaceholder">Sin portada</span>
+                </div>
+                <div class="asset-copy">
+                  <strong>Portada</strong>
+                  <small id="coverStatus">Usa JPG, PNG, WEBP o AVIF.</small>
+                  <label class="file-button">Elegir portada<input id="coverFile" type="file" accept="image/jpeg,image/png,image/webp,image/avif" hidden></label>
+                  <button id="clearCoverButton" class="mini-button" type="button" hidden>Cancelar cambio</button>
+                </div>
+              </div>
+
+              <div class="asset-panel">
+                <div class="asset-preview background-preview">
+                  <img id="backgroundPreview" alt="Previsualización de fondo" hidden>
+                  <span id="backgroundPlaceholder">Sin fondo</span>
+                </div>
+                <div class="asset-copy">
+                  <strong>Fondo de la review</strong>
+                  <small id="backgroundStatus">Imagen horizontal recomendada.</small>
+                  <label class="file-button">Elegir fondo<input id="backgroundFile" type="file" accept="image/jpeg,image/png,image/webp,image/avif" hidden></label>
+                  <button id="clearBackgroundButton" class="mini-button" type="button" hidden>Cancelar cambio</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="form-card music-admin-card">
+            <div class="form-card-head">
+              <div>
+                <span class="eyebrow">MÚSICA</span>
+                <h2>Banda sonora de la ficha</h2>
+              </div>
+              <span class="muted-note">MP3 recomendado. Máximo 95 MB.</span>
+            </div>
+
+            <div class="music-upload-row">
+              <div class="music-file-box">
+                <strong id="musicFileName">Sin MP3 nuevo seleccionado</strong>
+                <small id="musicFileStatus">Si el juego ya tiene música, seguirá usándola hasta que publiques otra.</small>
+                <label class="file-button">Elegir MP3<input id="musicFile" type="file" accept="audio/mpeg,.mp3" hidden></label>
+                <button id="clearMusicButton" class="mini-button" type="button" hidden>Cancelar cambio</button>
+              </div>
+              <audio id="musicPreview" controls preload="metadata" hidden></audio>
+            </div>
+
+            <div class="form-grid music-fields">
+              <label class="field">
+                <span>Nombre del tema</span>
+                <input id="fieldMusicTitle" data-music-field="title" type="text" placeholder="Ej. Save Room Theme">
+              </label>
+              <label class="field">
+                <span>Empezar en el segundo</span>
+                <input id="fieldMusicStart" data-music-field="startAt" type="number" min="0" step="0.1" placeholder="0">
+              </label>
+              <label class="field field-wide">
+                <span>Compositor / créditos</span>
+                <input id="fieldMusicComposer" data-music-field="composer" type="text">
+              </label>
+              <label class="field field-wide">
+                <span>Contexto breve</span>
+                <textarea id="fieldMusicContext" data-music-field="context" rows="2" placeholder="Dónde encaja este tema dentro del juego."></textarea>
+              </label>
+              <label class="field">
+                <span>Dónde suena</span>
+                <textarea id="fieldMusicWhere" data-music-field="where" rows="4"></textarea>
+              </label>
+              <label class="field">
+                <span>Cómo suena</span>
+                <textarea id="fieldMusicSound" data-music-field="sound" rows="4"></textarea>
+              </label>
+              <label class="field">
+                <span>Qué representa</span>
+                <textarea id="fieldMusicMeaning" data-music-field="meaning" rows="4"></textarea>
+              </label>
+              <label class="field">
+                <span>Qué hace sentir</span>
+                <textarea id="fieldMusicFeeling" data-music-field="feeling" rows="4"></textarea>
+              </label>
+              <label class="field">
+                <span>Función e intención musical</span>
+                <textarea id="fieldMusicIntent" data-music-field="intent" rows="4"></textarea>
+              </label>
+              <label class="field">
+                <span>Detalle / por qué funciona</span>
+                <textarea id="fieldMusicDetail" data-music-field="detail" rows="4"></textarea>
+              </label>
+            </div>
+          </section>
+
           <section class="form-card">
             <div class="form-card-head">
               <div>
@@ -186,6 +296,28 @@
     </section>
   </main>
 
+  <div id="newGameModal" class="modal-layer" hidden>
+    <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="newGameHeading">
+      <span class="eyebrow">NUEVA FICHA</span>
+      <h2 id="newGameHeading">Añadir juego</h2>
+      <p>Crea el borrador. Después podrás añadir portada, fondo, música, nota y review antes de publicarlo.</p>
+      <label class="field">
+        <span>Nombre del juego</span>
+        <input id="newGameTitle" type="text" autocomplete="off" placeholder="Ej. Sly Cooper 3">
+      </label>
+      <label class="field">
+        <span>ID técnico</span>
+        <input id="newGameId" type="text" autocomplete="off" spellcheck="false" placeholder="sly-cooper-3">
+        <small class="field-help">Se usa en la URL y en los archivos. Solo minúsculas, números y guiones.</small>
+      </label>
+      <p id="newGameError" class="error-message" role="alert"></p>
+      <div class="modal-actions">
+        <button id="cancelNewGameButton" class="ghost-button" type="button">Cancelar</button>
+        <button id="createNewGameButton" class="primary-button" type="button">Crear borrador</button>
+      </div>
+    </section>
+  </div>
+
   <div id="busyOverlay" class="busy-overlay" hidden>
     <div class="busy-card">
       <span class="spinner" aria-hidden="true"></span>
@@ -194,6 +326,6 @@
     </div>
   </div>
 
-  <script src="js/admin.js"></script>
+  <script src="js/admin.js?v=4.7.1"></script>
 </body>
 </html>
