@@ -5,8 +5,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#071018">
   <meta name="description" content="Tier list personal e interactiva de videojuegos de Maus.">
-  <title>Tier List de Maus — v4.6.0</title>
-  <link rel="stylesheet" href="css/styles.css?v=4.6.0">
+  <title>Tier List de Maus — v4.6.1</title>
+  <script>
+    // Comprueba la versión publicada sin usar la caché del navegador.
+    // Si hay una build nueva, abre la misma página con ?v=X para forzar
+    // un documento HTML fresco y conserva la sección actual (#tierlist, etc.).
+    window.MAUS_BUILD_VERSION = '4.6.1';
+    window.MAUS_CHECK_LATEST_BUILD = function () {
+      var currentBuild = window.MAUS_BUILD_VERSION;
+      var versionUrl = new URL('./version.json', document.baseURI);
+      versionUrl.searchParams.set('_', Date.now().toString());
+
+      return fetch(versionUrl.href, { cache: 'no-store' })
+        .then(function (response) {
+          if (!response.ok) throw new Error('No se pudo comprobar la versión');
+          return response.json();
+        })
+        .then(function (data) {
+          var latestBuild = data && String(data.version || '').trim();
+          if (!latestBuild || latestBuild === currentBuild) return;
+
+          var target = new URL(window.location.href);
+          target.searchParams.set('v', latestBuild);
+
+          // Si ya estamos en esa URL pero el HTML sigue siendo antiguo,
+          // añade un segundo parámetro único para evitar cualquier caché residual.
+          if (target.href === window.location.href) {
+            target.searchParams.set('_refresh', Date.now().toString());
+          }
+
+          window.location.replace(target.href);
+        })
+        .catch(function () {
+          // Si la comprobación falla, la web sigue cargando con normalidad.
+        });
+    };
+
+    window.MAUS_CHECK_LATEST_BUILD();
+    window.addEventListener('pageshow', function (event) {
+      if (event.persisted) window.MAUS_CHECK_LATEST_BUILD();
+    });
+  </script>
+  <link rel="stylesheet" href="css/styles.css?v=4.6.1">
 </head>
 <body data-scene="default">
   <canvas id="stormCanvas" class="storm-canvas" aria-hidden="true"></canvas>
@@ -113,9 +153,9 @@
 
   <div id="saveToast" class="save-toast" hidden>Guardado</div>
 
-  <script src="js/site-data.js?v=4.6.0"></script>
-  <script src="js/theme-music.js?v=4.6.0"></script>
-  <script src="js/app.js?v=4.6.0"></script>
-  <script src="js/storm.js?v=4.6.0"></script>
+  <script src="js/site-data.js?v=4.6.1"></script>
+  <script src="js/theme-music.js?v=4.6.1"></script>
+  <script src="js/app.js?v=4.6.1"></script>
+  <script src="js/storm.js?v=4.6.1"></script>
 </body>
 </html>
