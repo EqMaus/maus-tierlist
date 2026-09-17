@@ -63,3 +63,8 @@ Incluye los 15 temas MP3 definitivos y el nuevo fondo de God of War III.
 - Peso reducido por debajo de 300 KB para evitar que WhatsApp descarte la imagen del enlace.
 - Añadidos `og:image:url` y `image_src` como compatibilidad extra para crawlers de previsualización.
 - Build y recursos CSS/JS actualizados a `v4.6.3`.
+
+
+## Editor privado (v4.6.4)
+
+Existe en `admin.html`. Requiere autenticación mediante un Fine-grained Personal Access Token de GitHub limitado exclusivamente al repositorio `maus-tierlist` con permiso `Contents: Read and write`. El token se conserva solo durante la pestaña/sesión del navegador y no está incluido en el código.
