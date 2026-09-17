@@ -48,3 +48,10 @@ Incluye los 15 temas MP3 definitivos y el nuevo fondo de God of War III.
 - Si hay una build nueva, la web conserva la sección actual (`#tierlist`, `#games`, etc.) y recarga el HTML con `?v=<versión>` para saltarse la caché del documento.
 - También se vuelve a comprobar al restaurar una página desde la caché de navegación del navegador (bfcache).
 - CSS y JavaScript actualizados a `v4.6.1`.
+
+
+## v4.6.2
+- Añadida previsualización social mediante Open Graph para WhatsApp, Discord, Telegram y otras plataformas compatibles.
+- La imagen de previsualización es la captura del Modo presentación elegida por Maus (`social-preview-v4.6.2.png`).
+- Añadidos metadatos Twitter Card como compatibilidad adicional.
+- Build y recursos CSS/JS actualizados a `v4.6.2`.
