@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Tier List de Maus v4.2.6
 
 Cambios de esta versión:
@@ -40,3 +41,6 @@ Incluye los 15 temas MP3 definitivos y el nuevo fondo de God of War III.
 - Corregido el bloque CSS heredado de v4.4 que contenía saltos de línea escapados (`\n`) y podía impedir que se aplicasen hover, fade-in, Features y estilos del timeline.
 - Caché forzada a v4.6.0 para CSS y JavaScript.
 - Se mantienen los avisos de spoilers universales con “Cerrar review”, Modo presentación, transición elegante de “Ver fondo” y los inicios musicales: RE Requiem 0:02, Shadow of the Colossus 0:05 y Twilight Princess 1:16.
+=======
+Una página web que se va actualizando en la que puedes leer opiniones de algunos grandes juegos y de otros no tan grandes.
+>>>>>>> 7347f022e0738d659042b1a0a1f24ac27d2593bd
