@@ -264,10 +264,10 @@ code { padding: 2px 5px; border-radius: 5px; background: rgba(255,255,255,.06); 
 
 .media-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 .asset-panel {
-  display: grid;
-  grid-template-columns: minmax(160px, 220px) minmax(0, 1fr);
-  gap: 16px;
-  align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 14px;
   padding: 14px;
   border: 1px solid var(--line);
   border-radius: 14px;
@@ -287,9 +287,14 @@ code { padding: 2px 5px; border-radius: 5px; background: rgba(255,255,255,.06); 
   color: var(--muted);
   background: rgba(255,255,255,.025);
 }
-.cover-preview { aspect-ratio: 3 / 4; }
+.cover-preview {
+  aspect-ratio: 3 / 4;
+  width: min(220px, 100%);
+  align-self: flex-start;
+}
 .background-preview {
   aspect-ratio: 16 / 9;
+  width: 100%;
   min-height: 0;
 }
 .asset-preview img {
@@ -299,7 +304,7 @@ code { padding: 2px 5px; border-radius: 5px; background: rgba(255,255,255,.06); 
   position: absolute;
   inset: 0;
 }
-.asset-copy { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.asset-copy { position: relative; z-index: 2; min-width: 0; width: 100%; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
 .asset-copy strong { font-size: 16px; }
 .asset-copy small, .music-file-box small { color: var(--muted); line-height: 1.45; overflow-wrap: anywhere; }
 .file-button, .mini-button {
@@ -351,7 +356,6 @@ code { padding: 2px 5px; border-radius: 5px; background: rgba(255,255,255,.06); 
 }
 
 @media (max-width: 620px) {
-  .asset-panel { grid-template-columns: 1fr; }
   .asset-preview { max-width: 320px; width: 100%; }
   .modal-actions { justify-content: stretch; }
   .modal-actions > * { flex: 1; }
