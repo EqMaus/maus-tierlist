@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#071018">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://api.github.com; img-src 'self' data: blob: https://avatars.githubusercontent.com; media-src 'self' blob:; style-src 'self'; script-src 'self'; base-uri 'self'; form-action 'none';">
   <title>Editor privado · Tier List de Maus</title>
-  <link rel="stylesheet" href="css/admin.css?v=4.11.0">
+  <link rel="stylesheet" href="css/admin.css?v=4.12.0">
 </head>
 <body>
   <header class="admin-header">
@@ -289,19 +289,32 @@
             </label>
           </section>
 
-          <section class="form-card review-card">
-            <div class="form-card-head">
+          <section class="form-card review-card review-visual-card">
+            <div class="form-card-head review-editor-heading">
               <div>
                 <span class="eyebrow">REVIEW</span>
-                <h2>Texto completo</h2>
+                <h2>Editor visual</h2>
+                <p>Los bloques de aquí representan directamente los bloques que verá la gente en la web pública.</p>
               </div>
               <span id="reviewCount" class="counter">0 caracteres</span>
             </div>
-            <p class="format-hint">Puedes seguir usando <code>**negrita**</code>, <code>*cursiva*</code> y párrafos normales. Aquí sí puedes pulsar Enter: el editor se encarga de guardarlo correctamente.</p>
-            <label class="field">
-              <span class="sr-only">Review completa</span>
-              <textarea id="fieldReview" data-field="review" rows="22" spellcheck="true"></textarea>
-            </label>
+
+            <div id="reviewFormatToolbar" class="review-format-toolbar" role="toolbar" aria-label="Formato del párrafo seleccionado">
+              <span class="review-toolbar-label">PÁRRAFO SELECCIONADO</span>
+              <button type="button" data-review-format="bold" title="Negrita"><strong>B</strong></button>
+              <button type="button" data-review-format="italic" title="Cursiva"><em>I</em></button>
+              <button type="button" data-review-format="remove" title="Quitar formato">Aa</button>
+              <span class="review-toolbar-help">Selecciona texto dentro de un párrafo y aplica el formato.</span>
+            </div>
+
+            <div id="reviewVisualEditor" class="review-visual-editor" aria-label="Editor visual de la review"></div>
+
+            <div class="review-editor-footer">
+              <button id="addReviewSectionButton" class="review-add-section" type="button">＋ Añadir sección</button>
+              <span>Enter crea otro párrafo · Shift+Enter hace un salto de línea.</span>
+            </div>
+
+            <textarea id="fieldReview" data-field="review" class="review-raw-storage" aria-hidden="true" tabindex="-1"></textarea>
           </section>
 
           <section class="form-card tiers-card">
@@ -349,6 +362,6 @@
     </div>
   </div>
 
-  <script src="js/admin.js?v=4.11.0"></script>
+  <script src="js/admin.js?v=4.12.0"></script>
 </body>
 </html>

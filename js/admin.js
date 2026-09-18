@@ -96,6 +96,9 @@
   const fieldAmbientEffect = $('fieldAmbientEffect');
   const fieldExcerpt = $('fieldExcerpt');
   const fieldReview = $('fieldReview');
+  const reviewVisualEditor = $('reviewVisualEditor');
+  const reviewFormatToolbar = $('reviewFormatToolbar');
+  const addReviewSectionButton = $('addReviewSectionButton');
   const excerptCount = $('excerptCount');
   const reviewCount = $('reviewCount');
   const tierEditor = $('tierEditor');
@@ -172,6 +175,836 @@
 
   function clone(value) {
     return JSON.parse(JSON.stringify(value));
+  }
+
+const ADMIN_CURATED_REVIEW_SPECS = {
+  "gow2": [
+    {
+      "title": "Escenarios y combate",
+      "marker": null,
+      "verdict": false
+    },
+    {
+      "title": "Ritmo, puzles y jefes",
+      "marker": "El ritmo es muy bueno",
+      "verdict": false
+    },
+    {
+      "title": "Música, enemigos y feedback",
+      "marker": "La banda sonora es la polla",
+      "verdict": false
+    },
+    {
+      "title": "Final y doblaje",
+      "marker": "El final, a nivel de lore",
+      "verdict": false
+    },
+    {
+      "title": "Modo Titán",
+      "marker": "Me he visto obligado a jugar",
+      "verdict": false
+    },
+    {
+      "title": "Veredicto final",
+      "marker": "Le doy un sólido 7",
+      "verdict": true
+    }
+  ],
+  "re3-og": [
+    {
+      "title": "Nemesis y atmósfera",
+      "marker": null,
+      "verdict": false
+    },
+    {
+      "title": "Esquiva y combate",
+      "marker": "El sistema de esquiva es buenísimo",
+      "verdict": false
+    },
+    {
+      "title": "Escenarios y ritmo",
+      "marker": "Los escenarios están tremendos.",
+      "verdict": false
+    },
+    {
+      "title": "Música, sonido y personajes",
+      "marker": "La música, aunque suena",
+      "verdict": false
+    },
+    {
+      "title": "Dificultad, recursos y duración",
+      "marker": "Me he pasado el juego en la dificultad más alta",
+      "verdict": false
+    },
+    {
+      "title": "Sensación final",
+      "marker": "Tirar abajo a Nemesis",
+      "verdict": false
+    },
+    {
+      "title": "Veredicto final",
+      "marker": "Un 8. Juegazo",
+      "verdict": true
+    }
+  ],
+  "majoras-mask": [
+    {
+      "title": "Primera impresión",
+      "marker": null,
+      "verdict": false
+    },
+    {
+      "title": "Gameplay y sistema de tres días",
+      "marker": "El gameplay funciona muy bien.",
+      "verdict": false
+    },
+    {
+      "title": "Tono y atmósfera",
+      "marker": "Lo más fuerte que tiene Majora’s Mask",
+      "verdict": false
+    },
+    {
+      "title": "Mazmorras e Ikana",
+      "marker": "La estructura general me parece",
+      "verdict": false
+    },
+    {
+      "title": "Secundarias y personajes",
+      "marker": "Las subtramas y misiones secundarias",
+      "verdict": false
+    },
+    {
+      "title": "Música y balance final",
+      "marker": "La música en general es buenísima.",
+      "verdict": false
+    },
+    {
+      "title": "Veredicto final",
+      "marker": "La nota a día de hoy",
+      "verdict": true
+    }
+  ],
+  "gow3": [
+    {
+      "title": "Visuales y escenarios",
+      "marker": null,
+      "verdict": false
+    },
+    {
+      "title": "Objetos, magias y armas",
+      "marker": "Luego, los \"objetos utilizables\"",
+      "verdict": false
+    },
+    {
+      "title": "Jefes, música y doblaje",
+      "marker": "GOW3 tiene las mejores batallas",
+      "verdict": false
+    },
+    {
+      "title": "Secretos y feedback",
+      "marker": "También, los cofres *secretos*",
+      "verdict": false
+    },
+    {
+      "title": "Modo Caos y dificultad",
+      "marker": "Luego, el modo Caos",
+      "verdict": false
+    },
+    {
+      "title": "Veredicto final",
+      "marker": "Un 7.5.",
+      "verdict": true
+    }
+  ],
+  "gow1": [
+    {
+      "title": "Escenarios y estructura",
+      "marker": null,
+      "verdict": false
+    },
+    {
+      "title": "Magias y armas",
+      "marker": "God of War 1 tiene la magia",
+      "verdict": false
+    },
+    {
+      "title": "Jefes, música y doblaje",
+      "marker": "Los bosses son quizás",
+      "verdict": false
+    },
+    {
+      "title": "Progresión, feedback y dificultad",
+      "marker": "Los cofres secretos de este juego",
+      "verdict": false
+    },
+    {
+      "title": "Puzles, presentación y duración",
+      "marker": "Ah, y este juego tiene los mejores puzzles",
+      "verdict": false
+    },
+    {
+      "title": "Veredicto final",
+      "marker": "**Un 7**",
+      "verdict": true
+    }
+  ],
+  "sotc": [
+    {
+      "title": "Mundo y primera impresión",
+      "marker": null,
+      "verdict": false
+    },
+    {
+      "title": "Agro y colosos",
+      "marker": "Moverse con Agro",
+      "verdict": false
+    },
+    {
+      "title": "El peso de cada victoria",
+      "marker": "Derrotarlos no se siente",
+      "verdict": false
+    },
+    {
+      "title": "Jugabilidad y cámara",
+      "marker": "La jugabilidad está bien",
+      "verdict": false
+    },
+    {
+      "title": "Música e historia",
+      "marker": "La música es uno de los puntos fuertes.",
+      "verdict": false
+    },
+    {
+      "title": "Final",
+      "marker": "Te conviertes en aquello",
+      "verdict": false
+    },
+    {
+      "title": "Conclusión",
+      "marker": "Un juego que mucha gente",
+      "verdict": false
+    }
+  ],
+  "re9": [
+    {
+      "title": "Atmósfera y Raccoon City",
+      "marker": null,
+      "verdict": false
+    },
+    {
+      "title": "Historia y encuentros",
+      "marker": "Lo más memorable del juego es su historia",
+      "verdict": false
+    },
+    {
+      "title": "Combate y personajes jugables",
+      "marker": "Los controles se ven muy fluidos",
+      "verdict": false
+    },
+    {
+      "title": "Escenarios y tensión",
+      "marker": "Raccoon City es el escenario que más me gustó",
+      "verdict": false
+    },
+    {
+      "title": "Música y sonido",
+      "marker": "La música cumple como acompañamiento",
+      "verdict": false
+    },
+    {
+      "title": "Puzles y exploración",
+      "marker": "Los puzzles están bien",
+      "verdict": false
+    },
+    {
+      "title": "Doblaje y apartado técnico",
+      "marker": "El doblaje Inglés del juego",
+      "verdict": false
+    },
+    {
+      "title": "Dificultad, ritmo y duración",
+      "marker": "La dificultad es intermedia",
+      "verdict": false
+    },
+    {
+      "title": "Decisiones y final",
+      "marker": "También añadir que al final del juego",
+      "verdict": false
+    },
+    {
+      "title": "Conclusión",
+      "marker": "Como juego, es **excelente**",
+      "verdict": false
+    }
+  ],
+  "re2-og": [
+    {
+      "title": "Primera impresión y comisaría",
+      "marker": null,
+      "verdict": false
+    },
+    {
+      "title": "Controles y ritmo",
+      "marker": "Además, entre que te mueves",
+      "verdict": false
+    },
+    {
+      "title": "Enemigos y tensión",
+      "marker": "Los zombies siguen siendo lo que son",
+      "verdict": false
+    },
+    {
+      "title": "Personajes y música",
+      "marker": "Los personajes están guays.",
+      "verdict": false
+    },
+    {
+      "title": "Jefes y rejugabilidad",
+      "marker": "Los bosses son bastante flojos",
+      "verdict": false
+    },
+    {
+      "title": "Veredicto final",
+      "marker": "Nota: 6.5 / 7",
+      "verdict": true
+    }
+  ],
+  "re4-og": [
+    {
+      "title": "Gameplay y control",
+      "marker": null,
+      "verdict": false
+    },
+    {
+      "title": "Ritmo y acción",
+      "marker": "El ritmo general es muy bueno",
+      "verdict": false
+    },
+    {
+      "title": "Leon, música y Buhonero",
+      "marker": "Leon S. Kennedy aquí ya está",
+      "verdict": false
+    },
+    {
+      "title": "Ashley y acompañamiento",
+      "marker": "Por último, Ashley",
+      "verdict": false
+    },
+    {
+      "title": "Terror, enemigos y tensión",
+      "marker": "**Lo malo:**",
+      "verdict": false
+    },
+    {
+      "title": "Tramo final y duración",
+      "marker": "El tramo final es, claramente",
+      "verdict": false
+    },
+    {
+      "title": "Veredicto final",
+      "marker": "**Veredicto**",
+      "verdict": true
+    }
+  ],
+  "medievil": [
+    {
+      "title": "Primera impresión y ritmo",
+      "marker": null,
+      "verdict": false
+    },
+    {
+      "title": "Sir Daniel y control",
+      "marker": "Sir Daniel Fortesque",
+      "verdict": false
+    },
+    {
+      "title": "Cámara, combate y armas",
+      "marker": "La cámara tampoco es ninguna maravilla",
+      "verdict": false
+    },
+    {
+      "title": "Dificultad y Barco Fantasma",
+      "marker": "La dificultad generalmente está bien.",
+      "verdict": false
+    },
+    {
+      "title": "Niveles, Cálices y Galería",
+      "marker": "Por suerte, el diseño de niveles",
+      "verdict": false
+    },
+    {
+      "title": "Jefes y enemigos",
+      "marker": "Los jefes... sin más.",
+      "verdict": false
+    },
+    {
+      "title": "Ambientación, música y sonido",
+      "marker": "Pero si hay dos cosas donde MediEvil",
+      "verdict": false
+    },
+    {
+      "title": "Historia y envejecimiento",
+      "marker": "La historia, en cambio",
+      "verdict": false
+    },
+    {
+      "title": "Balance final",
+      "marker": "Tiene defectos claros y el tramo final",
+      "verdict": false
+    },
+    {
+      "title": "Veredicto final",
+      "marker": "Nota: 7",
+      "verdict": true
+    }
+  ],
+  "re3-remake": [
+    {
+      "title": "Como remake y como juego",
+      "marker": null,
+      "verdict": false
+    },
+    {
+      "title": "Nemesis",
+      "marker": "Nemesis en este juego",
+      "verdict": false
+    },
+    {
+      "title": "Esquiva y combate",
+      "marker": "El sistema de esquiva en este juego",
+      "verdict": false
+    },
+    {
+      "title": "Escenarios y adaptación",
+      "marker": "- Los escenarios son visualmente chulos",
+      "verdict": false
+    },
+    {
+      "title": "Música, personajes y puzles",
+      "marker": "La música por lo general es buena",
+      "verdict": false
+    },
+    {
+      "title": "Acción, ritmo y sensaciones",
+      "marker": "Y bueno, el juego se mantiene gracias a la acción",
+      "verdict": false
+    },
+    {
+      "title": "Veredicto final",
+      "marker": "Nota: 6,5 como juego independiente",
+      "verdict": true
+    }
+  ],
+  "re1-remaster": [
+    {
+      "title": "Atmósfera y controles",
+      "marker": null,
+      "verdict": false
+    },
+    {
+      "title": "Mansión y backtracking",
+      "marker": "El diseño de niveles es **regulero**.",
+      "verdict": false
+    },
+    {
+      "title": "Enemigos y puzles",
+      "marker": "Los zombies son en su mayoría obstáculos",
+      "verdict": false
+    },
+    {
+      "title": "Zonas y música",
+      "marker": "El juego aunque el 70% del tiempo",
+      "verdict": false
+    },
+    {
+      "title": "Inventario y estructura",
+      "marker": "**El mayor problema del juego es su estructura:**",
+      "verdict": false
+    },
+    {
+      "title": "Sensación y rejugabilidad",
+      "marker": "No me parece un juego que se pueda considerar",
+      "verdict": false
+    },
+    {
+      "title": "Balance final",
+      "marker": "¿Me ha gustado más este remastered",
+      "verdict": false
+    },
+    {
+      "title": "Veredicto final",
+      "marker": "Nota: 5 / 5.5",
+      "verdict": true
+    }
+  ],
+  "pokemon-diamond": [
+    {
+      "title": "Primera impresión",
+      "marker": null,
+      "verdict": false
+    },
+    {
+      "title": "Lo bueno",
+      "marker": "***Lo bueno:***",
+      "verdict": false
+    },
+    {
+      "title": "Lo malo",
+      "marker": "*Lo malo:*",
+      "verdict": false
+    },
+    {
+      "title": "Ritmo y estructura",
+      "marker": "Buen juego **en estructura**",
+      "verdict": false
+    },
+    {
+      "title": "Veredicto final",
+      "marker": "**Notita:**",
+      "verdict": true
+    }
+  ],
+  "pokemon-black": [
+    {
+      "title": "Primera impresión",
+      "marker": null,
+      "verdict": false
+    },
+    {
+      "title": "Lo bueno",
+      "marker": "***Lo bueno***",
+      "verdict": false
+    },
+    {
+      "title": "Lo malo",
+      "marker": "***Lo malo:***",
+      "verdict": false
+    },
+    {
+      "title": "Comparación con Diamante",
+      "marker": "No dista mucho del Pokémon Diamante",
+      "verdict": false
+    },
+    {
+      "title": "Veredicto final",
+      "marker": "**Notita:**",
+      "verdict": true
+    }
+  ],
+  "twilight-princess": [
+    {
+      "title": "Inicio y ritmo",
+      "marker": null,
+      "verdict": false
+    },
+    {
+      "title": "Link lobo y combate",
+      "marker": "Link lobo me encanta.",
+      "verdict": false
+    },
+    {
+      "title": "Hyrule y mazmorras",
+      "marker": "Hyrule me parece correcto.",
+      "verdict": false
+    },
+    {
+      "title": "Personajes y Ganondorf",
+      "marker": "Los personajes están bastante bien.",
+      "verdict": false
+    },
+    {
+      "title": "Música e historia",
+      "marker": "La banda sonora es espectacular.",
+      "verdict": false
+    },
+    {
+      "title": "Conclusión",
+      "marker": "En conjunto, Twilight Princess",
+      "verdict": false
+    },
+    {
+      "title": "Veredicto final",
+      "marker": "**NOTA: 8**",
+      "verdict": true
+    }
+  ]
+};
+
+  function inlineMarkdown(value) {
+    let html = esc(value);
+    html = html.replace(/\*\*\*([^*]+)\*\*\*/g, '<strong><em>$1</em></strong>');
+    html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+    return html;
+  }
+
+  function splitSentences(value) {
+    const text = String(value || '').replace(/\r/g, '').trim();
+    if (!text) return [];
+    const parts = text.match(/[^.!?…]+(?:[.!?…]+|$)/gu);
+    return (parts || [text]).map((part) => part.trim()).filter(Boolean);
+  }
+
+  function proseParagraphs(value) {
+    const raw = String(value || '').replace(/\r/g, '').trim();
+    if (!raw) return [];
+    const blocks = raw.split(/\n\s*\n/).map((part) => part.trim()).filter(Boolean);
+    const result = [];
+    for (const block of blocks.length ? blocks : [raw]) {
+      if (block.length <= 430) {
+        result.push(block);
+        continue;
+      }
+      const sentences = splitSentences(block);
+      if (sentences.length <= 1) {
+        result.push(block);
+        continue;
+      }
+      let current = '';
+      for (const sentence of sentences) {
+        const next = current ? `${current} ${sentence}` : sentence;
+        if (current && next.length > 390) {
+          result.push(current.trim());
+          current = sentence;
+        } else {
+          current = next;
+        }
+      }
+      if (current.trim()) result.push(current.trim());
+    }
+    return result;
+  }
+
+  function guessAdminSectionTitle(text, index, total) {
+    const n = normalize(text);
+    if (index === 0) return 'Primera impresión';
+    if (/(musica|banda sonora|sonido|doblaje|voz|efectos de sonido)/.test(n)) return 'Música y sonido';
+    if (/(historia|lore|personaj|protagon|final|villan|narrativ)/.test(n)) return 'Historia y personajes';
+    if (/(escenario|mundo|atmosfera|ambient|nivel|explor|backtracking|mazmorr|zona)/.test(n)) return 'Mundo y atmósfera';
+    if (/(combate|gameplay|control|arma|enemig|boss|jefe|esquiva|feedback|puzzle|puzle)/.test(n)) return 'Jugabilidad y combate';
+    if (/(dificultad|ritmo|duracion|rejug|horas|muertes|reto)/.test(n)) return 'Ritmo, dificultad y rejugabilidad';
+    if (index === total - 1) return 'Conclusión';
+    return 'Análisis';
+  }
+
+  function curatedAdminSections(gameId, value) {
+    const spec = ADMIN_CURATED_REVIEW_SPECS[gameId];
+    const raw = String(value || '').replace(/\r/g, '').trim();
+    if (!spec || !raw) return null;
+    const starts = [];
+    for (let index = 0; index < spec.length; index += 1) {
+      const marker = spec[index].marker;
+      const start = index === 0 ? 0 : raw.indexOf(marker);
+      if (start < 0 || (starts.length && start <= starts[starts.length - 1])) return null;
+      starts.push(start);
+    }
+    return spec.map((item, index) => ({
+      title: item.title,
+      verdict: Boolean(item.verdict),
+      text: raw.slice(starts[index], index + 1 < starts.length ? starts[index + 1] : raw.length).trim()
+    })).filter((section) => section.text);
+  }
+
+  function automaticAdminSections(value) {
+    const paragraphs = proseParagraphs(value);
+    if (!paragraphs.length) return [];
+    const working = [...paragraphs];
+    let verdict = '';
+    const last = working[working.length - 1] || '';
+    if (last && (last.length <= 150 || /(?:^|\b)(nota|veredicto|juegazo|muy buen juego|obra maestra|excelente|sublime)(?:\b|:)/i.test(last))) {
+      verdict = working.pop();
+    }
+    const groups = [];
+    working.forEach((paragraph, index) => {
+      const title = guessAdminSectionTitle(paragraph, index, working.length);
+      const previous = groups[groups.length - 1];
+      if (previous && previous.title === title) previous.paragraphs.push(paragraph);
+      else groups.push({ title, paragraphs: [paragraph] });
+    });
+    const sections = groups.map((group) => ({ title: group.title, verdict: false, paragraphs: group.paragraphs }));
+    if (verdict) sections.push({ title: 'Veredicto final', verdict: true, paragraphs: [verdict] });
+    return sections;
+  }
+
+  function normalizeReviewSections(game) {
+    if (Array.isArray(game?.reviewSections) && game.reviewSections.length) {
+      return game.reviewSections.map((section, index) => {
+        const verdict = Boolean(section?.verdict);
+        let paragraphs = Array.isArray(section?.paragraphs)
+          ? section.paragraphs.map((paragraph) => String(paragraph || '').trim()).filter(Boolean)
+          : [];
+        if (!paragraphs.length && section?.text) paragraphs = proseParagraphs(section.text);
+        if (!paragraphs.length) paragraphs = [''];
+        return {
+          title: verdict ? 'Veredicto final' : String(section?.title || `Sección ${index + 1}`).trim(),
+          verdict,
+          paragraphs
+        };
+      });
+    }
+
+    const derived = curatedAdminSections(game?.id, game?.review) || automaticAdminSections(game?.review) || [];
+    return derived.map((section, index) => ({
+      title: section.verdict ? 'Veredicto final' : String(section.title || `Sección ${index + 1}`).trim(),
+      verdict: Boolean(section.verdict),
+      paragraphs: Array.isArray(section.paragraphs) ? section.paragraphs : proseParagraphs(section.text)
+    })).filter((section) => section.paragraphs.length);
+  }
+
+  function editableNodeToMarkdown(element) {
+    const walk = (node) => {
+      if (node.nodeType === Node.TEXT_NODE) return node.nodeValue || '';
+      if (node.nodeType !== Node.ELEMENT_NODE) return '';
+      const tag = node.tagName.toLowerCase();
+      const inner = Array.from(node.childNodes).map(walk).join('');
+      if (tag === 'br') return '\n';
+      if (tag === 'strong' || tag === 'b') return `**${inner}**`;
+      if (tag === 'em' || tag === 'i') return `*${inner}*`;
+      if (tag === 'div' || tag === 'p') return `${inner}\n`;
+      return inner;
+    };
+    return Array.from(element.childNodes).map(walk).join('').replace(/\u00a0/g, ' ').replace(/\n{3,}/g, '\n\n').trim();
+  }
+
+  function sectionsToLegacyReview(sections) {
+    return sections.flatMap((section) => section.paragraphs || [])
+      .map((paragraph) => String(paragraph || '').trim())
+      .filter(Boolean)
+      .join('\n\n')
+      .trim();
+  }
+
+  function reviewSectionMarkup(section, sectionIndex) {
+    const verdict = Boolean(section.verdict);
+    const paragraphs = section.paragraphs?.length ? section.paragraphs : [''];
+    return `
+      <article class="review-editor-section${verdict ? ' is-verdict' : ''}" data-review-section="${sectionIndex}">
+        <div class="review-editor-section-controls">
+          <label class="review-section-title-field">
+            <span>${verdict ? 'TIPO DE BLOQUE' : 'TÍTULO DEL BLOQUE'}</span>
+            <input type="text" data-review-section-title value="${esc(verdict ? 'Veredicto final' : section.title)}" ${verdict ? 'readonly' : ''} aria-label="Título de la sección">
+          </label>
+          <label class="review-section-type-field">
+            <span>FORMATO</span>
+            <select data-review-section-type aria-label="Formato de la sección">
+              <option value="normal"${verdict ? '' : ' selected'}>Bloque normal</option>
+              <option value="verdict"${verdict ? ' selected' : ''}>Veredicto final</option>
+            </select>
+          </label>
+          <div class="review-section-actions" aria-label="Orden de la sección">
+            <button type="button" data-review-section-move="up" title="Subir sección">↑</button>
+            <button type="button" data-review-section-move="down" title="Bajar sección">↓</button>
+            <button type="button" class="danger" data-review-section-delete title="Eliminar sección">×</button>
+          </div>
+        </div>
+        <div class="review-editor-public-head">${verdict ? 'VEREDICTO FINAL' : esc(section.title)}</div>
+        <div class="review-editor-copy">
+          ${paragraphs.map((paragraph, paragraphIndex) => `
+            <div class="review-paragraph-shell" data-review-paragraph-shell="${paragraphIndex}">
+              <div class="review-editable-paragraph" contenteditable="true" spellcheck="true" data-review-paragraph="${paragraphIndex}" role="textbox" aria-multiline="true">${inlineMarkdown(paragraph).replace(/\n/g, '<br>')}</div>
+              <div class="review-paragraph-actions">
+                <button type="button" data-review-paragraph-move="up" title="Subir párrafo">↑</button>
+                <button type="button" data-review-paragraph-move="down" title="Bajar párrafo">↓</button>
+                <button type="button" class="danger" data-review-paragraph-delete title="Eliminar párrafo">×</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+        <button type="button" class="review-add-paragraph" data-review-add-paragraph>＋ Añadir párrafo aquí</button>
+      </article>`;
+  }
+
+  function renderVisualReviewEditor(game = selectedGame()) {
+    if (!reviewVisualEditor) return;
+    if (!game) {
+      reviewVisualEditor.innerHTML = '<p class="review-editor-empty">Selecciona un juego.</p>';
+      return;
+    }
+    const sections = normalizeReviewSections(game);
+    if (!sections.length) {
+      reviewVisualEditor.innerHTML = '<div class="review-editor-empty"><strong>Esta review está vacía.</strong><button type="button" data-review-create-first>Crear primera sección</button></div>';
+      return;
+    }
+    reviewVisualEditor.innerHTML = sections.map(reviewSectionMarkup).join('');
+  }
+
+  function collectVisualReviewSections() {
+    if (!reviewVisualEditor) return [];
+    return Array.from(reviewVisualEditor.querySelectorAll('[data-review-section]')).map((sectionElement, sectionIndex) => {
+      const verdict = sectionElement.querySelector('[data-review-section-type]')?.value === 'verdict';
+      const titleInput = sectionElement.querySelector('[data-review-section-title]');
+      const title = verdict ? 'Veredicto final' : String(titleInput?.value || `Sección ${sectionIndex + 1}`).trim();
+      const paragraphs = Array.from(sectionElement.querySelectorAll('[data-review-paragraph]'))
+        .map(editableNodeToMarkdown)
+        .filter((paragraph, index, list) => paragraph || list.length === 1);
+      return { title: title || `Sección ${sectionIndex + 1}`, verdict, paragraphs: paragraphs.length ? paragraphs : [''] };
+    });
+  }
+
+  function syncVisualReviewToGame() {
+    const game = selectedGame();
+    if (!game || !reviewVisualEditor) return;
+    const sections = collectVisualReviewSections();
+    game.reviewSections = sections;
+    game.review = sectionsToLegacyReview(sections);
+    fieldReview.value = game.review;
+    updateCounts();
+    updateDirtyUi();
+    clearNotice();
+  }
+
+  function focusReviewParagraph(sectionIndex, paragraphIndex, atEnd = true) {
+    requestAnimationFrame(() => {
+      const section = reviewVisualEditor?.querySelector(`[data-review-section="${sectionIndex}"]`);
+      const paragraph = section?.querySelector(`[data-review-paragraph="${paragraphIndex}"]`);
+      if (!paragraph) return;
+      paragraph.focus();
+      if (!atEnd) return;
+      const selection = window.getSelection();
+      const range = document.createRange();
+      range.selectNodeContents(paragraph);
+      range.collapse(false);
+      selection.removeAllRanges();
+      selection.addRange(range);
+    });
+  }
+
+  function mutateVisualSections(mutator, focusTarget = null) {
+    const game = selectedGame();
+    if (!game) return;
+    const sections = collectVisualReviewSections();
+    mutator(sections);
+    game.reviewSections = sections;
+    game.review = sectionsToLegacyReview(sections);
+    fieldReview.value = game.review;
+    renderVisualReviewEditor(game);
+    updateCounts();
+    updateDirtyUi();
+    clearNotice();
+    if (focusTarget) focusReviewParagraph(focusTarget.section, focusTarget.paragraph, focusTarget.end !== false);
+  }
+
+  let savedReviewRange = null;
+
+  function rememberReviewSelection() {
+    const selection = window.getSelection();
+    if (!selection || !selection.rangeCount) return;
+    const range = selection.getRangeAt(0);
+    const element = range.commonAncestorContainer.nodeType === Node.ELEMENT_NODE ? range.commonAncestorContainer : range.commonAncestorContainer.parentElement;
+    if (!element?.closest?.('[data-review-paragraph]')) return;
+    savedReviewRange = range.cloneRange();
+  }
+
+  function applyReviewFormat(command) {
+    if (!savedReviewRange) return;
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(savedReviewRange);
+    if (command === 'bold') document.execCommand('bold', false);
+    else if (command === 'italic') document.execCommand('italic', false);
+    else if (command === 'remove') document.execCommand('removeFormat', false);
+    rememberReviewSelection();
+    syncVisualReviewToGame();
   }
 
   function currentSnapshot() {
@@ -465,6 +1298,7 @@
       editorSubtitle.textContent = 'Los cambios no se publican hasta pulsar “Guardar y publicar”.';
       gameIdBadge.textContent = '—';
       newGameBadge.hidden = true;
+      if (reviewVisualEditor) reviewVisualEditor.innerHTML = '<p class="review-editor-empty">Selecciona un juego.</p>';
       return;
     }
 
@@ -485,6 +1319,7 @@
     fieldAmbientEffect.value = game.ambientEffect || 'none';
     fieldExcerpt.value = game.excerpt || '';
     fieldReview.value = game.review || '';
+    renderVisualReviewEditor(game);
     updateCounts();
     renderMedia();
   }
@@ -951,6 +1786,137 @@
   gameForm.addEventListener('change', (event) => {
     if (event.target.matches('[data-field]')) syncFormField(event.target);
     if (event.target.matches('[data-music-field]')) syncMusicField(event.target);
+  });
+
+  reviewVisualEditor?.addEventListener('focusin', (event) => {
+    reviewVisualEditor.querySelectorAll('.review-paragraph-shell.is-active').forEach((element) => element.classList.remove('is-active'));
+    const shell = event.target.closest('.review-paragraph-shell');
+    if (shell) shell.classList.add('is-active');
+    rememberReviewSelection();
+  });
+
+  reviewVisualEditor?.addEventListener('mouseup', rememberReviewSelection);
+  reviewVisualEditor?.addEventListener('keyup', rememberReviewSelection);
+
+  reviewVisualEditor?.addEventListener('input', (event) => {
+    const section = event.target.closest('[data-review-section]');
+    if (event.target.matches('[data-review-section-title]')) {
+      const head = section?.querySelector('.review-editor-public-head');
+      if (head) head.textContent = event.target.value || 'Nueva sección';
+    }
+    if (event.target.matches('[data-review-paragraph], [data-review-section-title]')) syncVisualReviewToGame();
+  });
+
+  reviewVisualEditor?.addEventListener('change', (event) => {
+    if (!event.target.matches('[data-review-section-type]')) return;
+    const sectionIndex = Number(event.target.closest('[data-review-section]')?.dataset.reviewSection);
+    mutateVisualSections((sections) => {
+      const section = sections[sectionIndex];
+      if (!section) return;
+      section.verdict = event.target.value === 'verdict';
+      if (section.verdict) section.title = 'Veredicto final';
+      else if (!section.title || section.title === 'Veredicto final') section.title = 'Nueva sección';
+    });
+  });
+
+  reviewVisualEditor?.addEventListener('keydown', (event) => {
+    const paragraph = event.target.closest('[data-review-paragraph]');
+    if (!paragraph || event.key !== 'Enter') return;
+    if (event.shiftKey) return;
+    event.preventDefault();
+    const sectionElement = paragraph.closest('[data-review-section]');
+    const sectionIndex = Number(sectionElement?.dataset.reviewSection);
+    const paragraphIndex = Number(paragraph.dataset.reviewParagraph);
+    syncVisualReviewToGame();
+    mutateVisualSections((sections) => {
+      const section = sections[sectionIndex];
+      if (!section) return;
+      section.paragraphs.splice(paragraphIndex + 1, 0, '');
+    }, { section: sectionIndex, paragraph: paragraphIndex + 1 });
+  });
+
+  reviewVisualEditor?.addEventListener('click', (event) => {
+    if (event.target.closest('[data-review-create-first]')) {
+      mutateVisualSections((sections) => sections.push({ title: 'Primera impresión', verdict: false, paragraphs: [''] }), { section: 0, paragraph: 0 });
+      return;
+    }
+    const sectionElement = event.target.closest('[data-review-section]');
+    if (!sectionElement) return;
+    const sectionIndex = Number(sectionElement.dataset.reviewSection);
+
+    if (event.target.closest('[data-review-add-paragraph]')) {
+      const before = collectVisualReviewSections();
+      const nextIndex = before[sectionIndex]?.paragraphs.length || 0;
+      mutateVisualSections((sections) => sections[sectionIndex]?.paragraphs.push(''), { section: sectionIndex, paragraph: nextIndex });
+      return;
+    }
+
+    const paragraphShell = event.target.closest('[data-review-paragraph-shell]');
+    const paragraphIndex = Number(paragraphShell?.dataset.reviewParagraphShell);
+
+    if (event.target.closest('[data-review-paragraph-move="up"]')) {
+      if (!Number.isFinite(paragraphIndex) || paragraphIndex <= 0) return;
+      mutateVisualSections((sections) => {
+        const items = sections[sectionIndex]?.paragraphs;
+        if (!items) return;
+        [items[paragraphIndex - 1], items[paragraphIndex]] = [items[paragraphIndex], items[paragraphIndex - 1]];
+      }, { section: sectionIndex, paragraph: paragraphIndex - 1 });
+      return;
+    }
+
+    if (event.target.closest('[data-review-paragraph-move="down"]')) {
+      mutateVisualSections((sections) => {
+        const items = sections[sectionIndex]?.paragraphs;
+        if (!items || paragraphIndex < 0 || paragraphIndex >= items.length - 1) return;
+        [items[paragraphIndex + 1], items[paragraphIndex]] = [items[paragraphIndex], items[paragraphIndex + 1]];
+      }, { section: sectionIndex, paragraph: paragraphIndex + 1 });
+      return;
+    }
+
+    if (event.target.closest('[data-review-paragraph-delete]')) {
+      mutateVisualSections((sections) => {
+        const items = sections[sectionIndex]?.paragraphs;
+        if (!items) return;
+        if (items.length <= 1) items[0] = '';
+        else items.splice(paragraphIndex, 1);
+      });
+      return;
+    }
+
+    if (event.target.closest('[data-review-section-move="up"]')) {
+      if (sectionIndex <= 0) return;
+      mutateVisualSections((sections) => {
+        [sections[sectionIndex - 1], sections[sectionIndex]] = [sections[sectionIndex], sections[sectionIndex - 1]];
+      });
+      return;
+    }
+
+    if (event.target.closest('[data-review-section-move="down"]')) {
+      mutateVisualSections((sections) => {
+        if (sectionIndex >= sections.length - 1) return;
+        [sections[sectionIndex + 1], sections[sectionIndex]] = [sections[sectionIndex], sections[sectionIndex + 1]];
+      });
+      return;
+    }
+
+    if (event.target.closest('[data-review-section-delete]')) {
+      if (!window.confirm('¿Eliminar esta sección de la review?')) return;
+      mutateVisualSections((sections) => sections.splice(sectionIndex, 1));
+    }
+  });
+
+  reviewFormatToolbar?.addEventListener('mousedown', (event) => {
+    if (event.target.closest('[data-review-format]')) event.preventDefault();
+  });
+  reviewFormatToolbar?.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-review-format]');
+    if (!button) return;
+    applyReviewFormat(button.dataset.reviewFormat);
+  });
+
+  addReviewSectionButton?.addEventListener('click', () => {
+    const current = collectVisualReviewSections();
+    mutateVisualSections((sections) => sections.push({ title: 'Nueva sección', verdict: false, paragraphs: [''] }), { section: current.length, paragraph: 0 });
   });
 
   coverFile.addEventListener('change', () => {

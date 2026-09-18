@@ -1221,8 +1221,33 @@
     return sections;
   }
 
+  function structuredReviewSections(gameId) {
+    const game = gameById.get(gameId);
+    const sections = game?.reviewSections;
+    const hasLocalReviewOverride = Boolean(editStore?.games?.[gameId]?.review);
+    if (hasLocalReviewOverride || !Array.isArray(sections) || !sections.length) return null;
+
+    const normalized = sections.map((section, index) => {
+      if (!section || typeof section !== 'object') return null;
+      const verdict = Boolean(section.verdict);
+      const title = verdict
+        ? 'Veredicto final'
+        : String(section.title || `Sección ${index + 1}`).trim();
+      const paragraphs = Array.isArray(section.paragraphs)
+        ? section.paragraphs.map((paragraph) => String(paragraph || '').trim()).filter(Boolean)
+        : [];
+      const text = paragraphs.length
+        ? paragraphs.join('\n\n')
+        : String(section.text || '').trim();
+      if (!text) return null;
+      return { title, verdict, text };
+    }).filter(Boolean);
+
+    return normalized.length ? normalized : null;
+  }
+
   function reviewSectionsFor(gameId, value) {
-    return curatedReviewSections(gameId, value) || automaticReviewSections(value);
+    return structuredReviewSections(gameId) || curatedReviewSections(gameId, value) || automaticReviewSections(value);
   }
 
   function reviewHtml(value, gameId) {
