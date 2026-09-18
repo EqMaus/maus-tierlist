@@ -79,7 +79,7 @@
     "reviewDate": "17/02/2026",
     "spoilers": false,
     "excerpt": "La primera entrega griega sigue funcionando por sus magias, sus puzles y una base de combate que aguanta muy bien.",
-    "review": "Bastante bueno y, como primera entrega de la saga, es muy muy top. Los escenarios son bastante decentes en general, aunque también, como en el 3, se podrían llegar a considerar repetitivos en ciertos puntos. Parte de la culpa de esto la tiene que el 75% del juego es en el Templo de Pandora.\n\nGod of War 1 tiene la magia más molona de todos los God of War: **El ejército de Hades**, y la **Ira de Poseidón** no se queda atrás, son la puta polla. También tiene la Ira de los Dioses (L3 + R3) más molona de toda la saga, sin ninguna duda. Si la del 2 era molona, esta es EXCESIVA. Las 2 armas que puedes usar en este juego, ambas son muy molonas.\n\nLas Espadas del Caos son las más molonas de la saga, (Y las más icónicas), y la espada de Artemisa está bastante guapa también, aunque no es santa de mi devoción. Los bosses son quizás los \"\"\"peores\"\"\" de la trilogía, aunque son buenos, no son tan chulos como en los otros 2 juegos.\n\nY el boss final es **la mayor mierda** de la saga, aunque gran parte de la culpa es la dificultad a la que lo he jugado, que convierte la batalla en algo que, simplemente, te quita todas tus opciones para que sea injusto y no tengas mucho que hacer. La música es **GOD**, para variar. La actuación de voz es normalita, algunas partes mejor dobladas que otras... Es inconsistente.\n\nLos cofres secretos de este juego son mejores que los del 3 pero peores que los del 2. Muy fácil llegar con toda la vida y toda la magia (Y necesario en el modo Dios si no quieres perder. Especialmente lo de la magia). El feedback del juego es bueno, cumple genial. Ninguna queja. Y luego, el modo Dios (Es el más difícil), me ha **decepcionado**. Ha sido sin duda el más fácil de los 3.\n\nNo me ha costado NADA más fuera del boss final (Por injusto) y ya. Los orbes verdes curan demasiado, los azules dan demasiada magia, y hay demasiados orbes rojos en general para mejorar todo lo que necesites. Muy mal ahí, es el que menos reto me ha supuesto. Aún con eso, lo he disfrutado.\n\nTambién decir que los enemigos quitan muy poca vida a exepción de un par de bosses, lo cual, si vienes de los otros 2 donde un golpe te pavimentaba la puta cabeza contra la mesa, pues se siente excesivamente sencillo. Ah, y este juego tiene los mejores puzzles de la trilogía, eso es importante para mí. Y también tiene las mejores presentaciones de... \"Sucesos\" en el juego, también. La música con la que te presentan ciertas cosas, es super buena, además.\n\nEste juego NO tiene contador de horas, muertes, y demás. Mal ahí. He tardado 5 horas, 47 minutos y 26 segundos **de puro gameplay** en completar el juego.\n\n**Nota final: 8**",
+    "review": "Bastante bueno y, como primera entrega de la saga, es muy muy top. Los escenarios son bastante decentes en general, aunque también, como en el 3, se podrían llegar a considerar repetitivos en ciertos puntos. Parte de la culpa de esto la tiene que el 75% del juego es en el Templo de Pandora.\n\nGod of War 1 tiene la magia más molona de todos los God of War: **El ejército de Hades**, y la **Ira de Poseidón** no se queda atrás, son la puta polla. También tiene la Ira de los Dioses (L3 + R3) más molona de toda la saga, sin ninguna duda. Si la del 2 era molona, esta es EXCESIVA. Las 2 armas que puedes usar en este juego, ambas son muy molonas.\n\nLas Espadas del Caos son las más molonas de la saga, (Y las más icónicas), y la espada de Artemisa está bastante guapa también, aunque no es santa de mi devoción. Los bosses son quizás los \"\"\"peores\"\"\" de la trilogía, aunque son buenos, no son tan chulos como en los otros 2 juegos.\n\nY el boss final es **la mayor mierda** de la saga, aunque gran parte de la culpa es la dificultad a la que lo he jugado, que convierte la batalla en algo que, simplemente, te quita todas tus opciones para que sea injusto y no tengas mucho que hacer. La música es **GOD**, para variar. La actuación de voz es normalita, algunas partes mejor dobladas que otras... Es inconsistente.\n\nLos cofres secretos de este juego son mejores que los del 3 pero peores que los del 2. Muy fácil llegar con toda la vida y toda la magia (Y necesario en el modo Dios si no quieres perder. Especialmente lo de la magia). El feedback del juego es bueno, cumple genial. Ninguna queja. Y luego, el modo Dios (Es el más difícil), me ha **decepcionado**. Ha sido sin duda el más fácil de los 3.\n\nNo me ha costado NADA más fuera del boss final (Por injusto) y ya. Los orbes verdes curan demasiado, los azules dan demasiada magia, y hay demasiados orbes rojos en general para mejorar todo lo que necesites. Muy mal ahí, es el que menos reto me ha supuesto. Aún con eso, lo he disfrutado.\n\nTambién decir que los enemigos quitan muy poca vida a exepción de un par de bosses, lo cual, si vienes de los otros 2 donde un golpe te pavimentaba la puta cabeza contra la mesa, pues se siente excesivamente sencillo. Ah, y este juego tiene los mejores puzzles de la trilogía, eso es importante para mí. Y también tiene las mejores presentaciones de... \"Sucesos\" en el juego, también. La música con la que te presentan ciertas cosas, es super buena, además.\n\nEste juego NO tiene contador de horas, muertes, y demás. Mal ahí. He tardado 5 horas, 47 minutos y 26 segundos de puro gameplay en completar el juego.\n\nNota final: 8",
     "ambientEffect": "ember-dust",
     "reviewSections": [
       {
@@ -129,7 +129,7 @@
         "title": "Veredicto final",
         "verdict": true,
         "paragraphs": [
-          "Este juego NO tiene contador de horas, muertes, y demás. Mal ahí. He tardado 5 horas, 47 minutos y 26 segundos **de puro gameplay** en completar el juego.\n\n**Nota final: 8**"
+          "Este juego NO tiene contador de horas, muertes, y demás. Mal ahí. He tardado 5 horas, 47 minutos y 26 segundos de puro gameplay en completar el juego.\n\nNota final: 8"
         ]
       }
     ]
@@ -259,8 +259,49 @@
     "reviewDate": "18/12/2025",
     "spoilers": false,
     "excerpt": "Buena estructura de aventura, pero un ritmo que para ti queda destrozado por los encuentros constantes y la lentitud general.",
-    "review": "Faltan aliens\n\nTractores\n\nY canelones\n\nPero bueno\n\n***Lo bueno:*** -La sensación de aventura está bien lograda -El final del juego tiene una dificultad **atrevida** -Tiene muchos pokémons muy molones *Lo malo:* -El juego es soporífero y sin cámara rápida no hubiese jugado más de 1 hora. -La variedad de pokémons ANTES del post game, es muy pobre. -Te obligan a llevar ataques en los pokémons que no quieres usar. -La historia es correcta, pero muy insulsa. Unos notas que se hacen llamar los CONOS GALÁCTICOS dicen querer controlar el espacio-tiempo y tal, pero poco más. -Y los encuentros con pokémons salvajes están programados por una manada de hijos de puta. No se te ocurra girar sobre tu propio eje encima de un matojo, en el agua o en una cueva (Que son sitios en los que te pasas el 70% del juego). Tirarse 1 repelente cada 15 segundos es una puta mierda. Esto es lo **peor** del juego, junto al ritmo, con diferencia arrolladora.\n\nBuen juego **en estructura**, a nivel de mundo muy bien construido, pero vas en muletas y lo de que te obliguen a pelear ochenta millones de veces sin que tú quieras hace que el juego sea el que lleva el ritmo, y no el jugador\n\n**Notita:** Con la cámara rápida, un 5 25/02/2026: La cambio a un 4, es un \"Meh\" de manual.",
-    "ambientEffect": "crystal-sparkles"
+    "review": "Faltan aliens\n\nTractores\n\nY canelones\n\nPero bueno\n\n***Lo bueno:*** -La sensación de aventura está bien lograda -El final del juego tiene una dificultad **atrevida** -Tiene muchos pokémons muy molones\n\n*Lo malo:* -El juego es soporífero y sin cámara rápida no hubiese jugado más de 1 hora. -La variedad de pokémons ANTES del post game, es muy pobre. -Te obligan a llevar ataques en los pokémons que no quieres usar. -La historia es correcta, pero muy insulsa. Unos notas que se hacen llamar los CONOS GALÁCTICOS dicen querer controlar el espacio-tiempo y tal, pero poco más.\n\n-Y los encuentros con pokémons salvajes están programados por una manada de hijos de puta. No se te ocurra girar sobre tu propio eje encima de un matojo, en el agua o en una cueva (Que son sitios en los que te pasas el 70% del juego). Tirarse 1 repelente cada 15 segundos es una puta mierda. Esto es lo **peor** del juego, junto al ritmo, con diferencia arrolladora.\n\nBuen juego **en estructura**, a nivel de mundo muy bien construido, pero vas en muletas y lo de que te obliguen a pelear ochenta millones de veces sin que tú quieras hace que el juego sea el que lleva el ritmo, y no el jugador\n\n**Notita:** Con la cámara rápida, un 3",
+    "ambientEffect": "crystal-sparkles",
+    "reviewSections": [
+      {
+        "title": "Primera impresión",
+        "verdict": false,
+        "paragraphs": [
+          "Faltan aliens",
+          "Tractores",
+          "Y canelones",
+          "Pero bueno"
+        ]
+      },
+      {
+        "title": "Lo bueno",
+        "verdict": false,
+        "paragraphs": [
+          "***Lo bueno:*** -La sensación de aventura está bien lograda -El final del juego tiene una dificultad **atrevida** -Tiene muchos pokémons muy molones"
+        ]
+      },
+      {
+        "title": "Lo malo",
+        "verdict": false,
+        "paragraphs": [
+          "*Lo malo:* -El juego es soporífero y sin cámara rápida no hubiese jugado más de 1 hora. -La variedad de pokémons ANTES del post game, es muy pobre. -Te obligan a llevar ataques en los pokémons que no quieres usar. -La historia es correcta, pero muy insulsa. Unos notas que se hacen llamar los CONOS GALÁCTICOS dicen querer controlar el espacio-tiempo y tal, pero poco más.",
+          "-Y los encuentros con pokémons salvajes están programados por una manada de hijos de puta. No se te ocurra girar sobre tu propio eje encima de un matojo, en el agua o en una cueva (Que son sitios en los que te pasas el 70% del juego). Tirarse 1 repelente cada 15 segundos es una puta mierda. Esto es lo **peor** del juego, junto al ritmo, con diferencia arrolladora."
+        ]
+      },
+      {
+        "title": "Ritmo y estructura",
+        "verdict": false,
+        "paragraphs": [
+          "Buen juego **en estructura**, a nivel de mundo muy bien construido, pero vas en muletas y lo de que te obliguen a pelear ochenta millones de veces sin que tú quieras hace que el juego sea el que lleva el ritmo, y no el jugador"
+        ]
+      },
+      {
+        "title": "Veredicto final",
+        "verdict": true,
+        "paragraphs": [
+          "**Notita:** Con la cámara rápida, un 3"
+        ]
+      }
+    ]
   },
   {
     "id": "pokemon-black",
@@ -275,8 +316,47 @@
     "reviewDate": "21/12/2025",
     "spoilers": false,
     "excerpt": "Te gustan más sus sprites y algunos temas de la OST, pero arrastra los mismos problemas de ritmo que te sacaron de Diamante.",
-    "review": "Faltan aliens\n\nNo hay aliens\n\n***Lo bueno*** -Los sprites de los pokémons y sus animaciones están bastante bien hechas. -La música del Overworld se hace notar. (Aunque en las peleas es bastante meh). -Los efectos de sonido cumplen. -Me parece que tiene un Post-Game que ofrece bien. -La historia no está **mal**. No es una mierda, dejémoslo ahí. -La música de \"Pueblo Arcilla\" es bastante potente, especialmente después de pasarte el juego. Mola. -Y la música de la Ruta 10 también mola mucho. ***Lo malo:*** -La historia resulta predecible. -Igual que Diamante y que todos los pokémons, sin cámara rápida prefieres cortarte la polla en trocitos para servirlos de tapa en un bar junto a unas aceitunas. -Varios pokémons de esta generación tardan demasiado en evolucionar. -Repite los mismos errores que Pokémon Diamante, por razones evidentes, así que tampoco me voy a extender mucho más. No dista mucho del Pokémon Diamante, al final los 2 son \"lo mismo\" pero como este tiene sprites y animaciones que me gustan más, le voy a poner mejor nota. **Notita:** Un 5.3 25/02/2026: La cambio a un 4.",
-    "ambientEffect": "dark-motes"
+    "review": "Faltan aliens\n\nNo hay aliens\n\n***Lo bueno*** -Los sprites de los pokémons y sus animaciones están bastante bien hechas. -La música del Overworld se hace notar. (Aunque en las peleas es bastante meh). -Los efectos de sonido cumplen. -Me parece que tiene un Post-Game que ofrece bien. -La historia no está **mal**. No es una mierda, dejémoslo ahí.\n\n-La música de \"Pueblo Arcilla\" es bastante potente, especialmente después de pasarte el juego. Mola. -Y la música de la Ruta 10 también mola mucho.\n\n***Lo malo:*** -La historia resulta predecible. -Igual que Diamante y que todos los pokémons, sin cámara rápida prefieres cortarte la polla en trocitos para servirlos de tapa en un bar junto a unas aceitunas. -Varios pokémons de esta generación tardan demasiado en evolucionar. -Repite los mismos errores que Pokémon Diamante, por razones evidentes, así que tampoco me voy a extender mucho más.\n\nNo dista mucho del Pokémon Diamante, al final los 2 son \"lo mismo\" pero como este tiene sprites y animaciones que me gustan más, le voy a poner mejor nota.\n\n**Notita:** Un 3",
+    "ambientEffect": "dark-motes",
+    "reviewSections": [
+      {
+        "title": "Primera impresión",
+        "verdict": false,
+        "paragraphs": [
+          "Faltan aliens",
+          "No hay aliens"
+        ]
+      },
+      {
+        "title": "Lo bueno",
+        "verdict": false,
+        "paragraphs": [
+          "***Lo bueno*** -Los sprites de los pokémons y sus animaciones están bastante bien hechas. -La música del Overworld se hace notar. (Aunque en las peleas es bastante meh). -Los efectos de sonido cumplen. -Me parece que tiene un Post-Game que ofrece bien. -La historia no está **mal**. No es una mierda, dejémoslo ahí.",
+          "-La música de \"Pueblo Arcilla\" es bastante potente, especialmente después de pasarte el juego. Mola. -Y la música de la Ruta 10 también mola mucho."
+        ]
+      },
+      {
+        "title": "Lo malo",
+        "verdict": false,
+        "paragraphs": [
+          "***Lo malo:*** -La historia resulta predecible. -Igual que Diamante y que todos los pokémons, sin cámara rápida prefieres cortarte la polla en trocitos para servirlos de tapa en un bar junto a unas aceitunas. -Varios pokémons de esta generación tardan demasiado en evolucionar. -Repite los mismos errores que Pokémon Diamante, por razones evidentes, así que tampoco me voy a extender mucho más."
+        ]
+      },
+      {
+        "title": "Comparación con Diamante",
+        "verdict": false,
+        "paragraphs": [
+          "No dista mucho del Pokémon Diamante, al final los 2 son \"lo mismo\" pero como este tiene sprites y animaciones que me gustan más, le voy a poner mejor nota."
+        ]
+      },
+      {
+        "title": "Veredicto final",
+        "verdict": true,
+        "paragraphs": [
+          "**Notita:** Un 3"
+        ]
+      }
+    ]
   },
   {
     "id": "twilight-princess",
