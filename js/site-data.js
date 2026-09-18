@@ -1245,35 +1245,35 @@
         ]
       },
       {
-        "title": "MATCHMAKING Y RANKED",
+        "title": "Matchmaking y ranked",
         "verdict": false,
         "paragraphs": [
           "El matchmaking me produce aproximadamente la misma sensación que en casi cualquier juego competitivo por equipos:\n**una puta mierda.**\nExiste una sensación constante de que el sistema intenta estabilizarte alrededor de un porcentaje de victorias relativamente equilibrado.\nCuando encadenas demasiadas partidas buenas, parece que inevitablemente empieza a llegar una colección de partidas muchísimo más desagradables.\nY cuando llevas una racha espantosa, ocurre algo parecido en sentido contrario.\nSea cual sea exactamente el funcionamiento interno del matchmaking, la experiencia termina siendo desesperante porque dependes de otras cuatro personas y el resultado de una partida puede estar condicionado por auténticas barbaridades que no tienen absolutamente nada que ver contigo.\nY eso es algo prácticamente inherente a cualquier competitivo por equipos."
         ]
       },
       {
-        "title": "ANTI-CHEAT",
+        "title": "Anti-cheat",
         "verdict": false,
         "paragraphs": [
           "Aquí pocas quejas.\nEl sistema anti-cheat parece cumplir su función razonablemente bien y no he tenido una experiencia con tramposos suficientemente problemática como para considerarlo un defecto importante.\nAsí que mientras siga funcionando, perfecto."
         ]
       },
       {
-        "title": "COMUNIDAD Y MODERACIÓN",
+        "title": "Comunidad y moderación",
         "verdict": false,
         "paragraphs": [
           "La comunidad es, como ocurre en prácticamente todos los juegos online competitivos:\n**asquerosa.**\nPoco más que añadir.\nEl chat sirve principalmente para reírte de los demás, discutir, ver cómo alguien pierde completamente la cabeza o escribir alguna gilipollez.\nY luego está la moderación.\nPuedes terminar castigado por escribir determinadas cosas completamente absurdas mientras, paralelamente, ves jugadores encadenando partidas lamentables o comportamientos que son muchísimo más perjudiciales para la experiencia de juego.\nEs el clásico problema de moderar mucho más fácilmente lo que alguien **escribe** que determinar con certeza cuándo alguien está intentando perder una partida.\nAsí que al final tenemos situaciones bastante ridículas."
         ]
       },
       {
-        "title": "DISEÑO VISUAL Y CLARIDAD",
+        "title": "Diseño visual y claridad",
         "verdict": false,
         "paragraphs": [
           "Visualmente, League of Legends me parece aceptable tirando a bueno.\nNo es espectacular, pero cumple.\nLas animaciones generalmente comunican bien las acciones y normalmente puedes interpretar lo que está ocurriendo.\nEl problema aparece cuando entramos en determinadas habilidades.\nHay hitboxes que me parecen directamente **malísimas**.\nAtaques que visualmente parecen haber fallado y terminan golpeándote.\nO situaciones donde el área que representa la animación y el área real que comprueba el juego no parecen coincidir como deberían.\nTambién existen habilidades que pueden resultar difíciles de distinguir correctamente dependiendo de todo lo que esté ocurriendo en pantalla.\nY en un juego donde una sola habilidad puede decidir una pelea completa."
         ]
       },
       {
-        "title": "CONTENIDO Y MONETIZACIÓN",
+        "title": "Contenido y monetización",
         "verdict": false,
         "paragraphs": [
           "Aquí no tengo demasiado que decir.\nNo me obligan a pagar.\nPuedo jugar perfectamente sin gastar dinero.\nHay skins, cosméticos y demás historias, pero si quiero comprarlas las compro y si no, no.\nAsí que mientras siga siendo así, es un apartado que personalmente me da bastante igual."
@@ -1287,14 +1287,14 @@
         ]
       },
       {
-        "title": "PRINCIPALES PROBLEMAS",
+        "title": "Principales problemas",
         "verdict": false,
         "paragraphs": [
           "Si tuviera que resumir los mayores problemas de League of Legends serían tres:\n**Las hitboxes.**\nHay habilidades cuya representación visual y área real de impacto deberían estar muchísimo mejor ajustadas.\n**El balance.**\nCon semejante cantidad de personajes, habilidades, objetos, matchups e interacciones, el juego parece encontrarse constantemente persiguiendo un equilibrio que nunca termina de existir.\nY, sobre todo:\n**el techo de habilidad mecánica.**\nPara mí es su mayor limitación.\nLeague permite aprender estrategia prácticamente de forma infinita, pero en lo que respecta a sus personajes, no permite una evolución mecánica equivalente.\nY eso hace que el proceso de masterizar un campeón me parezca mucho menos satisfactorio de lo que podría ser."
         ]
       },
       {
-        "title": "LO MEJOR DE LEAGUE OF LEGENDS",
+        "title": "Lo mejor de League of Legends",
         "verdict": false,
         "paragraphs": [
           "A pesar de todo eso, League of Legends tiene una cosa extremadamente clara a su favor:\n**es probablemente el juego más elaborado y cuidado de su género.**\nY se nota.\nSe nota en cómo responde.\nSe nota en cómo se mueve.\nSe nota en las animaciones.\nSe nota en el feedback.\nSe nota en cómo comunica una enorme cantidad de información.\nY se nota especialmente cuando lo comparas con otros MOBAs\nNo necesito ser un apasionado del género para querer jugar al LoL.\nDe hecho, precisamente porque **no lo soy**, tiene todavía más mérito que sea el único MOBA al que sí me apetece volver.\nPorque, aunque tenga problemas enormes, aunque determinados situaciones sean una puta mierda, aunque la comunidad sea horrible y aunque mecánicamente me parezca mucho más limitado de lo que me gustaría…\n**jugar al LoL, se siente bien.**\nY parece una frase extremadamente simple.\nPero es probablemente la razón principal por la que sigo considerándolo bastante bueno."
