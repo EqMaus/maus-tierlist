@@ -79,8 +79,60 @@
     "reviewDate": "17/02/2026",
     "spoilers": false,
     "excerpt": "La primera entrega griega sigue funcionando por sus magias, sus puzles y una base de combate que aguanta muy bien.",
-    "review": "Bastante bueno y, como primera entrega de la saga, es muy muy top. Los escenarios son bastante decentes en general, aunque también, como en el 3, se podrían llegar a considerar repetitivos en ciertos puntos. Parte de la culpa de esto la tiene que el 75% del juego es en el Templo de Pandora. God of War 1 tiene la magia más molona de todos los God of War: **El ejército de Hades**, y la **Ira de Poseidón** no se queda atrás, son la puta polla. También tiene la Ira de los Dioses (L3 + R3) más molona de toda la saga, sin ninguna duda. Si la del 2 era molona, esta es EXCESIVA. Las 2 armas que puedes usar en este juego, ambas son muy molonas. Las Espadas del Caos son las más molonas de la saga, (Y las más icónicas), y la espada de Artemisa está bastante guapa también, aunque no es santa de mi devoción. Los bosses son quizás los \"\"\"peores\"\"\" de la trilogía, aunque son buenos, no son tan chulos como en los otros 2 juegos. Y el boss final es **la mayor mierda** de la saga, aunque gran parte de la culpa es la dificultad a la que lo he jugado, que convierte la batalla en algo que, simplemente, te quita todas tus opciones para que sea injusto y no tengas mucho que hacer. La música es **GOD**, para variar. La actuación de voz es normalita, algunas partes mejor dobladas que otras... Es inconsistente. Los cofres secretos de este juego son mejores que los del 3 pero peores que los del 2. Muy fácil llegar con toda la vida y toda la magia (Y necesario en el modo Dios si no quieres perder. Especialmente lo de la magia). El feedback del juego es bueno, cumple genial. Ninguna queja. Y luego, el modo Dios (Es el más difícil), me ha **decepcionado**. Ha sido sin duda el más fácil de los 3. No me ha costado NADA más fuera del boss final (Por injusto) y ya. Los orbes verdes curan demasiado, los azules dan demasiada magia, y hay demasiados orbes rojos en general para mejorar todo lo que necesites. Muy mal ahí, es el que menos reto me ha supuesto. Aún con eso, lo he disfrutado.\n\nTambién decir que los enemigos quitan muy poca vida a exepción de un par de bosses, lo cual, si vienes de los otros 2 donde un golpe te pavimentaba la puta cabeza contra la mesa, pues se siente excesivamente sencillo. Ah, y este juego tiene los mejores puzzles de la trilogía, eso es importante para mí. Y también tiene las mejores presentaciones de... \"Sucesos\" en el juego, también. La música con la que te presentan ciertas cosas, es super buena. Ah, y este juego NO tiene contador de horas, muertes, y demás. Mal ahí. He tardado 5 horas, 47 minutos y 26 segundos **de puro gameplay** en completar el juego.\n**Nota final: Un 8**",
-    "ambientEffect": "ember-dust"
+    "review": "Bastante bueno y, como primera entrega de la saga, es muy muy top. Los escenarios son bastante decentes en general, aunque también, como en el 3, se podrían llegar a considerar repetitivos en ciertos puntos. Parte de la culpa de esto la tiene que el 75% del juego es en el Templo de Pandora.\n\nGod of War 1 tiene la magia más molona de todos los God of War: **El ejército de Hades**, y la **Ira de Poseidón** no se queda atrás, son la puta polla. También tiene la Ira de los Dioses (L3 + R3) más molona de toda la saga, sin ninguna duda. Si la del 2 era molona, esta es EXCESIVA. Las 2 armas que puedes usar en este juego, ambas son muy molonas.\n\nLas Espadas del Caos son las más molonas de la saga, (Y las más icónicas), y la espada de Artemisa está bastante guapa también, aunque no es santa de mi devoción. Los bosses son quizás los \"\"\"peores\"\"\" de la trilogía, aunque son buenos, no son tan chulos como en los otros 2 juegos.\n\nY el boss final es **la mayor mierda** de la saga, aunque gran parte de la culpa es la dificultad a la que lo he jugado, que convierte la batalla en algo que, simplemente, te quita todas tus opciones para que sea injusto y no tengas mucho que hacer. La música es **GOD**, para variar. La actuación de voz es normalita, algunas partes mejor dobladas que otras... Es inconsistente.\n\nLos cofres secretos de este juego son mejores que los del 3 pero peores que los del 2. Muy fácil llegar con toda la vida y toda la magia (Y necesario en el modo Dios si no quieres perder. Especialmente lo de la magia). El feedback del juego es bueno, cumple genial. Ninguna queja. Y luego, el modo Dios (Es el más difícil), me ha **decepcionado**. Ha sido sin duda el más fácil de los 3.\n\nNo me ha costado NADA más fuera del boss final (Por injusto) y ya. Los orbes verdes curan demasiado, los azules dan demasiada magia, y hay demasiados orbes rojos en general para mejorar todo lo que necesites. Muy mal ahí, es el que menos reto me ha supuesto. Aún con eso, lo he disfrutado.\n\nTambién decir que los enemigos quitan muy poca vida a exepción de un par de bosses, lo cual, si vienes de los otros 2 donde un golpe te pavimentaba la puta cabeza contra la mesa, pues se siente excesivamente sencillo. Ah, y este juego tiene los mejores puzzles de la trilogía, eso es importante para mí. Y también tiene las mejores presentaciones de... \"Sucesos\" en el juego, también. La música con la que te presentan ciertas cosas, es super buena, además.\n\nEste juego NO tiene contador de horas, muertes, y demás. Mal ahí. He tardado 5 horas, 47 minutos y 26 segundos **de puro gameplay** en completar el juego. \n**\nNota final: Un 8**",
+    "ambientEffect": "ember-dust",
+    "reviewSections": [
+      {
+        "title": "Primera impresión",
+        "verdict": false,
+        "paragraphs": [
+          "Bastante bueno y, como primera entrega de la saga, es muy muy top. Los escenarios son bastante decentes en general, aunque también, como en el 3, se podrían llegar a considerar repetitivos en ciertos puntos. Parte de la culpa de esto la tiene que el 75% del juego es en el Templo de Pandora."
+        ]
+      },
+      {
+        "title": "Jugabilidad y combate",
+        "verdict": false,
+        "paragraphs": [
+          "God of War 1 tiene la magia más molona de todos los God of War: **El ejército de Hades**, y la **Ira de Poseidón** no se queda atrás, son la puta polla. También tiene la Ira de los Dioses (L3 + R3) más molona de toda la saga, sin ninguna duda. Si la del 2 era molona, esta es EXCESIVA. Las 2 armas que puedes usar en este juego, ambas son muy molonas.",
+          "Las Espadas del Caos son las más molonas de la saga, (Y las más icónicas), y la espada de Artemisa está bastante guapa también, aunque no es santa de mi devoción. Los bosses son quizás los \"\"\"peores\"\"\" de la trilogía, aunque son buenos, no son tan chulos como en los otros 2 juegos."
+        ]
+      },
+      {
+        "title": "Música y sonido",
+        "verdict": false,
+        "paragraphs": [
+          "Y el boss final es **la mayor mierda** de la saga, aunque gran parte de la culpa es la dificultad a la que lo he jugado, que convierte la batalla en algo que, simplemente, te quita todas tus opciones para que sea injusto y no tengas mucho que hacer. La música es **GOD**, para variar. La actuación de voz es normalita, algunas partes mejor dobladas que otras... Es inconsistente."
+        ]
+      },
+      {
+        "title": "Jugabilidad y combate",
+        "verdict": false,
+        "paragraphs": [
+          "Los cofres secretos de este juego son mejores que los del 3 pero peores que los del 2. Muy fácil llegar con toda la vida y toda la magia (Y necesario en el modo Dios si no quieres perder. Especialmente lo de la magia). El feedback del juego es bueno, cumple genial. Ninguna queja. Y luego, el modo Dios (Es el más difícil), me ha **decepcionado**. Ha sido sin duda el más fácil de los 3."
+        ]
+      },
+      {
+        "title": "Historia y personajes",
+        "verdict": false,
+        "paragraphs": [
+          "No me ha costado NADA más fuera del boss final (Por injusto) y ya. Los orbes verdes curan demasiado, los azules dan demasiada magia, y hay demasiados orbes rojos en general para mejorar todo lo que necesites. Muy mal ahí, es el que menos reto me ha supuesto. Aún con eso, lo he disfrutado."
+        ]
+      },
+      {
+        "title": "Jugabilidad y combate",
+        "verdict": false,
+        "paragraphs": [
+          "También decir que los enemigos quitan muy poca vida a exepción de un par de bosses, lo cual, si vienes de los otros 2 donde un golpe te pavimentaba la puta cabeza contra la mesa, pues se siente excesivamente sencillo. Ah, y este juego tiene los mejores puzzles de la trilogía, eso es importante para mí. Y también tiene las mejores presentaciones de... \"Sucesos\" en el juego, también. La música con la que te presentan ciertas cosas, es super buena, además."
+        ]
+      },
+      {
+        "title": "Veredicto final",
+        "verdict": true,
+        "paragraphs": [
+          "Este juego NO tiene contador de horas, muertes, y demás. Mal ahí. He tardado 5 horas, 47 minutos y 26 segundos **de puro gameplay** en completar el juego. \n**\nNota final: Un 8**"
+        ]
+      }
+    ]
   },
   {
     "id": "sotc",
