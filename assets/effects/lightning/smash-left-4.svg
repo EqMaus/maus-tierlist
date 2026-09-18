@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="210" height="420" viewBox="0 0 210 420" fill="none">
+  <defs>
+    <filter id="blurWide" x="-80%" y="-30%" width="260%" height="180%">
+      <feGaussianBlur stdDeviation="12"/>
+    </filter>
+    <filter id="blurMid" x="-60%" y="-20%" width="220%" height="160%">
+      <feGaussianBlur stdDeviation="5"/>
+    </filter>
+    <filter id="blurCore" x="-60%" y="-20%" width="220%" height="160%">
+      <feGaussianBlur stdDeviation="1.2"/>
+    </filter>
+    <linearGradient id="gradCore" x1="0" y1="0" x2="0" y2="420" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="18%" stop-color="#a8e9ff"/>
+      <stop offset="52%" stop-color="#2fd3ff"/>
+      <stop offset="78%" stop-color="#6ba6ff"/>
+      <stop offset="100%" stop-color="#a8e9ff"/>
+    </linearGradient>
+  </defs>
+  <g opacity=".90" filter="url(#blurWide)">
+    <polyline points="37.8,9.1 57.3,49.1 72.8,113.6 64.9,166.4 58.9,216.5 50.5,261.9 60.6,308.2 42.3,352.6 27.0,410.6" stroke="#2fd3ff" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="64.9,166.4 70.9,191.4 75.8,213.7 81.8,240.6 86.8,259.7 83.0,292.5 78.2,313.8" stroke="#6ba6ff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="57.3,49.1 63.1,85.9 69.4,108.5 64.4,145.9 55.7,167.7 47.3,202.9 37.9,231.6" stroke="#6ba6ff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="58.9,216.5 63.1,241.2 60.4,259.7 56.7,277.0 52.2,307.1 48.5,344.0 51.6,371.1" stroke="#6ba6ff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="58.9,216.5 56.7,241.5 53.8,262.2 50.4,299.8 47.3,317.3 50.7,343.0" stroke="#6ba6ff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g opacity=".98" filter="url(#blurMid)">
+    <polyline points="37.8,9.1 57.3,49.1 72.8,113.6 64.9,166.4 58.9,216.5 50.5,261.9 60.6,308.2 42.3,352.6 27.0,410.6" stroke="#6ba6ff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="64.9,166.4 70.9,191.4 75.8,213.7 81.8,240.6 86.8,259.7 83.0,292.5 78.2,313.8" stroke="#2fd3ff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="57.3,49.1 63.1,85.9 69.4,108.5 64.4,145.9 55.7,167.7 47.3,202.9 37.9,231.6" stroke="#2fd3ff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="58.9,216.5 63.1,241.2 60.4,259.7 56.7,277.0 52.2,307.1 48.5,344.0 51.6,371.1" stroke="#2fd3ff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="58.9,216.5 56.7,241.5 53.8,262.2 50.4,299.8 47.3,317.3 50.7,343.0" stroke="#2fd3ff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g opacity="1" filter="url(#blurCore)">
+    <polyline points="37.8,9.1 57.3,49.1 72.8,113.6 64.9,166.4 58.9,216.5 50.5,261.9 60.6,308.2 42.3,352.6 27.0,410.6" stroke="url(#gradCore)" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="64.9,166.4 70.9,191.4 75.8,213.7 81.8,240.6 86.8,259.7 83.0,292.5 78.2,313.8" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="57.3,49.1 63.1,85.9 69.4,108.5 64.4,145.9 55.7,167.7 47.3,202.9 37.9,231.6" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="58.9,216.5 63.1,241.2 60.4,259.7 56.7,277.0 52.2,307.1 48.5,344.0 51.6,371.1" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="58.9,216.5 56.7,241.5 53.8,262.2 50.4,299.8 47.3,317.3 50.7,343.0" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

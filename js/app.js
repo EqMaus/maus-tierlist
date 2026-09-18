@@ -531,16 +531,21 @@
     return '';
   }
 
-  function specialLightningZoneHtml(zoneClass, x, y, w, h, bolts, sparks = []) {
-    const boltHtml = bolts.map((bolt, index) => {
-      const [bx, by, bw, bh, rotation, delay, duration, intensity = .9] = bolt;
-      return `<i class="special-bolt bolt-${index % 4}" style="--x:${bx}%;--y:${by}%;--w:${bw}px;--h:${bh}px;--r:${rotation}deg;--delay:${delay}s;--d:${duration}s;--a:${intensity}"></i>`;
+  function specialLightningZoneAssetHtml(zoneClass, x, y, w, h, assets, placements, sparkCount = 0) {
+    const bolts = placements.map((placement, index) => {
+      const [px, py, pw, ph, rotation, delay, duration, opacity = .95, scale = 1, blend = 'screen'] = placement;
+      const src = assets[index % assets.length];
+      return `<img class="special-lightning-asset asset-${index % 5}" src="${esc(src)}" alt="" aria-hidden="true" style="--x:${px}%;--y:${py}%;--w:${pw}px;--h:${ph}px;--r:${rotation}deg;--delay:${delay}s;--d:${duration}s;--a:${opacity};--scale:${scale};--blend:${blend}">`;
     }).join('');
-    const sparkHtml = sparks.map((spark, index) => {
-      const [sx, sy, size, delay, duration, intensity = .85] = spark;
-      return `<i class="special-spark spark-${index % 3}" style="--x:${sx}%;--y:${sy}%;--s:${size}px;--delay:${delay}s;--d:${duration}s;--a:${intensity}"></i>`;
+    const sparks = Array.from({ length: sparkCount }, (_, index) => {
+      const sx = (index * 17) % 86 + 7;
+      const sy = (index * 29) % 74 + 8;
+      const size = 18 + (index % 4) * 6;
+      const delay = -(index * .63 + .4);
+      const duration = 4.2 + (index % 3) * .7;
+      return `<i class="special-spark spark-${index % 3}" style="--x:${sx}%;--y:${sy}%;--s:${size}px;--delay:${delay}s;--d:${duration}s;--a:.78"></i>`;
     }).join('');
-    return `<div class="special-lightning-zone ${zoneClass}" style="--zone-x:${x}%;--zone-y:${y}%;--zone-w:${w}%;--zone-h:${h}%">${boltHtml}${sparkHtml}</div>`;
+    return `<div class="special-lightning-zone ${zoneClass}" style="--zone-x:${x}%;--zone-y:${y}%;--zone-w:${w}%;--zone-h:${h}%">${bolts}${sparks}</div>`;
   }
 
   function specialSceneEffectHtml(gameId) {
@@ -548,42 +553,38 @@
     if (!effectId || mobilePerformance) return '';
 
     if (effectId === 'smash-kazuya-lightning') {
-      const leftZone = specialLightningZoneHtml(
+      const leftAssets = ['assets/effects/lightning/smash-left-1.svg', 'assets/effects/lightning/smash-left-2.svg', 'assets/effects/lightning/smash-left-3.svg', 'assets/effects/lightning/smash-left-4.svg', 'assets/effects/lightning/smash-left-5.svg', 'assets/effects/lightning/smash-left-6.svg'];
+      const rightAssets = ['assets/effects/lightning/smash-right-1.svg', 'assets/effects/lightning/smash-right-2.svg', 'assets/effects/lightning/smash-right-3.svg', 'assets/effects/lightning/smash-right-4.svg', 'assets/effects/lightning/smash-right-5.svg', 'assets/effects/lightning/smash-right-6.svg', 'assets/effects/lightning/smash-right-7.svg'];
+
+      const leftZone = specialLightningZoneAssetHtml(
         'zone-left',
         9.2, 18.5, 39.6, 29.5,
+        leftAssets,
         [
-          [6, 62, 22, 126, -62, -.4, 3.8, .85],
-          [17, 22, 20, 96, -14, -1.3, 4.4, .95],
-          [33, 40, 17, 88, 18, -2.1, 3.9, .75],
-          [47, 18, 16, 84, 36, -3.2, 4.2, .84],
-          [57, 54, 18, 92, 68, -.8, 4.6, .92],
-          [71, 13, 14, 76, 21, -2.8, 5.1, .82]
+          [4, 8, 92, 188, -20, -.4, 5.0, .88, .92, 'screen'],
+          [17, 0, 116, 214, 11, -1.5, 5.8, .94, 1.0, 'screen'],
+          [33, 7, 98, 190, 21, -2.4, 6.1, .78, .9, 'screen'],
+          [49, 10, 90, 172, 34, -3.1, 5.5, .82, .86, 'screen'],
+          [64, 12, 96, 182, 55, -.9, 6.3, .9, .95, 'screen'],
+          [76, 0, 84, 170, 9, -4.0, 6.8, .76, .88, 'screen']
         ],
-        [
-          [22, 46, 34, -.8, 4.2, .78],
-          [49, 58, 28, -1.9, 4.8, .66],
-          [66, 27, 25, -3.1, 4.4, .72]
-        ]
+        4
       );
 
-      const rightZone = specialLightningZoneHtml(
+      const rightZone = specialLightningZoneAssetHtml(
         'zone-right',
         49.1, 10.4, 36.6, 59.6,
+        rightAssets,
         [
-          [9, 21, 18, 112, -42, -1.2, 3.7, .88],
-          [22, 5, 20, 132, -12, -.6, 4.9, 1],
-          [34, 34, 18, 116, 9, -2.4, 4.2, .82],
-          [49, 17, 19, 146, 18, -3.3, 5.4, .94],
-          [63, 40, 22, 118, 41, -1.7, 4.5, .86],
-          [76, 12, 16, 108, 32, -2.8, 5.2, .9],
-          [58, 66, 21, 128, 67, -.2, 4.1, .84]
+          [0, 2, 120, 255, -18, -1.3, 5.1, .86, .96, 'screen'],
+          [10, -2, 148, 308, -6, -.6, 5.8, .98, 1.02, 'screen'],
+          [22, 6, 134, 284, 5, -2.0, 6.2, .82, .93, 'screen'],
+          [38, 0, 132, 292, 14, -3.4, 6.7, .92, 1.0, 'screen'],
+          [51, 9, 126, 262, 24, -1.7, 5.5, .84, .92, 'screen'],
+          [65, 4, 122, 258, 31, -2.8, 6.0, .9, .97, 'screen'],
+          [57, 28, 118, 244, 48, -.3, 4.8, .78, .88, 'screen']
         ],
-        [
-          [21, 38, 36, -1.4, 4.9, .86],
-          [48, 26, 32, -2.6, 5.4, .74],
-          [68, 55, 29, -.9, 4.1, .81],
-          [55, 77, 25, -3.2, 4.6, .69]
-        ]
+        6
       );
 
       return `<div class="scene-special-effects effect-${esc(effectId)}" aria-hidden="true">${leftZone}${rightZone}</div>`;

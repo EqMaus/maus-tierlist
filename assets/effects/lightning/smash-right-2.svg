@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="260" height="560" viewBox="0 0 260 560" fill="none">
+  <defs>
+    <filter id="blurWide" x="-80%" y="-30%" width="260%" height="180%">
+      <feGaussianBlur stdDeviation="12"/>
+    </filter>
+    <filter id="blurMid" x="-60%" y="-20%" width="220%" height="160%">
+      <feGaussianBlur stdDeviation="5"/>
+    </filter>
+    <filter id="blurCore" x="-60%" y="-20%" width="220%" height="160%">
+      <feGaussianBlur stdDeviation="1.2"/>
+    </filter>
+    <linearGradient id="gradCore" x1="0" y1="0" x2="0" y2="560" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="18%" stop-color="#d0a4ff"/>
+      <stop offset="52%" stop-color="#59cfff"/>
+      <stop offset="78%" stop-color="#b875ff"/>
+      <stop offset="100%" stop-color="#d0a4ff"/>
+    </linearGradient>
+  </defs>
+  <g opacity=".90" filter="url(#blurWide)">
+    <polyline points="147.3,18.3 117.7,74.9 127.6,130.7 152.7,184.9 166.4,251.0 167.7,333.6 196.5,422.3 186.2,488.4 163.7,556.0" stroke="#59cfff" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="167.7,333.6 164.5,361.7 160.4,386.3 163.5,430.2 168.0,463.7 165.1,487.0 161.6,520.6" stroke="#b875ff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="167.7,333.6 156.8,370.1 164.4,400.7 173.4,441.3 185.7,483.2 179.3,521.7" stroke="#b875ff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="127.6,130.7 125.2,168.8 121.8,209.3 124.4,240.7 120.6,263.3 116.6,289.8 112.8,333.3" stroke="#b875ff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="167.7,333.6 163.1,373.2 157.5,410.9 149.7,447.8 156.2,473.2 161.3,511.8" stroke="#b875ff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="167.7,333.6 172.0,358.0 180.0,386.5 186.8,418.8 182.8,461.3 176.7,506.3 181.6,556.7" stroke="#b875ff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g opacity=".98" filter="url(#blurMid)">
+    <polyline points="147.3,18.3 117.7,74.9 127.6,130.7 152.7,184.9 166.4,251.0 167.7,333.6 196.5,422.3 186.2,488.4 163.7,556.0" stroke="#b875ff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="167.7,333.6 164.5,361.7 160.4,386.3 163.5,430.2 168.0,463.7 165.1,487.0 161.6,520.6" stroke="#59cfff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="167.7,333.6 156.8,370.1 164.4,400.7 173.4,441.3 185.7,483.2 179.3,521.7" stroke="#59cfff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="127.6,130.7 125.2,168.8 121.8,209.3 124.4,240.7 120.6,263.3 116.6,289.8 112.8,333.3" stroke="#59cfff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="167.7,333.6 163.1,373.2 157.5,410.9 149.7,447.8 156.2,473.2 161.3,511.8" stroke="#59cfff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="167.7,333.6 172.0,358.0 180.0,386.5 186.8,418.8 182.8,461.3 176.7,506.3 181.6,556.7" stroke="#59cfff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g opacity="1" filter="url(#blurCore)">
+    <polyline points="147.3,18.3 117.7,74.9 127.6,130.7 152.7,184.9 166.4,251.0 167.7,333.6 196.5,422.3 186.2,488.4 163.7,556.0" stroke="url(#gradCore)" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="167.7,333.6 164.5,361.7 160.4,386.3 163.5,430.2 168.0,463.7 165.1,487.0 161.6,520.6" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="167.7,333.6 156.8,370.1 164.4,400.7 173.4,441.3 185.7,483.2 179.3,521.7" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="127.6,130.7 125.2,168.8 121.8,209.3 124.4,240.7 120.6,263.3 116.6,289.8 112.8,333.3" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="167.7,333.6 163.1,373.2 157.5,410.9 149.7,447.8 156.2,473.2 161.3,511.8" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="167.7,333.6 172.0,358.0 180.0,386.5 186.8,418.8 182.8,461.3 176.7,506.3 181.6,556.7" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>
