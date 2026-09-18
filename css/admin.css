@@ -362,7 +362,7 @@ code { padding: 2px 5px; border-radius: 5px; background: rgba(255,255,255,.06); 
 }
 
 
-/* v4.13.4 · Selector de ambiente del fondo */
+/* v4.13.6 · Selector de ambiente del fondo */
 .ambient-effect-field {
   margin-top: 16px;
   max-width: 560px;
@@ -376,7 +376,7 @@ code { padding: 2px 5px; border-radius: 5px; background: rgba(255,255,255,.06); 
 
 
 /* =========================================================
-   v4.13.4 · EDITOR VISUAL DE REVIEWS
+   v4.13.6 · EDITOR VISUAL DE REVIEWS
    ========================================================= */
 .review-visual-card{overflow:visible}.review-editor-heading{align-items:flex-start}.review-editor-heading p{margin:7px 0 0;color:var(--muted);font-size:13px;line-height:1.55}.review-raw-storage{display:none!important}
 .review-format-toolbar{position:sticky;top:72px;z-index:12;display:flex;align-items:center;gap:8px;min-height:52px;margin:0 0 16px;padding:8px 10px;border:1px solid rgba(255,255,255,.085);border-radius:13px;background:rgba(8,20,29,.94);backdrop-filter:blur(14px) saturate(120%);box-shadow:0 12px 32px rgba(0,0,0,.18)}
@@ -395,7 +395,7 @@ code { padding: 2px 5px; border-radius: 5px; background: rgba(255,255,255,.06); 
 @media(max-width:760px){.review-format-toolbar{top:8px;flex-wrap:wrap}.review-toolbar-help{width:100%;margin-left:0}.review-editor-section-controls{grid-template-columns:1fr}.review-section-actions{justify-content:flex-start}.review-editor-public-head{margin-left:8px}.review-paragraph-shell{grid-template-columns:1fr}.review-paragraph-actions{opacity:1;transform:none}.review-editor-footer{align-items:flex-start;flex-direction:column}}
 
 /* =========================================================
-   v4.13.4 · Editor visual avanzado de reviews
+   v4.13.6 · Editor visual avanzado de reviews
    ========================================================= */
 .review-heading-actions{display:grid;justify-items:end;gap:9px}
 .review-mode-switch,.preview-device-switch{display:flex;gap:5px;padding:4px;border:1px solid rgba(255,255,255,.08);border-radius:10px;background:rgba(255,255,255,.025)}

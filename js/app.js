@@ -207,6 +207,12 @@
 
   function startSceneDrift(gameId) {
     stopSceneDrift(false);
+    if (mobilePerformance) {
+      sceneMotion.driftX = 0;
+      sceneMotion.driftY = 0;
+      updateSceneMotionVars();
+      return;
+    }
     if (!gameId || document.hidden) return;
     const profile = sceneDirectionFor(gameId);
     const phaseX = Math.random() * Math.PI * 2;
@@ -238,6 +244,12 @@
 
   function scheduleAutonomousCamera(gameId, immediate = false) {
     window.clearTimeout(autoCameraTimer);
+    if (mobilePerformance) {
+      sceneMotion.targetX = 0;
+      sceneMotion.targetY = 0;
+      queueSceneMotion();
+      return;
+    }
     if (!gameId || document.hidden) return;
     const profile = sceneDirectionFor(gameId);
     const move = () => {
@@ -455,6 +467,11 @@
 
   const gameById = new Map(games.map((game) => [game.id, game]));
 
+  const MOBILE_PERFORMANCE_QUERY = '(max-width: 900px) and (hover: none) and (pointer: coarse)';
+  const mobilePerformance = window.matchMedia(MOBILE_PERFORMANCE_QUERY).matches;
+  body.classList.toggle('mobile-performance', mobilePerformance);
+
+
 
   const LEGACY_AMBIENT_EFFECTS = {
     'gow1': 'ember-dust',
@@ -500,7 +517,8 @@
   function ambientEffectHtml(gameId) {
     const effect = ambientEffectFor(gameId);
     if (!effect || effect === 'none') return '';
-    const count = AMBIENT_EFFECT_COUNTS[effect] || 24;
+    const baseCount = AMBIENT_EFFECT_COUNTS[effect] || 24;
+    const count = mobilePerformance ? Math.min(baseCount, 22) : baseCount;
     const particles = Array.from({ length: count }, (_, index) => {
       const x = (index * 37 + 11) % 101;
       const y = (index * 53 + 17) % 101;
@@ -520,7 +538,8 @@
   function foregroundEffectHtml(gameId) {
     const effect = ambientEffectFor(gameId);
     if (!effect || effect === 'none') return '';
-    const count = effect === 'wind-dust' ? 26 : 18;
+    const baseCount = effect === 'wind-dust' ? 26 : 18;
+    const count = mobilePerformance ? Math.min(baseCount, 7) : baseCount;
     const particles = Array.from({ length: count }, (_, index) => {
       const x = (index * 61 + 7) % 106 - 3;
       const y = (index * 43 + 19) % 106 - 3;
@@ -562,7 +581,8 @@
       'village-ash': 16,
       'ominous-motes': 16
     };
-    const count = countMap[effect] || 14;
+    const baseCount = countMap[effect] || 14;
+    const count = mobilePerformance ? Math.min(baseCount, 6) : baseCount;
     const particles = Array.from({ length: count }, (_, index) => {
       const x = (index * 59 + 9) % 106 - 3;
       const y = (index * 47 + 13) % 106 - 3;
@@ -1832,7 +1852,10 @@
     scheduleAutonomousCamera(gameId, true);
     updateSceneScrollDepth();
     if (photoSrc) {
-      sceneArt.innerHTML = `<div class="scene-background-motion"><div class="scene-depth scene-depth-back" style="background-image:url('${esc(photoSrc)}')"></div><img class="scene-photo" src="${esc(photoSrc)}" alt=""><div class="scene-depth scene-depth-front" style="background-image:url('${esc(photoSrc)}')"></div></div>${lighting}${ambient}${foreground}${climateEvent}`;
+      const depthLayers = mobilePerformance
+        ? ''
+        : `<div class="scene-depth scene-depth-back" style="background-image:url('${esc(photoSrc)}')"></div><div class="scene-depth scene-depth-front" style="background-image:url('${esc(photoSrc)}')"></div>`;
+      sceneArt.innerHTML = `<div class="scene-background-motion">${depthLayers}<img class="scene-photo" src="${esc(photoSrc)}" alt=""></div>${lighting}${ambient}${foreground}${climateEvent}`;
       return;
     }
     sceneArt.innerHTML = `${sceneSvg(key)}${lighting}${ambient}${foreground}${climateEvent}`;
@@ -2512,7 +2535,7 @@
   }
 
   function bindStaticEvents() {
-    const lowPower = window.matchMedia('(max-width: 700px)').matches || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
+    const lowPower = mobilePerformance || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
     body.classList.toggle('low-power', Boolean(lowPower));
     window.addEventListener('scroll', () => {
       updateSceneScrollDepth();
@@ -2536,6 +2559,28 @@
     app.addEventListener('change', handleAppChange);
     app.addEventListener('focusout', handleAppBlur);
     app.addEventListener('keydown', handleAppKeydown);
+
+    // Navegación de secciones: si no caben todas, la rueda del ratón
+    // desplaza la banda horizontalmente. En móvil el swipe sigue siendo nativo.
+    app.addEventListener('wheel', (event) => {
+      const track = event.target.closest?.('.review-section-nav-track');
+      if (!track || track.scrollWidth <= track.clientWidth + 1) return;
+
+      const horizontalDelta = Math.abs(event.deltaX) > Math.abs(event.deltaY)
+        ? event.deltaX
+        : event.deltaY;
+
+      if (!horizontalDelta) return;
+
+      const maxScrollLeft = Math.max(0, track.scrollWidth - track.clientWidth);
+      const next = Math.min(maxScrollLeft, Math.max(0, track.scrollLeft + horizontalDelta));
+      const canMove = Math.abs(next - track.scrollLeft) > 0.5;
+
+      if (canMove) {
+        event.preventDefault();
+        track.scrollLeft = next;
+      }
+    }, { passive: false });
 
     if (playerSeek) {
       playerSeek.value = '0';

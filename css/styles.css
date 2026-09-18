@@ -1961,7 +1961,7 @@ body.climate-event[data-climate-event="flare"] .scene-foreground{
 }
 
 /* =========================================================
-   v4.13.4 · Dirección artística, cámara autónoma y rendimiento
+   v4.13.6 · Dirección artística, cámara autónoma y rendimiento
    ========================================================= */
 :root{
   --scene-light-x:50%;
@@ -2013,7 +2013,7 @@ body[data-scene="re1-remaster"] .scene-depth-back,body[data-scene="re2-og"] .sce
 
 
 /* =========================================================
-   v4.13.4 · FONDO SIEMPRE VIVO
+   v4.13.6 · FONDO SIEMPRE VIVO
    El fondo fotográfico se mueve también durante la lectura normal.
    Las partículas NO dependen de esta capa.
    ========================================================= */
@@ -2090,3 +2090,117 @@ body.background-only .scene-background-motion{
   from{transform:translate3d(-5.3px,-3.3px,0) scale(1.013)}
   to{transform:translate3d(5.3px,5.3px,0) scale(1.018)}
 }
+
+
+/* =========================================================
+   v4.13.6 · MODO RENDIMIENTO MÓVIL
+   Solo se activa en pantallas táctiles pequeñas. PC queda intacto.
+   ========================================================= */
+body.mobile-performance{
+  --scene-scroll-y:0px;
+}
+
+/* Mantiene el fondo vivo con UNA sola animación CSS barata. */
+body.mobile-performance .scene-background-motion{
+  animation-duration:22s;
+  animation-timing-function:ease-in-out;
+}
+body.mobile-performance.background-only .scene-background-motion{
+  animation-duration:19s;
+}
+
+/* La imagen interior deja de hacer zoom, parallax y scroll por separado.
+   El movimiento visible lo hace la envolvente anterior. */
+body.mobile-performance .scene-background-motion .scene-photo{
+  transform:none!important;
+  animation:none!important;
+  transition:filter .45s ease,opacity .45s ease!important;
+  will-change:auto!important;
+}
+body.mobile-performance .scene-depth{
+  display:none!important;
+}
+
+/* Una sola luz grande en vez de dos capas con blur enorme. */
+body.mobile-performance .scene-lighting span:last-child{
+  display:none!important;
+}
+body.mobile-performance .scene-lighting span:first-child{
+  width:58vw!important;
+  height:58vw!important;
+  filter:blur(20px)!important;
+}
+body.mobile-performance .scene-lighting{
+  transform:none!important;
+  filter:none!important;
+  mix-blend-mode:normal!important;
+}
+
+/* Quitamos las operaciones GPU más caras de las partículas.
+   Siguen animadas; simplemente son muchas menos y sin blur/sombras pesadas. */
+body.mobile-performance .scene-effects,
+body.mobile-performance .scene-foreground,
+body.mobile-performance .scene-event{
+  mix-blend-mode:normal!important;
+  filter:none!important;
+}
+body.mobile-performance .ambient-particle,
+body.mobile-performance .foreground-particle,
+body.mobile-performance .scene-event-particle{
+  filter:none!important;
+  box-shadow:none!important;
+}
+
+/* El grano animado y overlays secundarios cuestan bastante en móvil. */
+body.mobile-performance .scene-art::after{
+  display:none!important;
+}
+body.mobile-performance .scene-backdrop::after{
+  filter:blur(12px)!important;
+}
+
+/* Backdrop-filter sobre superficies grandes es uno de los mayores costes
+   al hacer scroll. En móvil usamos fondos algo más opacos equivalentes. */
+body.mobile-performance .site-header,
+body.mobile-performance .global-player,
+body.mobile-performance .detail-hero,
+body.mobile-performance .review-card,
+body.mobile-performance .side-card,
+body.mobile-performance .review-section,
+body.mobile-performance .review-section-nav,
+body.mobile-performance .theme-info-modal,
+body.mobile-performance .audio-gate{
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
+}
+body.mobile-performance .site-header{
+  background:rgba(4,11,17,.94)!important;
+}
+body.mobile-performance .global-player{
+  background:rgba(5,15,22,.97)!important;
+}
+body.mobile-performance .detail-hero,
+body.mobile-performance .review-card,
+body.mobile-performance .side-card{
+  background:rgba(7,18,26,.86)!important;
+}
+
+/* Menos pintura y sombras durante el scroll. */
+body.mobile-performance .review-card,
+body.mobile-performance .side-card,
+body.mobile-performance .detail-hero,
+body.mobile-performance .game-card{
+  box-shadow:0 12px 34px rgba(0,0,0,.24)!important;
+}
+body.mobile-performance .review-render-section{
+  content-visibility:auto;
+  contain-intrinsic-size:360px;
+}
+
+/* Los eventos siguen existiendo, pero no necesitan animar capas invisibles. */
+body.mobile-performance:not(.climate-event) .scene-event{
+  visibility:hidden;
+}
+
+/* Nada de cambios en escritorio: estas reglas dependen de la clase que
+   JS solo añade a teléfono/touch pequeño. */

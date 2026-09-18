@@ -16,10 +16,25 @@
 .review-render-root .review-verdict-body em{font-style:italic}
 .review-render-root .review-verdict-gap{height:.9em}
 .review-section-nav{position:sticky;top:70px;z-index:7;margin:0 0 15px;padding:7px;border:1px solid rgba(255,255,255,.07);border-radius:13px;background:rgba(5,13,19,.82);backdrop-filter:blur(15px) saturate(120%);box-shadow:0 10px 26px rgba(0,0,0,.13)}
-.review-section-nav-track{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}.review-section-nav-track::-webkit-scrollbar{display:none}
+.review-section-nav-track{
+  display:flex;
+  gap:6px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  max-width:100%;
+  scroll-behavior:smooth;
+  overscroll-behavior-x:contain;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(159,193,214,.42) transparent;
+}
+.review-section-nav-track::-webkit-scrollbar{height:5px}
+.review-section-nav-track::-webkit-scrollbar-track{background:transparent}
+.review-section-nav-track::-webkit-scrollbar-thumb{background:rgba(159,193,214,.34);border-radius:999px}
+.review-section-nav-track::-webkit-scrollbar-thumb:hover{background:rgba(159,193,214,.58)}
 .review-section-nav-button{flex:0 0 auto;border:1px solid transparent;border-radius:9px;background:transparent;color:#8ca6b7;padding:8px 10px;font:inherit;font-size:.73rem;font-weight:780;cursor:pointer;transition:.15s ease}
 .review-section-nav-button:hover{color:#fff;background:rgba(255,255,255,.04)}
 .review-section-nav-button.is-active{color:#fff;border-color:color-mix(in srgb,var(--review-tier) 32%,rgba(255,255,255,.07));background:color-mix(in srgb,var(--review-tier) 10%,rgba(255,255,255,.02))}
 .review-section-nav-button.is-verdict{color:#d7c384}
-@media(max-width:700px){.review-section-nav{top:58px;margin-inline:-4px}.review-render-root .review-section{padding:16px}.review-render-root .review-verdict{padding:16px}.review-render-root .review-verdict-body{font-size:1.15rem}.review-section-nav-button{font-size:.68rem;padding:7px 9px}}
+@media(max-width:700px){.review-section-nav{top:58px;margin-inline:-4px}.review-render-root .review-section{padding:16px}.review-render-root .review-verdict{padding:16px}.review-render-root .review-verdict-body{font-size:1.15rem}.review-section-nav-button{font-size:.68rem;padding:7px 9px}.review-section-nav-track{scrollbar-width:none}.review-section-nav-track::-webkit-scrollbar{display:none}}
 @media(prefers-reduced-motion:reduce){.review-section-nav-button{transition:none}}
