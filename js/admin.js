@@ -93,6 +93,7 @@
   const fieldTierVisible = $('fieldTierVisible');
   const fieldReviewDate = $('fieldReviewDate');
   const fieldSpoilers = $('fieldSpoilers');
+  const fieldAmbientEffect = $('fieldAmbientEffect');
   const fieldExcerpt = $('fieldExcerpt');
   const fieldReview = $('fieldReview');
   const excerptCount = $('excerptCount');
@@ -481,6 +482,7 @@
     fieldTierVisible.checked = game.tierVisible !== false;
     fieldReviewDate.value = game.reviewDate || '';
     fieldSpoilers.checked = Boolean(game.spoilers);
+    fieldAmbientEffect.value = game.ambientEffect || 'none';
     fieldExcerpt.value = game.excerpt || '';
     fieldReview.value = game.review || '';
     updateCounts();
@@ -912,6 +914,7 @@
       tierVisible: true,
       reviewDate: '',
       spoilers: false,
+      ambientEffect: 'none',
       excerpt: '',
       review: ''
     };

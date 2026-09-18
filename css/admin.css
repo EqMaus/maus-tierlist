@@ -360,3 +360,16 @@ code { padding: 2px 5px; border-radius: 5px; background: rgba(255,255,255,.06); 
   .modal-actions { justify-content: stretch; }
   .modal-actions > * { flex: 1; }
 }
+
+
+/* v4.8.0 · Selector de ambiente del fondo */
+.ambient-effect-field {
+  margin-top: 16px;
+  max-width: 560px;
+}
+.ambient-effect-field small {
+  display: block;
+  margin-top: 7px;
+  color: var(--muted);
+  line-height: 1.45;
+}

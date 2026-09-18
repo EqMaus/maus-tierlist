@@ -752,3 +752,290 @@ body[data-ui-theme="blue-yellow"][data-scene="default"]{--scene-a:rgba(59,129,22
 }
 
 body.background-only .appearance-popover{display:none!important}
+
+
+/* =========================================================
+   v4.8.0 · EFECTOS AMBIENTALES DE LOS FONDOS
+   Cada ficha puede definir game.ambientEffect.
+   ========================================================= */
+.scene-art { overflow: hidden; }
+.scene-art .scene-photo { position: absolute; inset: 0; z-index: 0; }
+.scene-effects {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+  contain: strict;
+}
+.scene-effects .ambient-particle {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--s);
+  height: var(--s);
+  opacity: var(--o);
+  transform: translate3d(0,0,0) rotate(var(--r));
+  will-change: transform, opacity;
+}
+
+/* God of War III · ceniza + brasas */
+.effect-ash-embers .ambient-particle {
+  border-radius: 50%;
+  background: rgba(205,205,196,.78);
+  box-shadow: 0 0 5px rgba(255,255,235,.14);
+  animation: ambientAsh var(--d) linear var(--delay) infinite;
+}
+.effect-ash-embers .ambient-v0,
+.effect-ash-embers .ambient-v4 {
+  width: calc(var(--s) * .62);
+  height: calc(var(--s) * 1.8);
+  border-radius: 60% 20% 60% 25%;
+  background: rgba(255,113,42,.85);
+  box-shadow: 0 0 8px rgba(255,77,20,.65), 0 0 18px rgba(255,77,20,.22);
+  animation-name: ambientEmberRise;
+}
+
+/* God of War II · polvo divino / chispas doradas */
+.effect-divine-sparks .ambient-particle {
+  border-radius: 50%;
+  background: rgba(255,221,142,.84);
+  box-shadow: 0 0 7px rgba(255,220,130,.58), 0 0 20px rgba(114,155,255,.2);
+  animation: ambientDivine var(--d) ease-in-out var(--delay) infinite alternate;
+}
+.effect-divine-sparks .ambient-v1,
+.effect-divine-sparks .ambient-v3 {
+  width: calc(var(--s) * .45);
+  height: calc(var(--s) * 2.2);
+  border-radius: 50%;
+}
+
+/* God of War I · polvo cálido y brasas */
+.effect-ember-dust .ambient-particle,
+.effect-village-ash .ambient-particle {
+  border-radius: 50%;
+  background: rgba(225,196,154,.5);
+  animation: ambientWarmDust var(--d) linear var(--delay) infinite;
+}
+.effect-ember-dust .ambient-v0,
+.effect-ember-dust .ambient-v4,
+.effect-village-ash .ambient-v0 {
+  background: rgba(255,123,54,.85);
+  box-shadow: 0 0 7px rgba(255,90,35,.45);
+  animation-name: ambientEmberRise;
+}
+
+/* RE3 · lluvia y chispas */
+.effect-rain-sparks .ambient-particle,
+.effect-rain-embers .ambient-particle,
+.effect-cold-rain .ambient-particle {
+  width: 1px;
+  height: calc(28px + var(--s) * 5);
+  border-radius: 999px;
+  background: linear-gradient(to bottom, rgba(200,225,255,0), rgba(200,225,255,.62));
+  transform: rotate(9deg);
+  animation: ambientRain calc(var(--d) * .34) linear var(--delay) infinite;
+}
+.effect-rain-sparks .ambient-v0,
+.effect-rain-sparks .ambient-v4,
+.effect-rain-embers .ambient-v0,
+.effect-rain-embers .ambient-v4 {
+  width: calc(var(--s) * .55);
+  height: calc(var(--s) * 1.8);
+  background: rgba(255,118,45,.9);
+  box-shadow: 0 0 8px rgba(255,70,20,.7);
+  animation: ambientSparkFall calc(var(--d) * .65) ease-out var(--delay) infinite;
+}
+.effect-rain-embers .ambient-v0,
+.effect-rain-embers .ambient-v4 {
+  animation-name: ambientEmberRise;
+}
+.effect-cold-rain { opacity: .72; }
+
+/* RE1 · polvo viejo suspendido */
+.effect-mansion-dust .ambient-particle {
+  border-radius: 50%;
+  background: rgba(232,218,190,.45);
+  box-shadow: 0 0 4px rgba(255,239,208,.12);
+  animation: ambientDustFloat var(--d) ease-in-out var(--delay) infinite alternate;
+}
+
+/* RE9 · partículas inquietantes */
+.effect-ominous-motes .ambient-particle {
+  border-radius: 50%;
+  background: rgba(172,111,207,.36);
+  box-shadow: 0 0 10px rgba(173,95,225,.23);
+  animation: ambientOminous var(--d) ease-in-out var(--delay) infinite alternate;
+}
+.effect-ominous-motes::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(circle at 50% 35%, rgba(146,84,184,.08), transparent 44%);
+  animation: ambientPulse 8s ease-in-out infinite alternate;
+}
+
+/* Shadow of the Colossus · polvo arrastrado por el viento */
+.effect-wind-dust .ambient-particle {
+  width: calc(var(--s) * 1.8);
+  height: max(1px, calc(var(--s) * .22));
+  border-radius: 999px;
+  background: rgba(218,216,177,.4);
+  filter: blur(.25px);
+  animation: ambientWindDust calc(var(--d) * .8) linear var(--delay) infinite;
+}
+
+/* Majora's Mask · motas lunares */
+.effect-moon-motes .ambient-particle {
+  border-radius: 50%;
+  background: rgba(207,142,255,.53);
+  box-shadow: 0 0 9px rgba(164,84,231,.32);
+  animation: ambientMoon var(--d) ease-in-out var(--delay) infinite alternate;
+}
+.effect-moon-motes .ambient-v0,
+.effect-moon-motes .ambient-v3 {
+  background: rgba(255,102,115,.48);
+  box-shadow: 0 0 10px rgba(255,82,104,.25);
+}
+.effect-moon-motes::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 78% 18%, rgba(204,170,235,.06), transparent 24%);
+  animation: ambientPulse 7s ease-in-out infinite alternate;
+}
+
+/* Twilight Princess · partículas del Crepúsculo */
+.effect-twilight-motes .ambient-particle {
+  width: calc(var(--s) * .78);
+  height: calc(var(--s) * .78);
+  border-radius: 1px;
+  background: rgba(111,220,238,.62);
+  box-shadow: 0 0 8px rgba(80,202,229,.35);
+  animation: ambientTwilight var(--d) ease-in-out var(--delay) infinite alternate;
+}
+.effect-twilight-motes .ambient-v0,
+.effect-twilight-motes .ambient-v4 {
+  background: rgba(255,167,65,.55);
+  box-shadow: 0 0 9px rgba(255,139,40,.3);
+}
+
+/* MediEvil · niebla espectral */
+.effect-ghost-mist .ambient-particle {
+  width: calc(180px + var(--s) * 22);
+  height: calc(48px + var(--s) * 7);
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(104,214,142,.13), rgba(73,137,102,.055) 45%, transparent 72%);
+  filter: blur(10px);
+  animation: ambientGhostMist calc(var(--d) * 1.45) ease-in-out var(--delay) infinite alternate;
+}
+.effect-ghost-mist .ambient-v1,
+.effect-ghost-mist .ambient-v4 {
+  background: radial-gradient(ellipse at center, rgba(199,233,187,.09), transparent 70%);
+}
+
+/* Pokémon Diamante · destellos fríos */
+.effect-crystal-sparkles .ambient-particle {
+  width: calc(var(--s) * .65);
+  height: calc(var(--s) * .65);
+  background: rgba(205,239,255,.82);
+  transform: rotate(45deg);
+  box-shadow: 0 0 7px rgba(124,211,255,.55), 0 0 16px rgba(167,143,255,.18);
+  animation: ambientCrystal var(--d) ease-in-out var(--delay) infinite;
+}
+
+/* Pokémon Negro · motas oscuras / geométricas */
+.effect-dark-motes .ambient-particle {
+  border-radius: 2px;
+  background: rgba(214,226,239,.23);
+  box-shadow: 0 0 6px rgba(185,206,237,.12);
+  animation: ambientDark var(--d) ease-in-out var(--delay) infinite alternate;
+}
+.effect-dark-motes .ambient-v0,
+.effect-dark-motes .ambient-v3 {
+  background: rgba(22,27,37,.62);
+  border: 1px solid rgba(203,220,240,.1);
+}
+
+@keyframes ambientAsh {
+  0% { transform: translate3d(0,-12vh,0) rotate(var(--r)); opacity: 0; }
+  10% { opacity: var(--o); }
+  55% { transform: translate3d(var(--drift),48vh,0) rotate(calc(var(--r) + 110deg)); }
+  100% { transform: translate3d(calc(var(--drift) * -.45),112vh,0) rotate(calc(var(--r) + 250deg)); opacity: 0; }
+}
+@keyframes ambientEmberRise {
+  0% { transform: translate3d(0,18vh,0) rotate(var(--r)); opacity: 0; }
+  18% { opacity: var(--o); }
+  100% { transform: translate3d(var(--drift),-112vh,0) rotate(calc(var(--r) + 80deg)); opacity: 0; }
+}
+@keyframes ambientDivine {
+  0% { transform: translate3d(calc(var(--drift) * -.25),20px,0) scale(.7); opacity: calc(var(--o) * .35); }
+  50% { opacity: var(--o); }
+  100% { transform: translate3d(var(--drift),-70px,0) scale(1.2); opacity: calc(var(--o) * .55); }
+}
+@keyframes ambientWarmDust {
+  0% { transform: translate3d(-30px,20px,0) rotate(var(--r)); opacity: 0; }
+  20% { opacity: var(--o); }
+  100% { transform: translate3d(calc(var(--drift) + 80px),-95px,0) rotate(calc(var(--r) + 130deg)); opacity: 0; }
+}
+@keyframes ambientRain {
+  0% { transform: translate3d(0,-26vh,0) rotate(9deg); opacity: 0; }
+  8% { opacity: var(--o); }
+  100% { transform: translate3d(-90px,126vh,0) rotate(9deg); opacity: 0; }
+}
+@keyframes ambientSparkFall {
+  0% { transform: translate3d(0,-10vh,0) rotate(var(--r)); opacity: 0; }
+  18% { opacity: var(--o); }
+  100% { transform: translate3d(var(--drift),75vh,0) rotate(calc(var(--r) + 180deg)); opacity: 0; }
+}
+@keyframes ambientDustFloat {
+  0% { transform: translate3d(-18px,12px,0) scale(.8); opacity: calc(var(--o) * .35); }
+  50% { opacity: var(--o); }
+  100% { transform: translate3d(var(--drift),-35px,0) scale(1.15); opacity: calc(var(--o) * .65); }
+}
+@keyframes ambientOminous {
+  0% { transform: translate3d(-12px,20px,0) scale(.7); opacity: calc(var(--o) * .25); }
+  100% { transform: translate3d(var(--drift),-55px,0) scale(1.3); opacity: var(--o); }
+}
+@keyframes ambientWindDust {
+  0% { transform: translate3d(-120vw,0,0) rotate(-4deg); opacity: 0; }
+  12% { opacity: var(--o); }
+  82% { opacity: calc(var(--o) * .8); }
+  100% { transform: translate3d(120vw,calc(var(--drift) * .3),0) rotate(4deg); opacity: 0; }
+}
+@keyframes ambientMoon {
+  0% { transform: translate3d(-14px,20px,0) scale(.65); opacity: calc(var(--o) * .22); }
+  50% { opacity: var(--o); }
+  100% { transform: translate3d(var(--drift),-50px,0) scale(1.2); opacity: calc(var(--o) * .5); }
+}
+@keyframes ambientTwilight {
+  0% { transform: translate3d(-20px,25px,0) rotate(0deg) scale(.7); opacity: calc(var(--o) * .2); }
+  50% { opacity: var(--o); }
+  100% { transform: translate3d(var(--drift),-65px,0) rotate(225deg) scale(1.15); opacity: calc(var(--o) * .45); }
+}
+@keyframes ambientGhostMist {
+  0% { transform: translate3d(-16vw,10px,0) scale(.85); opacity: .2; }
+  50% { opacity: .72; }
+  100% { transform: translate3d(22vw,-25px,0) scale(1.15); opacity: .28; }
+}
+@keyframes ambientCrystal {
+  0%,100% { transform: rotate(45deg) scale(.35); opacity: .12; }
+  48% { transform: rotate(135deg) scale(1.45); opacity: var(--o); }
+  56% { transform: rotate(180deg) scale(.75); opacity: calc(var(--o) * .45); }
+}
+@keyframes ambientDark {
+  0% { transform: translate3d(-15px,14px,0) rotate(var(--r)); opacity: calc(var(--o) * .2); }
+  100% { transform: translate3d(var(--drift),-55px,0) rotate(calc(var(--r) + 180deg)); opacity: var(--o); }
+}
+@keyframes ambientPulse {
+  from { opacity: .35; transform: scale(.96); }
+  to { opacity: 1; transform: scale(1.04); }
+}
+
+@media (max-width: 700px) {
+  .scene-effects { opacity: .72; }
+  .scene-effects .ambient-particle:nth-child(n+25) { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scene-effects { display: none !important; }
+}

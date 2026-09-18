@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#071018">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://api.github.com; img-src 'self' data: blob: https://avatars.githubusercontent.com; media-src 'self' blob:; style-src 'self'; script-src 'self'; base-uri 'self'; form-action 'none';">
   <title>Editor privado · Tier List de Maus</title>
-  <link rel="stylesheet" href="css/admin.css?v=4.7.3">
+  <link rel="stylesheet" href="css/admin.css?v=4.8.0">
 </head>
 <body>
   <header class="admin-header">
@@ -187,6 +187,29 @@
                 </div>
               </div>
             </div>
+
+            <label class="field ambient-effect-field">
+              <span>Efecto ambiental del fondo</span>
+              <select id="fieldAmbientEffect" data-field="ambientEffect">
+                <option value="none">Ninguno</option>
+                <option value="ash-embers">Ceniza + brasas</option>
+                <option value="divine-sparks">Motas divinas doradas</option>
+                <option value="ember-dust">Brasas + polvo cálido</option>
+                <option value="rain-sparks">Lluvia + chispas</option>
+                <option value="rain-embers">Lluvia + brasas</option>
+                <option value="cold-rain">Lluvia fría</option>
+                <option value="mansion-dust">Polvo suspendido</option>
+                <option value="village-ash">Ceniza rural</option>
+                <option value="ominous-motes">Partículas inquietantes</option>
+                <option value="wind-dust">Polvo al viento</option>
+                <option value="moon-motes">Partículas lunares</option>
+                <option value="twilight-motes">Partículas del Crepúsculo</option>
+                <option value="ghost-mist">Niebla espectral</option>
+                <option value="crystal-sparkles">Destellos cristalinos</option>
+                <option value="dark-motes">Motas oscuras</option>
+              </select>
+              <small>Se anima únicamente sobre el fondo de la ficha. En móviles se reduce automáticamente.</small>
+            </label>
           </section>
 
           <section class="form-card music-admin-card">
@@ -326,6 +349,6 @@
     </div>
   </div>
 
-  <script src="js/admin.js?v=4.7.3"></script>
+  <script src="js/admin.js?v=4.8.0"></script>
 </body>
 </html>

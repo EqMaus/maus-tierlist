@@ -155,6 +155,67 @@
 
   const gameById = new Map(games.map((game) => [game.id, game]));
 
+
+  const LEGACY_AMBIENT_EFFECTS = {
+    'gow1': 'ember-dust',
+    'gow2': 'divine-sparks',
+    'gow3': 'ash-embers',
+    're3-og': 'rain-sparks',
+    're3-remake': 'rain-embers',
+    're2-og': 'cold-rain',
+    're1-remaster': 'mansion-dust',
+    're4-og': 'village-ash',
+    're9': 'ominous-motes',
+    'sotc': 'wind-dust',
+    'majoras-mask': 'moon-motes',
+    'twilight-princess': 'twilight-motes',
+    'medievil': 'ghost-mist',
+    'pokemon-diamond': 'crystal-sparkles',
+    'pokemon-black': 'dark-motes'
+  };
+
+  const AMBIENT_EFFECT_COUNTS = {
+    'ash-embers': 38,
+    'divine-sparks': 28,
+    'ember-dust': 30,
+    'rain-sparks': 42,
+    'rain-embers': 42,
+    'cold-rain': 38,
+    'mansion-dust': 26,
+    'village-ash': 30,
+    'ominous-motes': 28,
+    'wind-dust': 34,
+    'moon-motes': 28,
+    'twilight-motes': 26,
+    'ghost-mist': 10,
+    'crystal-sparkles': 24,
+    'dark-motes': 28
+  };
+
+  function ambientEffectFor(gameId) {
+    const configured = String(gameById.get(gameId)?.ambientEffect || '').trim();
+    return configured || LEGACY_AMBIENT_EFFECTS[gameId] || 'none';
+  }
+
+  function ambientEffectHtml(gameId) {
+    const effect = ambientEffectFor(gameId);
+    if (!effect || effect === 'none') return '';
+    const count = AMBIENT_EFFECT_COUNTS[effect] || 24;
+    const particles = Array.from({ length: count }, (_, index) => {
+      const x = (index * 37 + 11) % 101;
+      const y = (index * 53 + 17) % 101;
+      const size = 2 + ((index * 7) % 7);
+      const duration = 8 + ((index * 11) % 18);
+      const delay = -((index * 13) % 23);
+      const drift = ((index * 29) % 151) - 75;
+      const rotation = (index * 47) % 360;
+      const opacity = (30 + ((index * 17) % 55)) / 100;
+      const variant = index % 5;
+      return `<i class="ambient-particle ambient-v${variant}" style="--x:${x}%;--y:${y}%;--s:${size}px;--d:${duration}s;--delay:${delay}s;--drift:${drift}px;--r:${rotation}deg;--o:${opacity}"></i>`;
+    }).join('');
+    return `<div class="scene-effects effect-${esc(effect)}" aria-hidden="true">${particles}</div>`;
+  }
+
   function clamp(value, min, max, fallback) {
     return Number.isFinite(value) ? Math.min(max, Math.max(min, value)) : fallback;
   }
@@ -1337,6 +1398,7 @@
     currentGameSceneId = null;
     body.classList.remove('scene-active');
     body.dataset.scene = 'default';
+    body.dataset.ambientEffect = 'none';
     if (backgroundViewButton) backgroundViewButton.hidden = true;
     if (sceneArt) sceneArt.innerHTML = '';
   }
@@ -1351,14 +1413,16 @@
     }
     body.classList.add('scene-active');
     body.dataset.scene = key;
+    body.dataset.ambientEffect = ambientEffectFor(gameId);
     // "Ver fondo" solo tiene sentido cuando existe una imagen de fondo dedicada e inspeccionable.
     if (backgroundViewButton) backgroundViewButton.hidden = !photoSrc;
     if (!sceneArt) return;
+    const ambient = ambientEffectHtml(gameId);
     if (photoSrc) {
-      sceneArt.innerHTML = `<img class="scene-photo" src="${esc(photoSrc)}" alt="">`;
+      sceneArt.innerHTML = `<img class="scene-photo" src="${esc(photoSrc)}" alt="">${ambient}`;
       return;
     }
-    sceneArt.innerHTML = sceneSvg(key);
+    sceneArt.innerHTML = `${sceneSvg(key)}${ambient}`;
   }
 
 
