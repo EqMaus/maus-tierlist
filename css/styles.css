@@ -756,7 +756,7 @@ body.background-only .appearance-popover{display:none!important}
 
 
 /* =========================================================
-   v4.10.1 · EFECTOS AMBIENTALES DE LOS FONDOS (ajustados)
+   v4.11.0 · EFECTOS AMBIENTALES DE LOS FONDOS (ajustados)
    Más exagerados y con personalidad propia por juego.
    ========================================================= */
 .scene-art { overflow: hidden; }
@@ -1248,7 +1248,7 @@ body.background-only .appearance-popover{display:none!important}
 
 
 /* =========================================================
-   v4.10.1 · INMERSIÓN TOTAL
+   v4.11.0 · INMERSIÓN TOTAL
    Parallax, color grading, iluminación dinámica
    y modo “Ver fondo” mucho más cinematográfico.
    ========================================================= */
@@ -1548,7 +1548,7 @@ body[data-scene="pokemon-black"]{
 
 
 /* =========================================================
-   v4.10.1 · INMERSIÓN VISUAL REAL
+   v4.11.0 · INMERSIÓN VISUAL REAL
    Más profundidad, parallax perceptible, primer plano, luz
    y un “Ver fondo” claramente cinematográfico.
    ========================================================= */
@@ -1641,7 +1641,7 @@ body.scene-entering .scene-foreground{animation:immersiveForegroundArrival 1.4s 
 
 
 /* =========================================================
-   v4.10.1 · PARTÍCULAS INDEPENDIENTES DEL RATÓN
+   v4.11.0 · PARTÍCULAS INDEPENDIENTES DEL RATÓN
    Las partículas siguen sus propias animaciones y no reciben
    desplazamiento por parallax del cursor.
    ========================================================= */
@@ -1678,4 +1678,284 @@ body.scene-entering .scene-foreground{
     opacity:1;
     transform:translate3d(0,0,0) scale(1);
   }
+}
+
+
+/* =========================================================
+   v4.11.0 · CLIMA VIVO AUTÓNOMO
+   La escena cambia sola entre calma, normal, intensidad y ráfagas.
+   Además, aparecen eventos raros puntuales por juego.
+   ========================================================= */
+:root{
+  --climate-mid-opacity:.92;
+  --climate-front-opacity:.90;
+  --climate-light-opacity:1;
+  --climate-speed:1;
+  --climate-front-speed:1;
+  --climate-glow:1;
+}
+
+.scene-lighting{
+  opacity:var(--climate-light-opacity);
+  transition:opacity 2.2s ease, filter 2.2s ease;
+  filter:saturate(var(--climate-glow));
+}
+.scene-effects{
+  opacity:var(--climate-mid-opacity) !important;
+  transition:opacity 2.4s ease, filter 2.4s ease;
+  filter:saturate(var(--climate-glow));
+}
+.scene-foreground{
+  opacity:var(--climate-front-opacity) !important;
+  transition:opacity 2.4s ease, filter 2.4s ease, transform .25s ease-out;
+  filter:saturate(var(--climate-glow));
+}
+.scene-effects .ambient-particle{animation-duration:calc(var(--d) * var(--climate-speed)) !important}
+.scene-foreground .foreground-particle{animation-duration:calc(var(--d) * var(--climate-front-speed)) !important}
+.scene-backdrop::after,
+.scene-art::before{transition:opacity 2.3s ease, filter 2.3s ease}
+body[data-climate-state="calm"] .scene-art::before{opacity:.68;filter:saturate(.94)}
+body[data-climate-state="intense"] .scene-art::before{opacity:.92;filter:saturate(1.06)}
+body[data-climate-state="surge"] .scene-art::before{opacity:1;filter:saturate(1.12)}
+body[data-climate-state="calm"] .scene-backdrop::after{opacity:.54}
+body[data-climate-state="surge"] .scene-backdrop::after{opacity:1}
+body[data-climate-state="calm"] .scene-photo{filter:saturate(1.05) contrast(1.04) brightness(.68)}
+body[data-climate-state="intense"] .scene-photo{filter:saturate(1.14) contrast(1.08) brightness(.73)}
+body[data-climate-state="surge"] .scene-photo{filter:saturate(1.18) contrast(1.1) brightness(.77)}
+body.background-only[data-climate-state="calm"] .scene-photo{filter:saturate(1.18) contrast(1.12) brightness(.86)}
+body.background-only[data-climate-state="surge"] .scene-photo{filter:saturate(1.28) contrast(1.18) brightness(.94)}
+
+.scene-event{
+  position:absolute;
+  inset:-10%;
+  z-index:8;
+  overflow:hidden;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .7s ease;
+  mix-blend-mode:screen;
+}
+.scene-event::before,
+.scene-event::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:0;
+}
+body.climate-event .scene-event{opacity:1}
+.scene-event .scene-event-particle{
+  position:absolute;
+  left:var(--x);
+  top:var(--y);
+  width:var(--s);
+  height:var(--s);
+  opacity:var(--o);
+  will-change:transform,opacity;
+}
+
+/* ráfagas de ceniza/brasas */
+.event-ash-embers .scene-event-particle,
+.event-ember-dust .scene-event-particle,
+.event-village-ash .scene-event-particle,
+.event-ominous-motes .scene-event-particle{
+  border-radius:50%;
+  background:rgba(210,188,156,.42);
+  filter:blur(2px);
+  animation:eventGust calc(var(--d) * .8) linear var(--delay) infinite;
+}
+.event-ash-embers .event-v0,
+.event-ash-embers .event-v3,
+.event-village-ash .event-v0,
+.event-village-ash .event-v3{
+  width:calc(var(--s) * .45);
+  height:calc(var(--s) * 1.75);
+  border-radius:58% 24% 62% 20%;
+  background:rgba(255,118,42,.94);
+  box-shadow:0 0 14px rgba(255,84,31,.58);
+  filter:blur(.6px);
+  animation:eventEmberBurst calc(var(--d) * .56) ease-out var(--delay) infinite;
+}
+.event-ominous-motes .scene-event-particle,
+.event-ember-dust .scene-event-particle{background:rgba(204,169,124,.36)}
+.event-ash-embers::before,
+.event-ember-dust::before,
+.event-village-ash::before,
+.event-ominous-motes::before{
+  background:linear-gradient(90deg, transparent, rgba(235,191,136,.08), transparent);
+  filter:blur(14px);
+}
+body.climate-event .event-ash-embers::before,
+body.climate-event .event-ember-dust::before,
+body.climate-event .event-village-ash::before,
+body.climate-event .event-ominous-motes::before{opacity:1;animation:eventSweep 1.6s ease-out both}
+
+/* lluvia/tormenta */
+.event-rain-sparks .scene-event-particle,
+.event-rain-embers .scene-event-particle,
+.event-cold-rain .scene-event-particle,
+.event-wind-dust .scene-event-particle{
+  width:1.4px;
+  height:calc(var(--s) * 5.1);
+  border-radius:999px;
+  background:linear-gradient(to bottom, rgba(230,240,255,0), rgba(220,234,250,.82));
+  transform:rotate(10deg);
+  filter:blur(.35px);
+  animation:eventRainBurst calc(var(--d) * .16) linear var(--delay) infinite;
+}
+.event-rain-sparks .event-v0,
+.event-rain-embers .event-v0,
+.event-wind-dust .event-v0,
+.event-wind-dust .event-v3{
+  width:calc(var(--s) * .42);
+  height:calc(var(--s) * 1.5);
+  border-radius:55% 20% 55% 20%;
+  background:rgba(222,58,72,.9);
+  box-shadow:0 0 12px rgba(255,71,85,.48);
+  filter:blur(.7px);
+  animation:eventRedBurst calc(var(--d) * .54) linear var(--delay) infinite;
+}
+.event-wind-dust::after{
+  background:linear-gradient(112deg, transparent 0 40%, rgba(255,82,96,.78) 41%, rgba(255,175,182,.45) 42%, transparent 43%), linear-gradient(104deg, transparent 0 74%, rgba(255,72,90,.62) 75%, rgba(255,164,171,.36) 76%, transparent 77%);
+}
+body.climate-event .event-wind-dust::after{opacity:1;animation:eventLightningFlash 2.8s linear both}
+
+/* luciérnagas / crepúsculo */
+.event-moon-motes .scene-event-particle{
+  border-radius:50%;
+  background:rgba(222,122,255,.95);
+  box-shadow:0 0 14px rgba(211,115,255,.84), 0 0 30px rgba(211,115,255,.32);
+  filter:blur(.5px);
+  animation:eventFireflySwarm calc(var(--d) * .9) ease-in-out var(--delay) infinite;
+}
+.event-moon-motes .event-v0,
+.event-moon-motes .event-v2,
+.event-moon-motes .event-v4{
+  background:rgba(138,255,98,.96);
+  box-shadow:0 0 14px rgba(128,255,92,.92), 0 0 30px rgba(128,255,92,.34);
+}
+.event-twilight-motes .scene-event-particle{
+  border-radius:2px;
+  background:rgba(98,219,240,.86);
+  box-shadow:0 0 14px rgba(88,204,230,.56);
+  filter:blur(.65px);
+  animation:eventTwilightSwirl calc(var(--d) * .82) ease-in-out var(--delay) infinite;
+}
+.event-twilight-motes .event-v0,
+.event-twilight-motes .event-v3{
+  background:rgba(255,167,74,.86);
+  box-shadow:0 0 16px rgba(255,141,45,.54);
+}
+
+/* hojas */
+.event-mansion-dust .scene-event-particle,
+.event-ghost-mist .scene-event-particle{
+  width:calc(var(--s) * .82);
+  height:calc(var(--s) * 1.58);
+  border-radius:60% 15% 58% 18%;
+  animation:eventLeafBurst calc(var(--d) * .78) linear var(--delay) infinite;
+}
+.event-mansion-dust .scene-event-particle{background:rgba(165,137,96,.84)}
+.event-mansion-dust .event-v1{background:rgba(208,187,147,.88)}
+.event-ghost-mist .scene-event-particle{background:rgba(46,92,56,.9)}
+.event-ghost-mist .event-v1{background:rgba(85,146,92,.84)}
+
+/* chispas divinas y sol */
+.event-divine-sparks .scene-event-particle,
+.event-crystal-sparkles .scene-event-particle,
+.event-dark-motes .scene-event-particle{
+  border-radius:50%;
+  background:rgba(255,239,189,.88);
+  box-shadow:0 0 15px rgba(255,242,193,.58);
+  filter:blur(.55px);
+  animation:eventSparkleBurst calc(var(--d) * .76) ease-in-out var(--delay) infinite;
+}
+.event-divine-sparks::before,
+.event-crystal-sparkles::before,
+.event-dark-motes::before{
+  inset:-8%;
+  background:radial-gradient(circle at 70% 12%, rgba(255,244,196,.24), transparent 34%), linear-gradient(120deg, transparent 0 28%, rgba(255,250,227,.16) 32%, transparent 38%);
+}
+body.climate-event .event-divine-sparks::before,
+body.climate-event .event-crystal-sparkles::before,
+body.climate-event .event-dark-motes::before{opacity:1;animation:eventSunPulse 2.4s ease both}
+
+body.climate-event[data-climate-event="storm"] .scene-effects,
+body.climate-event[data-climate-event="swarm"] .scene-effects,
+body.climate-event[data-climate-event="burst"] .scene-effects,
+body.climate-event[data-climate-event="gust"] .scene-effects,
+body.climate-event[data-climate-event="rain"] .scene-effects,
+body.climate-event[data-climate-event="leaf"] .scene-effects,
+body.climate-event[data-climate-event="sun"] .scene-effects,
+body.climate-event[data-climate-event="flare"] .scene-effects{
+  filter:saturate(calc(var(--climate-glow) * 1.08));
+}
+body.climate-event[data-climate-event="storm"] .scene-foreground,
+body.climate-event[data-climate-event="swarm"] .scene-foreground,
+body.climate-event[data-climate-event="burst"] .scene-foreground,
+body.climate-event[data-climate-event="gust"] .scene-foreground,
+body.climate-event[data-climate-event="rain"] .scene-foreground,
+body.climate-event[data-climate-event="leaf"] .scene-foreground,
+body.climate-event[data-climate-event="sun"] .scene-foreground,
+body.climate-event[data-climate-event="flare"] .scene-foreground{
+  filter:saturate(calc(var(--climate-glow) * 1.12));
+}
+
+@keyframes eventSweep{
+  from{transform:translateX(-28%);opacity:0}
+  35%{opacity:1}
+  to{transform:translateX(28%);opacity:0}
+}
+@keyframes eventGust{
+  0%{transform:translate3d(-18vw,6px,0) rotate(var(--r));opacity:0}
+  12%{opacity:var(--o)}
+  100%{transform:translate3d(122vw,-44px,0) rotate(calc(var(--r) + 120deg));opacity:0}
+}
+@keyframes eventEmberBurst{
+  0%{transform:translate3d(0,18vh,0) rotate(var(--r)) scale(.68);opacity:0}
+  14%{opacity:var(--o)}
+  100%{transform:translate3d(var(--drift),-118vh,0) rotate(calc(var(--r) + 140deg)) scale(1.18);opacity:0}
+}
+@keyframes eventRainBurst{
+  0%{transform:translate3d(0,-38vh,0) rotate(10deg);opacity:0}
+  6%{opacity:var(--o)}
+  100%{transform:translate3d(-125px,146vh,0) rotate(10deg);opacity:0}
+}
+@keyframes eventRedBurst{
+  0%{transform:translate3d(0,-16vh,0) rotate(var(--r));opacity:0}
+  10%{opacity:var(--o)}
+  100%{transform:translate3d(var(--drift),116vh,0) rotate(calc(var(--r) + 250deg));opacity:0}
+}
+@keyframes eventLightningFlash{
+  0%,11%,13%,100%{opacity:0}
+  11.2%,11.48%{opacity:.92}
+  12.1%,12.26%{opacity:.38}
+}
+@keyframes eventFireflySwarm{
+  0%{transform:translate3d(-10vw,24px,0) scale(.52);opacity:.12}
+  50%{opacity:1}
+  100%{transform:translate3d(110vw,-82px,0) scale(1.32);opacity:.72}
+}
+@keyframes eventTwilightSwirl{
+  0%{transform:translate3d(-8vw,28px,0) rotate(0deg) scale(.56);opacity:.16}
+  100%{transform:translate3d(110vw,-74px,0) rotate(220deg) scale(1.24);opacity:var(--o)}
+}
+@keyframes eventLeafBurst{
+  0%{transform:translate3d(-10vw,-10vh,0) rotate(var(--r));opacity:0}
+  10%{opacity:var(--o)}
+  100%{transform:translate3d(112vw,118vh,0) rotate(calc(var(--r) + 620deg));opacity:0}
+}
+@keyframes eventSparkleBurst{
+  0%{transform:translate3d(-18px,16px,0) scale(.42);opacity:.12}
+  55%{opacity:1}
+  100%{transform:translate3d(var(--drift),-48px,0) scale(1.42);opacity:.34}
+}
+@keyframes eventSunPulse{
+  from{transform:scale(.96);opacity:0}
+  30%{opacity:1}
+  to{transform:scale(1.06);opacity:0}
+}
+
+@media (max-width:700px){
+  .scene-event .scene-event-particle:nth-child(n+10){display:none}
 }

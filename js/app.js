@@ -206,6 +206,139 @@
     sceneEnterTimer = window.setTimeout(() => body.classList.remove('scene-entering'), 1450);
   }
 
+  let climateCycleTimer = 0;
+  let climateEventTimer = 0;
+  let climateEventEndTimer = 0;
+  let currentClimateState = 'normal';
+
+  const CLIMATE_STATE_VALUES = {
+    calm: { mid: 0.56, front: 0.48, light: 0.84, speed: 1.14, frontSpeed: 1.18, glow: 0.92 },
+    normal: { mid: 0.92, front: 0.9, light: 1, speed: 1, frontSpeed: 1, glow: 1 },
+    intense: { mid: 1.08, front: 1.1, light: 1.12, speed: 0.9, frontSpeed: 0.9, glow: 1.08 },
+    surge: { mid: 1.22, front: 1.26, light: 1.22, speed: 0.78, frontSpeed: 0.82, glow: 1.16 }
+  };
+
+  const DEFAULT_CLIMATE_PROFILE = {
+    pool: ['calm', 'normal', 'normal', 'intense'],
+    stateMin: 12000,
+    stateMax: 22000,
+    eventChance: 0.35,
+    eventMin: 18000,
+    eventMax: 36000,
+    eventDurationMin: 2200,
+    eventDurationMax: 4200,
+    eventType: 'gust'
+  };
+
+  const CLIMATE_PROFILES = {
+    'gow1': { pool: ['normal', 'normal', 'intense', 'surge'], stateMin: 12000, stateMax: 23000, eventChance: 0.46, eventMin: 18000, eventMax: 32000, eventDurationMin: 2500, eventDurationMax: 4200, eventType: 'gust' },
+    'gow2': { pool: ['calm', 'normal', 'normal', 'intense'], stateMin: 13000, stateMax: 24000, eventChance: 0.32, eventMin: 24000, eventMax: 42000, eventDurationMin: 2200, eventDurationMax: 3800, eventType: 'flare' },
+    'gow3': { pool: ['normal', 'intense', 'intense', 'surge'], stateMin: 11000, stateMax: 21000, eventChance: 0.52, eventMin: 16000, eventMax: 29000, eventDurationMin: 2600, eventDurationMax: 4600, eventType: 'burst' },
+    're3-og': { pool: ['normal', 'normal', 'intense', 'surge'], stateMin: 13000, stateMax: 24000, eventChance: 0.44, eventMin: 20000, eventMax: 34000, eventDurationMin: 2200, eventDurationMax: 3800, eventType: 'rain' },
+    're3-remake': { pool: ['normal', 'normal', 'intense', 'surge'], stateMin: 13000, stateMax: 24000, eventChance: 0.44, eventMin: 20000, eventMax: 34000, eventDurationMin: 2200, eventDurationMax: 3800, eventType: 'rain' },
+    're2-og': { pool: ['calm', 'normal', 'normal', 'intense'], stateMin: 15000, stateMax: 26000, eventChance: 0.24, eventMin: 26000, eventMax: 42000, eventDurationMin: 2000, eventDurationMax: 3200, eventType: 'dust' },
+    're1-remaster': { pool: ['calm', 'normal', 'normal', 'intense'], stateMin: 14000, stateMax: 25000, eventChance: 0.3, eventMin: 22000, eventMax: 38000, eventDurationMin: 2200, eventDurationMax: 3600, eventType: 'leaf' },
+    're4-og': { pool: ['normal', 'normal', 'intense', 'surge'], stateMin: 12000, stateMax: 22000, eventChance: 0.38, eventMin: 22000, eventMax: 36000, eventDurationMin: 2200, eventDurationMax: 3800, eventType: 'gust' },
+    're9': { pool: ['normal', 'intense', 'intense', 'surge'], stateMin: 11000, stateMax: 21000, eventChance: 0.42, eventMin: 18000, eventMax: 32000, eventDurationMin: 2400, eventDurationMax: 3800, eventType: 'dust' },
+    'sotc': { pool: ['normal', 'intense', 'intense', 'surge', 'surge'], stateMin: 10000, stateMax: 18000, eventChance: 0.72, eventMin: 12000, eventMax: 22000, eventDurationMin: 2800, eventDurationMax: 5200, eventType: 'storm' },
+    'majoras-mask': { pool: ['calm', 'normal', 'intense', 'surge'], stateMin: 11000, stateMax: 21000, eventChance: 0.62, eventMin: 14000, eventMax: 26000, eventDurationMin: 2500, eventDurationMax: 4200, eventType: 'swarm' },
+    'twilight-princess': { pool: ['calm', 'normal', 'intense', 'surge'], stateMin: 12000, stateMax: 22000, eventChance: 0.42, eventMin: 17000, eventMax: 30000, eventDurationMin: 2400, eventDurationMax: 3800, eventType: 'twilight' },
+    'medievil': { pool: ['calm', 'normal', 'intense', 'surge'], stateMin: 12000, stateMax: 22000, eventChance: 0.44, eventMin: 18000, eventMax: 32000, eventDurationMin: 2400, eventDurationMax: 3800, eventType: 'leaf' },
+    'pokemon-diamond': { pool: ['calm', 'normal', 'normal', 'intense'], stateMin: 15000, stateMax: 28000, eventChance: 0.28, eventMin: 26000, eventMax: 44000, eventDurationMin: 2200, eventDurationMax: 3400, eventType: 'sun' },
+    'pokemon-black': { pool: ['calm', 'normal', 'normal', 'intense'], stateMin: 15000, stateMax: 28000, eventChance: 0.28, eventMin: 26000, eventMax: 44000, eventDurationMin: 2200, eventDurationMax: 3400, eventType: 'sun' }
+  };
+
+  function climateProfileFor(gameId) {
+    return CLIMATE_PROFILES[gameId] || DEFAULT_CLIMATE_PROFILE;
+  }
+
+  function randomIntBetween(min, max) {
+    const floor = Math.max(0, Math.floor(min));
+    const ceil = Math.max(floor, Math.floor(max));
+    return floor + Math.floor(Math.random() * (ceil - floor + 1));
+  }
+
+  function pickClimateState(gameId) {
+    const profile = climateProfileFor(gameId);
+    const pool = Array.isArray(profile.pool) && profile.pool.length ? profile.pool : DEFAULT_CLIMATE_PROFILE.pool;
+    let next = pool[Math.floor(Math.random() * pool.length)] || 'normal';
+    if (pool.length > 1 && next === currentClimateState) {
+      next = pool[(pool.indexOf(next) + 1 + Math.floor(Math.random() * (pool.length - 1))) % pool.length] || next;
+    }
+    return next;
+  }
+
+  function applyClimateState(state) {
+    currentClimateState = state || 'normal';
+    const values = CLIMATE_STATE_VALUES[currentClimateState] || CLIMATE_STATE_VALUES.normal;
+    body.dataset.climateState = currentClimateState;
+    body.style.setProperty('--climate-mid-opacity', String(values.mid));
+    body.style.setProperty('--climate-front-opacity', String(values.front));
+    body.style.setProperty('--climate-light-opacity', String(values.light));
+    body.style.setProperty('--climate-speed', String(values.speed));
+    body.style.setProperty('--climate-front-speed', String(values.frontSpeed));
+    body.style.setProperty('--climate-glow', String(values.glow));
+  }
+
+  function clearClimateEvent() {
+    window.clearTimeout(climateEventEndTimer);
+    body.classList.remove('climate-event');
+    body.dataset.climateEvent = 'none';
+  }
+
+  function stopClimateCycle() {
+    window.clearTimeout(climateCycleTimer);
+    window.clearTimeout(climateEventTimer);
+    clearClimateEvent();
+    currentClimateState = 'normal';
+    body.dataset.climateState = 'normal';
+    body.dataset.climateEvent = 'none';
+    body.style.setProperty('--climate-mid-opacity', '0.92');
+    body.style.setProperty('--climate-front-opacity', '0.9');
+    body.style.setProperty('--climate-light-opacity', '1');
+    body.style.setProperty('--climate-speed', '1');
+    body.style.setProperty('--climate-front-speed', '1');
+    body.style.setProperty('--climate-glow', '1');
+  }
+
+  function scheduleClimateEvent(gameId) {
+    window.clearTimeout(climateEventTimer);
+    const profile = climateProfileFor(gameId);
+    const wait = randomIntBetween(profile.eventMin || DEFAULT_CLIMATE_PROFILE.eventMin, profile.eventMax || DEFAULT_CLIMATE_PROFILE.eventMax);
+    climateEventTimer = window.setTimeout(() => {
+      if (!currentGameSceneId || currentGameSceneId !== gameId || !body.classList.contains('scene-active')) return;
+      if (Math.random() <= (profile.eventChance ?? DEFAULT_CLIMATE_PROFILE.eventChance)) {
+        body.dataset.climateEvent = profile.eventType || 'gust';
+        body.classList.add('climate-event');
+        const duration = randomIntBetween(profile.eventDurationMin || DEFAULT_CLIMATE_PROFILE.eventDurationMin, profile.eventDurationMax || DEFAULT_CLIMATE_PROFILE.eventDurationMax);
+        climateEventEndTimer = window.setTimeout(() => {
+          clearClimateEvent();
+        }, duration);
+      }
+      scheduleClimateEvent(gameId);
+    }, wait);
+  }
+
+  function scheduleClimateCycle(gameId) {
+    window.clearTimeout(climateCycleTimer);
+    const profile = climateProfileFor(gameId);
+    const nextState = pickClimateState(gameId);
+    applyClimateState(nextState);
+    const wait = randomIntBetween(profile.stateMin || DEFAULT_CLIMATE_PROFILE.stateMin, profile.stateMax || DEFAULT_CLIMATE_PROFILE.stateMax);
+    climateCycleTimer = window.setTimeout(() => {
+      if (!currentGameSceneId || currentGameSceneId !== gameId || !body.classList.contains('scene-active')) return;
+      scheduleClimateCycle(gameId);
+    }, wait);
+  }
+
+  function startClimateCycle(gameId) {
+    stopClimateCycle();
+    if (!gameId) return;
+    applyClimateState('normal');
+    scheduleClimateCycle(gameId);
+    scheduleClimateEvent(gameId);
+  }
+
   let currentGameMusicId = null;
   let currentThemeSignature = '';
   let activeObjectUrl = null;
@@ -300,6 +433,42 @@
     const effect = ambientEffectFor(gameId);
     if (!effect || effect === 'none') return '';
     return `<div class="scene-lighting lighting-${esc(effect)}" aria-hidden="true"><span></span><span></span></div>`;
+  }
+
+  function sceneEventHtml(gameId) {
+    const effect = ambientEffectFor(gameId);
+    if (!effect || effect === 'none') return '';
+    const countMap = {
+      'wind-dust': 18,
+      'moon-motes': 16,
+      'twilight-motes': 16,
+      'ghost-mist': 14,
+      'mansion-dust': 14,
+      'ash-embers': 16,
+      'ember-dust': 16,
+      'rain-sparks': 18,
+      'rain-embers': 18,
+      'cold-rain': 14,
+      'crystal-sparkles': 12,
+      'dark-motes': 12,
+      'divine-sparks': 12,
+      'village-ash': 16,
+      'ominous-motes': 16
+    };
+    const count = countMap[effect] || 14;
+    const particles = Array.from({ length: count }, (_, index) => {
+      const x = (index * 59 + 9) % 106 - 3;
+      const y = (index * 47 + 13) % 106 - 3;
+      const size = 8 + ((index * 11) % 20);
+      const duration = 2 + ((index * 7) % 5);
+      const delay = -((index * 5) % 9);
+      const drift = ((index * 31) % 241) - 120;
+      const rotation = (index * 73) % 360;
+      const opacity = (25 + ((index * 19) % 50)) / 100;
+      const variant = index % 5;
+      return `<i class="scene-event-particle event-v${variant}" style="--x:${x}%;--y:${y}%;--s:${size}px;--d:${duration}s;--delay:${delay}s;--drift:${drift}px;--r:${rotation}deg;--o:${opacity}"></i>`;
+    }).join('');
+    return `<div class="scene-event event-${esc(effect)}" aria-hidden="true">${particles}</div>`;
   }
 
   function clamp(value, min, max, fallback) {
@@ -1478,6 +1647,7 @@
     body.classList.add('background-restoring');
     body.classList.remove('background-only');
     updateSceneFocusState();
+    updateSceneScrollDepth();
     backgroundUiTimer = window.setTimeout(() => {
       body.classList.remove('background-restoring');
       if (restoreUiButton) restoreUiButton.hidden = true;
@@ -1487,10 +1657,12 @@
   function clearScene() {
     setBackgroundOnly(false);
     currentGameSceneId = null;
+    stopClimateCycle();
     body.classList.remove('scene-active', 'scene-entering', 'scene-cinematic');
     body.dataset.scene = 'default';
     body.dataset.ambientEffect = 'none';
     resetSceneMotion();
+    updateSceneScrollDepth();
     if (backgroundViewButton) backgroundViewButton.hidden = true;
     if (sceneArt) sceneArt.innerHTML = '';
   }
@@ -1514,12 +1686,14 @@
     const lighting = sceneLightHtml(gameId);
     const ambient = ambientEffectHtml(gameId);
     const foreground = foregroundEffectHtml(gameId);
+    const climateEvent = sceneEventHtml(gameId);
+    startClimateCycle(gameId);
     updateSceneScrollDepth();
     if (photoSrc) {
-      sceneArt.innerHTML = `<img class="scene-photo" src="${esc(photoSrc)}" alt="">${lighting}${ambient}${foreground}`;
+      sceneArt.innerHTML = `<img class="scene-photo" src="${esc(photoSrc)}" alt="">${lighting}${ambient}${foreground}${climateEvent}`;
       return;
     }
-    sceneArt.innerHTML = `${sceneSvg(key)}${lighting}${ambient}${foreground}`;
+    sceneArt.innerHTML = `${sceneSvg(key)}${lighting}${ambient}${foreground}${climateEvent}`;
   }
 
 
