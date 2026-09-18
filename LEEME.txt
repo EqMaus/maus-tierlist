@@ -1,1 +1,7 @@
-MAUS TIER LIST — v4.13.2\n\nMEJORA: los fondos ya no pueden quedarse completamente quietos.\nAhora siempre tienen un movimiento autónomo muy sutil y continuo, incluso entre desplazamientos grandes de cámara.\nLa idea es que no se note como un efecto exagerado, pero sí que deje de sentirse como una imagen estática.\n\nEste ZIP sigue siendo un parche de código: no incluye js/site-data.js ni assets.\n
+MAUS TIER LIST — v4.13.3
+
+AJUSTE DE MOVIMIENTO DE FONDOS:
+- Modo normal: ahora usa la intensidad que antes tenía 'Ver fondo'.
+- 'Ver fondo': ahora tiene aproximadamente un 33 % más de movimiento que antes.
+
+Este ZIP sigue siendo un parche de código: no incluye js/site-data.js ni assets.

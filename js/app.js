@@ -219,7 +219,7 @@
         return;
       }
       const elapsed = now - startedAt;
-      const boost = body.classList.contains('background-only') ? 1.24 : 1;
+      const boost = body.classList.contains('background-only') ? 1.65 : 1.24;
       const power = body.classList.contains('low-power') ? 0.82 : 1;
       const ampX = Math.max(0.75, profile.camX * 0.16) * boost * power;
       const ampY = Math.max(0.55, profile.camY * 0.16) * boost * power;
@@ -243,7 +243,7 @@
     const profile = sceneDirectionFor(gameId);
     const move = () => {
       if (document.hidden || currentGameSceneId !== gameId || !body.classList.contains('scene-active')) return;
-      const boost = body.classList.contains('background-only') ? 1.45 : 1;
+      const boost = body.classList.contains('background-only') ? 1.93 : 1.45;
       sceneMotion.targetX = ((Math.random() * 2) - 1) * profile.camX * boost;
       sceneMotion.targetY = ((Math.random() * 2) - 1) * profile.camY * boost;
       queueSceneMotion();
