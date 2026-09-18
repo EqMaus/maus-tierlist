@@ -756,7 +756,7 @@ body.background-only .appearance-popover{display:none!important}
 
 
 /* =========================================================
-   v4.9.1 · EFECTOS AMBIENTALES DE LOS FONDOS (ajustados)
+   v4.10.0 · EFECTOS AMBIENTALES DE LOS FONDOS (ajustados)
    Más exagerados y con personalidad propia por juego.
    ========================================================= */
 .scene-art { overflow: hidden; }
@@ -1248,7 +1248,7 @@ body.background-only .appearance-popover{display:none!important}
 
 
 /* =========================================================
-   v4.9.1 · INMERSIÓN TOTAL
+   v4.10.0 · INMERSIÓN TOTAL
    Parallax, color grading, iluminación dinámica
    y modo “Ver fondo” mucho más cinematográfico.
    ========================================================= */
@@ -1548,13 +1548,93 @@ body[data-scene="pokemon-black"]{
 
 
 /* =========================================================
-   v4.9.1 · AUDIO AMBIENTAL + CAPAS DE ATMÓSFERA
+   v4.10.0 · INMERSIÓN VISUAL REAL
+   Más profundidad, parallax perceptible, primer plano, luz
+   y un “Ver fondo” claramente cinematográfico.
    ========================================================= */
-.music-widget-actions{display:flex;gap:10px;flex-wrap:wrap}
-.ambient-toggle-button{min-height:40px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 13px;border-radius:12px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.035);color:#bfd1dc;cursor:pointer;transition:.16s ease;white-space:nowrap;font-weight:700;letter-spacing:.01em}.ambient-toggle-button:hover{color:#fff;background:rgba(255,255,255,.065);border-color:rgba(255,255,255,.14)}.ambient-toggle-button[aria-pressed="false"]{opacity:.76;color:#9bafb9;background:rgba(255,255,255,.02)}
-.scene-atmosphere{position:absolute;inset:-8%;z-index:1;overflow:hidden;pointer-events:none;mix-blend-mode:screen;transform:translate3d(calc(var(--parallax-x) * .42),calc(var(--parallax-y) * .42),0);opacity:.58;filter:blur(10px)}
-.scene-atmosphere .mist-layer{position:absolute;display:block;border-radius:999px;filter:blur(18px);opacity:.42;animation:mistDrift 18s ease-in-out infinite alternate}.scene-atmosphere .layer-a{width:54vw;height:16vw;left:-8vw;bottom:6vh;background:radial-gradient(ellipse at center,rgba(255,255,255,.14),transparent 68%)}.scene-atmosphere .layer-b{width:48vw;height:14vw;right:-6vw;top:8vh;background:radial-gradient(ellipse at center,rgba(255,255,255,.11),transparent 68%);animation-duration:23s}.scene-atmosphere .layer-c{width:36vw;height:12vw;left:28vw;top:36vh;background:radial-gradient(ellipse at center,rgba(255,255,255,.08),transparent 70%);animation-duration:20s}
-.atmosphere-ash-embers .mist-layer{background:radial-gradient(ellipse at center,rgba(255,125,82,.14),transparent 68%)}.atmosphere-divine-sparks .mist-layer{background:radial-gradient(ellipse at center,rgba(248,225,162,.16),transparent 68%)}.atmosphere-ember-dust .mist-layer{background:radial-gradient(ellipse at center,rgba(206,160,110,.15),transparent 68%)}.atmosphere-rain-sparks .mist-layer,.atmosphere-rain-embers .mist-layer,.atmosphere-cold-rain .mist-layer{background:radial-gradient(ellipse at center,rgba(143,170,205,.12),transparent 68%)}.atmosphere-mansion-dust .mist-layer{background:radial-gradient(ellipse at center,rgba(153,126,94,.15),transparent 70%)}.atmosphere-village-ash .mist-layer{background:radial-gradient(ellipse at center,rgba(150,124,92,.15),transparent 70%)}.atmosphere-ominous-motes .mist-layer{background:radial-gradient(ellipse at center,rgba(120,95,73,.17),transparent 70%)}.atmosphere-wind-dust .mist-layer{background:radial-gradient(ellipse at center,rgba(165,80,84,.14),transparent 70%)}.atmosphere-moon-motes .mist-layer{background:radial-gradient(ellipse at center,rgba(165,118,208,.18),transparent 70%)}.atmosphere-twilight-motes .mist-layer{background:radial-gradient(ellipse at center,rgba(94,177,228,.16),transparent 70%)}.atmosphere-ghost-mist .mist-layer{background:radial-gradient(ellipse at center,rgba(92,148,101,.18),transparent 70%)}.atmosphere-crystal-sparkles .mist-layer,.atmosphere-dark-motes .mist-layer{background:radial-gradient(ellipse at center,rgba(255,245,201,.16),transparent 70%)}
-body.background-only .scene-atmosphere{opacity:.8;filter:blur(12px)}body.background-only .scene-atmosphere .mist-layer{opacity:.55}body.scene-cinematic .scene-atmosphere{animation:sceneAtmospherePulse 8s ease-in-out infinite alternate}
-@keyframes mistDrift{from{transform:translate3d(-2vw,0,0) scale(.94)}to{transform:translate3d(3vw,-2vh,0) scale(1.08)}}@keyframes sceneAtmospherePulse{from{opacity:.72}to{opacity:1}}
-@media (max-width:700px){.scene-atmosphere{opacity:.42}.scene-atmosphere .layer-c{display:none}.music-widget-actions{width:100%}}
+:root{--scene-scroll-y:0px;--scene-scroll-progress:0}
+
+body.scene-active .review-card,body.scene-active .side-card{
+  background:linear-gradient(180deg,rgba(6,16,24,.66),rgba(4,12,18,.56));
+  backdrop-filter:blur(14px) saturate(116%)
+}
+body.scene-active .review-section{background:linear-gradient(180deg,rgba(255,255,255,.026),rgba(255,255,255,.012));backdrop-filter:blur(5px)}
+
+.scene-art .scene-photo,.scene-art svg{
+  transform:translate3d(calc(var(--parallax-x) * .78),calc(var(--parallax-y) * .78 + var(--scene-scroll-y)),0) scale(var(--scene-zoom));
+  transition:transform .22s ease-out,filter .45s ease,opacity .45s ease
+}
+.scene-backdrop{transform:translate3d(calc(var(--parallax-x) * -.18),calc(var(--parallax-y) * -.18 + var(--scene-scroll-y) * .32),0) scale(1.07)}
+.scene-base{transform:translate3d(calc(var(--parallax-x) * -.24),calc(var(--parallax-y) * -.24 + var(--scene-scroll-y) * .2),0) scale(1.04)}
+
+.scene-lighting{position:absolute;inset:-8%;z-index:2;overflow:hidden;pointer-events:none;mix-blend-mode:screen}
+.scene-lighting span{position:absolute;display:block;border-radius:50%;filter:blur(34px);opacity:.24;will-change:transform,opacity}
+.scene-lighting span:first-child{width:42vw;height:42vw;left:-10vw;top:-15vw;background:radial-gradient(circle,rgba(255,255,255,.22),transparent 68%);animation:immersiveLightA 11s ease-in-out infinite alternate}
+.scene-lighting span:last-child{width:36vw;height:36vw;right:-9vw;bottom:-14vw;background:radial-gradient(circle,rgba(255,255,255,.16),transparent 68%);animation:immersiveLightB 14s ease-in-out infinite alternate}
+
+.scene-foreground{position:absolute;inset:-10%;z-index:6;overflow:hidden;pointer-events:none;transform:translate3d(calc(var(--parallax-x) * 1.8),calc(var(--parallax-y) * 1.8),0);transition:transform .22s ease-out,opacity .35s ease}
+.scene-foreground .foreground-particle{position:absolute;left:var(--x);top:var(--y);width:var(--s);height:var(--s);opacity:var(--o);filter:blur(2.2px);will-change:transform,opacity}
+
+.foreground-ash-embers .foreground-particle{border-radius:55% 25% 60% 20%;background:rgba(205,205,196,.48);animation:foregroundAsh var(--d) linear var(--delay) infinite}
+.foreground-ash-embers .foreground-v0,.foreground-ash-embers .foreground-v3{width:calc(var(--s) * .44);height:calc(var(--s) * 1.8);background:rgba(255,101,37,.82);box-shadow:0 0 18px rgba(255,79,26,.54);filter:blur(1px);animation:foregroundEmber calc(var(--d) * .72) ease-out var(--delay) infinite}
+.lighting-ash-embers span:first-child{background:radial-gradient(circle,rgba(255,112,53,.34),transparent 68%)}
+.lighting-ash-embers span:last-child{background:radial-gradient(circle,rgba(255,182,91,.16),transparent 70%)}
+
+.foreground-divine-sparks .foreground-particle{border-radius:50%;background:rgba(255,227,151,.7);box-shadow:0 0 20px rgba(255,222,135,.54);filter:blur(1.3px);animation:foregroundFloat var(--d) ease-in-out var(--delay) infinite alternate}
+.lighting-divine-sparks span:first-child{background:radial-gradient(circle,rgba(255,223,142,.28),transparent 68%)}
+.lighting-divine-sparks span:last-child{background:radial-gradient(circle,rgba(118,174,255,.2),transparent 70%)}
+
+.foreground-ember-dust .foreground-particle,.foreground-ominous-motes .foreground-particle,.foreground-village-ash .foreground-particle{border-radius:50%;background:rgba(199,160,111,.38);animation:foregroundDust calc(var(--d) * .72) linear var(--delay) infinite}
+.foreground-ember-dust .foreground-v0,.foreground-ominous-motes .foreground-v2,.foreground-village-ash .foreground-v4{width:calc(var(--s) * 2.5);height:calc(var(--s) * .22);border-radius:999px;background:rgba(208,173,125,.22);filter:blur(4px)}
+
+.foreground-cold-rain .foreground-particle{border-radius:50%;background:rgba(210,208,196,.35);animation:foregroundDustSlow var(--d) ease-in-out var(--delay) infinite alternate}
+.foreground-cold-rain .foreground-v1,.foreground-cold-rain .foreground-v3{width:calc(var(--s) * 2);height:calc(var(--s) * .15);border-radius:999px;background:rgba(218,214,198,.24)}
+
+.foreground-mansion-dust .foreground-particle,.foreground-ghost-mist .foreground-particle{border-radius:60% 15% 58% 18%;width:calc(var(--s) * .78);height:calc(var(--s) * 1.55);animation:foregroundLeaf calc(var(--d) * .74) linear var(--delay) infinite}
+.foreground-mansion-dust .foreground-particle{background:rgba(151,123,83,.75)}.foreground-mansion-dust .foreground-v1{background:rgba(211,189,145,.8)}
+.foreground-ghost-mist .foreground-particle{background:rgba(42,84,51,.82)}.foreground-ghost-mist .foreground-v1{background:rgba(78,131,84,.78)}
+
+.foreground-moon-motes .foreground-particle{border-radius:50%;background:rgba(222,123,255,.92);box-shadow:0 0 16px rgba(214,113,255,.88),0 0 38px rgba(214,113,255,.42);filter:blur(.6px);animation:foregroundFirefly var(--d) ease-in-out var(--delay) infinite alternate}
+.foreground-moon-motes .foreground-v0,.foreground-moon-motes .foreground-v2,.foreground-moon-motes .foreground-v4{background:rgba(146,255,106,.94);box-shadow:0 0 17px rgba(125,255,94,.92),0 0 40px rgba(125,255,94,.44)}
+
+.foreground-twilight-motes .foreground-particle{border-radius:2px;background:rgba(100,219,240,.85);box-shadow:0 0 17px rgba(80,202,229,.58);filter:blur(.8px);animation:foregroundTwilight var(--d) ease-in-out var(--delay) infinite alternate}
+.foreground-twilight-motes .foreground-v0,.foreground-twilight-motes .foreground-v3{background:rgba(255,164,63,.84);box-shadow:0 0 18px rgba(255,139,40,.52)}
+
+.foreground-wind-dust .foreground-particle{width:1.5px;height:calc(var(--s) * 4.8);background:linear-gradient(to bottom,transparent,rgba(218,226,235,.72));filter:blur(.4px);transform:rotate(10deg);animation:foregroundRain calc(var(--d) * .22) linear var(--delay) infinite}
+.foreground-wind-dust .foreground-v0,.foreground-wind-dust .foreground-v3{width:calc(var(--s) * .42);height:calc(var(--s) * 1.45);border-radius:60% 20% 60% 20%;background:rgba(220,52,66,.9);box-shadow:0 0 15px rgba(255,65,78,.52);filter:blur(.8px);animation:foregroundRedAsh calc(var(--d) * .7) linear var(--delay) infinite}
+
+.foreground-crystal-sparkles .foreground-particle,.foreground-dark-motes .foreground-particle{border-radius:50%;background:rgba(255,244,202,.42);box-shadow:0 0 13px rgba(255,242,194,.34);filter:blur(1.2px);animation:foregroundFloat var(--d) ease-in-out var(--delay) infinite alternate}
+.lighting-crystal-sparkles::before,.lighting-dark-motes::before{content:"";position:absolute;inset:-15%;background:conic-gradient(from 118deg at 88% 4%,transparent 0 4deg,rgba(255,246,196,.24) 5deg 10deg,transparent 11deg 18deg,rgba(255,249,214,.17) 19deg 24deg,transparent 25deg 34deg,rgba(255,249,222,.11) 35deg 39deg,transparent 40deg);filter:blur(2px);opacity:.9;transform-origin:88% 4%;animation:sunRaysBreathe 8s ease-in-out infinite alternate}
+
+body[data-scene="sotc"] .scene-art::before{animation:sotcRedFlash 9s linear infinite}
+body[data-scene="sotc"] .screen-vignette{animation:sotcVignettePulse 9s linear infinite}
+
+body.background-only{--scene-zoom:1.115}
+body.background-only .scene-art .scene-photo{opacity:1;filter:saturate(1.24) contrast(1.14) brightness(.9)}
+body.background-only .scene-foreground{transform:translate3d(calc(var(--parallax-x) * 2.25),calc(var(--parallax-y) * 2.25),0) scale(1.08)}
+body.background-only .scene-effects{transform:translate3d(calc(var(--parallax-x) * 1.5),calc(var(--parallax-y) * 1.5),0) scale(1.05)}
+body.background-only .screen-vignette{opacity:.42}
+body.background-only::before,body.background-only::after{content:"";position:fixed;left:0;right:0;height:clamp(18px,3.2vh,42px);z-index:450;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.78),rgba(0,0,0,.2));opacity:.82}
+body.background-only::before{top:0}body.background-only::after{bottom:0;transform:rotate(180deg)}
+body.scene-entering .scene-photo{animation:immersiveSceneArrival 1.25s cubic-bezier(.16,.82,.2,1) both!important}
+body.scene-entering .scene-foreground{animation:immersiveForegroundArrival 1.4s cubic-bezier(.16,.82,.2,1) both}
+
+@keyframes immersiveLightA{from{transform:translate3d(-3vw,-2vh,0) scale(.92);opacity:.18}to{transform:translate3d(4vw,3vh,0) scale(1.1);opacity:.34}}
+@keyframes immersiveLightB{from{transform:translate3d(3vw,3vh,0) scale(1.06);opacity:.12}to{transform:translate3d(-4vw,-2vh,0) scale(.9);opacity:.28}}
+@keyframes foregroundAsh{0%{transform:translate3d(0,-18vh,0) rotate(var(--r));opacity:0}12%{opacity:var(--o)}100%{transform:translate3d(var(--drift),122vh,0) rotate(calc(var(--r) + 320deg));opacity:0}}
+@keyframes foregroundEmber{0%{transform:translate3d(0,26vh,0) rotate(var(--r)) scale(.6);opacity:0}14%{opacity:var(--o)}100%{transform:translate3d(var(--drift),-126vh,0) rotate(calc(var(--r) + 160deg)) scale(1.2);opacity:0}}
+@keyframes foregroundFloat{from{transform:translate3d(-22px,26px,0) scale(.72);opacity:calc(var(--o) * .35)}to{transform:translate3d(var(--drift),-72px,0) scale(1.28);opacity:var(--o)}}
+@keyframes foregroundDust{0%{transform:translate3d(-26vw,18px,0) rotate(var(--r));opacity:0}12%{opacity:var(--o)}100%{transform:translate3d(120vw,-62px,0) rotate(calc(var(--r) + 150deg));opacity:0}}
+@keyframes foregroundDustSlow{from{transform:translate3d(-20px,24px,0) scale(.78);opacity:calc(var(--o) * .35)}to{transform:translate3d(var(--drift),-58px,0) scale(1.18);opacity:var(--o)}}
+@keyframes foregroundLeaf{0%{transform:translate3d(-12vw,-18vh,0) rotate(var(--r));opacity:0}10%{opacity:var(--o)}100%{transform:translate3d(114vw,124vh,0) rotate(calc(var(--r) + 680deg));opacity:0}}
+@keyframes foregroundFirefly{from{transform:translate3d(-24px,28px,0) scale(.55);opacity:.15}50%{opacity:1}to{transform:translate3d(calc(var(--drift) * .7),-66px,0) scale(1.32);opacity:.7}}
+@keyframes foregroundTwilight{from{transform:translate3d(-26px,32px,0) rotate(0) scale(.58);opacity:.18}to{transform:translate3d(var(--drift),-82px,0) rotate(250deg) scale(1.24);opacity:var(--o)}}
+@keyframes foregroundRain{0%{transform:translate3d(0,-36vh,0) rotate(10deg);opacity:0}5%{opacity:var(--o)}100%{transform:translate3d(-120px,142vh,0) rotate(10deg);opacity:0}}
+@keyframes foregroundRedAsh{0%{transform:translate3d(0,-14vh,0) rotate(var(--r));opacity:0}12%{opacity:var(--o)}100%{transform:translate3d(var(--drift),116vh,0) rotate(calc(var(--r) + 260deg));opacity:0}}
+@keyframes sunRaysBreathe{from{transform:rotate(-1.5deg) scale(.98);opacity:.62}to{transform:rotate(1.5deg) scale(1.04);opacity:1}}
+@keyframes sotcRedFlash{0%,13%,14.3%,57%,58.3%,100%{filter:none}13.15%,13.55%{filter:brightness(1.35) sepia(.12) hue-rotate(308deg) saturate(1.7)}57.2%,57.55%{filter:brightness(1.28) sepia(.1) hue-rotate(308deg) saturate(1.55)}}
+@keyframes sotcVignettePulse{0%,13%,14.3%,57%,58.3%,100%{opacity:1}13.15%,13.55%,57.2%,57.55%{opacity:.48}}
+@keyframes immersiveSceneArrival{from{opacity:.18;transform:translate3d(calc(var(--parallax-x) * .5),calc(var(--parallax-y) * .5 + 26px),0) scale(calc(var(--scene-zoom) + .055));filter:blur(8px) saturate(.75)}to{opacity:.82;transform:translate3d(calc(var(--parallax-x) * .78),calc(var(--parallax-y) * .78 + var(--scene-scroll-y)),0) scale(var(--scene-zoom));filter:saturate(1.10) contrast(1.06) brightness(.70)}}
+@keyframes immersiveForegroundArrival{from{opacity:0;transform:translate3d(calc(var(--parallax-x) * 1.8),calc(var(--parallax-y) * 1.8 + 24px),0) scale(1.08)}to{opacity:1;transform:translate3d(calc(var(--parallax-x) * 1.8),calc(var(--parallax-y) * 1.8),0) scale(1)}}
+
+@media(max-width:700px){.scene-foreground{opacity:.68}.scene-foreground .foreground-particle:nth-child(n+12){display:none}body.background-only{--scene-zoom:1.07}body.background-only::before,body.background-only::after{height:18px}}

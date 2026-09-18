@@ -362,7 +362,7 @@ code { padding: 2px 5px; border-radius: 5px; background: rgba(255,255,255,.06); 
 }
 
 
-/* v4.9.1 · Selector de ambiente del fondo */
+/* v4.10.0 · Selector de ambiente del fondo */
 .ambient-effect-field {
   margin-top: 16px;
   max-width: 560px;

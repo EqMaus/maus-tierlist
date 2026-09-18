@@ -14,7 +14,6 @@
   const playerCurrentTime = byId('playerCurrentTime');
   const playerDuration = byId('playerDuration');
   const themeInfoButton = byId('themeInfoButton');
-  const ambientToggleButton = byId('ambientToggleButton');
   const themeInfoModal = byId('themeInfoModal');
   const themeInfoClose = byId('themeInfoClose');
   const themeInfoContent = byId('themeInfoContent');
@@ -152,260 +151,6 @@
   let sceneEnterTimer = 0;
   const sceneMotion = { currentX: 0, currentY: 0, targetX: 0, targetY: 0 };
 
-  const AMBIENT_STORAGE_KEY = 'maus-ambient-enabled';
-  const ambientSceneProfiles = {
-    'gow1': { id: 'desert-fire', amount: .16 },
-    'gow2': { id: 'divine', amount: .14 },
-    'gow3': { id: 'ash-fire', amount: .18 },
-    're3-og': { id: 'rain-city', amount: .16 },
-    're3-remake': { id: 'rain-city', amount: .16 },
-    're2-og': { id: 'dusty-cold', amount: .12 },
-    're1-remaster': { id: 'leafy-mansion', amount: .13 },
-    're4-og': { id: 'village-wind', amount: .15 },
-    're9': { id: 'dirty-wind', amount: .14 },
-    'sotc': { id: 'storm-red', amount: .2 },
-    'majoras-mask': { id: 'majora', amount: .15 },
-    'twilight-princess': { id: 'twilight', amount: .15 },
-    'medievil': { id: 'haunted-wind', amount: .14 },
-    'pokemon-diamond': { id: 'sunlit-breeze', amount: .10 },
-    'pokemon-black': { id: 'sunlit-breeze', amount: .10 }
-  };
-  let ambientEnabled = true;
-  try {
-    const storedAmbient = localStorage.getItem(AMBIENT_STORAGE_KEY);
-    if (storedAmbient === '0') ambientEnabled = false;
-  } catch (_) {}
-  let ambientCtx = null;
-  let ambientMasterGain = null;
-  let ambientSceneNodes = [];
-  let ambientSceneKey = '';
-  let ambientUnlocked = false;
-  let ambientNoiseBuffer = null;
-  let ambientLevelTimer = 0;
-
-  function setAmbientToggleUi() {
-    if (!ambientToggleButton) return;
-    ambientToggleButton.setAttribute('aria-pressed', ambientEnabled ? 'true' : 'false');
-    ambientToggleButton.textContent = ambientEnabled ? 'Ambiente · ON' : 'Ambiente · OFF';
-  }
-
-  function ambientSceneProfileFor(gameId) {
-    return ambientSceneProfiles[gameId] || null;
-  }
-
-  function ensureAmbientContext() {
-    if (ambientCtx) return ambientCtx;
-    const Ctx = window.AudioContext || window.webkitAudioContext;
-    if (!Ctx) return null;
-    ambientCtx = new Ctx();
-    ambientMasterGain = ambientCtx.createGain();
-    ambientMasterGain.gain.value = 0;
-    ambientMasterGain.connect(ambientCtx.destination);
-    const length = ambientCtx.sampleRate * 2;
-    ambientNoiseBuffer = ambientCtx.createBuffer(1, length, ambientCtx.sampleRate);
-    const data = ambientNoiseBuffer.getChannelData(0);
-    for (let i = 0; i < length; i += 1) data[i] = (Math.random() * 2 - 1) * .92;
-    return ambientCtx;
-  }
-
-  function ambientRamp(gainNode, value, time = .8) {
-    if (!gainNode || !ambientCtx) return;
-    const now = ambientCtx.currentTime;
-    gainNode.gain.cancelScheduledValues(now);
-    gainNode.gain.setValueAtTime(gainNode.gain.value, now);
-    gainNode.gain.linearRampToValueAtTime(value, now + time);
-  }
-
-  function createAmbientNoise(filterType, frequency, q, gainValue) {
-    if (!ensureAmbientContext()) return null;
-    const source = ambientCtx.createBufferSource();
-    source.buffer = ambientNoiseBuffer;
-    source.loop = true;
-    const filter = ambientCtx.createBiquadFilter();
-    filter.type = filterType;
-    filter.frequency.value = frequency;
-    filter.Q.value = q || 0.0001;
-    const gain = ambientCtx.createGain();
-    gain.gain.value = gainValue;
-    source.connect(filter);
-    filter.connect(gain);
-    gain.connect(ambientMasterGain);
-    source.start();
-    return { source, filter, gain };
-  }
-
-  function createAmbientOsc(type, frequency, gainValue) {
-    if (!ensureAmbientContext()) return null;
-    const osc = ambientCtx.createOscillator();
-    osc.type = type;
-    osc.frequency.value = frequency;
-    const gain = ambientCtx.createGain();
-    gain.gain.value = gainValue;
-    osc.connect(gain);
-    gain.connect(ambientMasterGain);
-    osc.start();
-    return { osc, gain };
-  }
-
-  function createLfo(target, minValue, maxValue, frequency) {
-    if (!ensureAmbientContext() || !target) return null;
-    const osc = ambientCtx.createOscillator();
-    osc.type = 'sine';
-    osc.frequency.value = frequency;
-    const amount = ambientCtx.createGain();
-    amount.gain.value = (maxValue - minValue) / 2;
-    const offset = ambientCtx.createConstantSource();
-    offset.offset.value = minValue + (maxValue - minValue) / 2;
-    osc.connect(amount).connect(target);
-    offset.connect(target);
-    osc.start();
-    offset.start();
-    return { osc, amount, offset };
-  }
-
-  function stopAmbientScene() {
-    ambientSceneKey = '';
-    while (ambientSceneNodes.length) {
-      const node = ambientSceneNodes.pop();
-      for (const key of ['source', 'osc', 'offset']) {
-        try { node[key] && node[key].stop && node[key].stop(); } catch (_) {}
-      }
-      for (const key of ['source', 'osc', 'offset', 'filter', 'gain', 'amount']) {
-        try { node[key] && node[key].disconnect && node[key].disconnect(); } catch (_) {}
-      }
-    }
-  }
-
-  function buildAmbientScene(sceneId) {
-    if (!ensureAmbientContext()) return;
-    stopAmbientScene();
-    const push = (node) => { if (node) ambientSceneNodes.push(node); };
-
-    switch (sceneId) {
-      case 'desert-fire': {
-        const wind = createAmbientNoise('bandpass', 460, .2, .055); push(wind); push(createLfo(wind.gain.gain, .03, .075, .08)); push(createLfo(wind.filter.frequency, 280, 640, .06));
-        const dust = createAmbientNoise('highpass', 1200, .15, .02); push(dust); push(createLfo(dust.gain.gain, .005, .028, .14));
-        const fire = createAmbientNoise('lowpass', 1100, .4, .018); push(fire); push(createLfo(fire.gain.gain, .004, .032, .6));
-        break;
-      }
-      case 'divine': {
-        const air = createAmbientNoise('bandpass', 760, .35, .034); push(air); push(createLfo(air.gain.gain, .012, .04, .08));
-        const drone = createAmbientOsc('sine', 164, .008); push(drone); push(createLfo(drone.gain.gain, .003, .012, .11));
-        const shimmer = createAmbientOsc('triangle', 522, .0035); push(shimmer); push(createLfo(shimmer.gain.gain, .001, .005, .27));
-        break;
-      }
-      case 'ash-fire': {
-        const wind = createAmbientNoise('bandpass', 500, .28, .06); push(wind); push(createLfo(wind.gain.gain, .026, .08, .1));
-        const ash = createAmbientNoise('highpass', 1600, .25, .02); push(ash); push(createLfo(ash.gain.gain, .004, .03, .15));
-        const blaze = createAmbientNoise('lowpass', 980, .6, .022); push(blaze); push(createLfo(blaze.gain.gain, .008, .04, .75));
-        const rumble = createAmbientOsc('triangle', 62, .004); push(rumble); push(createLfo(rumble.gain.gain, .001, .007, .09));
-        break;
-      }
-      case 'rain-city': {
-        const rain = createAmbientNoise('highpass', 2600, .08, .05); push(rain); push(createLfo(rain.gain.gain, .028, .066, .25));
-        const wind = createAmbientNoise('bandpass', 780, .22, .025); push(wind); push(createLfo(wind.gain.gain, .01, .03, .09));
-        const hum = createAmbientOsc('sine', 95, .003); push(hum); push(createLfo(hum.gain.gain, .001, .0045, .05));
-        break;
-      }
-      case 'dusty-cold': {
-        const dust = createAmbientNoise('bandpass', 980, .18, .022); push(dust); push(createLfo(dust.gain.gain, .006, .028, .12));
-        const room = createAmbientOsc('sine', 110, .0032); push(room); push(createLfo(room.gain.gain, .001, .0045, .04));
-        break;
-      }
-      case 'leafy-mansion': {
-        const wind = createAmbientNoise('bandpass', 420, .16, .038); push(wind); push(createLfo(wind.gain.gain, .012, .048, .09));
-        const leaves = createAmbientNoise('highpass', 1850, .16, .016); push(leaves); push(createLfo(leaves.gain.gain, .002, .024, .21));
-        break;
-      }
-      case 'village-wind': {
-        const wind = createAmbientNoise('bandpass', 540, .24, .048); push(wind); push(createLfo(wind.gain.gain, .02, .058, .1));
-        const grit = createAmbientNoise('highpass', 1450, .15, .014); push(grit); push(createLfo(grit.gain.gain, .003, .021, .16));
-        break;
-      }
-      case 'dirty-wind': {
-        const wind = createAmbientNoise('bandpass', 470, .25, .05); push(wind); push(createLfo(wind.gain.gain, .022, .06, .08));
-        const grit = createAmbientNoise('highpass', 1280, .18, .015); push(grit); push(createLfo(grit.gain.gain, .004, .026, .16));
-        const drone = createAmbientOsc('triangle', 86, .003); push(drone); push(createLfo(drone.gain.gain, .001, .005, .05));
-        break;
-      }
-      case 'storm-red': {
-        const rain = createAmbientNoise('highpass', 2850, .1, .056); push(rain); push(createLfo(rain.gain.gain, .03, .072, .32));
-        const wind = createAmbientNoise('bandpass', 620, .22, .05); push(wind); push(createLfo(wind.gain.gain, .02, .072, .12));
-        const rumble = createAmbientOsc('triangle', 52, .006); push(rumble); push(createLfo(rumble.gain.gain, .002, .008, .05));
-        break;
-      }
-      case 'majora': {
-        const air = createAmbientNoise('bandpass', 680, .22, .026); push(air); push(createLfo(air.gain.gain, .01, .03, .1));
-        const drone = createAmbientOsc('sawtooth', 138, .0035); push(drone); push(createLfo(drone.gain.gain, .001, .006, .07));
-        const glow = createAmbientOsc('triangle', 414, .0027); push(glow); push(createLfo(glow.gain.gain, .0008, .004, .23));
-        break;
-      }
-      case 'twilight': {
-        const air = createAmbientNoise('bandpass', 700, .26, .03); push(air); push(createLfo(air.gain.gain, .012, .037, .08));
-        const drone = createAmbientOsc('triangle', 176, .0035); push(drone); push(createLfo(drone.gain.gain, .0012, .005, .07));
-        const shimmer = createAmbientOsc('sine', 352, .0022); push(shimmer); push(createLfo(shimmer.gain.gain, .0006, .0034, .18));
-        break;
-      }
-      case 'haunted-wind': {
-        const wind = createAmbientNoise('bandpass', 510, .25, .036); push(wind); push(createLfo(wind.gain.gain, .012, .05, .08));
-        const whisper = createAmbientNoise('highpass', 1720, .15, .008); push(whisper); push(createLfo(whisper.gain.gain, .001, .012, .2));
-        break;
-      }
-      case 'sunlit-breeze':
-      default: {
-        const breeze = createAmbientNoise('bandpass', 860, .18, .018); push(breeze); push(createLfo(breeze.gain.gain, .006, .022, .08));
-        const light = createAmbientOsc('sine', 392, .0018); push(light); push(createLfo(light.gain.gain, .0004, .0025, .14));
-        break;
-      }
-    }
-  }
-
-  function refreshAmbientLevel() {
-    if (!ambientMasterGain || !ambientCtx) return;
-    const profile = ambientSceneProfileFor(currentGameSceneId || '');
-    let target = 0;
-    if (ambientEnabled && profile && body.classList.contains('scene-active')) {
-      target = profile.amount || .12;
-      const musicPlaying = Boolean(audio && !audio.paused && !audio.ended && audio.currentSrc);
-      if (musicPlaying) target *= .6;
-      if (body.classList.contains('background-only')) target *= 1.55;
-    }
-    ambientRamp(ambientMasterGain, target, .85);
-  }
-
-  function ensureAmbientScene(gameId) {
-    const profile = ambientSceneProfileFor(gameId || '');
-    if (!profile) { stopAmbientScene(); refreshAmbientLevel(); return; }
-    if (!ambientUnlocked) return;
-    if (!ensureAmbientContext()) return;
-    if (ambientCtx.state === 'suspended') ambientCtx.resume().catch(() => {});
-    if (ambientSceneKey !== profile.id) {
-      buildAmbientScene(profile.id);
-      ambientSceneKey = profile.id;
-    }
-    refreshAmbientLevel();
-  }
-
-  function unlockAmbientAudio() {
-    if (ambientUnlocked) {
-      ensureAmbientScene(currentGameSceneId || '');
-      return;
-    }
-    const ctx = ensureAmbientContext();
-    if (!ctx) return;
-    ambientUnlocked = true;
-    ctx.resume().catch(() => {});
-    ensureAmbientScene(currentGameSceneId || '');
-    if (!ambientLevelTimer) ambientLevelTimer = window.setInterval(refreshAmbientLevel, 700);
-  }
-
-  function setAmbientEnabled(enabled) {
-    ambientEnabled = Boolean(enabled);
-    try { localStorage.setItem(AMBIENT_STORAGE_KEY, ambientEnabled ? '1' : '0'); } catch (_) {}
-    setAmbientToggleUi();
-    refreshAmbientLevel();
-  }
-
   function updateSceneMotionVars() {
     body.style.setProperty('--parallax-x', `${sceneMotion.currentX.toFixed(2)}px`);
     body.style.setProperty('--parallax-y', `${sceneMotion.currentY.toFixed(2)}px`);
@@ -434,6 +179,19 @@
     sceneMotion.targetX = 0;
     sceneMotion.targetY = 0;
     queueSceneMotion();
+  }
+
+  function updateSceneScrollDepth() {
+    if (!body.classList.contains('scene-active')) {
+      body.style.setProperty('--scene-scroll-y', '0px');
+      body.style.setProperty('--scene-scroll-progress', '0');
+      return;
+    }
+    const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    const progress = Math.min(1, Math.max(0, window.scrollY / maxScroll));
+    const boost = body.classList.contains('background-only') ? 1.35 : 1;
+    body.style.setProperty('--scene-scroll-y', `${(-42 * progress * boost).toFixed(2)}px`);
+    body.style.setProperty('--scene-scroll-progress', progress.toFixed(4));
   }
 
   function updateSceneFocusState() {
@@ -518,10 +276,30 @@
     return `<div class="scene-effects effect-${esc(effect)}" aria-hidden="true">${particles}</div>`;
   }
 
-  function sceneAtmosphereHtml(gameId) {
+
+  function foregroundEffectHtml(gameId) {
     const effect = ambientEffectFor(gameId);
     if (!effect || effect === 'none') return '';
-    return `<div class="scene-atmosphere atmosphere-${esc(effect)}" aria-hidden="true"><span class="mist-layer layer-a"></span><span class="mist-layer layer-b"></span><span class="mist-layer layer-c"></span></div>`;
+    const count = effect === 'wind-dust' ? 26 : 18;
+    const particles = Array.from({ length: count }, (_, index) => {
+      const x = (index * 61 + 7) % 106 - 3;
+      const y = (index * 43 + 19) % 106 - 3;
+      const size = 8 + ((index * 13) % 20);
+      const duration = 7 + ((index * 17) % 16);
+      const delay = -((index * 19) % 21);
+      const drift = ((index * 41) % 241) - 120;
+      const rotation = (index * 67) % 360;
+      const opacity = (18 + ((index * 23) % 42)) / 100;
+      const variant = index % 5;
+      return `<i class="foreground-particle foreground-v${variant}" style="--x:${x}%;--y:${y}%;--s:${size}px;--d:${duration}s;--delay:${delay}s;--drift:${drift}px;--r:${rotation}deg;--o:${opacity}"></i>`;
+    }).join('');
+    return `<div class="scene-foreground foreground-${esc(effect)}" aria-hidden="true">${particles}</div>`;
+  }
+
+  function sceneLightHtml(gameId) {
+    const effect = ambientEffectFor(gameId);
+    if (!effect || effect === 'none') return '';
+    return `<div class="scene-lighting lighting-${esc(effect)}" aria-hidden="true"><span></span><span></span></div>`;
   }
 
   function clamp(value, min, max, fallback) {
@@ -1686,7 +1464,7 @@
       requestAnimationFrame(() => requestAnimationFrame(() => {
         body.classList.add('background-only');
         updateSceneFocusState();
-        refreshAmbientLevel();
+        updateSceneScrollDepth();
       }));
       if (adminGate && !adminGate.hidden) closeAdminGate();
       return;
@@ -1700,7 +1478,6 @@
     body.classList.add('background-restoring');
     body.classList.remove('background-only');
     updateSceneFocusState();
-    refreshAmbientLevel();
     backgroundUiTimer = window.setTimeout(() => {
       body.classList.remove('background-restoring');
       if (restoreUiButton) restoreUiButton.hidden = true;
@@ -1714,8 +1491,6 @@
     body.dataset.scene = 'default';
     body.dataset.ambientEffect = 'none';
     resetSceneMotion();
-    stopAmbientScene();
-    refreshAmbientLevel();
     if (backgroundViewButton) backgroundViewButton.hidden = true;
     if (sceneArt) sceneArt.innerHTML = '';
   }
@@ -1736,14 +1511,15 @@
     // "Ver fondo" solo tiene sentido cuando existe una imagen de fondo dedicada e inspeccionable.
     if (backgroundViewButton) backgroundViewButton.hidden = !photoSrc;
     if (!sceneArt) return;
-    const atmosphere = sceneAtmosphereHtml(gameId);
+    const lighting = sceneLightHtml(gameId);
     const ambient = ambientEffectHtml(gameId);
-    ensureAmbientScene(gameId);
+    const foreground = foregroundEffectHtml(gameId);
+    updateSceneScrollDepth();
     if (photoSrc) {
-      sceneArt.innerHTML = `<img class="scene-photo" src="${esc(photoSrc)}" alt="">${atmosphere}${ambient}`;
+      sceneArt.innerHTML = `<img class="scene-photo" src="${esc(photoSrc)}" alt="">${lighting}${ambient}${foreground}`;
       return;
     }
-    sceneArt.innerHTML = `${sceneSvg(key)}${atmosphere}${ambient}`;
+    sceneArt.innerHTML = `${sceneSvg(key)}${lighting}${ambient}${foreground}`;
   }
 
 
@@ -2402,6 +2178,19 @@
   }
 
   function bindStaticEvents() {
+    window.addEventListener('pointermove', (event) => {
+      if (!body.classList.contains('scene-active')) return;
+      const x = (event.clientX / Math.max(window.innerWidth, 1)) - 0.5;
+      const y = (event.clientY / Math.max(window.innerHeight, 1)) - 0.5;
+      const intensity = body.classList.contains('background-only') ? 40 : 24;
+      sceneMotion.targetX = x * intensity * 2;
+      sceneMotion.targetY = y * intensity * 1.55;
+      queueSceneMotion();
+    }, { passive: true });
+    window.addEventListener('scroll', updateSceneScrollDepth, { passive: true });
+    window.addEventListener('mouseleave', resetSceneMotion);
+    window.addEventListener('blur', resetSceneMotion);
+
     app.addEventListener('click', handleAppClick);
     app.addEventListener('input', handleAppInput);
     app.addEventListener('change', handleAppChange);
@@ -2453,6 +2242,7 @@
     player?.addEventListener('pointerup', endMusicDrag);
     player?.addEventListener('pointercancel', endMusicDrag);
     window.addEventListener('resize', () => {
+      updateSceneScrollDepth();
       if (!player || player.hidden || player.style.left === '') return;
       const rect = player.getBoundingClientRect();
       setMusicWidgetPosition(rect.left, rect.top, false);
@@ -2461,23 +2251,9 @@
     document.addEventListener('pointerdown', retryPendingAudio, { capture: true });
     document.addEventListener('keydown', retryPendingAudio, { capture: true });
 
-    document.addEventListener('pointerdown', unlockAmbientAudio, { capture: true });
-    document.addEventListener('keydown', unlockAmbientAudio, { capture: true });
-    ambientToggleButton?.addEventListener('click', () => {
-      unlockAmbientAudio();
-      setAmbientEnabled(!ambientEnabled);
-    });
-    setAmbientToggleUi();
-
     audio.addEventListener('error', () => {
       if (!player.hidden) showSavedToast('No se pudo cargar este tema musical');
     });
-
-    audio.addEventListener('play', refreshAmbientLevel);
-    audio.addEventListener('pause', refreshAmbientLevel);
-    audio.addEventListener('volumechange', refreshAmbientLevel);
-    audio.addEventListener('emptied', refreshAmbientLevel);
-    audio.addEventListener('ended', refreshAmbientLevel);
 
     backgroundViewButton?.addEventListener('click', () => setBackgroundOnly(true));
     restoreUiButton?.addEventListener('click', () => setBackgroundOnly(false));
@@ -2574,5 +2350,6 @@
   updateEditUi();
   if (!location.hash) history.replaceState(null, '', '#tierlist');
   updateSceneMotionVars();
+  updateSceneScrollDepth();
   renderRoute();
 })();
