@@ -2282,7 +2282,12 @@
 
     const reviewRead = reviewHtml(game.review, game.id);
     const reviewEditor = reviewEditorHtml(game.review, game.id);
-    const reviewDisplay = editMode ? reviewEditor : `<details class="spoiler-review"><summary><span class="spoiler-open-label">⚠ Esta review contiene spoilers · abrir review</span><span class="spoiler-close-label">Cerrar review</span></summary>${reviewRead}</details>`;
+    const hasSpoilers = Boolean(game.spoilers);
+    const reviewDisplay = editMode
+      ? reviewEditor
+      : hasSpoilers
+        ? `<details class="spoiler-review"><summary><span class="spoiler-open-label">⚠ Esta review contiene spoilers · abrir review</span><span class="spoiler-close-label">Cerrar review</span></summary>${reviewRead}</details>`
+        : reviewRead;
     const scoreEditor = editMode ? `<select class="score-editor" data-edit-game="${esc(game.id)}" data-edit-field="score">${scale.map((row) => `<option value="${esc(row.score)}" ${Number(row.score) === Number(game.score) ? 'selected' : ''}>${esc(row.score)} · ${esc(row.label)}</option>`).join('')}</select>` : `<strong>${esc(game.score)}/10</strong>`;
     const titleDisplay = editMode ? `<input class="title-editor" data-edit-game="${esc(game.id)}" data-edit-field="title" value="${esc(game.title)}" aria-label="Título del juego">` : esc(game.title);
     const cover = coverSrc(game);

@@ -1,1 +1,9 @@
-MAUS TIER LISTS — v5.1.0\n\nSmash Ultimate pasa a usar una solución más profesional para los rayos:\n- overlays de rayos derivados de imágenes reales\n- integración por mezcla screen y flashes ambientales\n- zona izquierda: brazo de Kazuya\n- zona derecha: Kazuya rival\n- móvil lite sigue sin activar estos efectos\n\nEste ZIP sigue sin incluir js/site-data.js ni assets de juegos.\n
+MAUS TIER LISTS — v5.1.1
+
+FIX DE SPOILERS:
+- El aviso de spoilers ya NO aparece siempre.
+- Si 'Contiene spoilers' está desmarcado, la review se muestra abierta directamente.
+- Si está marcado, aparece el aviso y hay que abrir/cerrar la review como antes.
+- El editor ya guardaba correctamente el booleano; el fallo estaba en la web pública, que ignoraba ese valor.
+
+Este ZIP no incluye js/site-data.js ni los assets de tus juegos.

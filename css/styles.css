@@ -1961,7 +1961,7 @@ body.climate-event[data-climate-event="flare"] .scene-foreground{
 }
 
 /* =========================================================
-   v5.1.0 · Dirección artística, cámara autónoma y rendimiento
+   v5.1.1 · Dirección artística, cámara autónoma y rendimiento
    ========================================================= */
 :root{
   --scene-light-x:50%;
@@ -2013,7 +2013,7 @@ body[data-scene="re1-remaster"] .scene-depth-back,body[data-scene="re2-og"] .sce
 
 
 /* =========================================================
-   v5.1.0 · FONDO SIEMPRE VIVO
+   v5.1.1 · FONDO SIEMPRE VIVO
    El fondo fotográfico se mueve también durante la lectura normal.
    Las partículas NO dependen de esta capa.
    ========================================================= */
@@ -2093,7 +2093,7 @@ body.background-only .scene-background-motion{
 
 
 /* =========================================================
-   v5.1.0 · MODO RENDIMIENTO MÓVIL
+   v5.1.1 · MODO RENDIMIENTO MÓVIL
    Solo se activa en pantallas táctiles pequeñas. PC queda intacto.
    ========================================================= */
 body.mobile-performance{
@@ -2207,7 +2207,7 @@ body.mobile-performance:not(.climate-event) .scene-event{
 
 
 /* =========================================================
-   v5.1.0 · MÓVIL LITE
+   v5.1.1 · MÓVIL LITE
    En teléfono prima la fluidez: una imagen estática y cero efectos.
    Escritorio conserva el sistema visual completo.
    ========================================================= */
@@ -2320,7 +2320,7 @@ body.mobile-performance .review-verdict{
 
 
 /* =========================================================
-   v5.1.0 · DOS TIER LISTS: OFFLINE / ONLINE
+   v5.1.1 · DOS TIER LISTS: OFFLINE / ONLINE
    ========================================================= */
 .catalog-nav{
   display:flex;
@@ -2511,7 +2511,7 @@ body.online-mode .side-card{
 
 
 /* =========================================================
-   v5.1.0 · Relámpagos cinematográficos para Smash Ultimate
+   v5.1.1 · Relámpagos cinematográficos para Smash Ultimate
    ========================================================= */
 .scene-special-effects{
   position:absolute;
