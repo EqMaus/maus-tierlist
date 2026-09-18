@@ -79,6 +79,6 @@ Incluye los 15 temas MP3 definitivos y el nuevo fondo de God of War III.
 Existe en `admin.html`. Requiere autenticación mediante un Fine-grained Personal Access Token de GitHub limitado exclusivamente al repositorio `maus-tierlist` con permiso `Contents: Read and write`. El token se conserva solo durante la pestaña/sesión del navegador y no está incluido en el código.
 
 
-## Sesión persistente del editor (v4.8.1)
+## Sesión persistente del editor (v4.9.1)
 
 El login de `admin.html` incluye **Recordar sesión en este dispositivo**. Si se activa, el token de GitHub se conserva en el almacenamiento local del navegador y el editor vuelve a conectar automáticamente al abrirlo de nuevo. **Cerrar sesión** elimina tanto la sesión temporal como la persistente. Usa esta opción únicamente en un dispositivo personal.

@@ -756,7 +756,7 @@ body.background-only .appearance-popover{display:none!important}
 
 
 /* =========================================================
-   v4.8.1 · EFECTOS AMBIENTALES DE LOS FONDOS (ajustados)
+   v4.9.1 · EFECTOS AMBIENTALES DE LOS FONDOS (ajustados)
    Más exagerados y con personalidad propia por juego.
    ========================================================= */
 .scene-art { overflow: hidden; }
@@ -1245,3 +1245,316 @@ body.background-only .appearance-popover{display:none!important}
 }
 
 }
+
+
+/* =========================================================
+   v4.9.1 · INMERSIÓN TOTAL
+   Parallax, color grading, iluminación dinámica
+   y modo “Ver fondo” mucho más cinematográfico.
+   ========================================================= */
+:root{
+  --parallax-x:0px;
+  --parallax-y:0px;
+  --scene-zoom:1.025;
+  --scene-grade-top:rgba(14,28,40,.08);
+  --scene-grade-bottom:rgba(4,8,12,.18);
+  --scene-light-a:rgba(255,255,255,.08);
+  --scene-light-b:rgba(110,190,255,.04);
+  --scene-ui-accent:rgba(100,223,180,.18);
+  --scene-ui-outline:rgba(255,255,255,.08);
+  --scene-vignette-extra:rgba(0,0,0,.20);
+}
+.scene-backdrop{
+  transform:translate3d(calc(var(--parallax-x) * -.12), calc(var(--parallax-y) * -.12), 0) scale(1.05);
+  transform-origin:center center;
+}
+.scene-base{
+  transform:translate3d(calc(var(--parallax-x) * -.18), calc(var(--parallax-y) * -.18), 0) scale(1.03);
+}
+.scene-glow{
+  transform:translate3d(calc(var(--parallax-x) * -.32), calc(var(--parallax-y) * -.32), 0) scale(1.06);
+  animation:sceneGlowPulse 9s ease-in-out infinite alternate;
+}
+.scene-backdrop::after{
+  content:"";
+  position:absolute;
+  inset:-6%;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 22% 16%, var(--scene-light-a), transparent 28%),
+    radial-gradient(circle at 78% 24%, var(--scene-light-b), transparent 30%),
+    linear-gradient(180deg, rgba(255,255,255,.02), transparent 25%, rgba(0,0,0,.10));
+  mix-blend-mode:screen;
+  filter:blur(18px);
+  opacity:.72;
+  transform:translate3d(calc(var(--parallax-x) * -.28), calc(var(--parallax-y) * -.28), 0);
+  animation:sceneLightPulse 12s ease-in-out infinite alternate;
+}
+.scene-art{
+  isolation:isolate;
+  transform:scale(1.006);
+}
+.scene-art::before,
+.scene-art::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+}
+.scene-art::before{
+  z-index:2;
+  background:
+    linear-gradient(180deg,var(--scene-grade-top),transparent 30%,transparent 68%,var(--scene-grade-bottom)),
+    radial-gradient(circle at 50% 18%,rgba(255,255,255,.05),transparent 32%);
+  mix-blend-mode:screen;
+  opacity:.82;
+  transform:translate3d(calc(var(--parallax-x) * .08), calc(var(--parallax-y) * .08), 0);
+}
+.scene-art::after{
+  z-index:3;
+  background:
+    linear-gradient(120deg, transparent 0 28%, rgba(255,255,255,.022) 32%, transparent 38%),
+    linear-gradient(rgba(255,255,255,.016) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.012) 1px, transparent 1px);
+  background-size:auto, 3px 3px, 3px 3px;
+  opacity:.10;
+  mix-blend-mode:soft-light;
+  animation:sceneGrainShift 2.3s steps(2) infinite;
+}
+.scene-art svg,
+.scene-art .scene-photo{
+  transition:transform .35s ease-out, filter .45s ease, opacity .45s ease;
+  transform:translate3d(calc(var(--parallax-x) * .55), calc(var(--parallax-y) * .55), 0) scale(var(--scene-zoom));
+  transform-origin:center center;
+}
+.scene-art svg{
+  filter:drop-shadow(0 26px 56px rgba(0,0,0,.36));
+}
+.scene-art .scene-photo{
+  opacity:.82;
+  filter:saturate(1.10) contrast(1.06) brightness(.70);
+  animation:scenePhotoBreath 18s ease-in-out infinite alternate;
+}
+.scene-effects{
+  z-index:4;
+  transform:translate3d(calc(var(--parallax-x) * .9), calc(var(--parallax-y) * .9), 0);
+  transition:opacity .4s ease, transform .35s ease-out;
+}
+.screen-vignette{
+  background:
+    linear-gradient(180deg, rgba(3,9,14,.14), rgba(3,9,14,.42)),
+    radial-gradient(circle at 50% 18%, transparent 0 31%, rgba(0,0,0,.30) 84%),
+    radial-gradient(circle at 50% 50%, transparent 44%, var(--scene-vignette-extra) 100%);
+}
+
+/* Entrada más teatral al abrir una review */
+body.scene-entering .scene-art,
+body.scene-entering .scene-backdrop{
+  animation:sceneWake .95s cubic-bezier(.15,.8,.2,1) both;
+}
+body.scene-entering .scene-effects{
+  animation:sceneEffectsWake 1.05s cubic-bezier(.18,.78,.18,1) both;
+}
+
+/* La interfaz absorbe un poco el tono del juego */
+body.scene-active .site-header{
+  border-bottom-color:color-mix(in srgb,var(--scene-ui-accent) 48%, rgba(255,255,255,.05));
+  box-shadow:0 12px 42px rgba(0,0,0,.14);
+}
+body.scene-active .background-view-button,
+body.scene-active .theme-info-button,
+body.scene-active .player-toggle,
+body.scene-active .main-nav .nav-presentation-button,
+body.scene-active .main-nav .nav-appearance-button{
+  border-color:color-mix(in srgb,var(--scene-ui-accent) 56%, rgba(255,255,255,.08));
+  box-shadow:0 10px 30px rgba(0,0,0,.12);
+}
+body.scene-active .review-card,
+body.scene-active .side-card{
+  border-color:color-mix(in srgb,var(--scene-ui-accent) 30%, rgba(255,255,255,.07));
+  box-shadow:0 18px 50px rgba(0,0,0,.16), inset 0 1px 0 rgba(255,255,255,.02);
+}
+
+/* Modo Ver fondo: más cinemático */
+body.background-only{
+  --scene-zoom:1.075;
+}
+body.background-only .scene-backdrop{
+  opacity:1;
+  filter:saturate(1.04) brightness(1.02);
+}
+body.background-only .scene-backdrop::after{
+  opacity:1;
+  filter:blur(22px);
+}
+body.background-only .scene-art{
+  opacity:1;
+}
+body.background-only .scene-art .scene-photo{
+  opacity:.95;
+  filter:saturate(1.18) contrast(1.12) brightness(.84);
+}
+body.background-only .scene-art::before{
+  opacity:1;
+}
+body.background-only .scene-art::after{
+  opacity:.16;
+}
+body.background-only .scene-effects{
+  opacity:1;
+  transform:translate3d(calc(var(--parallax-x) * 1.28), calc(var(--parallax-y) * 1.28), 0) scale(1.025);
+}
+body.background-only .screen-vignette{
+  opacity:.72;
+}
+body.background-only.scene-cinematic .scene-photo,
+body.background-only.scene-cinematic .scene-art svg{
+  animation:scenePhotoBreath 14s ease-in-out infinite alternate, sceneCinematicFloat 10s ease-in-out infinite alternate;
+}
+body.background-only.scene-cinematic .scene-backdrop::after{
+  animation:sceneLightPulse 6.5s ease-in-out infinite alternate;
+}
+body.background-only.scene-cinematic .scene-effects{
+  animation:sceneEffectsBreathe 8s ease-in-out infinite alternate;
+}
+
+/* Personalidad de color por juego */
+body[data-scene="gow1"]{
+  --scene-grade-top:rgba(168,112,52,.12);
+  --scene-grade-bottom:rgba(49,23,7,.26);
+  --scene-light-a:rgba(233,173,96,.11);
+  --scene-light-b:rgba(199,134,76,.06);
+  --scene-ui-accent:rgba(216,154,88,.26);
+  --scene-vignette-extra:rgba(64,34,12,.24);
+}
+body[data-scene="gow2"]{
+  --scene-grade-top:rgba(164,193,255,.10);
+  --scene-grade-bottom:rgba(31,42,89,.24);
+  --scene-light-a:rgba(244,220,152,.12);
+  --scene-light-b:rgba(132,177,255,.08);
+  --scene-ui-accent:rgba(173,195,255,.28);
+  --scene-vignette-extra:rgba(18,26,60,.22);
+}
+body[data-scene="gow3"]{
+  --scene-grade-top:rgba(188,83,48,.12);
+  --scene-grade-bottom:rgba(46,18,9,.28);
+  --scene-light-a:rgba(255,145,88,.13);
+  --scene-light-b:rgba(215,104,61,.09);
+  --scene-ui-accent:rgba(236,126,76,.27);
+  --scene-vignette-extra:rgba(68,24,10,.30);
+}
+body[data-scene="majoras-mask"]{
+  --scene-grade-top:rgba(170,87,209,.12);
+  --scene-grade-bottom:rgba(38,15,58,.28);
+  --scene-light-a:rgba(153,255,116,.09);
+  --scene-light-b:rgba(220,110,255,.09);
+  --scene-ui-accent:rgba(194,115,255,.28);
+  --scene-vignette-extra:rgba(46,17,54,.26);
+}
+body[data-scene="twilight-princess"]{
+  --scene-grade-top:rgba(70,154,228,.10);
+  --scene-grade-bottom:rgba(22,31,64,.28);
+  --scene-light-a:rgba(104,215,241,.10);
+  --scene-light-b:rgba(255,170,84,.08);
+  --scene-ui-accent:rgba(116,206,236,.26);
+  --scene-vignette-extra:rgba(14,25,52,.26);
+}
+body[data-scene="sotc"]{
+  --scene-grade-top:rgba(165,121,103,.08);
+  --scene-grade-bottom:rgba(30,21,24,.26);
+  --scene-light-a:rgba(196,53,67,.09);
+  --scene-light-b:rgba(203,183,131,.07);
+  --scene-ui-accent:rgba(196,86,96,.23);
+  --scene-vignette-extra:rgba(48,16,20,.30);
+}
+body[data-scene="medievil"]{
+  --scene-grade-top:rgba(79,149,94,.10);
+  --scene-grade-bottom:rgba(18,39,24,.28);
+  --scene-light-a:rgba(118,216,132,.08);
+  --scene-light-b:rgba(79,134,95,.06);
+  --scene-ui-accent:rgba(102,182,118,.24);
+  --scene-vignette-extra:rgba(13,27,16,.28);
+}
+body[data-scene="re3-og"],
+body[data-scene="re3-remake"]{
+  --scene-grade-top:rgba(117,61,54,.09);
+  --scene-grade-bottom:rgba(20,19,24,.30);
+  --scene-light-a:rgba(232,104,74,.08);
+  --scene-light-b:rgba(92,120,164,.05);
+  --scene-ui-accent:rgba(188,108,94,.22);
+  --scene-vignette-extra:rgba(20,16,14,.28);
+}
+body[data-scene="re2-og"],
+body[data-scene="re1-remaster"],
+body[data-scene="re4-og"],
+body[data-scene="re9"]{
+  --scene-grade-top:rgba(95,101,112,.08);
+  --scene-grade-bottom:rgba(14,16,18,.30);
+  --scene-light-a:rgba(178,193,216,.06);
+  --scene-light-b:rgba(109,124,147,.05);
+  --scene-ui-accent:rgba(141,162,180,.20);
+  --scene-vignette-extra:rgba(12,14,17,.30);
+}
+body[data-scene="pokemon-diamond"],
+body[data-scene="pokemon-black"]{
+  --scene-grade-top:rgba(236,231,179,.10);
+  --scene-grade-bottom:rgba(20,25,33,.18);
+  --scene-light-a:rgba(255,241,179,.13);
+  --scene-light-b:rgba(189,220,255,.09);
+  --scene-ui-accent:rgba(202,221,255,.24);
+  --scene-vignette-extra:rgba(15,20,29,.16);
+}
+
+@keyframes sceneWake{
+  0%{opacity:0; transform:scale(1.03); filter:blur(10px)}
+  100%{opacity:1; transform:scale(1); filter:none}
+}
+@keyframes sceneEffectsWake{
+  0%{opacity:0; transform:scale(1.03)}
+  100%{opacity:1; transform:none}
+}
+@keyframes sceneGlowPulse{
+  from{opacity:.72}
+  to{opacity:1}
+}
+@keyframes sceneLightPulse{
+  from{opacity:.58}
+  to{opacity:1}
+}
+@keyframes scenePhotoBreath{
+  from{transform:translate3d(calc(var(--parallax-x) * .55), calc(var(--parallax-y) * .55), 0) scale(var(--scene-zoom))}
+  to{transform:translate3d(calc(var(--parallax-x) * .62), calc(var(--parallax-y) * .62), 0) scale(calc(var(--scene-zoom) + .018))}
+}
+@keyframes sceneCinematicFloat{
+  from{filter:saturate(1.16) contrast(1.1) brightness(.82)}
+  to{filter:saturate(1.22) contrast(1.13) brightness(.87)}
+}
+@keyframes sceneEffectsBreathe{
+  from{opacity:.88}
+  to{opacity:1}
+}
+@keyframes sceneGrainShift{
+  0%{transform:translate(0,0)}
+  50%{transform:translate(-1px,1px)}
+  100%{transform:translate(1px,-1px)}
+}
+
+@media (max-width: 700px){
+  .scene-backdrop::after{opacity:.55}
+  .scene-art .scene-photo{filter:saturate(1.08) contrast(1.05) brightness(.72)}
+  body.background-only{--scene-zoom:1.045}
+  body.background-only .scene-effects{transform:translate3d(calc(var(--parallax-x) * .8), calc(var(--parallax-y) * .8), 0)}
+}
+
+
+/* =========================================================
+   v4.9.1 · AUDIO AMBIENTAL + CAPAS DE ATMÓSFERA
+   ========================================================= */
+.music-widget-actions{display:flex;gap:10px;flex-wrap:wrap}
+.ambient-toggle-button{min-height:40px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 13px;border-radius:12px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.035);color:#bfd1dc;cursor:pointer;transition:.16s ease;white-space:nowrap;font-weight:700;letter-spacing:.01em}.ambient-toggle-button:hover{color:#fff;background:rgba(255,255,255,.065);border-color:rgba(255,255,255,.14)}.ambient-toggle-button[aria-pressed="false"]{opacity:.76;color:#9bafb9;background:rgba(255,255,255,.02)}
+.scene-atmosphere{position:absolute;inset:-8%;z-index:1;overflow:hidden;pointer-events:none;mix-blend-mode:screen;transform:translate3d(calc(var(--parallax-x) * .42),calc(var(--parallax-y) * .42),0);opacity:.58;filter:blur(10px)}
+.scene-atmosphere .mist-layer{position:absolute;display:block;border-radius:999px;filter:blur(18px);opacity:.42;animation:mistDrift 18s ease-in-out infinite alternate}.scene-atmosphere .layer-a{width:54vw;height:16vw;left:-8vw;bottom:6vh;background:radial-gradient(ellipse at center,rgba(255,255,255,.14),transparent 68%)}.scene-atmosphere .layer-b{width:48vw;height:14vw;right:-6vw;top:8vh;background:radial-gradient(ellipse at center,rgba(255,255,255,.11),transparent 68%);animation-duration:23s}.scene-atmosphere .layer-c{width:36vw;height:12vw;left:28vw;top:36vh;background:radial-gradient(ellipse at center,rgba(255,255,255,.08),transparent 70%);animation-duration:20s}
+.atmosphere-ash-embers .mist-layer{background:radial-gradient(ellipse at center,rgba(255,125,82,.14),transparent 68%)}.atmosphere-divine-sparks .mist-layer{background:radial-gradient(ellipse at center,rgba(248,225,162,.16),transparent 68%)}.atmosphere-ember-dust .mist-layer{background:radial-gradient(ellipse at center,rgba(206,160,110,.15),transparent 68%)}.atmosphere-rain-sparks .mist-layer,.atmosphere-rain-embers .mist-layer,.atmosphere-cold-rain .mist-layer{background:radial-gradient(ellipse at center,rgba(143,170,205,.12),transparent 68%)}.atmosphere-mansion-dust .mist-layer{background:radial-gradient(ellipse at center,rgba(153,126,94,.15),transparent 70%)}.atmosphere-village-ash .mist-layer{background:radial-gradient(ellipse at center,rgba(150,124,92,.15),transparent 70%)}.atmosphere-ominous-motes .mist-layer{background:radial-gradient(ellipse at center,rgba(120,95,73,.17),transparent 70%)}.atmosphere-wind-dust .mist-layer{background:radial-gradient(ellipse at center,rgba(165,80,84,.14),transparent 70%)}.atmosphere-moon-motes .mist-layer{background:radial-gradient(ellipse at center,rgba(165,118,208,.18),transparent 70%)}.atmosphere-twilight-motes .mist-layer{background:radial-gradient(ellipse at center,rgba(94,177,228,.16),transparent 70%)}.atmosphere-ghost-mist .mist-layer{background:radial-gradient(ellipse at center,rgba(92,148,101,.18),transparent 70%)}.atmosphere-crystal-sparkles .mist-layer,.atmosphere-dark-motes .mist-layer{background:radial-gradient(ellipse at center,rgba(255,245,201,.16),transparent 70%)}
+body.background-only .scene-atmosphere{opacity:.8;filter:blur(12px)}body.background-only .scene-atmosphere .mist-layer{opacity:.55}body.scene-cinematic .scene-atmosphere{animation:sceneAtmospherePulse 8s ease-in-out infinite alternate}
+@keyframes mistDrift{from{transform:translate3d(-2vw,0,0) scale(.94)}to{transform:translate3d(3vw,-2vh,0) scale(1.08)}}@keyframes sceneAtmospherePulse{from{opacity:.72}to{opacity:1}}
+@media (max-width:700px){.scene-atmosphere{opacity:.42}.scene-atmosphere .layer-c{display:none}.music-widget-actions{width:100%}}
