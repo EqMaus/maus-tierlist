@@ -531,21 +531,18 @@
     return '';
   }
 
-  function specialLightningZoneAssetHtml(zoneClass, x, y, w, h, assets, placements, sparkCount = 0) {
-    const bolts = placements.map((placement, index) => {
-      const [px, py, pw, ph, rotation, delay, duration, opacity = .95, scale = 1, blend = 'screen'] = placement;
-      const src = assets[index % assets.length];
-      return `<img class="special-lightning-asset asset-${index % 5}" src="${esc(src)}" alt="" aria-hidden="true" style="--x:${px}%;--y:${py}%;--w:${pw}px;--h:${ph}px;--r:${rotation}deg;--delay:${delay}s;--d:${duration}s;--a:${opacity};--scale:${scale};--blend:${blend}">`;
+  function specialLightningZonePhotoHtml(zoneClass, x, y, w, h, layers, flashCount = 2) {
+    const photoLayers = layers.map((layer, index) => {
+      const [src, px, py, pw, ph, rotation, delay, duration, opacity = .95, scale = 1, blend = 'screen', hue = '0deg', blur = 0] = layer;
+      return `<img class="special-lightning-photo layer-${index % 6}" src="${esc(src)}" alt="" aria-hidden="true" style="--x:${px}%;--y:${py}%;--w:${pw}px;--h:${ph}px;--r:${rotation}deg;--delay:${delay}s;--d:${duration}s;--a:${opacity};--scale:${scale};--blend:${blend};--hue:${hue};--blur:${blur}px">`;
     }).join('');
-    const sparks = Array.from({ length: sparkCount }, (_, index) => {
-      const sx = (index * 17) % 86 + 7;
-      const sy = (index * 29) % 74 + 8;
-      const size = 18 + (index % 4) * 6;
-      const delay = -(index * .63 + .4);
-      const duration = 4.2 + (index % 3) * .7;
-      return `<i class="special-spark spark-${index % 3}" style="--x:${sx}%;--y:${sy}%;--s:${size}px;--delay:${delay}s;--d:${duration}s;--a:.78"></i>`;
+    const flashes = Array.from({ length: flashCount }, (_, index) => {
+      const size = 44 + index * 12;
+      const delay = -(index * 1.2 + .55);
+      const duration = 6.2 + index * .8;
+      return `<i class="special-spark spark-${index % 3}" style="--x:${18 + index * 19}%;--y:${23 + (index*17)%50}%;--s:${size}px;--delay:${delay}s;--d:${duration}s;--a:.68"></i>`;
     }).join('');
-    return `<div class="special-lightning-zone ${zoneClass}" style="--zone-x:${x}%;--zone-y:${y}%;--zone-w:${w}%;--zone-h:${h}%">${bolts}${sparks}</div>`;
+    return `<div class="special-lightning-zone ${zoneClass}" style="--zone-x:${x}%;--zone-y:${y}%;--zone-w:${w}%;--zone-h:${h}%"><span class="special-zone-glow"></span>${photoLayers}${flashes}</div>`;
   }
 
   function specialSceneEffectHtml(gameId) {
@@ -553,41 +550,36 @@
     if (!effectId || mobilePerformance) return '';
 
     if (effectId === 'smash-kazuya-lightning') {
-      const leftAssets = ['assets/effects/lightning/smash-left-1.svg', 'assets/effects/lightning/smash-left-2.svg', 'assets/effects/lightning/smash-left-3.svg', 'assets/effects/lightning/smash-left-4.svg', 'assets/effects/lightning/smash-left-5.svg', 'assets/effects/lightning/smash-left-6.svg'];
-      const rightAssets = ['assets/effects/lightning/smash-right-1.svg', 'assets/effects/lightning/smash-right-2.svg', 'assets/effects/lightning/smash-right-3.svg', 'assets/effects/lightning/smash-right-4.svg', 'assets/effects/lightning/smash-right-5.svg', 'assets/effects/lightning/smash-right-6.svg', 'assets/effects/lightning/smash-right-7.svg'];
+      const network = 'assets/effects/smash-lightning/network.png';
+      const cloud = 'assets/effects/smash-lightning/cloud.png';
+      const strike = 'assets/effects/smash-lightning/strike.png';
 
-      const leftZone = specialLightningZoneAssetHtml(
+      const leftZone = specialLightningZonePhotoHtml(
         'zone-left',
         9.2, 18.5, 39.6, 29.5,
-        leftAssets,
         [
-          [4, 8, 92, 188, -20, -.4, 5.0, .88, .92, 'screen'],
-          [17, 0, 116, 214, 11, -1.5, 5.8, .94, 1.0, 'screen'],
-          [33, 7, 98, 190, 21, -2.4, 6.1, .78, .9, 'screen'],
-          [49, 10, 90, 172, 34, -3.1, 5.5, .82, .86, 'screen'],
-          [64, 12, 96, 182, 55, -.9, 6.3, .9, .95, 'screen'],
-          [76, 0, 84, 170, 9, -4.0, 6.8, .76, .88, 'screen']
+          [network, 18, 54, 172, 172, -17, -0.5, 6.8, .92, 1.02, 'screen', '0deg', 0],
+          [strike, 56, 48, 112, 170, 14, -2.1, 7.5, .96, 1.0, 'screen', '0deg', 0],
+          [network, 72, 44, 130, 130, 32, -3.8, 7.1, .82, .92, 'screen', '8deg', .5],
+          [strike, 36, 30, 86, 138, -34, -5.0, 8.2, .74, .86, 'screen', '-6deg', .5]
         ],
-        4
+        5
       );
 
-      const rightZone = specialLightningZoneAssetHtml(
+      const rightZone = specialLightningZonePhotoHtml(
         'zone-right',
         49.1, 10.4, 36.6, 59.6,
-        rightAssets,
         [
-          [0, 2, 120, 255, -18, -1.3, 5.1, .86, .96, 'screen'],
-          [10, -2, 148, 308, -6, -.6, 5.8, .98, 1.02, 'screen'],
-          [22, 6, 134, 284, 5, -2.0, 6.2, .82, .93, 'screen'],
-          [38, 0, 132, 292, 14, -3.4, 6.7, .92, 1.0, 'screen'],
-          [51, 9, 126, 262, 24, -1.7, 5.5, .84, .92, 'screen'],
-          [65, 4, 122, 258, 31, -2.8, 6.0, .9, .97, 'screen'],
-          [57, 28, 118, 244, 48, -.3, 4.8, .78, .88, 'screen']
+          [cloud, 46, 19, 244, 170, 7, -0.8, 7.6, .92, 1.02, 'screen', '0deg', 0],
+          [strike, 56, 34, 166, 302, -3, -2.6, 8.0, 1.0, 1.0, 'screen', '0deg', 0],
+          [network, 38, 58, 192, 192, 18, -4.1, 7.2, .84, .94, 'screen', '4deg', 0],
+          [strike, 72, 67, 132, 222, 24, -5.6, 8.8, .82, .88, 'screen', '-4deg', .2],
+          [cloud, 68, 42, 206, 146, 25, -3.4, 9.1, .66, .88, 'screen', '12deg', .8]
         ],
-        6
+        7
       );
 
-      return `<div class="scene-special-effects effect-${esc(effectId)}" aria-hidden="true">${leftZone}${rightZone}</div>`;
+      return `<div class="scene-special-effects effect-${esc(effectId)}" aria-hidden="true"><span class="special-scene-flash flash-left"></span><span class="special-scene-flash flash-right"></span>${leftZone}${rightZone}</div>`;
     }
 
     return '';

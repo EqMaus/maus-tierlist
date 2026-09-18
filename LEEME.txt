@@ -1,11 +1,1 @@
-MAUS TIER LISTS — v5.0.2
-
-Smash Ultimate recibe un sistema nuevo de relámpagos por assets reales (SVG transparentes),
-mucho más orgánicos que la versión CSS anterior.
-- brazo izquierdo de Kazuya: 6 overlays de rayo azul
-- Kazuya derecho: 7 overlays de rayo azul/violeta
-- ráfagas intermitentes, halo luminoso y chispas
-- el efecto solo se activa en Smash Ultimate
-- el modo móvil Lite sigue sin activar estos efectos
-
-Este ZIP sigue sin incluir js/site-data.js ni assets de juegos.
+MAUS TIER LISTS — v5.1.0\n\nSmash Ultimate pasa a usar una solución más profesional para los rayos:\n- overlays de rayos derivados de imágenes reales\n- integración por mezcla screen y flashes ambientales\n- zona izquierda: brazo de Kazuya\n- zona derecha: Kazuya rival\n- móvil lite sigue sin activar estos efectos\n\nEste ZIP sigue sin incluir js/site-data.js ni assets de juegos.\n
