@@ -40,6 +40,7 @@
   const importEditsButton = byId('importEditsButton');
   const importEditsInput = byId('importEditsInput');
   const saveToast = byId('saveToast');
+  const reviewReadingProgress = byId('reviewReadingProgress');
 
   const games = Array.isArray(window.MAUS_GAMES) ? window.MAUS_GAMES : [];
   const scale = Array.isArray(window.MAUS_SCALE) ? window.MAUS_SCALE : [];
@@ -150,6 +151,66 @@
   let sceneMotionFrame = 0;
   let sceneEnterTimer = 0;
   const sceneMotion = { currentX: 0, currentY: 0, targetX: 0, targetY: 0 };
+
+  let autoCameraTimer = 0;
+  const SCENE_DIRECTION = {
+    'gow1': { lightX:'73%', lightY:'8%', lightA:'rgba(171,202,255,.24)', lightB:'rgba(239,184,109,.11)', camX:10, camY:6, camMin:17000, camMax:29000, depth:.72, pos:'55% 50%', backSolid:'35%', backFade:'68%', frontSolid:'28%', frontFade:'65%' },
+    'gow2': { lightX:'54%', lightY:'7%', lightA:'rgba(155,199,255,.30)', lightB:'rgba(255,179,89,.18)', camX:11, camY:7, camMin:16000, camMax:28000, depth:.86, pos:'50% 50%', backSolid:'46%', backFade:'72%', frontSolid:'24%', frontFade:'57%' },
+    'gow3': { lightX:'47%', lightY:'44%', lightA:'rgba(255,99,49,.32)', lightB:'rgba(255,181,92,.13)', camX:12, camY:7, camMin:14000, camMax:25000, depth:.92, pos:'53% 52%', backSolid:'32%', backFade:'62%', frontSolid:'34%', frontFade:'70%' },
+    'majoras-mask': { lightX:'71%', lightY:'30%', lightA:'rgba(167,107,255,.25)', lightB:'rgba(111,255,97,.14)', camX:7, camY:5, camMin:19000, camMax:33000, depth:.62, pos:'50% 50%', backSolid:'30%', backFade:'61%', frontSolid:'22%', frontFade:'55%' },
+    'medievil': { lightX:'66%', lightY:'12%', lightA:'rgba(160,185,255,.23)', lightB:'rgba(82,158,100,.13)', camX:9, camY:6, camMin:19000, camMax:32000, depth:.78, pos:'50% 50%', backSolid:'40%', backFade:'69%', frontSolid:'30%', frontFade:'66%' },
+    'pokemon-black': { lightX:'68%', lightY:'22%', lightA:'rgba(255,239,177,.36)', lightB:'rgba(255,197,116,.13)', camX:7, camY:5, camMin:21000, camMax:35000, depth:.58, pos:'50% 50%', backSolid:'44%', backFade:'74%', frontSolid:'20%', frontFade:'52%' },
+    'pokemon-diamond': { lightX:'19%', lightY:'18%', lightA:'rgba(255,246,197,.38)', lightB:'rgba(135,211,255,.16)', camX:7, camY:5, camMin:21000, camMax:35000, depth:.6, pos:'50% 50%', backSolid:'48%', backFade:'76%', frontSolid:'22%', frontFade:'54%' },
+    're1-remaster': { lightX:'77%', lightY:'12%', lightA:'rgba(191,216,234,.22)', lightB:'rgba(92,122,105,.10)', camX:6, camY:4, camMin:22000, camMax:36000, depth:.55, pos:'50% 50%', backSolid:'34%', backFade:'62%', frontSolid:'25%', frontFade:'57%' },
+    're2-og': { lightX:'51%', lightY:'48%', lightA:'rgba(194,45,44,.22)', lightB:'rgba(92,137,181,.11)', camX:5, camY:4, camMin:22000, camMax:38000, depth:.48, pos:'50% 50%', backSolid:'27%', backFade:'58%', frontSolid:'29%', frontFade:'60%' },
+    're3-og': { lightX:'84%', lightY:'72%', lightA:'rgba(255,102,46,.28)', lightB:'rgba(94,131,174,.10)', camX:8, camY:5, camMin:18000, camMax:31000, depth:.72, pos:'50% 50%', backSolid:'38%', backFade:'67%', frontSolid:'35%', frontFade:'68%' },
+    're3-remake': { lightX:'61%', lightY:'12%', lightA:'rgba(176,215,235,.23)', lightB:'rgba(236,54,52,.16)', camX:8, camY:5, camMin:18000, camMax:30000, depth:.68, pos:'50% 50%', backSolid:'39%', backFade:'69%', frontSolid:'29%', frontFade:'63%' },
+    're4-og': { lightX:'17%', lightY:'38%', lightA:'rgba(177,188,116,.20)', lightB:'rgba(105,119,69,.10)', camX:7, camY:5, camMin:20000, camMax:34000, depth:.64, pos:'50% 50%', backSolid:'41%', backFade:'71%', frontSolid:'31%', frontFade:'64%' },
+    're9': { lightX:'8%', lightY:'44%', lightA:'rgba(255,173,102,.24)', lightB:'rgba(143,174,210,.11)', camX:7, camY:4, camMin:21000, camMax:35000, depth:.54, pos:'50% 50%', backSolid:'32%', backFade:'63%', frontSolid:'24%', frontFade:'58%' },
+    'sotc': { lightX:'54%', lightY:'18%', lightA:'rgba(255,58,75,.34)', lightB:'rgba(182,129,115,.12)', camX:12, camY:7, camMin:15000, camMax:27000, depth:.9, pos:'50% 50%', backSolid:'50%', backFade:'78%', frontSolid:'27%', frontFade:'60%' },
+    'twilight-princess': { lightX:'49%', lightY:'50%', lightA:'rgba(102,222,235,.28)', lightB:'rgba(255,157,71,.11)', camX:7, camY:5, camMin:19000, camMax:33000, depth:.7, pos:'50% 50%', backSolid:'36%', backFade:'66%', frontSolid:'31%', frontFade:'64%' }
+  };
+
+  function sceneDirectionFor(gameId) {
+    return SCENE_DIRECTION[gameId] || { lightX:'50%', lightY:'18%', lightA:'rgba(255,255,255,.18)', lightB:'rgba(116,188,235,.08)', camX:6, camY:4, camMin:20000, camMax:34000, depth:.55, pos:'50% 50%', backSolid:'42%', backFade:'70%', frontSolid:'24%', frontFade:'61%' };
+  }
+
+  function applySceneDirection(gameId) {
+    const profile = sceneDirectionFor(gameId);
+    body.style.setProperty('--scene-light-x', profile.lightX);
+    body.style.setProperty('--scene-light-y', profile.lightY);
+    body.style.setProperty('--scene-light-a-color', profile.lightA);
+    body.style.setProperty('--scene-light-b-color', profile.lightB);
+    body.style.setProperty('--scene-depth-strength', String(profile.depth));
+    body.style.setProperty('--scene-object-position', profile.pos);
+    body.style.setProperty('--scene-depth-back-solid', profile.backSolid || '42%');
+    body.style.setProperty('--scene-depth-back-fade', profile.backFade || '70%');
+    body.style.setProperty('--scene-depth-front-solid', profile.frontSolid || '24%');
+    body.style.setProperty('--scene-depth-front-fade', profile.frontFade || '61%');
+  }
+
+  function stopAutonomousCamera(reset = true) {
+    window.clearTimeout(autoCameraTimer);
+    autoCameraTimer = 0;
+    if (reset) resetSceneMotion();
+  }
+
+  function scheduleAutonomousCamera(gameId, immediate = false) {
+    window.clearTimeout(autoCameraTimer);
+    if (!gameId || document.hidden) return;
+    const profile = sceneDirectionFor(gameId);
+    const move = () => {
+      if (document.hidden || currentGameSceneId !== gameId || !body.classList.contains('scene-active')) return;
+      const boost = body.classList.contains('background-only') ? 1.45 : 1;
+      sceneMotion.targetX = ((Math.random() * 2) - 1) * profile.camX * boost;
+      sceneMotion.targetY = ((Math.random() * 2) - 1) * profile.camY * boost;
+      queueSceneMotion();
+      const wait = randomIntBetween(profile.camMin, profile.camMax);
+      autoCameraTimer = window.setTimeout(move, wait);
+    };
+    if (immediate) move();
+    else autoCameraTimer = window.setTimeout(move, 900);
+  }
 
   function updateSceneMotionVars() {
     body.style.setProperty('--parallax-x', `${sceneMotion.currentX.toFixed(2)}px`);
@@ -304,7 +365,9 @@
   function scheduleClimateEvent(gameId) {
     window.clearTimeout(climateEventTimer);
     const profile = climateProfileFor(gameId);
-    const wait = randomIntBetween(profile.eventMin || DEFAULT_CLIMATE_PROFILE.eventMin, profile.eventMax || DEFAULT_CLIMATE_PROFILE.eventMax);
+    const baseWait = randomIntBetween(profile.eventMin || DEFAULT_CLIMATE_PROFILE.eventMin, profile.eventMax || DEFAULT_CLIMATE_PROFILE.eventMax);
+    const rarityMultiplier = body.classList.contains('background-only') ? 1.30 : 2.25;
+    const wait = Math.round(baseWait * rarityMultiplier);
     climateEventTimer = window.setTimeout(() => {
       if (!currentGameSceneId || currentGameSceneId !== gameId || !body.classList.contains('scene-active')) return;
       if (Math.random() <= (profile.eventChance ?? DEFAULT_CLIMATE_PROFILE.eventChance)) {
@@ -324,7 +387,8 @@
     const profile = climateProfileFor(gameId);
     const nextState = pickClimateState(gameId);
     applyClimateState(nextState);
-    const wait = randomIntBetween(profile.stateMin || DEFAULT_CLIMATE_PROFILE.stateMin, profile.stateMax || DEFAULT_CLIMATE_PROFILE.stateMax);
+    const baseWait = randomIntBetween(profile.stateMin || DEFAULT_CLIMATE_PROFILE.stateMin, profile.stateMax || DEFAULT_CLIMATE_PROFILE.stateMax);
+    const wait = Math.round(baseWait * 1.45);
     climateCycleTimer = window.setTimeout(() => {
       if (!currentGameSceneId || currentGameSceneId !== gameId || !body.classList.contains('scene-active')) return;
       scheduleClimateCycle(gameId);
@@ -1252,6 +1316,9 @@
 
   function reviewHtml(value, gameId) {
     const sections = reviewSectionsFor(gameId, value);
+    if (window.MausReviewRenderer) {
+      return window.MausReviewRenderer.render(sections, { navigator: true, idPrefix: `review-${gameId}` });
+    }
     if (!sections.length) return '<div class="review-layout"><p class="empty-review">Sin review todavía.</p></div>';
     return `<div class="review-layout">${sections.map((section) => {
       if (section.verdict) return `<section class="review-verdict"><span>Veredicto final</span><div class="review-verdict-body">${inlineMarkdown(section.text).replace(/\n/g, '<br>')}</div></section>`;
@@ -1659,6 +1726,7 @@
         body.classList.add('background-only');
         updateSceneFocusState();
         updateSceneScrollDepth();
+        if (currentGameSceneId) scheduleAutonomousCamera(currentGameSceneId, true);
       }));
       if (adminGate && !adminGate.hidden) closeAdminGate();
       return;
@@ -1673,6 +1741,7 @@
     body.classList.remove('background-only');
     updateSceneFocusState();
     updateSceneScrollDepth();
+    if (currentGameSceneId) scheduleAutonomousCamera(currentGameSceneId, true);
     backgroundUiTimer = window.setTimeout(() => {
       body.classList.remove('background-restoring');
       if (restoreUiButton) restoreUiButton.hidden = true;
@@ -1683,11 +1752,13 @@
     setBackgroundOnly(false);
     currentGameSceneId = null;
     stopClimateCycle();
+    stopAutonomousCamera();
     body.classList.remove('scene-active', 'scene-entering', 'scene-cinematic');
     body.dataset.scene = 'default';
     body.dataset.ambientEffect = 'none';
     resetSceneMotion();
     updateSceneScrollDepth();
+    if (reviewReadingProgress) reviewReadingProgress.classList.remove('is-active');
     if (backgroundViewButton) backgroundViewButton.hidden = true;
     if (sceneArt) sceneArt.innerHTML = '';
   }
@@ -1703,6 +1774,7 @@
     body.classList.add('scene-active');
     body.dataset.scene = key;
     body.dataset.ambientEffect = ambientEffectFor(gameId);
+    applySceneDirection(gameId);
     nudgeSceneEntrance();
     updateSceneFocusState();
     // "Ver fondo" solo tiene sentido cuando existe una imagen de fondo dedicada e inspeccionable.
@@ -1713,9 +1785,10 @@
     const foreground = foregroundEffectHtml(gameId);
     const climateEvent = sceneEventHtml(gameId);
     startClimateCycle(gameId);
+    scheduleAutonomousCamera(gameId, true);
     updateSceneScrollDepth();
     if (photoSrc) {
-      sceneArt.innerHTML = `<img class="scene-photo" src="${esc(photoSrc)}" alt="">${lighting}${ambient}${foreground}${climateEvent}`;
+      sceneArt.innerHTML = `<div class="scene-depth scene-depth-back" style="background-image:url('${esc(photoSrc)}')"></div><img class="scene-photo" src="${esc(photoSrc)}" alt=""><div class="scene-depth scene-depth-front" style="background-image:url('${esc(photoSrc)}')"></div>${lighting}${ambient}${foreground}${climateEvent}`;
       return;
     }
     sceneArt.innerHTML = `${sceneSvg(key)}${lighting}${ambient}${foreground}${climateEvent}`;
@@ -1936,6 +2009,43 @@
     return `<article class="game-card" style="--tier:${esc(tier.color)}"><button type="button" data-open-game="${esc(game.id)}" aria-label="Abrir review de ${esc(game.title)}"><span class="card-arrow">↗</span>${cover ? `<img class="game-card-cover" src="${esc(cover)}" alt="" loading="lazy">` : `<div class="game-card-cover cover-fallback">${esc(game.title.slice(0, 1))}</div>`}<div class="game-card-content"><div class="game-score"><b>${esc(game.score)}</b><small>/10</small></div><span class="game-tier tier-font-${esc(tier.tone)}">${esc(tier.label)}</span><h3>${esc(game.title)}</h3><p>${esc(preview(game.review, 235))}</p></div></button></article>`;
   }
 
+  function preloadSceneBackgrounds(ids) {
+    ids.filter(Boolean).slice(0, 2).forEach((gameId) => {
+      const src = backgroundSrcFor(gameId);
+      if (!src) return;
+      const image = new Image();
+      image.decoding = 'async';
+      image.src = src;
+    });
+  }
+
+  function updateReviewReadingProgress() {
+    if (!reviewReadingProgress) return;
+    const root = app?.querySelector('.review-render-root');
+    if (!root || root.offsetParent === null) {
+      reviewReadingProgress.classList.remove('is-active');
+      reviewReadingProgress.querySelector('i').style.width = '0%';
+      return;
+    }
+    const rect = root.getBoundingClientRect();
+    const rootTop = window.scrollY + rect.top;
+    const start = rootTop - Math.min(130, window.innerHeight * .18);
+    const end = rootTop + root.offsetHeight - Math.min(window.innerHeight * .55, 440);
+    const span = Math.max(1, end - start);
+    const progress = Math.min(1, Math.max(0, (window.scrollY - start) / span));
+    reviewReadingProgress.classList.add('is-active');
+    reviewReadingProgress.querySelector('i').style.width = `${(progress * 100).toFixed(2)}%`;
+
+    const sections = Array.from(root.querySelectorAll('.review-render-section'));
+    let activeIndex = 0;
+    sections.forEach((section, index) => {
+      if (section.getBoundingClientRect().top <= 175) activeIndex = index;
+    });
+    root.querySelectorAll('[data-review-nav-index]').forEach((button) => {
+      button.classList.toggle('is-active', Number(button.dataset.reviewNavIndex) === activeIndex);
+    });
+  }
+
   function renderGame(id, rankingMode) {
     const game = gameById.get(id);
     if (!game) {
@@ -1955,6 +2065,7 @@
     const journeyPrev = journeyIndex > 0 ? journey[journeyIndex - 1] : null;
     const journeyNext = journeyIndex >= 0 && journeyIndex < journey.length - 1 ? journey[journeyIndex + 1] : null;
     const themeTitle = themeLabelFor(game.id);
+    preloadSceneBackgrounds([journeyPrev?.id, journeyNext?.id]);
 
     const reviewRead = reviewHtml(game.review, game.id);
     const reviewEditor = reviewEditorHtml(game.review, game.id);
@@ -1970,7 +2081,7 @@
         <div class="detail-hero-copy"><span class="eyebrow">${esc(tier.label)}</span><h1>${titleDisplay}</h1><div class="detail-scoreline"><span class="score-badge">${scoreEditor}</span><span class="tier-badge tier-font-${esc(tier.tone)}">${esc(tier.label)}</span>${themeTitle ? `<span class="music-badge">♫ ${esc(themeTitle)}</span>` : ''}</div></div>
       </section>
       <div class="detail-grid">
-        <article class="review-card"><div class="review-card-head"><div><span class="eyebrow">MI REVIEW</span><h2>Review</h2></div></div>${reviewDisplay}</article>
+        <article class="review-card" style="--tier:${esc(tier.color)};--review-tier:${esc(tier.color)}"><div class="review-card-head"><div><span class="eyebrow">MI REVIEW</span><h2>Review</h2></div></div>${reviewDisplay}</article>
         <aside class="side-stack">
           <section class="side-card" style="--tier:${esc(tier.color)}"><h3>Nota actual</h3><div class="big-score">${esc(game.score)}<small>/10</small></div><strong class="side-tier tier-font-${esc(tier.tone)}">${esc(tier.label)}</strong></section>
           ${tierIndex >= 0 && (tierPrev || tierNext) ? `<section class="side-card"><h3>Dentro de este tier</h3><div class="rank-nav">${tierPrev ? `<button type="button" data-open-game="${esc(tierPrev.id)}"><small>← Por encima</small>${esc(tierPrev.title)}</button>` : ''}${tierNext ? `<button type="button" data-open-game="${esc(tierNext.id)}"><small>Por debajo →</small>${esc(tierNext.title)}</button>` : ''}</div></section>` : ''}
@@ -1981,6 +2092,7 @@
       ${journeyIndex >= 0 ? reviewJourneyNav(journeyPrev, game, journeyNext, rankingMode) : ''}
     </div>`;
 
+    requestAnimationFrame(updateReviewReadingProgress);
     void startGameTheme(game.id);
   }
 
@@ -2282,6 +2394,12 @@
   }
 
   function handleAppClick(event) {
+    const reviewJump = event.target.closest('[data-review-jump]');
+    if (reviewJump && app.contains(reviewJump)) {
+      const target = document.getElementById(reviewJump.dataset.reviewJump);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
     const action = event.target.closest('[data-go],[data-open-game],[data-start-ranking],[data-ranking-open],[data-theme-remove]');
     if (!action || !app.contains(action)) return;
 
@@ -2377,24 +2495,34 @@
   }
 
   function bindStaticEvents() {
-    window.addEventListener('pointermove', (event) => {
-      if (!body.classList.contains('scene-active')) return;
-      const x = (event.clientX / Math.max(window.innerWidth, 1)) - 0.5;
-      const y = (event.clientY / Math.max(window.innerHeight, 1)) - 0.5;
-      const intensity = body.classList.contains('background-only') ? 40 : 24;
-      sceneMotion.targetX = x * intensity * 2;
-      sceneMotion.targetY = y * intensity * 1.55;
-      queueSceneMotion();
+    const lowPower = window.matchMedia('(max-width: 700px)').matches || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
+    body.classList.toggle('low-power', Boolean(lowPower));
+    window.addEventListener('scroll', () => {
+      updateSceneScrollDepth();
+      updateReviewReadingProgress();
     }, { passive: true });
-    window.addEventListener('scroll', updateSceneScrollDepth, { passive: true });
-    window.addEventListener('mouseleave', resetSceneMotion);
-    window.addEventListener('blur', resetSceneMotion);
+    window.addEventListener('resize', updateReviewReadingProgress, { passive: true });
+    document.addEventListener('visibilitychange', () => {
+      body.classList.toggle('page-hidden', document.hidden);
+      if (document.hidden) {
+        window.clearTimeout(climateCycleTimer);
+        window.clearTimeout(climateEventTimer);
+        window.clearTimeout(autoCameraTimer);
+      } else if (currentGameSceneId) {
+        startClimateCycle(currentGameSceneId);
+        scheduleAutonomousCamera(currentGameSceneId, false);
+        updateReviewReadingProgress();
+      }
+    });
 
     app.addEventListener('click', handleAppClick);
     app.addEventListener('input', handleAppInput);
     app.addEventListener('change', handleAppChange);
     app.addEventListener('focusout', handleAppBlur);
     app.addEventListener('keydown', handleAppKeydown);
+    app.addEventListener('toggle', (event) => {
+      if (event.target.matches('.spoiler-review')) requestAnimationFrame(updateReviewReadingProgress);
+    }, true);
 
     if (playerSeek) {
       playerSeek.value = '0';

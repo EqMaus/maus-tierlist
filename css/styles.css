@@ -1959,3 +1959,54 @@ body.climate-event[data-climate-event="flare"] .scene-foreground{
 @media (max-width:700px){
   .scene-event .scene-event-particle:nth-child(n+10){display:none}
 }
+
+/* =========================================================
+   v4.13.0 · Dirección artística, cámara autónoma y rendimiento
+   ========================================================= */
+:root{
+  --scene-light-x:50%;
+  --scene-light-y:18%;
+  --scene-light-a-color:rgba(255,255,255,.18);
+  --scene-light-b-color:rgba(116,188,235,.08);
+  --scene-depth-strength:.55;
+  --scene-object-position:50% 50%;
+  --scene-depth-back-solid:42%;
+  --scene-depth-back-fade:70%;
+  --scene-depth-front-solid:24%;
+  --scene-depth-front-fade:61%;
+}
+.scene-art .scene-photo{object-position:var(--scene-object-position);will-change:transform,filter}
+.scene-depth{position:absolute;inset:-2%;background-repeat:no-repeat;background-size:cover;background-position:var(--scene-object-position);pointer-events:none;will-change:transform,opacity;opacity:calc(var(--scene-depth-strength) * .15)}
+.scene-depth-back{z-index:-1;mask-image:linear-gradient(to bottom,#000 0 var(--scene-depth-back-solid),transparent var(--scene-depth-back-fade));-webkit-mask-image:linear-gradient(to bottom,#000 0 var(--scene-depth-back-solid),transparent var(--scene-depth-back-fade));filter:saturate(1.05) brightness(.74);transform:translate3d(calc(var(--parallax-x) * .34),calc(var(--parallax-y) * .34 + var(--scene-scroll-y) * .16),0) scale(1.035)}
+.scene-depth-front{z-index:1;mask-image:linear-gradient(to top,#000 0 var(--scene-depth-front-solid),transparent var(--scene-depth-front-fade));-webkit-mask-image:linear-gradient(to top,#000 0 var(--scene-depth-front-solid),transparent var(--scene-depth-front-fade));filter:saturate(1.12) contrast(1.04) brightness(.72) blur(.35px);opacity:calc(var(--scene-depth-strength) * .2);transform:translate3d(calc(var(--parallax-x) * 1.25),calc(var(--parallax-y) * 1.25 + var(--scene-scroll-y) * .62),0) scale(1.052)}
+.scene-lighting span:first-child{left:calc(var(--scene-light-x) - 21vw)!important;top:calc(var(--scene-light-y) - 21vw)!important;background:radial-gradient(circle,var(--scene-light-a-color),transparent 68%)!important}
+.scene-lighting span:last-child{right:auto!important;bottom:auto!important;left:calc(var(--scene-light-x) - 8vw)!important;top:calc(var(--scene-light-y) + 3vh)!important;background:radial-gradient(circle,var(--scene-light-b-color),transparent 70%)!important}
+.scene-art::before{background:linear-gradient(180deg,var(--scene-grade-top),transparent 30%,transparent 68%,var(--scene-grade-bottom)),radial-gradient(circle at var(--scene-light-x) var(--scene-light-y),var(--scene-light-a-color),transparent 30%)!important}
+body.background-only .scene-depth-back{opacity:calc(var(--scene-depth-strength) * .2)}
+body.background-only .scene-depth-front{opacity:calc(var(--scene-depth-strength) * .28)}
+body.background-only .scene-photo{transition:transform 7s ease-in-out,filter .6s ease,opacity .6s ease}
+body.scene-active:not(.background-only) .scene-photo{transition:transform 9s ease-in-out,filter 2.2s ease,opacity .6s ease}
+body.scene-active .scene-depth{transition:transform 10s ease-in-out,opacity 2s ease}
+
+/* Eventos raros: que el impacto sea puntual, no ruido constante. */
+body.climate-event .scene-event{animation:rareEventEnvelope 4.2s ease both}
+@keyframes rareEventEnvelope{0%{opacity:0}12%{opacity:1}72%{opacity:1}100%{opacity:0}}
+
+/* Pausa real cuando la pestaña deja de estar visible. */
+body.page-hidden .scene-effects *,body.page-hidden .scene-foreground *,body.page-hidden .scene-event *,body.page-hidden .scene-lighting *,body.page-hidden .scene-art::before,body.page-hidden .scene-art::after{animation-play-state:paused!important}
+
+/* Densidad adaptativa en móvil/equipos modestos. */
+body.low-power .scene-effects .ambient-particle:nth-child(n+38),body.low-power .scene-foreground .foreground-particle:nth-child(n+12),body.low-power .scene-event .scene-event-particle:nth-child(n+10){display:none!important}
+body.low-power .scene-depth-back{display:none}
+body.low-power .scene-lighting{filter:saturate(.96)}
+
+/* Más contraste entre juegos sin añadir capas interactivas. */
+body[data-scene="majoras-mask"] .scene-depth-front{filter:saturate(1.2) contrast(1.08) brightness(.68) hue-rotate(4deg)}
+body[data-scene="sotc"] .scene-depth-back{filter:saturate(.92) contrast(1.12) brightness(.62)}
+body[data-scene="gow3"] .scene-depth-front{filter:saturate(1.2) contrast(1.1) brightness(.7)}
+body[data-scene="medievil"] .scene-depth-front{filter:saturate(1.15) hue-rotate(8deg) brightness(.68)}
+body[data-scene="pokemon-diamond"] .scene-lighting,body[data-scene="pokemon-black"] .scene-lighting{mix-blend-mode:screen;opacity:calc(var(--climate-light-opacity) * 1.08)}
+body[data-scene="re1-remaster"] .scene-depth-back,body[data-scene="re2-og"] .scene-depth-back{opacity:calc(var(--scene-depth-strength) * .10)}
+
+@media(max-width:700px){.scene-depth-front{opacity:calc(var(--scene-depth-strength) * .12)}body.background-only .scene-depth-front{opacity:calc(var(--scene-depth-strength) * .18)}}
+.scene-lighting{transform:translate3d(calc(var(--parallax-x) * .34),calc(var(--parallax-y) * .34 + var(--scene-scroll-y) * .12),0);transition:transform 10s ease-in-out,opacity 2.2s ease,filter 2.2s ease}

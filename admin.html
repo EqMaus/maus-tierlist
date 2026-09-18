@@ -7,7 +7,8 @@
   <meta name="theme-color" content="#071018">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://api.github.com; img-src 'self' data: blob: https://avatars.githubusercontent.com; media-src 'self' blob:; style-src 'self'; script-src 'self'; base-uri 'self'; form-action 'none';">
   <title>Editor privado · Tier List de Maus</title>
-  <link rel="stylesheet" href="css/admin.css?v=4.12.1">
+  <link rel="stylesheet" href="css/review-shared.css?v=4.13.0">
+  <link rel="stylesheet" href="css/admin.css?v=4.13.0">
 </head>
 <body>
   <header class="admin-header">
@@ -294,24 +295,53 @@
               <div>
                 <span class="eyebrow">REVIEW</span>
                 <h2>Editor visual</h2>
-                <p>Los bloques de aquí representan directamente los bloques que verá la gente en la web pública.</p>
+                <p>Edita por bloques y comprueba el resultado con el mismo renderer que usa la web pública.</p>
               </div>
-              <span id="reviewCount" class="counter">0 caracteres</span>
+              <div class="review-heading-actions">
+                <span id="reviewCount" class="counter">0 caracteres</span>
+                <div class="review-mode-switch" role="group" aria-label="Modo del editor">
+                  <button id="reviewEditModeButton" class="is-active" type="button">Editar</button>
+                  <button id="reviewPreviewModeButton" type="button">Vista pública</button>
+                </div>
+              </div>
             </div>
 
             <div id="reviewFormatToolbar" class="review-format-toolbar" role="toolbar" aria-label="Formato del párrafo seleccionado">
               <span class="review-toolbar-label">PÁRRAFO SELECCIONADO</span>
-              <button type="button" data-review-format="bold" title="Negrita"><strong>B</strong></button>
-              <button type="button" data-review-format="italic" title="Cursiva"><em>I</em></button>
+              <button id="reviewUndoButton" type="button" title="Deshacer (Ctrl+Z)">↶</button>
+              <button id="reviewRedoButton" type="button" title="Rehacer (Ctrl+Y)">↷</button>
+              <span class="toolbar-separator" aria-hidden="true"></span>
+              <button type="button" data-review-format="bold" title="Negrita (Ctrl+B)"><strong>B</strong></button>
+              <button type="button" data-review-format="italic" title="Cursiva (Ctrl+I)"><em>I</em></button>
               <button type="button" data-review-format="remove" title="Quitar formato">Aa</button>
-              <span class="review-toolbar-help">Selecciona texto dentro de un párrafo y aplica el formato.</span>
+              <button id="reviewSplitButton" type="button" title="Dividir el párrafo en el cursor">Dividir</button>
+              <span class="review-toolbar-help">Arrastra bloques con ⋮⋮ · Enter crea un párrafo · Shift+Enter hace salto de línea.</span>
             </div>
 
-            <div id="reviewVisualEditor" class="review-visual-editor" aria-label="Editor visual de la review"></div>
+            <div id="reviewVisualEditor" class="review-visual-editor review-render-root" aria-label="Editor visual de la review"></div>
+
+            <div id="reviewPublicPreview" class="review-public-preview" hidden>
+              <div class="review-preview-toolbar">
+                <span>PREVISUALIZACIÓN REAL</span>
+                <div class="preview-device-switch" role="group" aria-label="Tamaño de previsualización">
+                  <button id="reviewDesktopPreviewButton" class="is-active" type="button">🖥 Escritorio</button>
+                  <button id="reviewMobilePreviewButton" type="button">📱 Móvil</button>
+                </div>
+              </div>
+              <div id="reviewPreviewViewport" class="review-preview-viewport is-desktop">
+                <div id="reviewPreviewScene" class="review-preview-scene">
+                  <div id="reviewPreviewAtmosphere" class="review-preview-atmosphere" aria-hidden="true"></div>
+                  <article class="review-preview-card">
+                    <div class="review-preview-card-head"><span class="eyebrow">MI REVIEW</span><h3>Review</h3></div>
+                    <div id="reviewPreviewContent"></div>
+                  </article>
+                </div>
+              </div>
+            </div>
 
             <div class="review-editor-footer">
               <button id="addReviewSectionButton" class="review-add-section" type="button">＋ Añadir sección</button>
-              <span>Enter crea otro párrafo · Shift+Enter hace un salto de línea.</span>
+              <span>Los cambios se guardan como <strong>reviewSections</strong>; el texto antiguo queda solo como compatibilidad.</span>
             </div>
 
             <textarea id="fieldReview" data-field="review" class="review-raw-storage" aria-hidden="true" tabindex="-1"></textarea>
@@ -362,6 +392,7 @@
     </div>
   </div>
 
-  <script src="js/admin.js?v=4.12.1"></script>
+  <script src="js/review-renderer.js?v=4.13.0"></script>
+  <script src="js/admin.js?v=4.13.0"></script>
 </body>
 </html>

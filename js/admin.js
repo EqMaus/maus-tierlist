@@ -99,6 +99,18 @@
   const reviewVisualEditor = $('reviewVisualEditor');
   const reviewFormatToolbar = $('reviewFormatToolbar');
   const addReviewSectionButton = $('addReviewSectionButton');
+  const reviewEditModeButton = $('reviewEditModeButton');
+  const reviewPreviewModeButton = $('reviewPreviewModeButton');
+  const reviewPublicPreview = $('reviewPublicPreview');
+  const reviewPreviewContent = $('reviewPreviewContent');
+  const reviewPreviewViewport = $('reviewPreviewViewport');
+  const reviewPreviewScene = $('reviewPreviewScene');
+  const reviewPreviewAtmosphere = $('reviewPreviewAtmosphere');
+  const reviewDesktopPreviewButton = $('reviewDesktopPreviewButton');
+  const reviewMobilePreviewButton = $('reviewMobilePreviewButton');
+  const reviewUndoButton = $('reviewUndoButton');
+  const reviewRedoButton = $('reviewRedoButton');
+  const reviewSplitButton = $('reviewSplitButton');
   const excerptCount = $('excerptCount');
   const reviewCount = $('reviewCount');
   const tierEditor = $('tierEditor');
@@ -157,6 +169,11 @@
   let previewUrls = {};
   let newGameIds = new Set();
   let idEditedManually = false;
+  let reviewViewMode = 'edit';
+  let reviewPreviewDevice = 'desktop';
+  let reviewFocusSnapshot = '';
+  let reviewDragState = null;
+  const reviewHistory = new Map();
 
   function esc(value) {
     return String(value ?? '').replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
@@ -867,6 +884,7 @@ const ADMIN_CURATED_REVIEW_SPECS = {
   }
 
   function sectionsToLegacyReview(sections) {
+    if (window.MausReviewRenderer) return window.MausReviewRenderer.legacyText(sections);
     return sections.flatMap((section) => section.paragraphs || [])
       .map((paragraph) => String(paragraph || '').trim())
       .filter(Boolean)
@@ -874,12 +892,79 @@ const ADMIN_CURATED_REVIEW_SPECS = {
       .trim();
   }
 
+  function reviewSnapshot(game = selectedGame()) {
+    return JSON.stringify(normalizeReviewSections(game));
+  }
+
+  function historyState(gameId) {
+    if (!reviewHistory.has(gameId)) reviewHistory.set(gameId, { undo: [], redo: [] });
+    return reviewHistory.get(gameId);
+  }
+
+  function pushReviewUndo(snapshot = reviewSnapshot()) {
+    const game = selectedGame();
+    if (!game || !snapshot) return;
+    const history = historyState(game.id);
+    if (history.undo[history.undo.length - 1] !== snapshot) history.undo.push(snapshot);
+    if (history.undo.length > 60) history.undo.shift();
+    history.redo = [];
+    updateReviewHistoryButtons();
+  }
+
+  function restoreReviewSnapshot(snapshot) {
+    const game = selectedGame();
+    if (!game || !snapshot) return;
+    const sections = JSON.parse(snapshot);
+    game.reviewSections = sections;
+    game.review = sectionsToLegacyReview(sections);
+    fieldReview.value = game.review;
+    renderVisualReviewEditor(game);
+    renderReviewPreview(game);
+    updateCounts();
+    updateDirtyUi();
+  }
+
+  function undoReview() {
+    const game = selectedGame();
+    if (!game) return;
+    const history = historyState(game.id);
+    const current = reviewSnapshot(game);
+    if (reviewFocusSnapshot && reviewFocusSnapshot !== current && history.undo[history.undo.length - 1] !== reviewFocusSnapshot) {
+      history.undo.push(reviewFocusSnapshot);
+      reviewFocusSnapshot = '';
+    }
+    const previous = history.undo.pop();
+    if (!previous) return;
+    history.redo.push(reviewSnapshot(game));
+    restoreReviewSnapshot(previous);
+    updateReviewHistoryButtons();
+  }
+
+  function redoReview() {
+    const game = selectedGame();
+    if (!game) return;
+    const history = historyState(game.id);
+    const next = history.redo.pop();
+    if (!next) return;
+    history.undo.push(reviewSnapshot(game));
+    restoreReviewSnapshot(next);
+    updateReviewHistoryButtons();
+  }
+
+  function updateReviewHistoryButtons() {
+    const game = selectedGame();
+    const history = game ? historyState(game.id) : { undo: [], redo: [] };
+    if (reviewUndoButton) reviewUndoButton.disabled = !history.undo.length;
+    if (reviewRedoButton) reviewRedoButton.disabled = !history.redo.length;
+  }
+
   function reviewSectionMarkup(section, sectionIndex) {
     const verdict = Boolean(section.verdict);
     const paragraphs = section.paragraphs?.length ? section.paragraphs : [''];
     return `
-      <article class="review-editor-section${verdict ? ' is-verdict' : ''}" data-review-section="${sectionIndex}">
+      <article class="review-editor-section ${verdict ? 'review-verdict is-verdict' : 'review-section'}" data-review-section="${sectionIndex}">
         <div class="review-editor-section-controls">
+          <button type="button" class="review-drag-handle section-drag-handle" data-review-drag-section="${sectionIndex}" draggable="true" title="Arrastrar sección">⋮⋮</button>
           <label class="review-section-title-field">
             <span>${verdict ? 'TIPO DE BLOQUE' : 'TÍTULO DEL BLOQUE'}</span>
             <input type="text" data-review-section-title value="${esc(verdict ? 'Veredicto final' : section.title)}" ${verdict ? 'readonly' : ''} aria-label="Título de la sección">
@@ -891,20 +976,23 @@ const ADMIN_CURATED_REVIEW_SPECS = {
               <option value="verdict"${verdict ? ' selected' : ''}>Veredicto final</option>
             </select>
           </label>
-          <div class="review-section-actions" aria-label="Orden de la sección">
+          <div class="review-section-actions" aria-label="Acciones de la sección">
             <button type="button" data-review-section-move="up" title="Subir sección">↑</button>
             <button type="button" data-review-section-move="down" title="Bajar sección">↓</button>
+            <button type="button" data-review-section-duplicate title="Duplicar sección">⧉</button>
             <button type="button" class="danger" data-review-section-delete title="Eliminar sección">×</button>
           </div>
         </div>
-        <div class="review-editor-public-head">${verdict ? 'VEREDICTO FINAL' : esc(section.title)}</div>
-        <div class="review-editor-copy">
+        <div class="review-editor-public-head review-section-head">${verdict ? 'VEREDICTO FINAL' : esc(section.title)}</div>
+        <div class="review-editor-copy${verdict ? ' review-verdict-body' : ' review-copy'}">
           ${paragraphs.map((paragraph, paragraphIndex) => `
             <div class="review-paragraph-shell" data-review-paragraph-shell="${paragraphIndex}">
+              <button type="button" class="review-drag-handle paragraph-drag-handle" data-review-drag-paragraph="${paragraphIndex}" draggable="true" title="Arrastrar párrafo">⋮⋮</button>
               <div class="review-editable-paragraph" contenteditable="true" spellcheck="true" data-review-paragraph="${paragraphIndex}" role="textbox" aria-multiline="true">${inlineMarkdown(paragraph).replace(/\n/g, '<br>')}</div>
               <div class="review-paragraph-actions">
                 <button type="button" data-review-paragraph-move="up" title="Subir párrafo">↑</button>
                 <button type="button" data-review-paragraph-move="down" title="Bajar párrafo">↓</button>
+                <button type="button" data-review-paragraph-join title="Unir con el párrafo anterior" ${paragraphIndex === 0 ? 'disabled' : ''}>↥+</button>
                 <button type="button" class="danger" data-review-paragraph-delete title="Eliminar párrafo">×</button>
               </div>
             </div>
@@ -912,6 +1000,56 @@ const ADMIN_CURATED_REVIEW_SPECS = {
         </div>
         <button type="button" class="review-add-paragraph" data-review-add-paragraph>＋ Añadir párrafo aquí</button>
       </article>`;
+  }
+
+  function renderReviewPreview(game = selectedGame()) {
+    if (!reviewPreviewContent || !reviewPreviewScene) return;
+    if (!game) {
+      reviewPreviewContent.innerHTML = '<p class="review-editor-empty">Selecciona un juego.</p>';
+      return;
+    }
+    const sections = normalizeReviewSections(game);
+    const tier = tierForScore(game.score);
+    const pending = pendingFiles[game.id] || {};
+    const background = pending.background ? previewUrls[`${game.id}:background`] : legacyOrCustomBackground(game);
+    reviewPreviewScene.style.setProperty('--tier', tier?.color || '#7aa7c6');
+    reviewPreviewScene.style.setProperty('--review-tier', tier?.color || '#7aa7c6');
+    reviewPreviewScene.style.setProperty('--preview-bg', background ? `url("${String(background).replace(/"/g, '%22')}")` : 'none');
+    if (reviewPreviewAtmosphere) {
+      const effect = String(game.ambientEffect || 'none');
+      reviewPreviewAtmosphere.dataset.effect = effect;
+      reviewPreviewAtmosphere.innerHTML = effect === 'none' ? '' : Array.from({ length: 24 }, () => '<i></i>').join('');
+      reviewPreviewAtmosphere.querySelectorAll('i').forEach((particle, index) => {
+        particle.style.setProperty('--x', `${(index * 37 + 9) % 101}%`);
+        particle.style.setProperty('--y', `${(index * 53 + 17) % 101}%`);
+        particle.style.setProperty('--s', `${2 + ((index * 7) % 8)}px`);
+        particle.style.setProperty('--delay', `${-((index * 11) % 14)}s`);
+        particle.style.setProperty('--d', `${7 + ((index * 5) % 12)}s`);
+      });
+    }
+    reviewPreviewContent.innerHTML = window.MausReviewRenderer
+      ? window.MausReviewRenderer.render(sections, { navigator: true, idPrefix: `admin-preview-${game.id}` })
+      : '<p>No se pudo cargar el renderer compartido.</p>';
+  }
+
+  function setReviewViewMode(mode) {
+    reviewViewMode = mode === 'preview' ? 'preview' : 'edit';
+    const preview = reviewViewMode === 'preview';
+    if (reviewVisualEditor) reviewVisualEditor.hidden = preview;
+    if (reviewFormatToolbar) reviewFormatToolbar.hidden = preview;
+    if (addReviewSectionButton) addReviewSectionButton.hidden = preview;
+    if (reviewPublicPreview) reviewPublicPreview.hidden = !preview;
+    reviewEditModeButton?.classList.toggle('is-active', !preview);
+    reviewPreviewModeButton?.classList.toggle('is-active', preview);
+    if (preview) renderReviewPreview();
+  }
+
+  function setReviewPreviewDevice(device) {
+    reviewPreviewDevice = device === 'mobile' ? 'mobile' : 'desktop';
+    reviewPreviewViewport?.classList.toggle('is-mobile', reviewPreviewDevice === 'mobile');
+    reviewPreviewViewport?.classList.toggle('is-desktop', reviewPreviewDevice !== 'mobile');
+    reviewDesktopPreviewButton?.classList.toggle('is-active', reviewPreviewDevice !== 'mobile');
+    reviewMobilePreviewButton?.classList.toggle('is-active', reviewPreviewDevice === 'mobile');
   }
 
   function renderVisualReviewEditor(game = selectedGame()) {
@@ -926,6 +1064,8 @@ const ADMIN_CURATED_REVIEW_SPECS = {
       return;
     }
     reviewVisualEditor.innerHTML = sections.map(reviewSectionMarkup).join('');
+    renderReviewPreview(game);
+    updateReviewHistoryButtons();
   }
 
   function collectVisualReviewSections() {
@@ -948,6 +1088,7 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     game.reviewSections = sections;
     game.review = sectionsToLegacyReview(sections);
     fieldReview.value = game.review;
+    renderReviewPreview(game);
     updateCounts();
     updateDirtyUi();
     clearNotice();
@@ -972,6 +1113,7 @@ const ADMIN_CURATED_REVIEW_SPECS = {
   function mutateVisualSections(mutator, focusTarget = null) {
     const game = selectedGame();
     if (!game) return;
+    pushReviewUndo(reviewSnapshot(game));
     const sections = collectVisualReviewSections();
     mutator(sections);
     game.reviewSections = sections;
@@ -997,6 +1139,7 @@ const ADMIN_CURATED_REVIEW_SPECS = {
 
   function applyReviewFormat(command) {
     if (!savedReviewRange) return;
+    pushReviewUndo(reviewSnapshot());
     const selection = window.getSelection();
     selection.removeAllRanges();
     selection.addRange(savedReviewRange);
@@ -1005,6 +1148,35 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     else if (command === 'remove') document.execCommand('removeFormat', false);
     rememberReviewSelection();
     syncVisualReviewToGame();
+  }
+
+  function fragmentToMarkdown(fragment) {
+    const holder = document.createElement('div');
+    holder.appendChild(fragment);
+    return editableNodeToMarkdown(holder);
+  }
+
+  function splitSelectedParagraph() {
+    if (!savedReviewRange || !savedReviewRange.collapsed) return;
+    const element = savedReviewRange.startContainer.nodeType === Node.ELEMENT_NODE ? savedReviewRange.startContainer : savedReviewRange.startContainer.parentElement;
+    const paragraph = element?.closest?.('[data-review-paragraph]');
+    if (!paragraph) return;
+    const sectionElement = paragraph.closest('[data-review-section]');
+    const sectionIndex = Number(sectionElement?.dataset.reviewSection);
+    const paragraphIndex = Number(paragraph.dataset.reviewParagraph);
+    const beforeRange = document.createRange();
+    beforeRange.selectNodeContents(paragraph);
+    beforeRange.setEnd(savedReviewRange.startContainer, savedReviewRange.startOffset);
+    const afterRange = document.createRange();
+    afterRange.selectNodeContents(paragraph);
+    afterRange.setStart(savedReviewRange.startContainer, savedReviewRange.startOffset);
+    const before = fragmentToMarkdown(beforeRange.cloneContents());
+    const after = fragmentToMarkdown(afterRange.cloneContents());
+    mutateVisualSections((sections) => {
+      const items = sections[sectionIndex]?.paragraphs;
+      if (!items) return;
+      items.splice(paragraphIndex, 1, before, after);
+    }, { section: sectionIndex, paragraph: paragraphIndex + 1, end: false });
   }
 
   function currentSnapshot() {
@@ -1287,6 +1459,7 @@ const ADMIN_CURATED_REVIEW_SPECS = {
       const value = musicInfo[key];
       input.value = key === 'startAt' ? (Number.isFinite(Number(value)) ? String(Number(value)) : '') : (value || '');
     });
+    renderReviewPreview(game);
   }
 
   function renderSelectedGame() {
@@ -1299,6 +1472,8 @@ const ADMIN_CURATED_REVIEW_SPECS = {
       gameIdBadge.textContent = '—';
       newGameBadge.hidden = true;
       if (reviewVisualEditor) reviewVisualEditor.innerHTML = '<p class="review-editor-empty">Selecciona un juego.</p>';
+      if (reviewPreviewContent) reviewPreviewContent.innerHTML = '<p class="review-editor-empty">Selecciona un juego.</p>';
+      updateReviewHistoryButtons();
       return;
     }
 
@@ -1320,12 +1495,17 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     fieldExcerpt.value = game.excerpt || '';
     fieldReview.value = game.review || '';
     renderVisualReviewEditor(game);
+    renderReviewPreview(game);
+    setReviewViewMode(reviewViewMode);
+    setReviewPreviewDevice(reviewPreviewDevice);
+    updateReviewHistoryButtons();
     updateCounts();
     renderMedia();
   }
 
   function selectGame(id) {
     if (!games.some((game) => game.id === id)) return;
+    reviewFocusSnapshot = '';
     selectedId = id;
     renderGameList();
     renderSelectedGame();
@@ -1352,6 +1532,7 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     editorSubtitle.textContent = `${game.platform || 'Sin plataforma'} · ${game.year || 'Sin año'}`;
     updateCounts();
     renderGameList();
+    renderReviewPreview(game);
     updateDirtyUi();
     clearNotice();
   }
@@ -1468,6 +1649,8 @@ const ADMIN_CURATED_REVIEW_SPECS = {
       const parsed = parseSiteData(siteDataFile.content);
       games = clone(parsed.games);
       scale = clone(parsed.scale);
+      reviewHistory.clear();
+      reviewFocusSnapshot = '';
       currentVersion = parseVersion(versionFile.content);
       baseShas = { siteData: siteDataFile.sha, index: indexFile.sha, version: versionFile.sha };
       baseSnapshot = currentSnapshot();
@@ -1659,6 +1842,13 @@ const ADMIN_CURATED_REVIEW_SPECS = {
       const remoteVersion = parseVersion(freshVersion.content);
       const nextVersion = nextPatchVersion(remoteVersion);
       const publishGames = clone(games);
+      publishGames.forEach((game) => {
+        const structured = normalizeReviewSections(game);
+        if (structured.length) {
+          game.reviewSections = structured;
+          game.review = sectionsToLegacyReview(structured);
+        }
+      });
 
       await uploadPendingAssets(publishGames, nextVersion);
 
@@ -1751,7 +1941,8 @@ const ADMIN_CURATED_REVIEW_SPECS = {
       spoilers: false,
       ambientEffect: 'none',
       excerpt: '',
-      review: ''
+      review: '',
+      reviewSections: []
     };
     games.push(game);
     newGameIds.add(id);
@@ -1788,15 +1979,81 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     if (event.target.matches('[data-music-field]')) syncMusicField(event.target);
   });
 
+  let reviewFloatingToolbar = null;
+
+  function ensureReviewFloatingToolbar() {
+    if (reviewFloatingToolbar) return reviewFloatingToolbar;
+    const element = document.createElement('div');
+    element.className = 'review-floating-toolbar';
+    element.hidden = true;
+    element.innerHTML = '<button type="button" data-review-float-format="bold"><strong>B</strong></button><button type="button" data-review-float-format="italic"><em>I</em></button><button type="button" data-review-float-format="remove">Aa</button>';
+    document.body.appendChild(element);
+    element.addEventListener('mousedown', (event) => event.preventDefault());
+    element.addEventListener('click', (event) => {
+      const button = event.target.closest('[data-review-float-format]');
+      if (!button) return;
+      applyReviewFormat(button.dataset.reviewFloatFormat);
+      positionReviewFloatingToolbar();
+    });
+    reviewFloatingToolbar = element;
+    return element;
+  }
+
+  function positionReviewFloatingToolbar() {
+    const toolbar = ensureReviewFloatingToolbar();
+    const selection = window.getSelection();
+    if (!selection || !selection.rangeCount || selection.isCollapsed) {
+      toolbar.hidden = true;
+      return;
+    }
+    const range = selection.getRangeAt(0);
+    const node = range.commonAncestorContainer.nodeType === Node.ELEMENT_NODE ? range.commonAncestorContainer : range.commonAncestorContainer.parentElement;
+    if (!node?.closest?.('[data-review-paragraph]')) {
+      toolbar.hidden = true;
+      return;
+    }
+    const rect = range.getBoundingClientRect();
+    if (!rect.width && !rect.height) {
+      toolbar.hidden = true;
+      return;
+    }
+    toolbar.hidden = false;
+    const width = toolbar.offsetWidth || 122;
+    const left = Math.max(8, Math.min(window.innerWidth - width - 8, rect.left + (rect.width / 2) - (width / 2)));
+    const top = Math.max(8, rect.top - 44);
+    toolbar.style.left = `${left}px`;
+    toolbar.style.top = `${top}px`;
+  }
+
+  function clearReviewDropTargets() {
+    reviewVisualEditor?.querySelectorAll('.is-drop-target').forEach((element) => element.classList.remove('is-drop-target'));
+  }
+
   reviewVisualEditor?.addEventListener('focusin', (event) => {
     reviewVisualEditor.querySelectorAll('.review-paragraph-shell.is-active').forEach((element) => element.classList.remove('is-active'));
     const shell = event.target.closest('.review-paragraph-shell');
     if (shell) shell.classList.add('is-active');
+    reviewFocusSnapshot = reviewSnapshot();
     rememberReviewSelection();
   });
 
-  reviewVisualEditor?.addEventListener('mouseup', rememberReviewSelection);
-  reviewVisualEditor?.addEventListener('keyup', rememberReviewSelection);
+  reviewVisualEditor?.addEventListener('focusout', () => {
+    const current = reviewSnapshot();
+    if (reviewFocusSnapshot && reviewFocusSnapshot !== current) pushReviewUndo(reviewFocusSnapshot);
+    reviewFocusSnapshot = '';
+    window.setTimeout(() => {
+      if (!reviewFloatingToolbar?.matches(':hover')) reviewFloatingToolbar && (reviewFloatingToolbar.hidden = true);
+    }, 80);
+  });
+
+  reviewVisualEditor?.addEventListener('mouseup', () => {
+    rememberReviewSelection();
+    positionReviewFloatingToolbar();
+  });
+  reviewVisualEditor?.addEventListener('keyup', () => {
+    rememberReviewSelection();
+    positionReviewFloatingToolbar();
+  });
 
   reviewVisualEditor?.addEventListener('input', (event) => {
     const section = event.target.closest('[data-review-section]');
@@ -1820,6 +2077,30 @@ const ADMIN_CURATED_REVIEW_SPECS = {
   });
 
   reviewVisualEditor?.addEventListener('keydown', (event) => {
+    const modifier = event.ctrlKey || event.metaKey;
+    if (modifier && event.key.toLowerCase() === 'b') {
+      event.preventDefault();
+      rememberReviewSelection();
+      applyReviewFormat('bold');
+      return;
+    }
+    if (modifier && event.key.toLowerCase() === 'i') {
+      event.preventDefault();
+      rememberReviewSelection();
+      applyReviewFormat('italic');
+      return;
+    }
+    if (modifier && event.key.toLowerCase() === 'z') {
+      event.preventDefault();
+      if (event.shiftKey) redoReview(); else undoReview();
+      return;
+    }
+    if (modifier && event.key.toLowerCase() === 'y') {
+      event.preventDefault();
+      redoReview();
+      return;
+    }
+
     const paragraph = event.target.closest('[data-review-paragraph]');
     if (!paragraph || event.key !== 'Enter') return;
     if (event.shiftKey) return;
@@ -1833,6 +2114,76 @@ const ADMIN_CURATED_REVIEW_SPECS = {
       if (!section) return;
       section.paragraphs.splice(paragraphIndex + 1, 0, '');
     }, { section: sectionIndex, paragraph: paragraphIndex + 1 });
+  });
+
+  reviewVisualEditor?.addEventListener('dragstart', (event) => {
+    const sectionHandle = event.target.closest('[data-review-drag-section]');
+    const paragraphHandle = event.target.closest('[data-review-drag-paragraph]');
+    if (sectionHandle) {
+      reviewDragState = { type: 'section', fromSection: Number(sectionHandle.dataset.reviewDragSection) };
+    } else if (paragraphHandle) {
+      const section = paragraphHandle.closest('[data-review-section]');
+      reviewDragState = { type: 'paragraph', fromSection: Number(section?.dataset.reviewSection), fromParagraph: Number(paragraphHandle.dataset.reviewDragParagraph) };
+    } else {
+      event.preventDefault();
+      return;
+    }
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData('text/plain', 'review-block');
+  });
+
+  reviewVisualEditor?.addEventListener('dragover', (event) => {
+    if (!reviewDragState) return;
+    const target = reviewDragState.type === 'section'
+      ? event.target.closest('[data-review-section]')
+      : event.target.closest('[data-review-paragraph-shell]');
+    if (!target) return;
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+    clearReviewDropTargets();
+    target.classList.add('is-drop-target');
+  });
+
+  reviewVisualEditor?.addEventListener('drop', (event) => {
+    if (!reviewDragState) return;
+    event.preventDefault();
+    const drag = reviewDragState;
+    reviewDragState = null;
+    if (drag.type === 'section') {
+      const target = event.target.closest('[data-review-section]');
+      const toSection = Number(target?.dataset.reviewSection);
+      clearReviewDropTargets();
+      if (!Number.isFinite(toSection) || toSection === drag.fromSection) return;
+      mutateVisualSections((sections) => {
+        const [moved] = sections.splice(drag.fromSection, 1);
+        let insertAt = toSection;
+        if (drag.fromSection < toSection) insertAt -= 1;
+        sections.splice(Math.max(0, insertAt), 0, moved);
+      });
+      return;
+    }
+
+    const targetParagraph = event.target.closest('[data-review-paragraph-shell]');
+    const targetSection = targetParagraph?.closest('[data-review-section]');
+    const toSection = Number(targetSection?.dataset.reviewSection);
+    const toParagraph = Number(targetParagraph?.dataset.reviewParagraphShell);
+    clearReviewDropTargets();
+    if (!Number.isFinite(toSection) || !Number.isFinite(toParagraph)) return;
+    mutateVisualSections((sections) => {
+      const sourceItems = sections[drag.fromSection]?.paragraphs;
+      const targetItems = sections[toSection]?.paragraphs;
+      if (!sourceItems || !targetItems) return;
+      const [moved] = sourceItems.splice(drag.fromParagraph, 1);
+      let insertAt = toParagraph;
+      if (drag.fromSection === toSection && drag.fromParagraph < toParagraph) insertAt -= 1;
+      targetItems.splice(Math.max(0, insertAt), 0, moved);
+      if (!sourceItems.length) sourceItems.push('');
+    });
+  });
+
+  reviewVisualEditor?.addEventListener('dragend', () => {
+    reviewDragState = null;
+    clearReviewDropTargets();
   });
 
   reviewVisualEditor?.addEventListener('click', (event) => {
@@ -1873,6 +2224,17 @@ const ADMIN_CURATED_REVIEW_SPECS = {
       return;
     }
 
+    if (event.target.closest('[data-review-paragraph-join]')) {
+      if (!Number.isFinite(paragraphIndex) || paragraphIndex <= 0) return;
+      mutateVisualSections((sections) => {
+        const items = sections[sectionIndex]?.paragraphs;
+        if (!items) return;
+        const joined = `${String(items[paragraphIndex - 1] || '').trim()} ${String(items[paragraphIndex] || '').trim()}`.trim();
+        items.splice(paragraphIndex - 1, 2, joined);
+      }, { section: sectionIndex, paragraph: paragraphIndex - 1 });
+      return;
+    }
+
     if (event.target.closest('[data-review-paragraph-delete]')) {
       mutateVisualSections((sections) => {
         const items = sections[sectionIndex]?.paragraphs;
@@ -1899,6 +2261,17 @@ const ADMIN_CURATED_REVIEW_SPECS = {
       return;
     }
 
+    if (event.target.closest('[data-review-section-duplicate]')) {
+      mutateVisualSections((sections) => {
+        const source = sections[sectionIndex];
+        if (!source) return;
+        const copy = clone(source);
+        if (!copy.verdict) copy.title = `${copy.title} (copia)`;
+        sections.splice(sectionIndex + 1, 0, copy);
+      });
+      return;
+    }
+
     if (event.target.closest('[data-review-section-delete]')) {
       if (!window.confirm('¿Eliminar esta sección de la review?')) return;
       mutateVisualSections((sections) => sections.splice(sectionIndex, 1));
@@ -1906,12 +2279,26 @@ const ADMIN_CURATED_REVIEW_SPECS = {
   });
 
   reviewFormatToolbar?.addEventListener('mousedown', (event) => {
-    if (event.target.closest('[data-review-format]')) event.preventDefault();
+    if (event.target.closest('button')) event.preventDefault();
   });
   reviewFormatToolbar?.addEventListener('click', (event) => {
     const button = event.target.closest('[data-review-format]');
+    if (button) applyReviewFormat(button.dataset.reviewFormat);
+  });
+
+  reviewUndoButton?.addEventListener('click', undoReview);
+  reviewRedoButton?.addEventListener('click', redoReview);
+  reviewSplitButton?.addEventListener('click', splitSelectedParagraph);
+
+  reviewEditModeButton?.addEventListener('click', () => setReviewViewMode('edit'));
+  reviewPreviewModeButton?.addEventListener('click', () => setReviewViewMode('preview'));
+  reviewDesktopPreviewButton?.addEventListener('click', () => setReviewPreviewDevice('desktop'));
+  reviewMobilePreviewButton?.addEventListener('click', () => setReviewPreviewDevice('mobile'));
+  reviewPublicPreview?.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-review-jump]');
     if (!button) return;
-    applyReviewFormat(button.dataset.reviewFormat);
+    const target = document.getElementById(button.dataset.reviewJump);
+    target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 
   addReviewSectionButton?.addEventListener('click', () => {
