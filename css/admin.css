@@ -265,7 +265,7 @@ code { padding: 2px 5px; border-radius: 5px; background: rgba(255,255,255,.06); 
 .media-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 .asset-panel {
   display: grid;
-  grid-template-columns: minmax(120px, .62fr) minmax(0, 1fr);
+  grid-template-columns: minmax(160px, 220px) minmax(0, 1fr);
   gap: 16px;
   align-items: center;
   padding: 14px;
@@ -278,6 +278,9 @@ code { padding: 2px 5px; border-radius: 5px; background: rgba(255,255,255,.06); 
   overflow: hidden;
   display: grid;
   place-items: center;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   min-height: 176px;
   border: 1px dashed var(--line-strong);
   border-radius: 11px;
@@ -285,8 +288,17 @@ code { padding: 2px 5px; border-radius: 5px; background: rgba(255,255,255,.06); 
   background: rgba(255,255,255,.025);
 }
 .cover-preview { aspect-ratio: 3 / 4; }
-.background-preview { aspect-ratio: 16 / 9; min-height: 150px; }
-.asset-preview img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+.background-preview {
+  aspect-ratio: 16 / 9;
+  min-height: 0;
+}
+.asset-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  inset: 0;
+}
 .asset-copy { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
 .asset-copy strong { font-size: 16px; }
 .asset-copy small, .music-file-box small { color: var(--muted); line-height: 1.45; overflow-wrap: anywhere; }
