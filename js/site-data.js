@@ -1310,7 +1310,7 @@
     ],
     "music": {
       "startAt": 137,
-      "title": "League of Legends - Mi",
+      "title": "League of Legends - Main Theme 2009",
       "src": "assets/audio/league-of-legends-theme-v5-1-1.mp3"
     },
     "cover": "assets/covers/league-of-legends-v5-1-1.jpg",
