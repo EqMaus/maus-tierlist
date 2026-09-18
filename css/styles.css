@@ -756,7 +756,7 @@ body.background-only .appearance-popover{display:none!important}
 
 
 /* =========================================================
-   v4.10.0 · EFECTOS AMBIENTALES DE LOS FONDOS (ajustados)
+   v4.10.1 · EFECTOS AMBIENTALES DE LOS FONDOS (ajustados)
    Más exagerados y con personalidad propia por juego.
    ========================================================= */
 .scene-art { overflow: hidden; }
@@ -1248,7 +1248,7 @@ body.background-only .appearance-popover{display:none!important}
 
 
 /* =========================================================
-   v4.10.0 · INMERSIÓN TOTAL
+   v4.10.1 · INMERSIÓN TOTAL
    Parallax, color grading, iluminación dinámica
    y modo “Ver fondo” mucho más cinematográfico.
    ========================================================= */
@@ -1548,7 +1548,7 @@ body[data-scene="pokemon-black"]{
 
 
 /* =========================================================
-   v4.10.0 · INMERSIÓN VISUAL REAL
+   v4.10.1 · INMERSIÓN VISUAL REAL
    Más profundidad, parallax perceptible, primer plano, luz
    y un “Ver fondo” claramente cinematográfico.
    ========================================================= */
@@ -1638,3 +1638,44 @@ body.scene-entering .scene-foreground{animation:immersiveForegroundArrival 1.4s 
 @keyframes immersiveForegroundArrival{from{opacity:0;transform:translate3d(calc(var(--parallax-x) * 1.8),calc(var(--parallax-y) * 1.8 + 24px),0) scale(1.08)}to{opacity:1;transform:translate3d(calc(var(--parallax-x) * 1.8),calc(var(--parallax-y) * 1.8),0) scale(1)}}
 
 @media(max-width:700px){.scene-foreground{opacity:.68}.scene-foreground .foreground-particle:nth-child(n+12){display:none}body.background-only{--scene-zoom:1.07}body.background-only::before,body.background-only::after{height:18px}}
+
+
+/* =========================================================
+   v4.10.1 · PARTÍCULAS INDEPENDIENTES DEL RATÓN
+   Las partículas siguen sus propias animaciones y no reciben
+   desplazamiento por parallax del cursor.
+   ========================================================= */
+
+/* Capa de partículas medias: completamente independiente */
+.scene-effects{
+  transform:none !important;
+}
+
+/* Capa de partículas cercanas: también independiente */
+.scene-foreground{
+  transform:none !important;
+}
+
+/* En "Ver fondo" pueden ganar presencia, pero sin seguir al ratón */
+body.background-only .scene-effects{
+  transform:scale(1.05) !important;
+}
+body.background-only .scene-foreground{
+  transform:scale(1.08) !important;
+}
+
+/* Las animaciones de entrada tampoco toman coordenadas del cursor */
+body.scene-entering .scene-foreground{
+  animation:immersiveForegroundArrivalIndependent 1.4s cubic-bezier(.16,.82,.2,1) both !important;
+}
+
+@keyframes immersiveForegroundArrivalIndependent{
+  from{
+    opacity:0;
+    transform:translate3d(0,24px,0) scale(1.08);
+  }
+  to{
+    opacity:1;
+    transform:translate3d(0,0,0) scale(1);
+  }
+}
