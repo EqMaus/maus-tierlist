@@ -1,16 +1,9 @@
-MAUS TIER LISTS — v5.0.0
+MAUS TIER LISTS — v5.0.1
 
-NUEVA ARQUITECTURA OFFLINE / ONLINE
-===================================
-- La tier list actual pasa a estar identificada claramente como OFFLINE.
-- Se añade una segunda tier list ONLINE completamente independiente.
-- Cada lista tiene ranking, recorrido y biblioteca de reviews propios.
-- La web cambia de identidad visual al entrar en ONLINE (azul/violeta, rejilla y paneles distintos).
-- El editor privado incluye selector OFFLINE / ONLINE.
-- Los juegos nuevos se crean dentro de la lista que tengas seleccionada.
-- Al publicar por primera vez desde esta versión, el editor añadirá automáticamente window.MAUS_ONLINE_GAMES a js/site-data.js.
-- NO hace falta reemplazar js/site-data.js al instalar esta actualización: hasta que añadas juegos, la lista online aparece vacía.
-- Los IDs deben seguir siendo únicos entre ambas listas.
-- El modo móvil Lite de v4.13.7 se mantiene.
+Añadido efecto especial para Smash Ultimate:
+- relámpagos azules intermitentes alrededor del brazo del Kazuya de la izquierda
+- relámpagos azules/violetas alrededor del Kazuya de la derecha
+- el efecto solo se activa en la review de Smash Ultimate
+- el modo móvil Lite sigue sin usar estos efectos
 
-IMPORTANTE: este ZIP sigue sin incluir js/site-data.js ni assets, para no pisar tus reviews ni multimedia actuales.
+Este ZIP sigue sin incluir js/site-data.js ni assets.

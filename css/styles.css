@@ -1961,7 +1961,7 @@ body.climate-event[data-climate-event="flare"] .scene-foreground{
 }
 
 /* =========================================================
-   v5.0.0 · Dirección artística, cámara autónoma y rendimiento
+   v5.0.1 · Dirección artística, cámara autónoma y rendimiento
    ========================================================= */
 :root{
   --scene-light-x:50%;
@@ -2013,7 +2013,7 @@ body[data-scene="re1-remaster"] .scene-depth-back,body[data-scene="re2-og"] .sce
 
 
 /* =========================================================
-   v5.0.0 · FONDO SIEMPRE VIVO
+   v5.0.1 · FONDO SIEMPRE VIVO
    El fondo fotográfico se mueve también durante la lectura normal.
    Las partículas NO dependen de esta capa.
    ========================================================= */
@@ -2093,7 +2093,7 @@ body.background-only .scene-background-motion{
 
 
 /* =========================================================
-   v5.0.0 · MODO RENDIMIENTO MÓVIL
+   v5.0.1 · MODO RENDIMIENTO MÓVIL
    Solo se activa en pantallas táctiles pequeñas. PC queda intacto.
    ========================================================= */
 body.mobile-performance{
@@ -2207,7 +2207,7 @@ body.mobile-performance:not(.climate-event) .scene-event{
 
 
 /* =========================================================
-   v5.0.0 · MÓVIL LITE
+   v5.0.1 · MÓVIL LITE
    En teléfono prima la fluidez: una imagen estática y cero efectos.
    Escritorio conserva el sistema visual completo.
    ========================================================= */
@@ -2320,7 +2320,7 @@ body.mobile-performance .review-verdict{
 
 
 /* =========================================================
-   v5.0.0 · DOS TIER LISTS: OFFLINE / ONLINE
+   v5.0.1 · DOS TIER LISTS: OFFLINE / ONLINE
    ========================================================= */
 .catalog-nav{
   display:flex;
@@ -2503,4 +2503,161 @@ body.online-mode .side-card{
   .catalog-switch-button{min-height:50px}
   .online-tier-page::before,.online-library-page::before{display:none}
   body.mobile-performance.online-mode .site-header{background:#07101a!important}
+}
+
+
+/* =========================================================
+   v5.0.1 · Relámpagos azules para Smash Ultimate (Kazuya)
+   ========================================================= */
+.scene-special-effects{
+  position:absolute;
+  inset:0;
+  z-index:7;
+  overflow:hidden;
+  pointer-events:none;
+  transform:translate3d(calc(var(--parallax-x) * 1.28),calc(var(--parallax-y) * 1.28),0);
+  transition:transform .24s ease-out,opacity .34s ease;
+  mix-blend-mode:screen;
+}
+.special-lightning-zone{
+  position:absolute;
+  left:var(--zone-x);
+  top:var(--zone-y);
+  width:var(--zone-w);
+  height:var(--zone-h);
+  opacity:.98;
+}
+.special-lightning-zone::before,
+.special-lightning-zone::after{
+  content:"";
+  position:absolute;
+  inset:-8%;
+  pointer-events:none;
+}
+.special-lightning-zone::before{
+  background:radial-gradient(circle at 50% 50%, rgba(93,187,255,.22), transparent 72%);
+  filter:blur(14px);
+  opacity:.32;
+  animation:smashZoneAura 5.2s ease-in-out infinite alternate;
+}
+.special-lightning-zone::after{
+  background:
+    radial-gradient(circle at 28% 34%, rgba(227,245,255,.18), transparent 13%),
+    radial-gradient(circle at 61% 54%, rgba(141,198,255,.16), transparent 11%),
+    radial-gradient(circle at 73% 24%, rgba(184,130,255,.12), transparent 10%);
+  filter:blur(2.4px);
+  opacity:.18;
+  animation:smashZoneSpecks 7.2s linear infinite;
+}
+.effect-smash-kazuya-lightning .zone-right::before{
+  background:
+    radial-gradient(circle at 44% 38%, rgba(110,175,255,.30), transparent 48%),
+    radial-gradient(circle at 60% 62%, rgba(188,86,255,.17), transparent 44%);
+  opacity:.5;
+  filter:blur(18px);
+}
+.effect-smash-kazuya-lightning .zone-left::before{
+  opacity:.27;
+  filter:blur(12px);
+}
+
+.special-bolt{
+  position:absolute;
+  left:var(--x);
+  top:var(--y);
+  width:var(--w);
+  height:var(--h);
+  opacity:0;
+  transform:rotate(var(--r)) scale(.72);
+  transform-origin:center center;
+  clip-path:polygon(44% 0, 62% 0, 49% 29%, 73% 29%, 23% 100%, 38% 56%, 16% 56%);
+  background:linear-gradient(180deg, rgba(255,255,255,.98), rgba(166,230,255,.98) 18%, rgba(106,198,255,.96) 42%, rgba(78,119,255,.92) 72%, rgba(200,109,255,.75));
+  filter:
+    drop-shadow(0 0 4px rgba(211,244,255,.98))
+    drop-shadow(0 0 10px rgba(85,203,255,.92))
+    drop-shadow(0 0 18px rgba(64,131,255,.74));
+  animation:smashKazuyaBolt var(--d) steps(1,end) var(--delay) infinite;
+}
+.special-bolt::before,
+.special-bolt::after{
+  content:"";
+  position:absolute;
+  opacity:.9;
+  background:inherit;
+  filter:inherit;
+}
+.special-bolt::before{
+  width:36%;
+  height:52%;
+  left:-8%;
+  top:26%;
+  transform:rotate(-18deg);
+  clip-path:polygon(44% 0, 62% 0, 49% 29%, 73% 29%, 23% 100%, 38% 56%, 16% 56%);
+}
+.special-bolt::after{
+  width:28%;
+  height:44%;
+  right:-3%;
+  top:40%;
+  transform:rotate(18deg);
+  clip-path:polygon(44% 0, 62% 0, 49% 29%, 73% 29%, 23% 100%, 38% 56%, 16% 56%);
+}
+.bolt-1{filter:drop-shadow(0 0 4px rgba(219,250,255,.96)) drop-shadow(0 0 12px rgba(81,216,255,.94)) drop-shadow(0 0 24px rgba(73,121,255,.82))}
+.bolt-2{filter:drop-shadow(0 0 4px rgba(222,244,255,.96)) drop-shadow(0 0 9px rgba(124,224,255,.82)) drop-shadow(0 0 20px rgba(155,103,255,.74))}
+.bolt-3{filter:drop-shadow(0 0 4px rgba(225,245,255,.98)) drop-shadow(0 0 11px rgba(84,198,255,.88)) drop-shadow(0 0 16px rgba(112,149,255,.70))}
+
+.special-spark{
+  position:absolute;
+  left:var(--x);
+  top:var(--y);
+  width:var(--s);
+  height:var(--s);
+  border-radius:50%;
+  background:
+    radial-gradient(circle, rgba(255,255,255,.95) 0 24%, rgba(160,225,255,.86) 34%, rgba(77,173,255,.48) 62%, transparent 78%);
+  opacity:0;
+  filter:blur(.4px) drop-shadow(0 0 8px rgba(84,203,255,.76));
+  animation:smashKazuyaSpark var(--d) ease-in-out var(--delay) infinite;
+}
+.spark-1{
+  background:
+    radial-gradient(circle, rgba(255,255,255,.95) 0 18%, rgba(179,238,255,.82) 30%, rgba(108,162,255,.45) 58%, transparent 76%);
+}
+.spark-2{
+  background:
+    radial-gradient(circle, rgba(255,255,255,.92) 0 20%, rgba(198,222,255,.72) 28%, rgba(167,96,255,.36) 56%, transparent 76%);
+}
+
+@keyframes smashKazuyaBolt{
+  0%, 72%, 100%{opacity:0;transform:rotate(var(--r)) scale(.68)}
+  73%{opacity:calc(.18 * var(--a));transform:rotate(var(--r)) scale(.76)}
+  74%{opacity:calc(.95 * var(--a));transform:rotate(var(--r)) scale(1.02)}
+  75%{opacity:calc(.35 * var(--a))}
+  76%{opacity:0}
+  79%{opacity:calc(.72 * var(--a));transform:rotate(var(--r)) scale(.92)}
+  81%{opacity:0}
+}
+
+@keyframes smashKazuyaSpark{
+  0%, 68%, 100%{opacity:0;transform:scale(.3)}
+  71%{opacity:calc(.28 * var(--a));transform:scale(.7)}
+  74%{opacity:calc(.92 * var(--a));transform:scale(1.04)}
+  78%{opacity:0;transform:scale(.56)}
+}
+
+@keyframes smashZoneAura{
+  0%{opacity:.15;transform:scale(.96)}
+  55%{opacity:.34;transform:scale(1.03)}
+  100%{opacity:.22;transform:scale(1)}
+}
+
+@keyframes smashZoneSpecks{
+  0%{opacity:.12;transform:translate3d(-2px,0,0)}
+  50%{opacity:.24;transform:translate3d(2px,-2px,0)}
+  100%{opacity:.14;transform:translate3d(-1px,3px,0)}
+}
+
+/* En móvil lite no arrancan, pero por seguridad también los escondemos. */
+body.mobile-performance .scene-special-effects{
+  display:none!important;
 }

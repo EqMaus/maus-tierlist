@@ -524,6 +524,74 @@
     return configured || LEGACY_AMBIENT_EFFECTS[gameId] || 'none';
   }
 
+  function specialSceneEffectId(gameId) {
+    const game = gameById.get(gameId);
+    const fingerprint = `${String(gameId || '')} ${String(game?.title || '')}`.toLowerCase();
+    if (fingerprint.includes('smash') && fingerprint.includes('ultimate')) return 'smash-kazuya-lightning';
+    return '';
+  }
+
+  function specialLightningZoneHtml(zoneClass, x, y, w, h, bolts, sparks = []) {
+    const boltHtml = bolts.map((bolt, index) => {
+      const [bx, by, bw, bh, rotation, delay, duration, intensity = .9] = bolt;
+      return `<i class="special-bolt bolt-${index % 4}" style="--x:${bx}%;--y:${by}%;--w:${bw}px;--h:${bh}px;--r:${rotation}deg;--delay:${delay}s;--d:${duration}s;--a:${intensity}"></i>`;
+    }).join('');
+    const sparkHtml = sparks.map((spark, index) => {
+      const [sx, sy, size, delay, duration, intensity = .85] = spark;
+      return `<i class="special-spark spark-${index % 3}" style="--x:${sx}%;--y:${sy}%;--s:${size}px;--delay:${delay}s;--d:${duration}s;--a:${intensity}"></i>`;
+    }).join('');
+    return `<div class="special-lightning-zone ${zoneClass}" style="--zone-x:${x}%;--zone-y:${y}%;--zone-w:${w}%;--zone-h:${h}%">${boltHtml}${sparkHtml}</div>`;
+  }
+
+  function specialSceneEffectHtml(gameId) {
+    const effectId = specialSceneEffectId(gameId);
+    if (!effectId || mobilePerformance) return '';
+
+    if (effectId === 'smash-kazuya-lightning') {
+      const leftZone = specialLightningZoneHtml(
+        'zone-left',
+        9.2, 18.5, 39.6, 29.5,
+        [
+          [6, 62, 22, 126, -62, -.4, 3.8, .85],
+          [17, 22, 20, 96, -14, -1.3, 4.4, .95],
+          [33, 40, 17, 88, 18, -2.1, 3.9, .75],
+          [47, 18, 16, 84, 36, -3.2, 4.2, .84],
+          [57, 54, 18, 92, 68, -.8, 4.6, .92],
+          [71, 13, 14, 76, 21, -2.8, 5.1, .82]
+        ],
+        [
+          [22, 46, 34, -.8, 4.2, .78],
+          [49, 58, 28, -1.9, 4.8, .66],
+          [66, 27, 25, -3.1, 4.4, .72]
+        ]
+      );
+
+      const rightZone = specialLightningZoneHtml(
+        'zone-right',
+        49.1, 10.4, 36.6, 59.6,
+        [
+          [9, 21, 18, 112, -42, -1.2, 3.7, .88],
+          [22, 5, 20, 132, -12, -.6, 4.9, 1],
+          [34, 34, 18, 116, 9, -2.4, 4.2, .82],
+          [49, 17, 19, 146, 18, -3.3, 5.4, .94],
+          [63, 40, 22, 118, 41, -1.7, 4.5, .86],
+          [76, 12, 16, 108, 32, -2.8, 5.2, .9],
+          [58, 66, 21, 128, 67, -.2, 4.1, .84]
+        ],
+        [
+          [21, 38, 36, -1.4, 4.9, .86],
+          [48, 26, 32, -2.6, 5.4, .74],
+          [68, 55, 29, -.9, 4.1, .81],
+          [55, 77, 25, -3.2, 4.6, .69]
+        ]
+      );
+
+      return `<div class="scene-special-effects effect-${esc(effectId)}" aria-hidden="true">${leftZone}${rightZone}</div>`;
+    }
+
+    return '';
+  }
+
   function ambientEffectHtml(gameId) {
     const effect = ambientEffectFor(gameId);
     if (!effect || effect === 'none') return '';
@@ -1901,6 +1969,7 @@
     const ambient = ambientEffectHtml(gameId);
     const foreground = foregroundEffectHtml(gameId);
     const climateEvent = sceneEventHtml(gameId);
+    const specialEffect = specialSceneEffectHtml(gameId);
 
     startClimateCycle(gameId);
     startSceneDrift(gameId);
@@ -1908,10 +1977,10 @@
     updateSceneScrollDepth();
 
     if (photoSrc) {
-      sceneArt.innerHTML = `<div class="scene-background-motion"><div class="scene-depth scene-depth-back" style="background-image:url('${esc(photoSrc)}')"></div><img class="scene-photo" src="${esc(photoSrc)}" alt=""><div class="scene-depth scene-depth-front" style="background-image:url('${esc(photoSrc)}')"></div></div>${lighting}${ambient}${foreground}${climateEvent}`;
+      sceneArt.innerHTML = `<div class="scene-background-motion"><div class="scene-depth scene-depth-back" style="background-image:url('${esc(photoSrc)}')"></div><img class="scene-photo" src="${esc(photoSrc)}" alt=""><div class="scene-depth scene-depth-front" style="background-image:url('${esc(photoSrc)}')"></div></div>${lighting}${ambient}${foreground}${climateEvent}${specialEffect}`;
       return;
     }
-    sceneArt.innerHTML = `${sceneSvg(key)}${lighting}${ambient}${foreground}${climateEvent}`;
+    sceneArt.innerHTML = `${sceneSvg(key)}${lighting}${ambient}${foreground}${climateEvent}${specialEffect}`;
   }
 
   function presentationRows(catalog = presentationCatalog) {
