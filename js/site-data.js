@@ -149,8 +149,62 @@
     "reviewDate": "17/05/2026",
     "spoilers": false,
     "excerpt": "Una identidad emocional rarísima, el sistema de tres días y todo Ikana sostienen uno de los Zelda más especiales para ti.",
-    "review": "Es un juego que me encanta y que me he pasado muchísimas veces. Esta última run ha sido más para analizarlo bien y poder hacerle una review adecuada, pero incluso sabiéndome prácticamente todo, el juego sigue teniendo una magia especial difícil de encontrar en otros videojuegos. El gameplay funciona muy bien. Todo se siente bastante sólido y divertido de jugar, y el sistema de los 3 días sigue siendo una de las ideas más originales y especiales que ha tenido Zelda. Eso sí, una vez ya conoces el juego de memoria, parte de la magia del sistema desaparece porque deja de ser estrés y pasa a ser automatismo. Para un jugador nuevo, esa presión constante probablemente sea una de las mejores partes del juego. Lo más fuerte que tiene Majora’s Mask es el tono. La tristeza, la inquietud, la melancolía y la sensación constante de decadencia están increíblemente bien llevadas. El juego tiene una personalidad emocional brutal y consigue transmitir muchísimo con muy poco. La estructura general me parece muy buena, aunque no perfecta. De las 4 mazmorras principales, las 3 primeras me parecen bastante meh, sinceramente. Funcionan, pero ninguna me parece especialmente memorable. Y eso es algo que le perdono completamente al juego porque el conjunto es la polla con cebolla. Porque en el momento en el que termina la Gran Bahía… el juego se vuelve SUBLIME. Todo lo relacionado con Ikana es lo mejor del juego: los escenarios, el lore, la música, la atmósfera… absolutamente todo. Ahí es donde Majora’s Mask alcanza su máximo nivel y donde más se nota esa sensación de tristeza y decadencia que tiene toda la aventura. Y dentro de eso, la Torre de Piedra es claramente la mejor mazmorra del juego. La subida inicial puede ser algo pocha, pero cuando empieza el templo de verdad… es increíble. Los puzles, la mecánica de darle la vuelta al templo, la música y la atmósfera hacen que sea el punto más alto del juego sin ninguna duda. Las subtramas y misiones secundarias son otro de los puntos más fuertes del juego. La mayoría son bastante buenas y ayudan muchísimo a que Termina se sienta viva. El sistema del cuaderno funciona genial porque te hace sentir que realmente estás siguiendo las vidas y problemas de los personajes. Y dentro de todo eso, la línea de misiones de Anju y Kafei es probablemente lo mejor del juego a nivel narrativo. Triste, rara, incómoda y muy humana. Representa perfectamente el tono entero de Majora’s Mask. La música en general es buenísima. Hay muchísimos temas increíbles: Canción de Curación, Oda al Orden, Elegía al Vacío, Stone Tower… prácticamente toda la banda sonora tiene muchísima personalidad. Majora’s Mask no me parece perfecto, ni muchísimo menos. Tiene cosas torpes y partes claramente inferiores a otras. Pero tiene algo. Una magia rarísima. Una identidad propia brutal. La nota a día de hoy es un 8.5.",
-    "ambientEffect": "moon-motes"
+    "review": "Es un juego que me encanta y que me he pasado muchísimas veces. Esta última run ha sido más para analizarlo bien y poder hacerle una review adecuada, pero incluso sabiéndome prácticamente todo, el juego sigue teniendo una magia especial difícil de encontrar en otros videojuegos.\n\nEl gameplay funciona muy bien. Todo se siente bastante sólido y divertido de jugar, y el sistema de los 3 días sigue siendo una de las ideas más originales y especiales que ha tenido Zelda. Eso sí, una vez ya conoces el juego de memoria, parte de la magia del sistema desaparece porque deja de ser estrés y pasa a ser automatismo. Para un jugador nuevo, esa presión constante probablemente sea una de las mejores partes del juego.\n\nLo más fuerte que tiene Majora’s Mask es el tono. La tristeza, la inquietud, la melancolía y la sensación constante de decadencia están increíblemente bien llevadas. El juego tiene una personalidad emocional brutal y consigue transmitir muchísimo con muy poco.\n\nLa estructura general me parece muy buena, aunque no perfecta. De las 4 mazmorras principales, las 3 primeras me parecen bastante meh, sinceramente. Funcionan, pero ninguna me parece especialmente memorable. Y eso es algo que le perdono completamente al juego porque el conjunto es la polla con cebolla. Porque en el momento en el que termina la Gran Bahía… el juego se vuelve SUBLIME.\n\nTodo lo relacionado con Ikana es lo mejor del juego: los escenarios, el lore, la música, la atmósfera… absolutamente todo. Ahí es donde Majora’s Mask alcanza su máximo nivel y donde más se nota esa sensación de tristeza y decadencia que tiene toda la aventura. Y dentro de eso, la Torre de Piedra es claramente la mejor mazmorra del juego.\n\nLa subida inicial puede ser algo pocha, pero cuando empieza el templo de verdad… es increíble. Los puzles, la mecánica de darle la vuelta al templo, la música y la atmósfera hacen que sea el punto más alto del juego sin ninguna duda.\n\nLas subtramas y misiones secundarias son otro de los puntos más fuertes del juego. La mayoría son bastante buenas y ayudan muchísimo a que Termina se sienta viva. El sistema del cuaderno funciona genial porque te hace sentir que realmente estás siguiendo las vidas y problemas de los personajes.\n\nY dentro de todo eso, la línea de misiones de Anju y Kafei es probablemente lo mejor del juego a nivel narrativo. Triste, rara, incómoda y muy humana. Representa perfectamente el tono entero de Majora’s Mask.\n\nLa música en general es buenísima. Hay muchísimos temas increíbles: Canción de Curación, Oda al Orden, Elegía al Vacío, Stone Tower… prácticamente toda la banda sonora tiene muchísima personalidad. Majora’s Mask no me parece perfecto, ni muchísimo menos. Tiene cosas torpes y partes claramente inferiores a otras. Pero tiene algo. Una magia rarísima. Una identidad propia brutal.\n\nLa nota a día de hoy es un 8.5.",
+    "ambientEffect": "moon-motes",
+    "reviewSections": [
+      {
+        "title": "Primera impresión",
+        "verdict": false,
+        "paragraphs": [
+          "Es un juego que me encanta y que me he pasado muchísimas veces. Esta última run ha sido más para analizarlo bien y poder hacerle una review adecuada, pero incluso sabiéndome prácticamente todo, el juego sigue teniendo una magia especial difícil de encontrar en otros videojuegos."
+        ]
+      },
+      {
+        "title": "Gameplay y sistema de tres días",
+        "verdict": false,
+        "paragraphs": [
+          "El gameplay funciona muy bien. Todo se siente bastante sólido y divertido de jugar, y el sistema de los 3 días sigue siendo una de las ideas más originales y especiales que ha tenido Zelda. Eso sí, una vez ya conoces el juego de memoria, parte de la magia del sistema desaparece porque deja de ser estrés y pasa a ser automatismo. Para un jugador nuevo, esa presión constante probablemente sea una de las mejores partes del juego."
+        ]
+      },
+      {
+        "title": "Tono y atmósfera",
+        "verdict": false,
+        "paragraphs": [
+          "Lo más fuerte que tiene Majora’s Mask es el tono. La tristeza, la inquietud, la melancolía y la sensación constante de decadencia están increíblemente bien llevadas. El juego tiene una personalidad emocional brutal y consigue transmitir muchísimo con muy poco."
+        ]
+      },
+      {
+        "title": "Mazmorras e Ikana",
+        "verdict": false,
+        "paragraphs": [
+          "La estructura general me parece muy buena, aunque no perfecta. De las 4 mazmorras principales, las 3 primeras me parecen bastante meh, sinceramente. Funcionan, pero ninguna me parece especialmente memorable. Y eso es algo que le perdono completamente al juego porque el conjunto es la polla con cebolla. Porque en el momento en el que termina la Gran Bahía… el juego se vuelve SUBLIME.",
+          "Todo lo relacionado con Ikana es lo mejor del juego: los escenarios, el lore, la música, la atmósfera… absolutamente todo. Ahí es donde Majora’s Mask alcanza su máximo nivel y donde más se nota esa sensación de tristeza y decadencia que tiene toda la aventura. Y dentro de eso, la Torre de Piedra es claramente la mejor mazmorra del juego.",
+          "La subida inicial puede ser algo pocha, pero cuando empieza el templo de verdad… es increíble. Los puzles, la mecánica de darle la vuelta al templo, la música y la atmósfera hacen que sea el punto más alto del juego sin ninguna duda."
+        ]
+      },
+      {
+        "title": "Secundarias y personajes",
+        "verdict": false,
+        "paragraphs": [
+          "Las subtramas y misiones secundarias son otro de los puntos más fuertes del juego. La mayoría son bastante buenas y ayudan muchísimo a que Termina se sienta viva. El sistema del cuaderno funciona genial porque te hace sentir que realmente estás siguiendo las vidas y problemas de los personajes.",
+          "Y dentro de todo eso, la línea de misiones de Anju y Kafei es probablemente lo mejor del juego a nivel narrativo. Triste, rara, incómoda y muy humana. Representa perfectamente el tono entero de Majora’s Mask."
+        ]
+      },
+      {
+        "title": "Música y balance final",
+        "verdict": false,
+        "paragraphs": [
+          "La música en general es buenísima. Hay muchísimos temas increíbles: Canción de Curación, Oda al Orden, Elegía al Vacío, Stone Tower… prácticamente toda la banda sonora tiene muchísima personalidad. Majora’s Mask no me parece perfecto, ni muchísimo menos. Tiene cosas torpes y partes claramente inferiores a otras. Pero tiene algo. Una magia rarísima. Una identidad propia brutal."
+        ]
+      },
+      {
+        "title": "Veredicto final",
+        "verdict": true,
+        "paragraphs": [
+          "La nota a día de hoy es un 8.5."
+        ]
+      }
+    ]
   },
   {
     "id": "gow3",
@@ -297,8 +351,60 @@
     "reviewDate": "30/03/2026",
     "spoilers": true,
     "excerpt": "Un juego especial por la soledad, el silencio y la culpa que consigue asociar a cada coloso más que por la acción pura.",
-    "review": "Muy especial este juego. Desde el principio sabe transmitir bien soledad y curiosidad. El juego no te encandila ni por la acción, ni por el ritmo, sino por lo que consigue hacerte sentir. A mí me enganchó bastante bien, y tardé unas 7 horitas en pasármelo. El mundo está *vacío*, pero con intención. No se siente como falta de contenido, sino como parte del propio juego. Moverse con Agro (El caballo) es muy chulo, aunque al principio (Los primeros 20 minutos) se puede sentir algo torpe hasta que le pillas el truco. A nivel visual, el juego tiene paisajes muy, muy guapos. Los colosos cumplen en general a nivel de espectacularidad, pero tienen bastante margen de mejora. Algunos son bastante meh, tanto visual como mecánicamente, y otros sí te hacen sentir epicidad clara. No hubo ninguno que me flipase especialmente, pero la mezcla entre épica y puzle funciona bien. Derrotarlos no se siente (Y no es) una victoria. Al revés. Te deja una sensación rara, incómoda. Sabes que lo haces por un motivo (Resucitar a Mono), pero a la vez estás matando criaturas que, salvo el último, no parecen querer hacerte daño. Y además, notas cómo tu personaje se va deteriorando poco a poco, y eso sumado a la música que siempre suena cuando acabas una batalla contra cada coloso pues... Está muy bien llevado. La jugabilidad está bien, sin más. Los controles cumplen, aunque el personaje es limitado en lo que puede hacer y la animación de correr me resulta un poquito rara. Escalar a los colosos se siente bien cuando por fin encuentras la manera de hacerlo después de estar un rato pensando en cómo. La cámara funciona perfecta, ninguna pega. La música es uno de los puntos fuertes. Prácticamente todos los temas me parecieron muy buenos, con especial mención a \"Opened Way\" que es una locura. El silencio del mundo también suma muchísimo a la experiencia. La historia es clave. Si no entras en ella, el juego se cae. Pero si entras, funciona muy bien. El final es raro pero interesante. Te conviertes en aquello que llevas todo el juego derrotando, te sellan, y eso sí, Mono resucita. Juegan con hacerte creer que Agro muere justo antes del último coloso, y cuando vuelve a aparecer al final del juego... Es genial. Es un juego **especial**. Un juego que mucha gente puede decir que simplemente es 'malo' o 'un coñazo', y lo podría entender, pero que tiene algo distinto, una magia difícil de explicar. Lo he disfrutado y seguro que en algunos años lo vuelvo a jugar. Nota final: **Un 8**",
-    "ambientEffect": "wind-dust"
+    "review": "Muy especial este juego. Desde el principio sabe transmitir bien soledad y curiosidad. El juego no te encandila ni por la acción, ni por el ritmo, sino por lo que consigue hacerte sentir. A mí me enganchó bastante bien, y tardé unas 7 horitas en pasármelo. El mundo está *vacío*, pero con intención. No se siente como falta de contenido, sino como parte del propio juego.\n\nMoverse con Agro (El caballo) es muy chulo, aunque al principio (Los primeros 20 minutos) se puede sentir algo torpe hasta que le pillas el truco. A nivel visual, el juego tiene paisajes muy, muy guapos. Los colosos cumplen en general a nivel de espectacularidad, pero tienen bastante margen de mejora.\n\nAlgunos son bastante meh, tanto visual como mecánicamente, y otros sí te hacen sentir epicidad clara. No hubo ninguno que me flipase especialmente, pero la mezcla entre épica y puzle funciona bien.\n\nDerrotarlos no se siente (Y no es) una victoria. Al revés. Te deja una sensación rara, incómoda. Sabes que lo haces por un motivo (Resucitar a Mono), pero a la vez estás matando criaturas que, salvo el último, no parecen querer hacerte daño. Y además, notas cómo tu personaje se va deteriorando poco a poco, y eso sumado a la música que siempre suena cuando acabas una batalla contra cada coloso pues... Está muy bien llevado.\n\nLa jugabilidad está bien, sin más. Los controles cumplen, aunque el personaje es limitado en lo que puede hacer y la animación de correr me resulta un poquito rara. Escalar a los colosos se siente bien cuando por fin encuentras la manera de hacerlo después de estar un rato pensando en cómo. La cámara funciona perfecta, ninguna pega.\n\nLa música es uno de los puntos fuertes. Prácticamente todos los temas me parecieron muy buenos, con especial mención a \"Opened Way\" que es una locura. El silencio del mundo también suma muchísimo a la experiencia. La historia es clave. Si no entras en ella, el juego se cae. Pero si entras, funciona muy bien. El final es raro pero interesante.\n\nTe conviertes en aquello que llevas todo el juego derrotando, te sellan, y eso sí, Mono resucita. Juegan con hacerte creer que Agro muere justo antes del último coloso, y cuando vuelve a aparecer al final del juego... Es genial. Es un juego **especial**.\n\nUn juego que mucha gente puede decir que simplemente es 'malo' o 'un coñazo', y lo podría entender, pero que tiene algo distinto, una magia difícil de explicar. Lo he disfrutado y seguro que en algunos años lo vuelvo a jugar. Nota final: **Un 8**",
+    "ambientEffect": "wind-dust",
+    "reviewSections": [
+      {
+        "title": "Mundo y primera impresión",
+        "verdict": false,
+        "paragraphs": [
+          "Muy especial este juego. Desde el principio sabe transmitir bien soledad y curiosidad. El juego no te encandila ni por la acción, ni por el ritmo, sino por lo que consigue hacerte sentir. A mí me enganchó bastante bien, y tardé unas 7 horitas en pasármelo. El mundo está *vacío*, pero con intención. No se siente como falta de contenido, sino como parte del propio juego."
+        ]
+      },
+      {
+        "title": "Agro y colosos",
+        "verdict": false,
+        "paragraphs": [
+          "Moverse con Agro (El caballo) es muy chulo, aunque al principio (Los primeros 20 minutos) se puede sentir algo torpe hasta que le pillas el truco. A nivel visual, el juego tiene paisajes muy, muy guapos. Los colosos cumplen en general a nivel de espectacularidad, pero tienen bastante margen de mejora.",
+          "Algunos son bastante meh, tanto visual como mecánicamente, y otros sí te hacen sentir epicidad clara. No hubo ninguno que me flipase especialmente, pero la mezcla entre épica y puzle funciona bien."
+        ]
+      },
+      {
+        "title": "El peso de cada victoria",
+        "verdict": false,
+        "paragraphs": [
+          "Derrotarlos no se siente (Y no es) una victoria. Al revés. Te deja una sensación rara, incómoda. Sabes que lo haces por un motivo (Resucitar a Mono), pero a la vez estás matando criaturas que, salvo el último, no parecen querer hacerte daño. Y además, notas cómo tu personaje se va deteriorando poco a poco, y eso sumado a la música que siempre suena cuando acabas una batalla contra cada coloso pues... Está muy bien llevado."
+        ]
+      },
+      {
+        "title": "Jugabilidad y cámara",
+        "verdict": false,
+        "paragraphs": [
+          "La jugabilidad está bien, sin más. Los controles cumplen, aunque el personaje es limitado en lo que puede hacer y la animación de correr me resulta un poquito rara. Escalar a los colosos se siente bien cuando por fin encuentras la manera de hacerlo después de estar un rato pensando en cómo. La cámara funciona perfecta, ninguna pega."
+        ]
+      },
+      {
+        "title": "Música e historia",
+        "verdict": false,
+        "paragraphs": [
+          "La música es uno de los puntos fuertes. Prácticamente todos los temas me parecieron muy buenos, con especial mención a \"Opened Way\" que es una locura. El silencio del mundo también suma muchísimo a la experiencia. La historia es clave. Si no entras en ella, el juego se cae. Pero si entras, funciona muy bien. El final es raro pero interesante."
+        ]
+      },
+      {
+        "title": "Final",
+        "verdict": false,
+        "paragraphs": [
+          "Te conviertes en aquello que llevas todo el juego derrotando, te sellan, y eso sí, Mono resucita. Juegan con hacerte creer que Agro muere justo antes del último coloso, y cuando vuelve a aparecer al final del juego... Es genial. Es un juego **especial**."
+        ]
+      },
+      {
+        "title": "Conclusión",
+        "verdict": false,
+        "paragraphs": [
+          "Un juego que mucha gente puede decir que simplemente es 'malo' o 'un coñazo', y lo podría entender, pero que tiene algo distinto, una magia difícil de explicar. Lo he disfrutado y seguro que en algunos años lo vuelvo a jugar. Nota final: **Un 8**"
+        ]
+      }
+    ]
   },
   {
     "id": "re9",
@@ -313,8 +419,83 @@
     "reviewDate": "05/03/2026",
     "spoilers": true,
     "excerpt": "La atmósfera, Raccoon City y la historia son lo que más pesa en una experiencia que mezcla terror y acción con bastante equilibrio.",
-    "review": "No sé por dónde empezar, hay bastante que decir... La atmósfera está muy bien lograda. El juego consigue transmitir lo que quiere: peligro, desolación, tensión, crudeza… un poco de todo. De principio a fin se mantiene constante; unas zonas me gustaban más que otras, pero nunca me sacó del juego. Racoon City me moló mucho visualmente y toca lo emocional, aunque sin llegar a lo profundo. Lo más memorable del juego es su historia, que sucede 28 años después de Resident Evil 3. La parte de Grace y Leon, junto con todo lo que les rodea: Umbrella, Spencer, Victor, Zeno, Elpis, Emily... Está muy bien trabajada y contada. Los encuentros con enemigos son impredecibles y pueden sorprender; no son solo espectáculo, realmente generan tensión. Y hay escenas que realmente sorprenden, como cuando Victor le arranca la cabeza a Zeno. Los controles se ven muy fluidos y cómodos, las animaciones están genial. El combate parece responder a la perfección, nada torpe, pero se echa en falta que Leon pueda esquivar y que Grace pueda dar patadas a zombies en el suelo. La gestión de recursos es dura al principio, pero luego si exploras bien, no hay problema. No hay mecánicas que destaquen ni para bien ni para mal. El juego mezcla acción y survival horror: Grace trae tensión y miedo; Leon es matar zombies, explosiones, escopetazos, hachazos y reventar cabezas. Si prefieres terror, las partes de Leon pueden parecer exageradas, y si prefieres acción, las de Grace pueden resultar lentas. El gameplay de Leon es como jugar al modo mercenarios de RE 3, y eso no es algo malo. Raccoon City es el escenario que más me gustó, visualmente y por la atmósfera que tiene de post-apocalipsis 28 años después. La peor parte del juego está dentro de la misma ciudad: una sección sobre estructuras inclinadas con cristales que se rompen y muchos enemigos; no es mala, solo menos buena que el resto. Hay variedad de escenarios, nada repetitivo. El juego sabe generar tensión y sensación de peligro.\n\nLa música cumple como acompañamiento, sin ser memorable; eso sí, hay un guiño al tema de la comisaría de RE2 en Racoon City que me moló mucho, aunque solo suena a trazos. El sonido ambiental sí genera tensión en varios momentos. Los efectos son genéricos pero muy bien trabajados: satisfacen y funcionan, aunque no dejan recuerdo. Pero sí, el sonido sabe aumentar la inmersión y la emoción. Los puzzles están bien, funcionan, pero ninguno tiene demasiada personalidad ni resulta demasiado memorable. La exploración aporta y recompensa la curiosidad siempre. El juego fomenta investigar y mirar alrededor, no es solo ir del punto A al B. El doblaje Inglés del juego es **EXQUISITO**. Desde el principio del juego con Grace gritando por su madre me quedó claro que el juego no se andaba con mierdas. Estoy extremadamente contento con el doblaje, está TODO super bien doblado, de principio a fin. Genial con eso. Añado también que el motor gráfico del juego \"RE Engine\" está en su peak en este juego. Se ve todo genial La dificultad es intermedia y bastante generosa, aunque tiene momentos puntuales duros. La tensión no es constante, pero aparece cuando tiene que hacerlo. El ritmo es muy bueno: en unas 10–13 horas lo terminas explorando bien, sin alargarse de más. El juego mantiene equilibrio entre terror y acción, aunque el tramo final se inclina claramente hacia la acción. También añadir que al final del juego has de tener **La Decisión**. Y en función de la que elijas (Son 2), cambiará el final del juego, eso mola mucho porque además está muy bien implementado. Y también, por Fanservice, el boss final es \"un Nemesis\". No es Nemesis en lo absoluto, pero funciona y se ve muy parecido al Nemesis final de RE3 Remake. Pero recalco: **NO ES NEMESIS**. Como juego, es **excelente**, de principio a fin. La historia es muy muy buena, la experiencia vivida es intensa, y el factor rejugable es notable. Puesto que en mi jerarquía, **EXCELENTE** significa 7.5, ahí lo pongo.\n\nAñado también que este juego, como el RE2 y 4, tiene a Leon S. Kennedy, que es un prota de putísima madre.",
-    "ambientEffect": "ominous-motes"
+    "review": "No sé por dónde empezar, hay bastante que decir... La atmósfera está muy bien lograda. El juego consigue transmitir lo que quiere: peligro, desolación, tensión, crudeza… un poco de todo. De principio a fin se mantiene constante; unas zonas me gustaban más que otras, pero nunca me sacó del juego. Racoon City me moló mucho visualmente y toca lo emocional, aunque sin llegar a lo profundo.\n\nLo más memorable del juego es su historia, que sucede 28 años después de Resident Evil 3. La parte de Grace y Leon, junto con todo lo que les rodea: Umbrella, Spencer, Victor, Zeno, Elpis, Emily... Está muy bien trabajada y contada. Los encuentros con enemigos son impredecibles y pueden sorprender; no son solo espectáculo, realmente generan tensión.\n\nY hay escenas que realmente sorprenden, como cuando Victor le arranca la cabeza a Zeno.\n\nLos controles se ven muy fluidos y cómodos, las animaciones están genial. El combate parece responder a la perfección, nada torpe, pero se echa en falta que Leon pueda esquivar y que Grace pueda dar patadas a zombies en el suelo. La gestión de recursos es dura al principio, pero luego si exploras bien, no hay problema. No hay mecánicas que destaquen ni para bien ni para mal.\n\nEl juego mezcla acción y survival horror: Grace trae tensión y miedo; Leon es matar zombies, explosiones, escopetazos, hachazos y reventar cabezas. Si prefieres terror, las partes de Leon pueden parecer exageradas, y si prefieres acción, las de Grace pueden resultar lentas. El gameplay de Leon es como jugar al modo mercenarios de RE 3, y eso no es algo malo.\n\nRaccoon City es el escenario que más me gustó, visualmente y por la atmósfera que tiene de post-apocalipsis 28 años después. La peor parte del juego está dentro de la misma ciudad: una sección sobre estructuras inclinadas con cristales que se rompen y muchos enemigos; no es mala, solo menos buena que el resto. Hay variedad de escenarios, nada repetitivo. El juego sabe generar tensión y sensación de peligro.\n\nLa música cumple como acompañamiento, sin ser memorable; eso sí, hay un guiño al tema de la comisaría de RE2 en Racoon City que me moló mucho, aunque solo suena a trazos. El sonido ambiental sí genera tensión en varios momentos. Los efectos son genéricos pero muy bien trabajados: satisfacen y funcionan, aunque no dejan recuerdo. Pero sí, el sonido sabe aumentar la inmersión y la emoción.\n\nLos puzzles están bien, funcionan, pero ninguno tiene demasiada personalidad ni resulta demasiado memorable. La exploración aporta y recompensa la curiosidad siempre. El juego fomenta investigar y mirar alrededor, no es solo ir del punto A al B.\n\nEl doblaje Inglés del juego es **EXQUISITO**. Desde el principio del juego con Grace gritando por su madre me quedó claro que el juego no se andaba con mierdas. Estoy extremadamente contento con el doblaje, está TODO super bien doblado, de principio a fin. Genial con eso. Añado también que el motor gráfico del juego \"RE Engine\" está en su peak en este juego. Se ve todo genial\n\nLa dificultad es intermedia y bastante generosa, aunque tiene momentos puntuales duros. La tensión no es constante, pero aparece cuando tiene que hacerlo. El ritmo es muy bueno: en unas 10–13 horas lo terminas explorando bien, sin alargarse de más. El juego mantiene equilibrio entre terror y acción, aunque el tramo final se inclina claramente hacia la acción.\n\nTambién añadir que al final del juego has de tener **La Decisión**. Y en función de la que elijas (Son 2), cambiará el final del juego, eso mola mucho porque además está muy bien implementado. Y también, por Fanservice, el boss final es \"un Nemesis\". No es Nemesis en lo absoluto, pero funciona y se ve muy parecido al Nemesis final de RE3 Remake. Pero recalco: **NO ES NEMESIS**.\n\nComo juego, es **excelente**, de principio a fin. La historia es muy muy buena, la experiencia vivida es intensa, y el factor rejugable es notable. Puesto que en mi jerarquía, **EXCELENTE** significa 7.5, ahí lo pongo.\n\nAñado también que este juego, como el RE2 y 4, tiene a Leon S. Kennedy, que es un prota de putísima madre.",
+    "ambientEffect": "ominous-motes",
+    "reviewSections": [
+      {
+        "title": "Atmósfera y Raccoon City",
+        "verdict": false,
+        "paragraphs": [
+          "No sé por dónde empezar, hay bastante que decir... La atmósfera está muy bien lograda. El juego consigue transmitir lo que quiere: peligro, desolación, tensión, crudeza… un poco de todo. De principio a fin se mantiene constante; unas zonas me gustaban más que otras, pero nunca me sacó del juego. Racoon City me moló mucho visualmente y toca lo emocional, aunque sin llegar a lo profundo."
+        ]
+      },
+      {
+        "title": "Historia y encuentros",
+        "verdict": false,
+        "paragraphs": [
+          "Lo más memorable del juego es su historia, que sucede 28 años después de Resident Evil 3. La parte de Grace y Leon, junto con todo lo que les rodea: Umbrella, Spencer, Victor, Zeno, Elpis, Emily... Está muy bien trabajada y contada. Los encuentros con enemigos son impredecibles y pueden sorprender; no son solo espectáculo, realmente generan tensión.",
+          "Y hay escenas que realmente sorprenden, como cuando Victor le arranca la cabeza a Zeno."
+        ]
+      },
+      {
+        "title": "Combate y personajes jugables",
+        "verdict": false,
+        "paragraphs": [
+          "Los controles se ven muy fluidos y cómodos, las animaciones están genial. El combate parece responder a la perfección, nada torpe, pero se echa en falta que Leon pueda esquivar y que Grace pueda dar patadas a zombies en el suelo. La gestión de recursos es dura al principio, pero luego si exploras bien, no hay problema. No hay mecánicas que destaquen ni para bien ni para mal.",
+          "El juego mezcla acción y survival horror: Grace trae tensión y miedo; Leon es matar zombies, explosiones, escopetazos, hachazos y reventar cabezas. Si prefieres terror, las partes de Leon pueden parecer exageradas, y si prefieres acción, las de Grace pueden resultar lentas. El gameplay de Leon es como jugar al modo mercenarios de RE 3, y eso no es algo malo."
+        ]
+      },
+      {
+        "title": "Escenarios y tensión",
+        "verdict": false,
+        "paragraphs": [
+          "Raccoon City es el escenario que más me gustó, visualmente y por la atmósfera que tiene de post-apocalipsis 28 años después. La peor parte del juego está dentro de la misma ciudad: una sección sobre estructuras inclinadas con cristales que se rompen y muchos enemigos; no es mala, solo menos buena que el resto. Hay variedad de escenarios, nada repetitivo. El juego sabe generar tensión y sensación de peligro."
+        ]
+      },
+      {
+        "title": "Música y sonido",
+        "verdict": false,
+        "paragraphs": [
+          "La música cumple como acompañamiento, sin ser memorable; eso sí, hay un guiño al tema de la comisaría de RE2 en Racoon City que me moló mucho, aunque solo suena a trazos. El sonido ambiental sí genera tensión en varios momentos. Los efectos son genéricos pero muy bien trabajados: satisfacen y funcionan, aunque no dejan recuerdo. Pero sí, el sonido sabe aumentar la inmersión y la emoción."
+        ]
+      },
+      {
+        "title": "Puzles y exploración",
+        "verdict": false,
+        "paragraphs": [
+          "Los puzzles están bien, funcionan, pero ninguno tiene demasiada personalidad ni resulta demasiado memorable. La exploración aporta y recompensa la curiosidad siempre. El juego fomenta investigar y mirar alrededor, no es solo ir del punto A al B."
+        ]
+      },
+      {
+        "title": "Doblaje y apartado técnico",
+        "verdict": false,
+        "paragraphs": [
+          "El doblaje Inglés del juego es **EXQUISITO**. Desde el principio del juego con Grace gritando por su madre me quedó claro que el juego no se andaba con mierdas. Estoy extremadamente contento con el doblaje, está TODO super bien doblado, de principio a fin. Genial con eso. Añado también que el motor gráfico del juego \"RE Engine\" está en su peak en este juego. Se ve todo genial"
+        ]
+      },
+      {
+        "title": "Dificultad, ritmo y duración",
+        "verdict": false,
+        "paragraphs": [
+          "La dificultad es intermedia y bastante generosa, aunque tiene momentos puntuales duros. La tensión no es constante, pero aparece cuando tiene que hacerlo. El ritmo es muy bueno: en unas 10–13 horas lo terminas explorando bien, sin alargarse de más. El juego mantiene equilibrio entre terror y acción, aunque el tramo final se inclina claramente hacia la acción."
+        ]
+      },
+      {
+        "title": "Decisiones y final",
+        "verdict": false,
+        "paragraphs": [
+          "También añadir que al final del juego has de tener **La Decisión**. Y en función de la que elijas (Son 2), cambiará el final del juego, eso mola mucho porque además está muy bien implementado. Y también, por Fanservice, el boss final es \"un Nemesis\". No es Nemesis en lo absoluto, pero funciona y se ve muy parecido al Nemesis final de RE3 Remake. Pero recalco: **NO ES NEMESIS**."
+        ]
+      },
+      {
+        "title": "Conclusión",
+        "verdict": false,
+        "paragraphs": [
+          "Como juego, es **excelente**, de principio a fin. La historia es muy muy buena, la experiencia vivida es intensa, y el factor rejugable es notable. Puesto que en mi jerarquía, **EXCELENTE** significa 7.5, ahí lo pongo.",
+          "Añado también que este juego, como el RE2 y 4, tiene a Leon S. Kennedy, que es un prota de putísima madre."
+        ]
+      }
+    ]
   },
   {
     "id": "re2-og",
@@ -389,8 +570,63 @@
     "reviewDate": "05/04/2026",
     "spoilers": true,
     "excerpt": "Probablemente el Resident Evil más divertido de jugar en sentido puro, aunque para ti pierde demasiada tensión y parte de la esencia survival horror.",
-    "review": "**Lo bueno:** El gameplay es, sin ninguna duda, el punto más fuerte del juego. Disparar, enconar enemigos y rematarlos con patadas funciona de lujo y se siente muy satisfactorio en todo momento. Es un sistema simple pero muy bien pulido, que además te permite ahorrar recursos y jugar con cierta estrategia incluso dentro de tanta acción. El control acompaña muy bien a esto. En mi caso, jugando con teclado y ratón, apuntar era prácticamente perfecto, lo que hace que el juego gane aún más en fluidez. El ritmo general es muy bueno durante gran parte de la aventura. El juego siempre te está proponiendo algo: combates, situaciones distintas, cambios de escenario… No hay apenas momentos muertos y eso hace que sea muy fácil seguir jugando sin aburrirse. Es, probablemente, el Resident Evil más divertido de jugar en un sentido puro. Acción constante, disparos, explosiones, armas, dinero… todo está planteado para que el jugador disfrute activamente de lo que está haciendo. Leon S. Kennedy aquí ya está en su versión más icónica. Carismático, y con frases que le dan mucha personalidad. La música cumple, especialmente y para variar, el tema de la save room y, también, el del buhonero. (Las frases y voz del Buhonero son excesivas, esto también me gustó mucho). También destaca el sistema del buhonero: comprar, vender y mejorar armas añade una capa extra muy satisfactoria al gameplay. Te da sensación de progreso constante y el hecho de poder comprarte armas más molonas está excesivo. Además el tío te vende un bazoka que es de 1 uso pero oneshotea TODO, hasta al boss final. Más de 1 boss se fue calentito por esto. Por último, Ashley, que suele tener mala fama, en mi caso no resultó tan molesta como esperaba. Es inútil, sí, pero no llega a entorpecer la experiencia de forma grave. **Lo malo:** El mayor problema del juego es que pierde bastante la esencia de Resident Evil. La tensión prácticamente desaparece y el terror pasa a un segundo plano. Es más un juego de acción con algún susto puntual que un survival horror como tal. Los enemigos, aunque cumplen, no destacan demasiado. Los ganados funcionan bien dentro del contexto del juego, pero no tienen el impacto ni la presencia de otros enemigos de la saga. En general, ninguno se queda realmente grabado. La falta de momentos de presión real también le resta fuerza. Más allá de alguna situación puntual, como el combate contra el monstruo del lago, rara vez sientes que estás en verdadero peligro o bajo estrés. El tramo final es, claramente, lo peor del juego. Se alarga innecesariamente con combates constantes sin demasiado sentido, dando la sensación de relleno para aumentar la duración. Durante esa parte, el juego pierde bastante frescura. Por último, aunque no se hace pesado en exceso, sí puede dar la sensación de ser más largo de lo que parece, sobre todo cuando llegas a ese tramo final más repetitivo. **Veredicto**: No es el Resident Evil que busco, pero es un juego que se disfruta muchísimo de principio a fin. No tiene la esencia de los 3 primeros juegos, pero si querías menos terror y más acción, este es tu juego, además de que es MUY divertido de jugar. **Nota final: 7**",
-    "ambientEffect": "village-ash"
+    "review": "**Lo bueno:** El gameplay es, sin ninguna duda, el punto más fuerte del juego. Disparar, enconar enemigos y rematarlos con patadas funciona de lujo y se siente muy satisfactorio en todo momento. Es un sistema simple pero muy bien pulido, que además te permite ahorrar recursos y jugar con cierta estrategia incluso dentro de tanta acción. El control acompaña muy bien a esto.\n\nEn mi caso, jugando con teclado y ratón, apuntar era prácticamente perfecto, lo que hace que el juego gane aún más en fluidez.\n\nEl ritmo general es muy bueno durante gran parte de la aventura. El juego siempre te está proponiendo algo: combates, situaciones distintas, cambios de escenario… No hay apenas momentos muertos y eso hace que sea muy fácil seguir jugando sin aburrirse. Es, probablemente, el Resident Evil más divertido de jugar en un sentido puro. Acción constante, disparos, explosiones, armas, dinero…\n\ntodo está planteado para que el jugador disfrute activamente de lo que está haciendo.\n\nLeon S. Kennedy aquí ya está en su versión más icónica. Carismático, y con frases que le dan mucha personalidad. La música cumple, especialmente y para variar, el tema de la save room y, también, el del buhonero. (Las frases y voz del Buhonero son excesivas, esto también me gustó mucho).\n\nTambién destaca el sistema del buhonero: comprar, vender y mejorar armas añade una capa extra muy satisfactoria al gameplay. Te da sensación de progreso constante y el hecho de poder comprarte armas más molonas está excesivo. Además el tío te vende un bazoka que es de 1 uso pero oneshotea TODO, hasta al boss final. Más de 1 boss se fue calentito por esto.\n\nPor último, Ashley, que suele tener mala fama, en mi caso no resultó tan molesta como esperaba. Es inútil, sí, pero no llega a entorpecer la experiencia de forma grave.\n\n**Lo malo:** El mayor problema del juego es que pierde bastante la esencia de Resident Evil. La tensión prácticamente desaparece y el terror pasa a un segundo plano. Es más un juego de acción con algún susto puntual que un survival horror como tal. Los enemigos, aunque cumplen, no destacan demasiado.\n\nLos ganados funcionan bien dentro del contexto del juego, pero no tienen el impacto ni la presencia de otros enemigos de la saga. En general, ninguno se queda realmente grabado. La falta de momentos de presión real también le resta fuerza. Más allá de alguna situación puntual, como el combate contra el monstruo del lago, rara vez sientes que estás en verdadero peligro o bajo estrés.\n\nEl tramo final es, claramente, lo peor del juego. Se alarga innecesariamente con combates constantes sin demasiado sentido, dando la sensación de relleno para aumentar la duración. Durante esa parte, el juego pierde bastante frescura. Por último, aunque no se hace pesado en exceso, sí puede dar la sensación de ser más largo de lo que parece, sobre todo cuando llegas a ese tramo final más repetitivo.\n\n**Veredicto**: No es el Resident Evil que busco, pero es un juego que se disfruta muchísimo de principio a fin. No tiene la esencia de los 3 primeros juegos, pero si querías menos terror y más acción, este es tu juego, además de que es MUY divertido de jugar. **Nota final: 7**",
+    "ambientEffect": "village-ash",
+    "reviewSections": [
+      {
+        "title": "Gameplay y control",
+        "verdict": false,
+        "paragraphs": [
+          "**Lo bueno:** El gameplay es, sin ninguna duda, el punto más fuerte del juego. Disparar, enconar enemigos y rematarlos con patadas funciona de lujo y se siente muy satisfactorio en todo momento. Es un sistema simple pero muy bien pulido, que además te permite ahorrar recursos y jugar con cierta estrategia incluso dentro de tanta acción. El control acompaña muy bien a esto.",
+          "En mi caso, jugando con teclado y ratón, apuntar era prácticamente perfecto, lo que hace que el juego gane aún más en fluidez."
+        ]
+      },
+      {
+        "title": "Ritmo y acción",
+        "verdict": false,
+        "paragraphs": [
+          "El ritmo general es muy bueno durante gran parte de la aventura. El juego siempre te está proponiendo algo: combates, situaciones distintas, cambios de escenario… No hay apenas momentos muertos y eso hace que sea muy fácil seguir jugando sin aburrirse. Es, probablemente, el Resident Evil más divertido de jugar en un sentido puro. Acción constante, disparos, explosiones, armas, dinero…",
+          "todo está planteado para que el jugador disfrute activamente de lo que está haciendo."
+        ]
+      },
+      {
+        "title": "Leon, música y Buhonero",
+        "verdict": false,
+        "paragraphs": [
+          "Leon S. Kennedy aquí ya está en su versión más icónica. Carismático, y con frases que le dan mucha personalidad. La música cumple, especialmente y para variar, el tema de la save room y, también, el del buhonero. (Las frases y voz del Buhonero son excesivas, esto también me gustó mucho).",
+          "También destaca el sistema del buhonero: comprar, vender y mejorar armas añade una capa extra muy satisfactoria al gameplay. Te da sensación de progreso constante y el hecho de poder comprarte armas más molonas está excesivo. Además el tío te vende un bazoka que es de 1 uso pero oneshotea TODO, hasta al boss final. Más de 1 boss se fue calentito por esto."
+        ]
+      },
+      {
+        "title": "Ashley y acompañamiento",
+        "verdict": false,
+        "paragraphs": [
+          "Por último, Ashley, que suele tener mala fama, en mi caso no resultó tan molesta como esperaba. Es inútil, sí, pero no llega a entorpecer la experiencia de forma grave."
+        ]
+      },
+      {
+        "title": "Terror, enemigos y tensión",
+        "verdict": false,
+        "paragraphs": [
+          "**Lo malo:** El mayor problema del juego es que pierde bastante la esencia de Resident Evil. La tensión prácticamente desaparece y el terror pasa a un segundo plano. Es más un juego de acción con algún susto puntual que un survival horror como tal. Los enemigos, aunque cumplen, no destacan demasiado.",
+          "Los ganados funcionan bien dentro del contexto del juego, pero no tienen el impacto ni la presencia de otros enemigos de la saga. En general, ninguno se queda realmente grabado. La falta de momentos de presión real también le resta fuerza. Más allá de alguna situación puntual, como el combate contra el monstruo del lago, rara vez sientes que estás en verdadero peligro o bajo estrés."
+        ]
+      },
+      {
+        "title": "Tramo final y duración",
+        "verdict": false,
+        "paragraphs": [
+          "El tramo final es, claramente, lo peor del juego. Se alarga innecesariamente con combates constantes sin demasiado sentido, dando la sensación de relleno para aumentar la duración. Durante esa parte, el juego pierde bastante frescura. Por último, aunque no se hace pesado en exceso, sí puede dar la sensación de ser más largo de lo que parece, sobre todo cuando llegas a ese tramo final más repetitivo."
+        ]
+      },
+      {
+        "title": "Veredicto final",
+        "verdict": true,
+        "paragraphs": [
+          "**Veredicto**: No es el Resident Evil que busco, pero es un juego que se disfruta muchísimo de principio a fin. No tiene la esencia de los 3 primeros juegos, pero si querías menos terror y más acción, este es tu juego, además de que es MUY divertido de jugar. **Nota final: 7**"
+        ]
+      }
+    ]
   },
   {
     "id": "medievil",
@@ -405,8 +641,90 @@
     "reviewDate": "10/09/2026",
     "spoilers": false,
     "excerpt": "Gallowmere, su ambientación gótica y una banda sonora top tier sostienen un juego con mucho encanto pese a su imprecisión y a un tramo final peor.",
-    "review": "MediEvil es un juego que ya había jugado varias veces, aunque completado de principio a fin muy pocas. Y volviendo a él ahora, creo que sigue siendo un juego muy chulo que, aunque evidentemente tiene cosas que han envejecido, mantiene su personalidad. El juego empieza bien y se mantiene bien durante gran parte de la aventura. Tiene buen ritmo, los niveles son variados y generalmente tenía ganas de seguir jugando. El bajón llega sobre todo hacia el tramo del Barco Fantasma, donde algunos niveles empiezan a ser bastante peores. No llega al punto de querer que se acabe el juego, pero sí hay niveles que estaba deseando terminar para pasar al siguiente. Sir Daniel Fortesque es buen prota y leyendo sobre él y su historia en un nivel concreto, te hará verlo más chulo de lo que parece a simple vista. A nivel de control, Fortesque es bastante impreciso. No diría que sea incómodo de controlar, pero parece que tiene dos putos plátanos en los pies. Especialmente cuando necesitas hacer movimientos precisos se nota bastante. La cámara tampoco es ninguna maravilla, aunque personalmente me acostumbré y rara vez llegó a darme problemas serios. El combate está bien. Golpear enemigos tiene un feedback decente y funciona, aunque tampoco estamos ante el santo grial del combate cuerpo a cuerpo. La variedad de armas, eso sí, me gusta bastante. Varias son muy divertidas de utilizar. Mis favoritas son la Espada Mágica y el Arco Mágico, además de la Armadura de Dragón. El hacha, por otro lado, me parece una puta mierda.\n\nLa dificultad generalmente está bien. El juego tampoco es especialmente complicado y, aunque perder todas las botellas de vida supone reiniciar el nivel entero, es bastante difícil llegar a ese punto salvo que te estés cayendo constantemente. La excepción es el puto Barco Fantasma (Solo si vas con menos de 2 botellas, ojo). Ahí el combate empieza a enseñar problemas bastante más serios. Hay enemigos que hacen muchísimo daño, pegarles no consigue hacerlos retroceder como debería y tú tampoco dispones de una esquiva con la que evitar sus ataques. Hay situaciones en las que recibir daño parece prácticamente inevitable y eso ya no me parece dificultad bien planteada. De hecho, tanto el Barco Fantasma como el Lago están entre lo peor del juego. Son niveles que simplemente quería terminar y quitarme de encima. Por suerte, el diseño de niveles en general es una de las mejores cosas de MediEvil. Hay mucha variedad y Gallowmere tiene muchísimo encanto. Las Cuevas de Cristal y algún nivel como El Guantelete de Gallows o LKas Ruinas Encantadas me parecen especialmente chulos. El propio mapa de Gallowmere me encanta, incluida su música. Explorar además tiene sentido gracias al sistema de Cálices. Tener que derrotar suficientes enemigos, encontrar el Cáliz y llevártelo al final del nivel para acceder a la Galería de Héroes me parece un puntazo. Hace que tengas un motivo adicional para investigar bien cada escenario. Y la propia Galería de Héroes es una idea cojonuda como sistema de progresión. Ir volviendo y encontrándote con los antiguos héroes mientras consigues recompensas hace que completar los Cálices tenga bastante gracia. Eso sí, algunas de esas recompensas son bastante mierda y podrían haber sido mucho mejores.\n\nLos jefes... sin más. No creo que haya ninguno verdaderamente memorable. El enfrentamiento contra los dos enemigos sobre una plataforma que se mueve me parece probablemente el mejor, y tampoco es que sea una pelea de la hostia. Cumplen su función y poco más. Con los enemigos normales no tengo demasiadas pegas; funcionan bien dentro de cada nivel. Pero si hay dos cosas donde MediEvil destaca especialmente son su ambientación y su música. La estética gótica, los cementerios, castillos, pueblos, bosques, monstruos y todo ese humor macabro le dan buena identidad. Es tétrico sin intentar ser realmente terrorífico y absurdo sin convertirse en gilipollas. Tiene un equilibrio muy particular y muy suyo. Y la banda sonora es TOP TIER. Es **lo mejor del juego**. La música le da una cantidad absurda de personalidad a Gallowmere y consigue que escenarios que ya visualmente funcionan bien tengan todavía más encanto. El apartado sonoro también es bueno. El doblaje es generalmente bastante malo, las cosas como son, pero al menos tiene gracia y encaja con el tono del juego. Y luego tienes excepciones como el Rey Peregrino, que está sorprendentemente bien doblado. La historia, en cambio, es bastante meh. Sirve para justificar la aventura y tiene su gracia, pero no te quedas a jugar por ella.\n\nEn general, creo que MediEvil ha envejecido bastante decentemente. Evidentemente le vendrían bien algunos retoques aquí y allá, especialmente en la precisión del movimiento y determinados aspectos del combate, pero no me parece un juego al que haya que hacerle concesiones enormes simplemente por ser de 1998. Tiene defectos claros y el tramo final baja bastante respecto a lo que viene antes, pero sigue siendo divertido, tiene niveles muy buenos, una banda sonora tremenda y una personalidad que continúa funcionando perfectamente tantos años después. Lo volvería a jugar dentro de unos años sin ningún problema. **Lo mejor:** La ambientación, el diseño de niveles y la música. Son las tres cosas que hacen que MediEvil siga teniendo tantísima personalidad. **Lo peor:** El bajón del tramo final, algunas recompensas bastante pobres de la Galería de Héroes y la imprecisión del personaje. El Barco Fantasma, especialmente, puede irse a tomar por culo. Nota: 7 — Muy bueno No es un juego especialmente refinado ni uno de los mejores que he jugado, pero sí uno con muchísimo encanto.",
-    "ambientEffect": "ghost-mist"
+    "review": "MediEvil es un juego que ya había jugado varias veces, aunque completado de principio a fin muy pocas. Y volviendo a él ahora, creo que sigue siendo un juego muy chulo que, aunque evidentemente tiene cosas que han envejecido, mantiene su personalidad. El juego empieza bien y se mantiene bien durante gran parte de la aventura.\n\nTiene buen ritmo, los niveles son variados y generalmente tenía ganas de seguir jugando. El bajón llega sobre todo hacia el tramo del Barco Fantasma, donde algunos niveles empiezan a ser bastante peores. No llega al punto de querer que se acabe el juego, pero sí hay niveles que estaba deseando terminar para pasar al siguiente.\n\nSir Daniel Fortesque es buen prota y leyendo sobre él y su historia en un nivel concreto, te hará verlo más chulo de lo que parece a simple vista. A nivel de control, Fortesque es bastante impreciso. No diría que sea incómodo de controlar, pero parece que tiene dos putos plátanos en los pies. Especialmente cuando necesitas hacer movimientos precisos se nota bastante.\n\nLa cámara tampoco es ninguna maravilla, aunque personalmente me acostumbré y rara vez llegó a darme problemas serios. El combate está bien. Golpear enemigos tiene un feedback decente y funciona, aunque tampoco estamos ante el santo grial del combate cuerpo a cuerpo. La variedad de armas, eso sí, me gusta bastante. Varias son muy divertidas de utilizar.\n\nMis favoritas son la Espada Mágica y el Arco Mágico, además de la Armadura de Dragón. El hacha, por otro lado, me parece una puta mierda.\n\nLa dificultad generalmente está bien. El juego tampoco es especialmente complicado y, aunque perder todas las botellas de vida supone reiniciar el nivel entero, es bastante difícil llegar a ese punto salvo que te estés cayendo constantemente. La excepción es el puto Barco Fantasma (Solo si vas con menos de 2 botellas, ojo). Ahí el combate empieza a enseñar problemas bastante más serios.\n\nHay enemigos que hacen muchísimo daño, pegarles no consigue hacerlos retroceder como debería y tú tampoco dispones de una esquiva con la que evitar sus ataques. Hay situaciones en las que recibir daño parece prácticamente inevitable y eso ya no me parece dificultad bien planteada. De hecho, tanto el Barco Fantasma como el Lago están entre lo peor del juego.\n\nSon niveles que simplemente quería terminar y quitarme de encima.\n\nPor suerte, el diseño de niveles en general es una de las mejores cosas de MediEvil. Hay mucha variedad y Gallowmere tiene muchísimo encanto. Las Cuevas de Cristal y algún nivel como El Guantelete de Gallows o LKas Ruinas Encantadas me parecen especialmente chulos. El propio mapa de Gallowmere me encanta, incluida su música. Explorar además tiene sentido gracias al sistema de Cálices.\n\nTener que derrotar suficientes enemigos, encontrar el Cáliz y llevártelo al final del nivel para acceder a la Galería de Héroes me parece un puntazo. Hace que tengas un motivo adicional para investigar bien cada escenario. Y la propia Galería de Héroes es una idea cojonuda como sistema de progresión.\n\nIr volviendo y encontrándote con los antiguos héroes mientras consigues recompensas hace que completar los Cálices tenga bastante gracia. Eso sí, algunas de esas recompensas son bastante mierda y podrían haber sido mucho mejores.\n\nLos jefes... sin más. No creo que haya ninguno verdaderamente memorable. El enfrentamiento contra los dos enemigos sobre una plataforma que se mueve me parece probablemente el mejor, y tampoco es que sea una pelea de la hostia. Cumplen su función y poco más. Con los enemigos normales no tengo demasiadas pegas; funcionan bien dentro de cada nivel.\n\nPero si hay dos cosas donde MediEvil destaca especialmente son su ambientación y su música. La estética gótica, los cementerios, castillos, pueblos, bosques, monstruos y todo ese humor macabro le dan buena identidad. Es tétrico sin intentar ser realmente terrorífico y absurdo sin convertirse en gilipollas. Tiene un equilibrio muy particular y muy suyo. Y la banda sonora es TOP TIER.\n\nEs **lo mejor del juego**. La música le da una cantidad absurda de personalidad a Gallowmere y consigue que escenarios que ya visualmente funcionan bien tengan todavía más encanto. El apartado sonoro también es bueno. El doblaje es generalmente bastante malo, las cosas como son, pero al menos tiene gracia y encaja con el tono del juego.\n\nY luego tienes excepciones como el Rey Peregrino, que está sorprendentemente bien doblado.\n\nLa historia, en cambio, es bastante meh. Sirve para justificar la aventura y tiene su gracia, pero no te quedas a jugar por ella.\n\nEn general, creo que MediEvil ha envejecido bastante decentemente. Evidentemente le vendrían bien algunos retoques aquí y allá, especialmente en la precisión del movimiento y determinados aspectos del combate, pero no me parece un juego al que haya que hacerle concesiones enormes simplemente por ser de 1998.\n\nTiene defectos claros y el tramo final baja bastante respecto a lo que viene antes, pero sigue siendo divertido, tiene niveles muy buenos, una banda sonora tremenda y una personalidad que continúa funcionando perfectamente tantos años después. Lo volvería a jugar dentro de unos años sin ningún problema. **Lo mejor:** La ambientación, el diseño de niveles y la música.\n\nSon las tres cosas que hacen que MediEvil siga teniendo tantísima personalidad. **Lo peor:** El bajón del tramo final, algunas recompensas bastante pobres de la Galería de Héroes y la imprecisión del personaje. El Barco Fantasma, especialmente, puede irse a tomar por culo.\n\nNota: 7 — Muy bueno No es un juego especialmente refinado ni uno de los mejores que he jugado, pero sí uno con muchísimo encanto.",
+    "ambientEffect": "ghost-mist",
+    "reviewSections": [
+      {
+        "title": "Primera impresión y ritmo",
+        "verdict": false,
+        "paragraphs": [
+          "MediEvil es un juego que ya había jugado varias veces, aunque completado de principio a fin muy pocas. Y volviendo a él ahora, creo que sigue siendo un juego muy chulo que, aunque evidentemente tiene cosas que han envejecido, mantiene su personalidad. El juego empieza bien y se mantiene bien durante gran parte de la aventura.",
+          "Tiene buen ritmo, los niveles son variados y generalmente tenía ganas de seguir jugando. El bajón llega sobre todo hacia el tramo del Barco Fantasma, donde algunos niveles empiezan a ser bastante peores. No llega al punto de querer que se acabe el juego, pero sí hay niveles que estaba deseando terminar para pasar al siguiente."
+        ]
+      },
+      {
+        "title": "Sir Daniel y control",
+        "verdict": false,
+        "paragraphs": [
+          "Sir Daniel Fortesque es buen prota y leyendo sobre él y su historia en un nivel concreto, te hará verlo más chulo de lo que parece a simple vista. A nivel de control, Fortesque es bastante impreciso. No diría que sea incómodo de controlar, pero parece que tiene dos putos plátanos en los pies. Especialmente cuando necesitas hacer movimientos precisos se nota bastante."
+        ]
+      },
+      {
+        "title": "Cámara, combate y armas",
+        "verdict": false,
+        "paragraphs": [
+          "La cámara tampoco es ninguna maravilla, aunque personalmente me acostumbré y rara vez llegó a darme problemas serios. El combate está bien. Golpear enemigos tiene un feedback decente y funciona, aunque tampoco estamos ante el santo grial del combate cuerpo a cuerpo. La variedad de armas, eso sí, me gusta bastante. Varias son muy divertidas de utilizar.",
+          "Mis favoritas son la Espada Mágica y el Arco Mágico, además de la Armadura de Dragón. El hacha, por otro lado, me parece una puta mierda."
+        ]
+      },
+      {
+        "title": "Dificultad y Barco Fantasma",
+        "verdict": false,
+        "paragraphs": [
+          "La dificultad generalmente está bien. El juego tampoco es especialmente complicado y, aunque perder todas las botellas de vida supone reiniciar el nivel entero, es bastante difícil llegar a ese punto salvo que te estés cayendo constantemente. La excepción es el puto Barco Fantasma (Solo si vas con menos de 2 botellas, ojo). Ahí el combate empieza a enseñar problemas bastante más serios.",
+          "Hay enemigos que hacen muchísimo daño, pegarles no consigue hacerlos retroceder como debería y tú tampoco dispones de una esquiva con la que evitar sus ataques. Hay situaciones en las que recibir daño parece prácticamente inevitable y eso ya no me parece dificultad bien planteada. De hecho, tanto el Barco Fantasma como el Lago están entre lo peor del juego.",
+          "Son niveles que simplemente quería terminar y quitarme de encima."
+        ]
+      },
+      {
+        "title": "Niveles, Cálices y Galería",
+        "verdict": false,
+        "paragraphs": [
+          "Por suerte, el diseño de niveles en general es una de las mejores cosas de MediEvil. Hay mucha variedad y Gallowmere tiene muchísimo encanto. Las Cuevas de Cristal y algún nivel como El Guantelete de Gallows o LKas Ruinas Encantadas me parecen especialmente chulos. El propio mapa de Gallowmere me encanta, incluida su música. Explorar además tiene sentido gracias al sistema de Cálices.",
+          "Tener que derrotar suficientes enemigos, encontrar el Cáliz y llevártelo al final del nivel para acceder a la Galería de Héroes me parece un puntazo. Hace que tengas un motivo adicional para investigar bien cada escenario. Y la propia Galería de Héroes es una idea cojonuda como sistema de progresión.",
+          "Ir volviendo y encontrándote con los antiguos héroes mientras consigues recompensas hace que completar los Cálices tenga bastante gracia. Eso sí, algunas de esas recompensas son bastante mierda y podrían haber sido mucho mejores."
+        ]
+      },
+      {
+        "title": "Jefes y enemigos",
+        "verdict": false,
+        "paragraphs": [
+          "Los jefes... sin más. No creo que haya ninguno verdaderamente memorable. El enfrentamiento contra los dos enemigos sobre una plataforma que se mueve me parece probablemente el mejor, y tampoco es que sea una pelea de la hostia. Cumplen su función y poco más. Con los enemigos normales no tengo demasiadas pegas; funcionan bien dentro de cada nivel."
+        ]
+      },
+      {
+        "title": "Ambientación, música y sonido",
+        "verdict": false,
+        "paragraphs": [
+          "Pero si hay dos cosas donde MediEvil destaca especialmente son su ambientación y su música. La estética gótica, los cementerios, castillos, pueblos, bosques, monstruos y todo ese humor macabro le dan buena identidad. Es tétrico sin intentar ser realmente terrorífico y absurdo sin convertirse en gilipollas. Tiene un equilibrio muy particular y muy suyo. Y la banda sonora es TOP TIER.",
+          "Es **lo mejor del juego**. La música le da una cantidad absurda de personalidad a Gallowmere y consigue que escenarios que ya visualmente funcionan bien tengan todavía más encanto. El apartado sonoro también es bueno. El doblaje es generalmente bastante malo, las cosas como son, pero al menos tiene gracia y encaja con el tono del juego.",
+          "Y luego tienes excepciones como el Rey Peregrino, que está sorprendentemente bien doblado."
+        ]
+      },
+      {
+        "title": "Historia y envejecimiento",
+        "verdict": false,
+        "paragraphs": [
+          "La historia, en cambio, es bastante meh. Sirve para justificar la aventura y tiene su gracia, pero no te quedas a jugar por ella.",
+          "En general, creo que MediEvil ha envejecido bastante decentemente. Evidentemente le vendrían bien algunos retoques aquí y allá, especialmente en la precisión del movimiento y determinados aspectos del combate, pero no me parece un juego al que haya que hacerle concesiones enormes simplemente por ser de 1998."
+        ]
+      },
+      {
+        "title": "Balance final",
+        "verdict": false,
+        "paragraphs": [
+          "Tiene defectos claros y el tramo final baja bastante respecto a lo que viene antes, pero sigue siendo divertido, tiene niveles muy buenos, una banda sonora tremenda y una personalidad que continúa funcionando perfectamente tantos años después. Lo volvería a jugar dentro de unos años sin ningún problema. **Lo mejor:** La ambientación, el diseño de niveles y la música.",
+          "Son las tres cosas que hacen que MediEvil siga teniendo tantísima personalidad. **Lo peor:** El bajón del tramo final, algunas recompensas bastante pobres de la Galería de Héroes y la imprecisión del personaje. El Barco Fantasma, especialmente, puede irse a tomar por culo."
+        ]
+      },
+      {
+        "title": "Veredicto final",
+        "verdict": true,
+        "paragraphs": [
+          "Nota: 7 — Muy bueno No es un juego especialmente refinado ni uno de los mejores que he jugado, pero sí uno con muchísimo encanto."
+        ]
+      }
+    ]
   },
   {
     "id": "re3-remake",
@@ -681,8 +999,178 @@
     "reviewDate": "26/07/2026",
     "spoilers": false,
     "excerpt": "Empieza muy mal para ti, pero una vez arranca destacan Link lobo, el combate, Midna, las mazmorras y una banda sonora espectacular.",
-    "review": "El inicio del juego es, sin ninguna duda, el peor que he jugado en un Zelda. Desde que empieza la aventura hasta que Link se pone la túnica verde pueden pasar perfectamente unas 2 horas, y durante ese tiempo el juego resulta bastante aburrido. Le cuesta muchísimo arrancar. Ahora bien, una vez termina esa introducción... el juego mejora muchísimo. A partir de ahí, prácticamente toda la aventura mantiene un nivel muy alto, con una excepción importante: los racimos de luz. Me parecen una mecánica bastante mala y, cada vez que toca recogerlos, el ritmo del juego cae bastante. Link lobo me encanta. Jugar con él resulta muy divertido y le da muchísima personalidad al juego. Es una de las mejores ideas que ha tenido la saga.\n\nEl combate es probablemente el mejor de los Zelda que he jugado. Se siente muy sólido, y las habilidades secretas aportan bastante variedad y hacen que Link vaya evolucionando durante la aventura. Aunque el juego no suele ser especialmente difícil, sí hay algunas mazmorras que exigen bastante más que en otros Zelda. Hyrule me parece correcto. No lo siento especialmente vivo, pero tampoco vacío. Cumple bien su función, aunque personalmente soy de ir bastante al grano y explorar nunca ha sido lo que más me atrae en los Zelda. Las mazmorras están muy bien. En general, diría que van claramente de menos a más. Las primeras son más normalitas, pero conforme avanza el juego la calidad sube muchísimo. El Pico Nevado y la Ciudad en los Cielos son probablemente las mejores de todo el juego. El Templo del Tiempo y el Patíbulo del Desierto también me parecen muy buenos. En cambio, la mazmorra de los Goron es seguramente la más floja. Los personajes están bastante bien. Midna es, sin ninguna duda, uno de los mejores personajes de toda la saga Zelda. Tiene muchísimo desarrollo y acaba siendo una parte fundamental de la aventura. Zant también me gusta bastante, y el resto de personajes importantes cumplen muy bien dentro del mundo del juego. Ganondorf, sin embargo, me dejó algo frío. Su presencia impone y el combate final está muy bien planteado visualmente, pero todas sus fases son absurdamente fáciles y eso le resta bastante impacto.\n\nLa banda sonora es espectacular. Hay muchísimos temas memorables, con especial mención a Midna's Lament y Rutela Theme, aunque prácticamente toda la música mantiene un nivel altísimo. La historia también me gustó bastante. Sigue siendo la típica historia de salvar el reino, pero está contada de una forma más interesante que en otros Zelda y el tono oscuro ayuda muchísimo a darle personalidad. El final está bien y cierra la aventura de forma satisfactoria, aunque tampoco me parece una locura. En conjunto, Twilight Princess me parece uno de los mejores Zelda. Tiene un comienzo muy malo y alguna mecánica bastante cuestionable, pero cuando despega ofrece una aventura muy completa, con grandes mazmorras, un combate excelente, una banda sonora increíble y uno de los mejores personajes de la saga.\n\n**NOTA: 8** *Empieza muy mal, pero cuando Twilight Princess arranca de verdad, está entre los mejores Zelda. Tiene defectos claros, pero sus virtudes pesan más.*",
-    "ambientEffect": "twilight-motes"
+    "review": "El inicio del juego es, sin ninguna duda, el peor que he jugado en un Zelda. Desde que empieza la aventura hasta que Link se pone la túnica verde pueden pasar perfectamente unas 2 horas, y durante ese tiempo el juego resulta bastante aburrido. Le cuesta muchísimo arrancar. Ahora bien, una vez termina esa introducción... el juego mejora muchísimo.\n\nA partir de ahí, prácticamente toda la aventura mantiene un nivel muy alto, con una excepción importante: los racimos de luz. Me parecen una mecánica bastante mala y, cada vez que toca recogerlos, el ritmo del juego cae bastante.\n\nLink lobo me encanta. Jugar con él resulta muy divertido y le da muchísima personalidad al juego. Es una de las mejores ideas que ha tenido la saga.\n\nEl combate es probablemente el mejor de los Zelda que he jugado. Se siente muy sólido, y las habilidades secretas aportan bastante variedad y hacen que Link vaya evolucionando durante la aventura. Aunque el juego no suele ser especialmente difícil, sí hay algunas mazmorras que exigen bastante más que en otros Zelda.\n\nHyrule me parece correcto. No lo siento especialmente vivo, pero tampoco vacío. Cumple bien su función, aunque personalmente soy de ir bastante al grano y explorar nunca ha sido lo que más me atrae en los Zelda. Las mazmorras están muy bien. En general, diría que van claramente de menos a más. Las primeras son más normalitas, pero conforme avanza el juego la calidad sube muchísimo.\n\nEl Pico Nevado y la Ciudad en los Cielos son probablemente las mejores de todo el juego. El Templo del Tiempo y el Patíbulo del Desierto también me parecen muy buenos. En cambio, la mazmorra de los Goron es seguramente la más floja.\n\nLos personajes están bastante bien. Midna es, sin ninguna duda, uno de los mejores personajes de toda la saga Zelda. Tiene muchísimo desarrollo y acaba siendo una parte fundamental de la aventura. Zant también me gusta bastante, y el resto de personajes importantes cumplen muy bien dentro del mundo del juego. Ganondorf, sin embargo, me dejó algo frío.\n\nSu presencia impone y el combate final está muy bien planteado visualmente, pero todas sus fases son absurdamente fáciles y eso le resta bastante impacto.\n\nLa banda sonora es espectacular. Hay muchísimos temas memorables, con especial mención a Midna's Lament y Rutela Theme, aunque prácticamente toda la música mantiene un nivel altísimo. La historia también me gustó bastante.\n\nSigue siendo la típica historia de salvar el reino, pero está contada de una forma más interesante que en otros Zelda y el tono oscuro ayuda muchísimo a darle personalidad. El final está bien y cierra la aventura de forma satisfactoria, aunque tampoco me parece una locura.\n\nEn conjunto, Twilight Princess me parece uno de los mejores Zelda. Tiene un comienzo muy malo y alguna mecánica bastante cuestionable, pero cuando despega ofrece una aventura muy completa, con grandes mazmorras, un combate excelente, una banda sonora increíble y uno de los mejores personajes de la saga.\n\n**NOTA: 8** *Empieza muy mal, pero cuando Twilight Princess arranca de verdad, está entre los mejores Zelda. Tiene defectos claros, pero sus virtudes pesan más.*",
+    "ambientEffect": "twilight-motes",
+    "reviewSections": [
+      {
+        "title": "Inicio y ritmo",
+        "verdict": false,
+        "paragraphs": [
+          "El inicio del juego es, sin ninguna duda, el peor que he jugado en un Zelda. Desde que empieza la aventura hasta que Link se pone la túnica verde pueden pasar perfectamente unas 2 horas, y durante ese tiempo el juego resulta bastante aburrido. Le cuesta muchísimo arrancar. Ahora bien, una vez termina esa introducción... el juego mejora muchísimo.",
+          "A partir de ahí, prácticamente toda la aventura mantiene un nivel muy alto, con una excepción importante: los racimos de luz. Me parecen una mecánica bastante mala y, cada vez que toca recogerlos, el ritmo del juego cae bastante."
+        ]
+      },
+      {
+        "title": "Link lobo y combate",
+        "verdict": false,
+        "paragraphs": [
+          "Link lobo me encanta. Jugar con él resulta muy divertido y le da muchísima personalidad al juego. Es una de las mejores ideas que ha tenido la saga.",
+          "El combate es probablemente el mejor de los Zelda que he jugado. Se siente muy sólido, y las habilidades secretas aportan bastante variedad y hacen que Link vaya evolucionando durante la aventura. Aunque el juego no suele ser especialmente difícil, sí hay algunas mazmorras que exigen bastante más que en otros Zelda."
+        ]
+      },
+      {
+        "title": "Hyrule y mazmorras",
+        "verdict": false,
+        "paragraphs": [
+          "Hyrule me parece correcto. No lo siento especialmente vivo, pero tampoco vacío. Cumple bien su función, aunque personalmente soy de ir bastante al grano y explorar nunca ha sido lo que más me atrae en los Zelda. Las mazmorras están muy bien. En general, diría que van claramente de menos a más. Las primeras son más normalitas, pero conforme avanza el juego la calidad sube muchísimo.",
+          "El Pico Nevado y la Ciudad en los Cielos son probablemente las mejores de todo el juego. El Templo del Tiempo y el Patíbulo del Desierto también me parecen muy buenos. En cambio, la mazmorra de los Goron es seguramente la más floja."
+        ]
+      },
+      {
+        "title": "Personajes y Ganondorf",
+        "verdict": false,
+        "paragraphs": [
+          "Los personajes están bastante bien. Midna es, sin ninguna duda, uno de los mejores personajes de toda la saga Zelda. Tiene muchísimo desarrollo y acaba siendo una parte fundamental de la aventura. Zant también me gusta bastante, y el resto de personajes importantes cumplen muy bien dentro del mundo del juego. Ganondorf, sin embargo, me dejó algo frío.",
+          "Su presencia impone y el combate final está muy bien planteado visualmente, pero todas sus fases son absurdamente fáciles y eso le resta bastante impacto."
+        ]
+      },
+      {
+        "title": "Música e historia",
+        "verdict": false,
+        "paragraphs": [
+          "La banda sonora es espectacular. Hay muchísimos temas memorables, con especial mención a Midna's Lament y Rutela Theme, aunque prácticamente toda la música mantiene un nivel altísimo. La historia también me gustó bastante.",
+          "Sigue siendo la típica historia de salvar el reino, pero está contada de una forma más interesante que en otros Zelda y el tono oscuro ayuda muchísimo a darle personalidad. El final está bien y cierra la aventura de forma satisfactoria, aunque tampoco me parece una locura."
+        ]
+      },
+      {
+        "title": "Conclusión",
+        "verdict": false,
+        "paragraphs": [
+          "En conjunto, Twilight Princess me parece uno de los mejores Zelda. Tiene un comienzo muy malo y alguna mecánica bastante cuestionable, pero cuando despega ofrece una aventura muy completa, con grandes mazmorras, un combate excelente, una banda sonora increíble y uno de los mejores personajes de la saga."
+        ]
+      },
+      {
+        "title": "Veredicto final",
+        "verdict": true,
+        "paragraphs": [
+          "**NOTA: 8** *Empieza muy mal, pero cuando Twilight Princess arranca de verdad, está entre los mejores Zelda. Tiene defectos claros, pero sus virtudes pesan más.*"
+        ]
+      }
+    ]
+  }
+];
+
+  window.MAUS_ONLINE_GAMES = [
+  {
+    "id": "super-smash-bros-ultimate",
+    "title": "Super Smash Bros. Ultimate",
+    "year": "2018",
+    "platform": "Nintendo Switch",
+    "franchise": "Super Smash Bros.",
+    "score": 9,
+    "label": "Sublime",
+    "tierOrder": 1,
+    "tierVisible": true,
+    "reviewDate": "19/09/2026",
+    "spoilers": false,
+    "ambientEffect": "ash-embers",
+    "excerpt": "",
+    "review": "Hay algo en Smash Ultimate que, incluso después de tantísimas horas, sigue funcionando increíblemente bien: **moverse y pegar es una maravilla**.\nLa libertad de movimiento que ofrece el juego es enorme. Saltos, fast falls, aéreos, plataformas, desplazamientos, esquivas, reverses, movimiento alrededor del rival, infinidad de techs que van surgiendo… Hay una sensación constante de que el personaje responde a lo que quieres hacer y de que tienes muchísimas formas de moverte por el escenario.\nY una parte importantísima de que todo esto funcione tan bien es la kinestesia del juego.\nUltimate comunica absolutamente todo.\nCuando das un golpe fuerte, **parece que has dado un golpe fuerte**. El sonido, las partículas, el hitlag, la animación, el lanzamiento del personaje, la cámara… Todo trabaja en conjunto para conseguir que los ataques tengan peso.\nY esto puede parecer una gilipollez hasta que juegas a un juego de lucha que no lo hace igual de bien.\nSmash consigue que acertar determinados golpes sea absurdamente satisfactorio. Hay ataques que llevas viendo miles de horas y que siguen teniendo ese pequeño momento de:\n**JODER.**\nEso es difícil de conseguir.\nDe hecho, probablemente sea el apartado que más miedo me da de cara al siguiente Smash. No porque crea que vaya a ser malo, sino porque sinceramente me parece **muy difícil mejorar el feedback audiovisual de Ultimate sin empeorarlo por el camino**.\n\nTambién me parece bastante increíble lo poco que ha envejecido el combate.\nEstamos hablando de un juego de 2018 y, prácticamente ocho años después, podría salir hoy perfectamente en lo que respecta a cómo se siente jugarlo.\nEso no significa que esté libre de mierda.\nHay cosas que para el siguiente juego deberían cambiar sí o sí.\nLa macro del grab está mal hecha, el sistema de buffer puede provocar situaciones bastante asquerosas y el propio juego tiene un delay base que simplemente no debería estar ahí.\nLos controles además son muchísimo menos personalizables de lo que deberían.\nEn un juego de lucha con esta cantidad de técnicas, personajes y formas diferentes de jugar, debería existir una libertad bastante mayor para configurar exactamente qué queremos que haga cada botón y cómo queremos que responda el juego.\n\nUna vez entramos dentro del combate en sí, la profundidad es **absurdamente desbordante**.\nUltimate es uno de los juegos más profundos que he jugado y también uno de los más difíciles.\nPuedes aprender durante cientos y cientos de horas y seguir encontrando situaciones que no entiendes, matchups que no sabes jugar, interacciones nuevas, optimizaciones, rutas, movimientos o pequeños detalles que cambian completamente una situación.\nY eso hace que mejorar sea tremendamente satisfactorio.\nSiempre hay algo más.\n\nEl roster es gigantesco.\nY a mí me parece una pedazo de mierda.\nNo porque haya muchos personajes. Que haya 86 personajes me parece perfecto.\nEl problema es **cómo están diseñados muchos de ellos**.\nDe todo el roster considero mínimamente divertidos alrededor de cinco personajes.\nY realmente divertido, de esos que hacen que quiera seguir jugando durante horas y horas, hay uno:\n**Kazuya Mishima.**\nUltimate tiene personajes cuyo gameplay directamente me parece horrible.\nMin Min, Mr. Game & Watch, Sonic o Steve son ejemplos clarísimos.\nY aquí no hablo necesariamente de que sean buenos o malos personajes competitivamente. Hablo de cómo funcionan, de cómo plantean las partidas y de cómo convierten un juego tremendamente expresivo en algo tremendamente aburrido.\nPuedes tener 86 personajes, pero si gran parte del roster genera enfrentamientos que me parecen un coñazo, que haya tantísimos deja de parecerme algo positivo.\nPor suerte para mí, existe Kazuya. *(Que no está exento de problemas, ni muchísimo menos).*\nY solo Kazuya probablemente haya aumentado la nota que le pongo a este juego de una forma absurda.\nEs el personaje con el que he encontrado exactamente lo que quiero en Smash y gran parte de las mejores sensaciones que he tenido jugando vienen directamente de aprenderlo, mejorar con él y descubrir hasta dónde puedes llevarlo.\n\nEsto no es algo que me pase solo con el Smash. En todos los juegos que juego, tengo un personaje que es absolutamente predilecto y, sin él, si me lo quitaran, dejaría de jugar.\n\nKazuya para mí es la razón principal por la cual yo disfruto del juego, así que desde aquí le doy las gracias a todos los involucrados en el desarrollo del personaje.\n\nEl balance depende muchísimo de desde dónde mires el juego.\n**Casualmente me parece bueno.**\n**Competitivamente me parece malo.**\nY tampoco necesito darle veinte vueltas.\nCon un roster de este tamaño es normal que existan diferencias enormes entre personajes, pero hay diseños y matchups que, cuando empiezas a jugar el juego de forma competitiva, hacen que esas diferencias sean muchísimo más evidentes.\n\nEl online de Super Smash Bros. Ultimate es **una de las mayores mierdas que he probado en un videojuego**.\nIncluso una partida que vaya todo lo bien que puede ir dentro de las condiciones normales del juego sigue teniendo una cantidad de input lag que para un juego de lucha me parece completamente absurda.\nEstamos hablando de alrededor de seis frames de input lag incluso en condiciones muy buenas, salvo que empieces a entrar en consolas modificadas, mods y soluciones externas al propio juego.\nY seis frames en un juego como Smash importan muchísimo, **no** está bien.\nUltimate es un juego donde reaccionar, hacer spacing, castigar, confirmar movimientos y tomar decisiones rápidamente forma parte constante del combate.\nMeter una capa enorme de delay encima de eso cambia directamente cómo se juega.\nPara un juego con una vertiente competitiva tan gigantesca, que su infraestructura online sea así me parece incomprensible.\n\nEl conjunto de escenarios competitivos me parece bastante bueno.\nDe los aproximadamente nueve escenarios habituales dentro del ruleset competitivo, considero buenos prácticamente todos.\nBattlefield funciona.\nSmall Battlefield funciona.\nPokémon Stadium 2 funciona.\nSmashville funciona.\nTown and City funciona.\nKalos funciona.\nDestino Final funciona.\nEn general hay una variedad bastante buena de tamaños, plataformas y distribuciones sin convertir cada partida en una cosa completamente distinta.\nEl que menos me gusta es **Yoshi's Story**, que me parece bastante mierda.\nSobre objetos y el resto de elementos orientados al juego casual tampoco tengo demasiado que decir.\nNo juego Ultimate de esa manera y prefiero no valorar algo que prácticamente no utilizo.\n\nVisualmente el juego sigue siendo bonito.\nNo tengo grandes quejas.\nLos personajes se leen perfectamente durante el combate, los escenarios funcionan y toda esa comunicación visual de la que hablaba antes continúa siendo excelente años después.\n\nAdemás, este juego tiene animaciones que, dentro de su simpleza, tengan muchísima personalidad.\n\nMusicalmente esto es directamente una barbaridad.\nUltimate tiene una cantidad demencial de música.\nObviamente, cuando tienes semejante cantidad de canciones, no van a gustarte todas. Ni de coña.\nPero da igual.\nSi me das miles de canciones y de todas ellas encuentro cientos que me parecen buenas, **ya tengo cientos de canciones buenas**.\nCon eso tiro perfectamente.\nEs uno de esos casos donde la cantidad termina jugando a favor del juego simplemente porque el catálogo es tan monstruosamente grande que es prácticamente imposible no encontrar muchísima música que te guste.\n\nSi tuviera que condensar las cosas que más me molestan de Ultimate serían principalmente cuatro:\n**El input reader.**\n**La macro mal hecha del grab.**\n**El input lag, tanto online como offline.**\nY **el gameplay de una buena parte del roster**.\nNo son problemas pequeños.\nDe hecho, alguno de ellos me parece especialmente grave para un juego de lucha.\nPero existe una razón por la que, incluso con todo eso, sigo valorando Ultimate tantísimo.\n\nCuando Smash Ultimate funciona como yo quiero que funcione, me proporciona **la mayor satisfacción de gameplay que he experimentado en un juego de lucha**.\nMoverme es satisfactorio.\nAprender es satisfactorio.\nMejorar es satisfactorio.\nLeer al rival es satisfactorio.\nY pegar es extremadamente satisfactorio.\nCada golpe tiene exactamente el feedback que espero que tenga.\nHay una comunicación constante entre lo que estoy haciendo con las manos y lo que está ocurriendo en pantalla, y cuando todo encaja aparece una sensación que NINGÚN juego me han dado.\n\nA eso tengo que sumarle algo que para mí también forma parte inevitable de mi experiencia con Ultimate:\n**la comunidad que he conocido gracias al juego. O el juego que he conocido gracias a la comunidad(?) Nunca lo sabremos.**\nGente contra la que he jugado, gente con la que he aprendido, partidas, sets, conversaciones y experiencias que simplemente no existirían para mí sin Smash.\nEso no convierte objetivamente el videojuego en uno mejor.\nPero una review como esta habla también de **mi experiencia con él**.\nY mi experiencia con Smash Ultimate está inevitablemente ligada a todo eso.\nA cada torneo al que he asistido, a todo el cariño (Y algo de hate, también), que me he llevado y me llevo por parte de mis compañeros. De todo lo que he aprendido y disfrutado gracias a ellos, de cada set que he jugado contra ellos, de cada Grand Final animándome y también deseando verme perder. Por todo eso y por cada aplauso y grito que se ha dado por mí.\nY sí, también está ligada a Kazuya Mishima.\nMuchísimo.\n\nUltimate tiene algunos problemas que quiero que el siguiente Smash arregle sin ningún tipo de duda.\nQuiero menos delay.\nQuiero un buffer mejor.\nQuiero controles muchísimo más configurables.\nQuiero que determinadas mecánicas de input funcionen mejor.\nY quiero personajes cuyo gameplay me resulte más interesante.\nPero al mismo tiempo quiero que tengan muchísimo cuidado.\nPorque hay algo que Ultimate consiguió de una forma que me parece casi perfecta:\n**hacer que jugar se sienta increíble.**\nY eso es mucho más difícil de conseguir de lo que parece.\n9/10 — SUBLIME",
+    "reviewSections": [
+      {
+        "title": "Sensaciones generales",
+        "verdict": false,
+        "paragraphs": [
+          "Hay algo en Smash Ultimate que, incluso después de tantísimas horas, sigue funcionando increíblemente bien: **moverse y pegar es una maravilla**.\nLa libertad de movimiento que ofrece el juego es enorme. Saltos, fast falls, aéreos, plataformas, desplazamientos, esquivas, reverses, movimiento alrededor del rival, infinidad de techs que van surgiendo… Hay una sensación constante de que el personaje responde a lo que quieres hacer y de que tienes muchísimas formas de moverte por el escenario.\nY una parte importantísima de que todo esto funcione tan bien es la kinestesia del juego.\nUltimate comunica absolutamente todo.\nCuando das un golpe fuerte, **parece que has dado un golpe fuerte**. El sonido, las partículas, el hitlag, la animación, el lanzamiento del personaje, la cámara… Todo trabaja en conjunto para conseguir que los ataques tengan peso.\nY esto puede parecer una gilipollez hasta que juegas a un juego de lucha que no lo hace igual de bien.\nSmash consigue que acertar determinados golpes sea absurdamente satisfactorio. Hay ataques que llevas viendo miles de horas y que siguen teniendo ese pequeño momento de:\n**JODER.**\nEso es difícil de conseguir.\nDe hecho, probablemente sea el apartado que más miedo me da de cara al siguiente Smash. No porque crea que vaya a ser malo, sino porque sinceramente me parece **muy difícil mejorar el feedback audiovisual de Ultimate sin empeorarlo por el camino**."
+        ]
+      },
+      {
+        "title": "Combates y controles",
+        "verdict": false,
+        "paragraphs": [
+          "También me parece bastante increíble lo poco que ha envejecido el combate.\nEstamos hablando de un juego de 2018 y, prácticamente ocho años después, podría salir hoy perfectamente en lo que respecta a cómo se siente jugarlo.\nEso no significa que esté libre de mierda.\nHay cosas que para el siguiente juego deberían cambiar sí o sí.\nLa macro del grab está mal hecha, el sistema de buffer puede provocar situaciones bastante asquerosas y el propio juego tiene un delay base que simplemente no debería estar ahí.\nLos controles además son muchísimo menos personalizables de lo que deberían.\nEn un juego de lucha con esta cantidad de técnicas, personajes y formas diferentes de jugar, debería existir una libertad bastante mayor para configurar exactamente qué queremos que haga cada botón y cómo queremos que responda el juego."
+        ]
+      },
+      {
+        "title": "Profundidad",
+        "verdict": false,
+        "paragraphs": [
+          "Una vez entramos dentro del combate en sí, la profundidad es **absurdamente desbordante**.\nUltimate es uno de los juegos más profundos que he jugado y también uno de los más difíciles.\nPuedes aprender durante cientos y cientos de horas y seguir encontrando situaciones que no entiendes, matchups que no sabes jugar, interacciones nuevas, optimizaciones, rutas, movimientos o pequeños detalles que cambian completamente una situación.\nY eso hace que mejorar sea tremendamente satisfactorio.\nSiempre hay algo más."
+        ]
+      },
+      {
+        "title": "Roster",
+        "verdict": false,
+        "paragraphs": [
+          "El roster es gigantesco.\nY a mí me parece una pedazo de mierda.\nNo porque haya muchos personajes. Que haya 86 personajes me parece perfecto.\nEl problema es **cómo están diseñados muchos de ellos**.\nDe todo el roster considero mínimamente divertidos alrededor de cinco personajes.\nY realmente divertido, de esos que hacen que quiera seguir jugando durante horas y horas, hay uno:\n**Kazuya Mishima.**\nUltimate tiene personajes cuyo gameplay directamente me parece horrible.\nMin Min, Mr. Game & Watch, Sonic o Steve son ejemplos clarísimos.\nY aquí no hablo necesariamente de que sean buenos o malos personajes competitivamente. Hablo de cómo funcionan, de cómo plantean las partidas y de cómo convierten un juego tremendamente expresivo en algo tremendamente aburrido.\nPuedes tener 86 personajes, pero si gran parte del roster genera enfrentamientos que me parecen un coñazo, que haya tantísimos deja de parecerme algo positivo.\nPor suerte para mí, existe Kazuya. *(Que no está exento de problemas, ni muchísimo menos).*\nY solo Kazuya probablemente haya aumentado la nota que le pongo a este juego de una forma absurda.\nEs el personaje con el que he encontrado exactamente lo que quiero en Smash y gran parte de las mejores sensaciones que he tenido jugando vienen directamente de aprenderlo, mejorar con él y descubrir hasta dónde puedes llevarlo.\n\nEsto no es algo que me pase solo con el Smash. En todos los juegos que juego, tengo un personaje que es absolutamente predilecto y, sin él, si me lo quitaran, dejaría de jugar.\n\nKazuya para mí es la razón principal por la cual yo disfruto del juego, así que desde aquí le doy las gracias a todos los involucrados en el desarrollo del personaje."
+        ]
+      },
+      {
+        "title": "Balance",
+        "verdict": false,
+        "paragraphs": [
+          "El balance depende muchísimo de desde dónde mires el juego.\n**Casualmente me parece bueno.**\n**Competitivamente me parece malo.**\nY tampoco necesito darle veinte vueltas.\nCon un roster de este tamaño es normal que existan diferencias enormes entre personajes, pero hay diseños y matchups que, cuando empiezas a jugar el juego de forma competitiva, hacen que esas diferencias sean muchísimo más evidentes."
+        ]
+      },
+      {
+        "title": "Online",
+        "verdict": false,
+        "paragraphs": [
+          "El online de Super Smash Bros. Ultimate es **una de las mayores mierdas que he probado en un videojuego**.\nIncluso una partida que vaya todo lo bien que puede ir dentro de las condiciones normales del juego sigue teniendo una cantidad de input lag que para un juego de lucha me parece completamente absurda.\nEstamos hablando de alrededor de seis frames de input lag incluso en condiciones muy buenas, salvo que empieces a entrar en consolas modificadas, mods y soluciones externas al propio juego.\nY seis frames en un juego como Smash importan muchísimo, **no** está bien.\nUltimate es un juego donde reaccionar, hacer spacing, castigar, confirmar movimientos y tomar decisiones rápidamente forma parte constante del combate.\nMeter una capa enorme de delay encima de eso cambia directamente cómo se juega.\nPara un juego con una vertiente competitiva tan gigantesca, que su infraestructura online sea así me parece incomprensible."
+        ]
+      },
+      {
+        "title": "Escenarios",
+        "verdict": false,
+        "paragraphs": [
+          "El conjunto de escenarios competitivos me parece bastante bueno.\nDe los aproximadamente nueve escenarios habituales dentro del ruleset competitivo, considero buenos prácticamente todos.\nBattlefield funciona.\nSmall Battlefield funciona.\nPokémon Stadium 2 funciona.\nSmashville funciona.\nTown and City funciona.\nKalos funciona.\nDestino Final funciona.\nEn general hay una variedad bastante buena de tamaños, plataformas y distribuciones sin convertir cada partida en una cosa completamente distinta.\nEl que menos me gusta es **Yoshi's Story**, que me parece bastante mierda.\nSobre objetos y el resto de elementos orientados al juego casual tampoco tengo demasiado que decir.\nNo juego Ultimate de esa manera y prefiero no valorar algo que prácticamente no utilizo."
+        ]
+      },
+      {
+        "title": "Gráficos",
+        "verdict": false,
+        "paragraphs": [
+          "Visualmente el juego sigue siendo bonito.\nNo tengo grandes quejas.\nLos personajes se leen perfectamente durante el combate, los escenarios funcionan y toda esa comunicación visual de la que hablaba antes continúa siendo excelente años después.\n\nAdemás, este juego tiene animaciones que, dentro de su simpleza, tengan muchísima personalidad."
+        ]
+      },
+      {
+        "title": "Música",
+        "verdict": false,
+        "paragraphs": [
+          "Musicalmente esto es directamente una barbaridad.\nUltimate tiene una cantidad demencial de música.\nObviamente, cuando tienes semejante cantidad de canciones, no van a gustarte todas. Ni de coña.\nPero da igual.\nSi me das miles de canciones y de todas ellas encuentro cientos que me parecen buenas, **ya tengo cientos de canciones buenas**.\nCon eso tiro perfectamente.\nEs uno de esos casos donde la cantidad termina jugando a favor del juego simplemente porque el catálogo es tan monstruosamente grande que es prácticamente imposible no encontrar muchísima música que te guste."
+        ]
+      },
+      {
+        "title": "Principales problemas",
+        "verdict": false,
+        "paragraphs": [
+          "Si tuviera que condensar las cosas que más me molestan de Ultimate serían principalmente cuatro:\n**El input reader.**\n**La macro mal hecha del grab.**\n**El input lag, tanto online como offline.**\nY **el gameplay de una buena parte del roster**.\nNo son problemas pequeños.\nDe hecho, alguno de ellos me parece especialmente grave para un juego de lucha.\nPero existe una razón por la que, incluso con todo eso, sigo valorando Ultimate tantísimo."
+        ]
+      },
+      {
+        "title": "Lo mejor de Ultimate",
+        "verdict": false,
+        "paragraphs": [
+          "Cuando Smash Ultimate funciona como yo quiero que funcione, me proporciona **la mayor satisfacción de gameplay que he experimentado en un juego de lucha**.\nMoverme es satisfactorio.\nAprender es satisfactorio.\nMejorar es satisfactorio.\nLeer al rival es satisfactorio.\nY pegar es extremadamente satisfactorio.\nCada golpe tiene exactamente el feedback que espero que tenga.\nHay una comunicación constante entre lo que estoy haciendo con las manos y lo que está ocurriendo en pantalla, y cuando todo encaja aparece una sensación que NINGÚN juego me han dado."
+        ]
+      },
+      {
+        "title": "Experiencia personal y Comunidad",
+        "verdict": false,
+        "paragraphs": [
+          "A eso tengo que sumarle algo que para mí también forma parte inevitable de mi experiencia con Ultimate:\n**la comunidad que he conocido gracias al juego. O el juego que he conocido gracias a la comunidad(?) Nunca lo sabremos.**\nGente contra la que he jugado, gente con la que he aprendido, partidas, sets, conversaciones y experiencias que simplemente no existirían para mí sin Smash.\nEso no convierte objetivamente el videojuego en uno mejor.\nPero una review como esta habla también de **mi experiencia con él**.\nY mi experiencia con Smash Ultimate está inevitablemente ligada a todo eso.\nA cada torneo al que he asistido, a todo el cariño (Y algo de hate, también), que me he llevado y me llevo por parte de mis compañeros. De todo lo que he aprendido y disfrutado gracias a ellos, de cada set que he jugado contra ellos, de cada Grand Final animándome y también deseando verme perder. Por todo eso y por cada aplauso y grito que se ha dado por mí.\nY sí, también está ligada a Kazuya Mishima.\nMuchísimo."
+        ]
+      },
+      {
+        "title": "Conclusión",
+        "verdict": false,
+        "paragraphs": [
+          "Ultimate tiene algunos problemas que quiero que el siguiente Smash arregle sin ningún tipo de duda.\nQuiero menos delay.\nQuiero un buffer mejor.\nQuiero controles muchísimo más configurables.\nQuiero que determinadas mecánicas de input funcionen mejor.\nY quiero personajes cuyo gameplay me resulte más interesante.\nPero al mismo tiempo quiero que tengan muchísimo cuidado.\nPorque hay algo que Ultimate consiguió de una forma que me parece casi perfecta:\n**hacer que jugar se sienta increíble.**\nY eso es mucho más difícil de conseguir de lo que parece.\n9/10 — SUBLIME"
+        ]
+      }
+    ],
+    "cover": "assets/covers/super-smash-bros-ultimate-v5-0-1.avif",
+    "background": "assets/backgrounds/super-smash-bros-ultimate-bg-v5-0-1.png"
   }
 ];
 
