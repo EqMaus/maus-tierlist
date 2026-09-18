@@ -75,6 +75,10 @@
   const connectionBadge = $('connectionBadge');
   const versionBadge = $('versionBadge');
   const gameCount = $('gameCount');
+  const catalogOfflineButton = $('catalogOfflineButton');
+  const catalogOnlineButton = $('catalogOnlineButton');
+  const catalogOfflineCount = $('catalogOfflineCount');
+  const catalogOnlineCount = $('catalogOnlineCount');
   const gameSearch = $('gameSearch');
   const gameList = $('gameList');
   const addGameButton = $('addGameButton');
@@ -160,6 +164,7 @@
 
   let token = '';
   let games = [];
+  let activeCatalog = 'offline';
   let scale = [];
   let selectedId = '';
   let currentVersion = '';
@@ -1307,16 +1312,37 @@ const ADMIN_CURATED_REVIEW_SPECS = {
   }
 
   function parseSiteData(source) {
-    const match = String(source).match(/window\.MAUS_GAMES\s*=\s*(\[[\s\S]*?\]);\s*window\.MAUS_SCALE\s*=\s*(\[[\s\S]*?\]);/);
-    if (!match) throw new Error('No se pudo interpretar js/site-data.js.');
-    const parsedGames = JSON.parse(match[1]);
-    const parsedScale = JSON.parse(match[2]);
-    if (!Array.isArray(parsedGames) || !Array.isArray(parsedScale)) throw new Error('Los datos del sitio no tienen el formato esperado.');
-    return { games: parsedGames, scale: parsedScale };
+    const text = String(source);
+    const gamesMatch = text.match(/window\.MAUS_GAMES\s*=\s*(\[[\s\S]*?\]);/);
+    const onlineMatch = text.match(/window\.MAUS_ONLINE_GAMES\s*=\s*(\[[\s\S]*?\]);/);
+    const scaleMatch = text.match(/window\.MAUS_SCALE\s*=\s*(\[[\s\S]*?\]);/);
+    if (!gamesMatch || !scaleMatch) throw new Error('No se pudo interpretar js/site-data.js.');
+
+    const offline = JSON.parse(gamesMatch[1]);
+    const online = onlineMatch ? JSON.parse(onlineMatch[1]) : [];
+    const parsedScale = JSON.parse(scaleMatch[1]);
+
+    if (!Array.isArray(offline) || !Array.isArray(online) || !Array.isArray(parsedScale)) {
+      throw new Error('Los datos del sitio no tienen el formato esperado.');
+    }
+
+    const combined = [
+      ...offline.map((game) => ({ ...game, _catalog: 'offline' })),
+      ...online.map((game) => ({ ...game, _catalog: 'online' }))
+    ];
+    return { games: combined, scale: parsedScale };
+  }
+
+  function publicGameData(game) {
+    const copy = clone(game);
+    delete copy._catalog;
+    return copy;
   }
 
   function serializeSiteData(nextGames, nextScale) {
-    return `(function () {\n  'use strict';\n\n  window.MAUS_GAMES = ${JSON.stringify(nextGames, null, 2)};\n\n  window.MAUS_SCALE = ${JSON.stringify(nextScale, null, 2)};\n})();\n`;
+    const offline = nextGames.filter((game) => game._catalog !== 'online').map(publicGameData);
+    const online = nextGames.filter((game) => game._catalog === 'online').map(publicGameData);
+    return `(function () {\n  'use strict';\n\n  window.MAUS_GAMES = ${JSON.stringify(offline, null, 2)};\n\n  window.MAUS_ONLINE_GAMES = ${JSON.stringify(online, null, 2)};\n\n  window.MAUS_SCALE = ${JSON.stringify(nextScale, null, 2)};\n})();\n`;
   }
 
   function parseVersion(source) {
@@ -1353,8 +1379,17 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     return scale.find((row) => Number(row.score) === Number(score)) || null;
   }
 
-  function sortedGames() {
-    return [...games].sort((a, b) => (b.score - a.score) || ((a.tierOrder ?? 999) - (b.tierOrder ?? 999)) || String(a.title).localeCompare(String(b.title), 'es'));
+  function normalizeCatalog(value) {
+    return value === 'online' ? 'online' : 'offline';
+  }
+
+  function gamesInCatalog(catalog = activeCatalog) {
+    const normalized = normalizeCatalog(catalog);
+    return games.filter((game) => normalizeCatalog(game._catalog) === normalized);
+  }
+
+  function sortedGames(catalog = activeCatalog) {
+    return [...gamesInCatalog(catalog)].sort((a, b) => (b.score - a.score) || ((a.tierOrder ?? 999) - (b.tierOrder ?? 999)) || String(a.title).localeCompare(String(b.title), 'es'));
   }
 
   function selectedGame() {
@@ -1373,16 +1408,39 @@ const ADMIN_CURATED_REVIEW_SPECS = {
       </label>`).join('');
   }
 
+  function renderCatalogControls() {
+    const offlineCount = gamesInCatalog('offline').length;
+    const onlineCount = gamesInCatalog('online').length;
+    if (catalogOfflineCount) catalogOfflineCount.textContent = String(offlineCount);
+    if (catalogOnlineCount) catalogOnlineCount.textContent = String(onlineCount);
+    catalogOfflineButton?.classList.toggle('is-active', activeCatalog === 'offline');
+    catalogOnlineButton?.classList.toggle('is-active', activeCatalog === 'online');
+  }
+
   function renderGameList() {
     const query = normalize(gameSearch.value).trim();
-    const filtered = sortedGames().filter((game) => !query || normalize(`${game.title} ${game.franchise} ${game.id}`).includes(query));
-    gameCount.textContent = `${games.length} ${games.length === 1 ? 'juego' : 'juegos'}`;
+    const catalogGames = sortedGames(activeCatalog);
+    const filtered = catalogGames.filter((game) => !query || normalize(`${game.title} ${game.franchise} ${game.id}`).includes(query));
+    gameCount.textContent = `${catalogGames.length} ${activeCatalog === 'online' ? 'online' : 'offline'}`;
+    renderCatalogControls();
     gameList.innerHTML = filtered.map((game) => `
       <button class="game-list-button${game.id === selectedId ? ' active' : ''}" type="button" data-game-id="${esc(game.id)}" role="option" aria-selected="${game.id === selectedId ? 'true' : 'false'}">
         <span class="game-score">${esc(game.score)}</span>
         <span class="game-list-copy"><strong>${esc(game.title)}</strong><small>${esc(game.franchise || game.platform || '')}</small></span>
         ${newGameIds.has(game.id) ? '<span class="game-new-dot">NUEVO</span>' : `<span class="game-list-order">#${esc(game.tierOrder ?? '—')}</span>`}
       </button>`).join('');
+  }
+
+  function switchCatalog(catalog) {
+    const next = normalizeCatalog(catalog);
+    if (next === activeCatalog) return;
+    activeCatalog = next;
+    gameSearch.value = '';
+    reviewFocusSnapshot = '';
+    selectedId = sortedGames(activeCatalog)[0]?.id || '';
+    renderGameList();
+    renderSelectedGame();
+    clearNotice();
   }
 
   function updateCounts() {
@@ -1478,7 +1536,7 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     }
 
     editorTitle.textContent = game.title;
-    editorSubtitle.textContent = `${game.platform || 'Sin plataforma'} · ${game.year || 'Sin año'}`;
+    editorSubtitle.textContent = `${game._catalog === 'online' ? 'ONLINE' : 'OFFLINE'} · ${game.platform || 'Sin plataforma'} · ${game.year || 'Sin año'}`;
     gameIdBadge.textContent = game.id;
     newGameBadge.hidden = !newGameIds.has(game.id);
     fieldTitle.value = game.title || '';
@@ -1529,7 +1587,7 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     } else game[field] = target.value;
 
     editorTitle.textContent = game.title || game.id;
-    editorSubtitle.textContent = `${game.platform || 'Sin plataforma'} · ${game.year || 'Sin año'}`;
+    editorSubtitle.textContent = `${game._catalog === 'online' ? 'ONLINE' : 'OFFLINE'} · ${game.platform || 'Sin plataforma'} · ${game.year || 'Sin año'}`;
     updateCounts();
     renderGameList();
     renderReviewPreview(game);
@@ -1649,6 +1707,7 @@ const ADMIN_CURATED_REVIEW_SPECS = {
       const parsed = parseSiteData(siteDataFile.content);
       games = clone(parsed.games);
       scale = clone(parsed.scale);
+      activeCatalog = 'offline';
       reviewHistory.clear();
       reviewFocusSnapshot = '';
       currentVersion = parseVersion(versionFile.content);
@@ -1656,7 +1715,7 @@ const ADMIN_CURATED_REVIEW_SPECS = {
       baseSnapshot = currentSnapshot();
       newGameIds = new Set();
       resetPendingFiles();
-      selectedId = games[0]?.id || '';
+      selectedId = sortedGames(activeCatalog)[0]?.id || '';
       versionBadge.textContent = `v${currentVersion}`;
       renderScoreOptions();
       renderTierEditor();
@@ -1696,6 +1755,7 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     token = '';
     games = [];
     scale = [];
+    activeCatalog = 'offline';
     selectedId = '';
     currentVersion = '';
     baseSnapshot = '';
@@ -1879,7 +1939,7 @@ const ADMIN_CURATED_REVIEW_SPECS = {
       renderGameList();
       renderSelectedGame();
       updateDirtyUi();
-      showNotice(`Publicado como <strong>v${esc(nextVersion)}</strong>. Las portadas, fondos y MP3 nuevos ya forman parte del repositorio. GitHub Pages puede tardar unos segundos en desplegarlo. <a href="./?v=${encodeURIComponent(nextVersion)}#tierlist" target="_blank" rel="noreferrer">Abrir la versión publicada ↗</a>`);
+      showNotice(`Publicado como <strong>v${esc(nextVersion)}</strong>. Las tier lists offline y online, portadas, fondos y MP3 nuevos ya forman parte del repositorio. GitHub Pages puede tardar unos segundos en desplegarlo. <a href="./?v=${encodeURIComponent(nextVersion)}#tierlist" target="_blank" rel="noreferrer">Abrir la versión publicada ↗</a>`);
     } catch (error) {
       showNotice(esc(error.message || 'No se pudieron publicar los cambios.'), true);
     } finally {
@@ -1926,8 +1986,9 @@ const ADMIN_CURATED_REVIEW_SPECS = {
 
     const defaultTier = scale.find((row) => Number(row.score) === 7) || scale[0];
     const score = Number(defaultTier?.score ?? 7);
-    const order = Math.max(0, ...games.filter((game) => Number(game.score) === score).map((game) => Number(game.tierOrder) || 0)) + 1;
+    const order = Math.max(0, ...gamesInCatalog(activeCatalog).filter((game) => Number(game.score) === score).map((game) => Number(game.tierOrder) || 0)) + 1;
     const game = {
+      _catalog: activeCatalog,
       id,
       title,
       year: '',
@@ -2344,6 +2405,8 @@ const ADMIN_CURATED_REVIEW_SPECS = {
   });
 
   discardButton.addEventListener('click', () => void discard());
+  catalogOfflineButton?.addEventListener('click', () => switchCatalog('offline'));
+  catalogOnlineButton?.addEventListener('click', () => switchCatalog('online'));
   publishButton.addEventListener('click', () => void publish());
   window.addEventListener('beforeunload', (event) => {
     if (!isDirty()) return;

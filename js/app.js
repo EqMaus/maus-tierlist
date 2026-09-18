@@ -42,7 +42,9 @@
   const importEditsInput = byId('importEditsInput');
   const saveToast = byId('saveToast');
 
-  const games = Array.isArray(window.MAUS_GAMES) ? window.MAUS_GAMES : [];
+  const offlineGames = (Array.isArray(window.MAUS_GAMES) ? window.MAUS_GAMES : []).map((game) => ({ ...game, _catalog: 'offline' }));
+  const onlineGames = (Array.isArray(window.MAUS_ONLINE_GAMES) ? window.MAUS_ONLINE_GAMES : []).map((game) => ({ ...game, _catalog: 'online' }));
+  const games = [...offlineGames, ...onlineGames];
   const scale = Array.isArray(window.MAUS_SCALE) ? window.MAUS_SCALE : [];
   const builtInMusic = window.MAUS_GAME_MUSIC && typeof window.MAUS_GAME_MUSIC === 'object' ? window.MAUS_GAME_MUSIC : {};
   const musicDeepDive = window.MAUS_GAME_MUSIC_DEEP && typeof window.MAUS_GAME_MUSIC_DEEP === 'object' ? window.MAUS_GAME_MUSIC_DEEP : {};
@@ -147,6 +149,7 @@
   let toastTimer = 0;
   let themeRequestId = 0;
   let currentGameSceneId = null;
+  let presentationCatalog = 'offline';
 
   let sceneMotionFrame = 0;
   let sceneDriftFrame = 0;
@@ -685,12 +688,35 @@
     return custom && typeof custom === 'object' ? { ...built, ...custom } : built;
   }
 
-  function visibleTierGames() {
-    return games.filter((game) => game.tierVisible !== false);
+  function normalizeCatalog(value) {
+    return value === 'online' ? 'online' : 'offline';
   }
 
-  function rankedJourney() {
-    return [...visibleTierGames()].sort((a, b) => (b.score - a.score) || ((a.tierOrder ?? 999) - (b.tierOrder ?? 999)) || a.title.localeCompare(b.title, 'es'));
+  function gamesForCatalog(catalog = 'offline') {
+    const normalized = normalizeCatalog(catalog);
+    return games.filter((game) => normalizeCatalog(game._catalog) === normalized);
+  }
+
+  function visibleTierGames(catalog = 'offline') {
+    return gamesForCatalog(catalog).filter((game) => game.tierVisible !== false);
+  }
+
+  function rankedJourney(catalog = 'offline') {
+    return [...visibleTierGames(catalog)].sort((a, b) => (b.score - a.score) || ((a.tierOrder ?? 999) - (b.tierOrder ?? 999)) || a.title.localeCompare(b.title, 'es'));
+  }
+
+  function catalogHome(catalog) {
+    return normalizeCatalog(catalog) === 'online' ? 'online' : 'tierlist';
+  }
+
+  function catalogReviewsRoute(catalog) {
+    return `games/${normalizeCatalog(catalog)}`;
+  }
+
+  function applyCatalogMode(catalog) {
+    const normalized = normalizeCatalog(catalog);
+    body.dataset.catalog = normalized;
+    body.classList.toggle('online-mode', normalized === 'online');
   }
 
   function sortGames(list) {
@@ -1888,8 +1914,8 @@
     sceneArt.innerHTML = `${sceneSvg(key)}${lighting}${ambient}${foreground}${climateEvent}`;
   }
 
-  function presentationRows() {
-    const ranked = rankedJourney();
+  function presentationRows(catalog = presentationCatalog) {
+    const ranked = rankedJourney(catalog);
     const rankById = new Map(ranked.map((game, index) => [game.id, index + 1]));
     return scale
       .map((row) => ({
@@ -1902,16 +1928,29 @@
       .filter((row) => row.games.length);
   }
 
-  function renderPresentationMode() {
+  function renderPresentationMode(catalog = presentationCatalog) {
     if (!presentationMode || !presentationTiers || !presentationStats) return;
-    const ranked = rankedJourney();
-    const rows = presentationRows();
+    presentationCatalog = normalizeCatalog(catalog);
+    const ranked = rankedJourney(presentationCatalog);
+    const rows = presentationRows(presentationCatalog);
     const topScore = ranked.length ? Math.max(...ranked.map((game) => Number(game.score))) : 0;
+    const isOnline = presentationCatalog === 'online';
+
+    const kicker = presentationMode.querySelector('.presentation-kicker');
+    const title = presentationMode.querySelector('.presentation-title-block h1');
+    const lead = presentationMode.querySelector('.presentation-title-block p');
+    if (kicker) kicker.textContent = isOnline ? 'TIER LIST ONLINE · EDICIÓN DE MAUS' : 'TIER LIST OFFLINE · EDICIÓN DE MAUS';
+    if (title) title.textContent = isOnline ? 'Mi ranking de videojuegos online' : 'Mi ranking de videojuegos offline';
+    if (lead) lead.textContent = isOnline
+      ? 'Competitivo, cooperativo y multijugador: el ranking online separado del resto.'
+      : 'Campañas, aventuras y experiencias principalmente offline.';
+
+    presentationMode.classList.toggle('presentation-online', isOnline);
     presentationStats.innerHTML = `
       <div><strong>${ranked.length}</strong><span>JUEGOS</span></div>
       <div><strong>${rows.length}</strong><span>TIERS OCUPADOS</span></div>
       <div><strong>${esc(topScore)}/10</strong><span>NOTA MÁS ALTA</span></div>`;
-    presentationTiers.innerHTML = rows.map((row) => `
+    presentationTiers.innerHTML = rows.length ? rows.map((row) => `
       <section class="presentation-tier" style="--tier:${esc(row.color)}">
         <div class="presentation-tier-label">
           <strong class="tier-font-${esc(row.tone)}">${esc(row.label)}</strong>
@@ -1927,7 +1966,7 @@
             </button>`;
           }).join('')}
         </div>
-      </section>`).join('');
+      </section>`).join('') : `<div class="presentation-empty">${isOnline ? 'Todavía no hay juegos online publicados.' : 'Todavía no hay juegos publicados.'}</div>`;
   }
 
   async function requestPresentationFullscreen() {
@@ -1945,7 +1984,8 @@
     setBackgroundOnly(false);
     closeThemeInfo();
     stopGameTheme(true);
-    renderPresentationMode();
+    presentationCatalog = normalizeCatalog(body.dataset.catalog);
+    renderPresentationMode(presentationCatalog);
     presentationMode.hidden = false;
     body.classList.add('presentation-active');
     requestAnimationFrame(() => presentationMode.classList.add('is-open'));
@@ -1977,9 +2017,15 @@
     else location.hash = next;
   }
 
-  function updateNav(section) {
+  function updateNav(section, catalog = body.dataset.catalog || 'offline') {
+    const normalized = normalizeCatalog(catalog);
     document.querySelectorAll('[data-nav]').forEach((link) => {
-      const active = link.dataset.nav === section || (section === 'game' && link.dataset.nav === 'games') || (section === 'ranking' && link.dataset.nav === 'tierlist');
+      const nav = link.dataset.nav;
+      let active = false;
+      if (nav === 'offline') active = normalized === 'offline' && ['tierlist', 'game', 'ranking'].includes(section);
+      else if (nav === 'online') active = normalized === 'online' && ['online', 'game', 'ranking'].includes(section);
+      else if (nav === 'games') active = section === 'games';
+      else if (nav === section) active = true;
       link.classList.toggle('is-active', active);
     });
   }
@@ -1988,8 +2034,8 @@
     console.error(error);
     stopGameTheme(true);
     clearScene();
-    updateNav('tierlist');
-    app.innerHTML = `<div class="page"><section class="recovery-card"><span class="eyebrow">RECUPERACIÓN</span><h1>La vista no pudo cargarse.</h1><p>La aplicación ha evitado quedarse bloqueada. Puedes volver a la tier list y seguir usando la web.</p><button class="primary-button" type="button" data-go="tierlist">Volver a la tier list</button></section></div>`;
+    updateNav('tierlist', 'offline');
+    app.innerHTML = `<div class="page"><section class="recovery-card"><span class="eyebrow">RECUPERACIÓN</span><h1>La vista no pudo cargarse.</h1><p>La aplicación ha evitado quedarse bloqueada. Puedes volver a la tier list y seguir usando la web.</p><button class="primary-button" type="button" data-go="tierlist">Volver a la tier list offline</button></section></div>`;
   }
 
   function renderRoute() {
@@ -1999,21 +2045,33 @@
       clearScene();
 
       if (route.section === 'game' && route.id && gameById.has(route.id)) {
-        updateNav('game');
+        const catalog = normalizeCatalog(gameById.get(route.id)?._catalog);
+        applyCatalogMode(catalog);
+        updateNav('game', catalog);
         renderGame(route.id, false);
       } else if (route.section === 'ranking' && route.id && gameById.has(route.id)) {
-        updateNav('ranking');
+        const catalog = normalizeCatalog(gameById.get(route.id)?._catalog);
+        applyCatalogMode(catalog);
+        updateNav('ranking', catalog);
         renderGame(route.id, true);
       } else if (route.section === 'games') {
-        updateNav('games');
-        renderGames();
+        const catalog = normalizeCatalog(route.id);
+        applyCatalogMode(catalog);
+        updateNav('games', catalog);
+        renderGames(catalog);
+      } else if (route.section === 'online') {
+        applyCatalogMode('online');
+        updateNav('online', 'online');
+        renderTierList('online');
       } else if (route.section === 'features') {
-        updateNav('features');
+        applyCatalogMode('offline');
+        updateNav('features', 'offline');
         renderFeatures();
       } else {
         if (route.section !== 'tierlist' || route.id) history.replaceState(null, '', '#tierlist');
-        updateNav('tierlist');
-        renderTierList();
+        applyCatalogMode('offline');
+        updateNav('tierlist', 'offline');
+        renderTierList('offline');
       }
 
       if (app) app.focus({ preventScroll: true });
@@ -2023,35 +2081,52 @@
     }
   }
 
-  function renderTierList() {
+  function renderTierList(catalog = 'offline') {
     stopGameTheme(true);
-    const ranked = visibleTierGames();
+    const normalized = normalizeCatalog(catalog);
+    const isOnline = normalized === 'online';
+    const ranked = visibleTierGames(normalized);
     const rows = scale.filter((row) => Number(row.score) >= 3);
     const topScore = ranked.length ? Math.max(...ranked.map((game) => Number(game.score))) : 0;
 
-    app.innerHTML = `<div class="page">
+    const title = isOnline
+      ? 'Mi ranking online,<br>separado del resto.'
+      : 'Mi ranking offline,<br>con cada review detrás.';
+    const lead = isOnline
+      ? 'Aquí van únicamente juegos cuyo núcleo está en el multijugador, competitivo o cooperativo online. Su ranking es independiente del offline.'
+      : 'Campañas, aventuras y experiencias principalmente offline. Pulsa cualquier juego para abrir directamente su ficha.';
+    const eyebrow = isOnline ? 'TIER LIST · ONLINE' : 'TIER LIST · OFFLINE';
+    const pageClass = isOnline ? 'online-tier-page' : 'offline-tier-page';
+
+    app.innerHTML = `<div class="page ${pageClass}">
+      <div class="catalog-switch" aria-label="Elegir tier list">
+        <button type="button" class="catalog-switch-button offline${!isOnline ? ' is-active' : ''}" data-go="tierlist"><span>OFFLINE</span><small>Campañas · single player</small></button>
+        <button type="button" class="catalog-switch-button online${isOnline ? ' is-active' : ''}" data-go="online"><span>ONLINE</span><small>Competitivo · coop · multijugador</small></button>
+      </div>
       <section class="tier-hero">
         <div>
-          <span class="eyebrow">TIER LIST PERSONAL</span>
-          <h1 class="page-title">Mi ranking,<br>con cada review detrás.</h1>
-          <p class="page-lead">Pulsa cualquier juego para abrir directamente su ficha. Dentro de un mismo tier, cuanto más a la izquierda está, más arriba lo tengo.</p>
+          <span class="eyebrow">${eyebrow}</span>
+          <h1 class="page-title">${title}</h1>
+          <p class="page-lead">${lead}</p>
           <div class="hero-actions">
-            <button class="primary-button" type="button" data-start-ranking>▶ Leer ranking de arriba a abajo</button>
-            <button class="secondary-button" type="button" data-go="games">Ver todas las reviews</button>
+            <button class="primary-button" type="button" data-start-ranking="${normalized}">▶ Leer ranking de arriba a abajo</button>
+            <button class="secondary-button" type="button" data-go="${catalogReviewsRoute(normalized)}">Ver reviews ${isOnline ? 'online' : 'offline'}</button>
           </div>
-          <p class="tour-explainer">El recorrido abre el #1 y permite pasar al siguiente o anterior sin volver a esta pantalla.</p>
+          <p class="tour-explainer">${isOnline ? 'La posición de un juego online no afecta a su posición en la tier list offline.' : 'Dentro de un mismo tier, cuanto más a la izquierda está, más arriba lo tengo.'}</p>
         </div>
-        <aside class="tier-hero-panel">
+        <aside class="tier-hero-panel ${isOnline ? 'online-hero-panel' : ''}">
+          <span class="catalog-hero-badge">${isOnline ? 'ONLINE' : 'OFFLINE'}</span>
           <strong>${ranked.length} reviews</strong>
-          <small>ordenados según mi tier list actual</small>
-          <div class="hero-stat-grid"><div class="hero-stat"><b>${esc(topScore)}/10</b><span>nota más alta</span></div><div class="hero-stat"><b>${new Set(ranked.map((game) => game.score)).size}</b><span>tiers ocupados</span></div></div>
+          <small>${isOnline ? 'ranking multijugador independiente' : 'ordenados según mi tier list offline actual'}</small>
+          <div class="hero-stat-grid"><div class="hero-stat"><b>${ranked.length ? `${esc(topScore)}/10` : '—'}</b><span>nota más alta</span></div><div class="hero-stat"><b>${new Set(ranked.map((game) => game.score)).size}</b><span>tiers ocupados</span></div></div>
         </aside>
       </section>
+      ${isOnline && !ranked.length ? `<section class="online-empty-intro"><span>LISTA NUEVA</span><strong>La tier list online está preparada.</strong><p>Los juegos online se añaden desde el editor privado y quedan completamente separados de los juegos offline.</p></section>` : ''}
       <div class="tier-list">${rows.map((row) => {
         const tierGames = ranked.filter((game) => Number(game.score) === Number(row.score)).sort((a, b) => ((a.tierOrder ?? 999) - (b.tierOrder ?? 999)) || a.title.localeCompare(b.title, 'es'));
         return `<section class="tier-row" style="--tier:${esc(row.color)}">
-          <div class="tier-label"><strong class="tier-font-${esc(row.tone)}" ${editMode ? `contenteditable="true" spellcheck="true" data-edit-tier-score="${esc(row.score)}"` : ''}>${esc(row.label)}</strong><span>${esc(row.score)}</span></div>
-          <div class="tier-games">${tierGames.length ? tierGames.map((game, index) => tierCard(game, index, row)).join('') : '<div class="tier-empty">Sin juegos todavía</div>'}</div>
+          <div class="tier-label"><strong class="tier-font-${esc(row.tone)}" ${editMode && !isOnline ? `contenteditable="true" spellcheck="true" data-edit-tier-score="${esc(row.score)}"` : ''}>${esc(row.label)}</strong><span>${esc(row.score)}</span></div>
+          <div class="tier-games">${tierGames.length ? tierGames.map((game, index) => tierCard(game, index, row)).join('') : `<div class="tier-empty">${isOnline ? 'Sin juegos online todavía' : 'Sin juegos todavía'}</div>`}</div>
         </section>`;
       }).join('')}</div>
     </div>`;
@@ -2065,13 +2140,19 @@
     </button>`;
   }
 
-  function renderGames() {
+  function renderGames(catalog = 'offline') {
     stopGameTheme(true);
-    const sorted = sortGames(games);
-    app.innerHTML = `<div class="page">
-      <div class="library-top"><div><span class="eyebrow">REVIEWS</span><h1 class="page-title">Todas mis reviews.</h1><p class="page-lead">Portada completa, nota actual y review. Nada más.</p></div></div>
+    const normalized = normalizeCatalog(catalog);
+    const isOnline = normalized === 'online';
+    const sorted = sortGames(gamesForCatalog(normalized));
+    app.innerHTML = `<div class="page review-library-page${isOnline ? ' online-library-page' : ''}">
+      <div class="catalog-switch compact" aria-label="Elegir biblioteca de reviews">
+        <button type="button" class="catalog-switch-button offline${!isOnline ? ' is-active' : ''}" data-go="games/offline"><span>REVIEWS OFFLINE</span><small>${offlineGames.length} juegos</small></button>
+        <button type="button" class="catalog-switch-button online${isOnline ? ' is-active' : ''}" data-go="games/online"><span>REVIEWS ONLINE</span><small>${onlineGames.length} juegos</small></button>
+      </div>
+      <div class="library-top"><div><span class="eyebrow">${isOnline ? 'REVIEWS · ONLINE' : 'REVIEWS · OFFLINE'}</span><h1 class="page-title">${isOnline ? 'Mis juegos online.' : 'Mis juegos offline.'}</h1><p class="page-lead">${isOnline ? 'Biblioteca independiente para juegos multijugador y competitivos.' : 'Campañas y experiencias principalmente offline.'}</p></div></div>
       <div class="library-toolbar"><label class="search-field"><input id="gameSearch" type="search" autocomplete="off" placeholder="Buscar una review…"></label><span id="gameCount" class="library-count">${sorted.length} reviews</span></div>
-      <div id="gameGrid" class="game-grid" style="margin-top:18px">${sorted.map(gameCard).join('')}</div>
+      <div id="gameGrid" class="game-grid" data-catalog="${normalized}" style="margin-top:18px">${sorted.length ? sorted.map(gameCard).join('') : `<div class="library-empty-state"><strong>No hay reviews online todavía.</strong><span>Añádelas desde el editor privado.</span></div>`}</div>
     </div>`;
   }
 
@@ -2083,7 +2164,7 @@
         <div class="features-hero-mark" aria-hidden="true"><span>?</span></div>
       </section>
       <div class="features-grid">
-        <article class="feature-card"><span class="feature-index">01</span><h2>Tier list</h2><p>Es el ranking principal. Cada juego es clicable y abre su ficha completa. Dentro de un mismo tier, el orden de izquierda a derecha también importa.</p><button type="button" data-go="tierlist">Ir a Tier list →</button></article>
+        <article class="feature-card"><span class="feature-index">01</span><h2>Dos tier lists</h2><p>La web separa por completo los juegos <strong>offline</strong> de los <strong>online</strong>. Cada uno tiene su ranking, su biblioteca de reviews y su recorrido.</p><div class="feature-dual-actions"><button type="button" data-go="tierlist">Offline →</button><button type="button" data-go="online">Online →</button></div></article>
         <article class="feature-card"><span class="feature-index">02</span><h2>Reviews</h2><p>Reúne todas las fichas en una biblioteca más directa. Puedes buscar por nombre y abrir cualquier tarjeta para entrar en la review.</p><button type="button" data-go="games">Ir a Reviews →</button></article>
         <article class="feature-card"><span class="feature-index">03</span><h2>Dentro de una ficha</h2><p>Encontrarás mi texto completo, la nota actual, el tier y navegación para seguir recorriendo juegos sin volver atrás constantemente.</p><small>DÓNDE · Abriendo cualquier juego</small></article>
         <article class="feature-card"><span class="feature-index">04</span><h2>Música</h2><p>Cada ficha puede tener su propio tema. El reproductor flotante permite cambiar volumen, avanzar o retroceder en la canción y abrir una ficha dedicada con contexto musical.</p><small>DÓNDE · Reproductor flotante</small></article>
@@ -2120,14 +2201,17 @@
       return;
     }
 
+    const catalog = normalizeCatalog(game._catalog);
+    const isOnline = catalog === 'online';
+    applyCatalogMode(catalog);
     applyScene(game.id);
     const tier = tierInfo(game.score);
-    const inTier = visibleTierGames().filter((item) => Number(item.score) === Number(game.score)).sort((a, b) => ((a.tierOrder ?? 999) - (b.tierOrder ?? 999)) || a.title.localeCompare(b.title, 'es'));
+    const inTier = visibleTierGames(catalog).filter((item) => Number(item.score) === Number(game.score)).sort((a, b) => ((a.tierOrder ?? 999) - (b.tierOrder ?? 999)) || a.title.localeCompare(b.title, 'es'));
     const tierIndex = inTier.findIndex((item) => item.id === game.id);
     const tierPrev = tierIndex > 0 ? inTier[tierIndex - 1] : null;
     const tierNext = tierIndex >= 0 && tierIndex < inTier.length - 1 ? inTier[tierIndex + 1] : null;
 
-    const journey = rankedJourney();
+    const journey = rankedJourney(catalog);
     const journeyIndex = journey.findIndex((item) => item.id === game.id);
     const journeyPrev = journeyIndex > 0 ? journey[journeyIndex - 1] : null;
     const journeyNext = journeyIndex >= 0 && journeyIndex < journey.length - 1 ? journey[journeyIndex + 1] : null;
@@ -2142,7 +2226,7 @@
     const cover = coverSrc(game);
 
     app.innerHTML = `<div class="page game-page">
-      <div class="detail-top"><button class="back-button" type="button" data-go="tierlist">← Volver a la tier list</button><span class="eyebrow">${rankingMode ? 'RANKING · LECTURA EN ORDEN' : 'REVIEW PERSONAL'}</span></div>
+      <div class="detail-top"><button class="back-button" type="button" data-go="${catalogHome(catalog)}">← Volver a la tier list ${isOnline ? 'online' : 'offline'}</button><span class="eyebrow">${rankingMode ? `${isOnline ? 'ONLINE' : 'OFFLINE'} · RANKING · LECTURA EN ORDEN` : `${isOnline ? 'ONLINE' : 'OFFLINE'} · REVIEW PERSONAL`}</span></div>
       <section class="detail-hero" style="--tier:${esc(tier.color)}">
         ${cover ? `<img class="detail-cover" src="${esc(cover)}" alt="Portada de ${esc(game.title)}">` : ''}
         <div class="detail-hero-copy"><span class="eyebrow">${esc(tier.label)}</span><h1>${titleDisplay}</h1><div class="detail-scoreline"><span class="score-badge">${scoreEditor}</span><span class="tier-badge tier-font-${esc(tier.tone)}">${esc(tier.label)}</span>${themeTitle ? `<span class="music-badge">♫ ${esc(themeTitle)}</span>` : ''}</div></div>
@@ -2152,7 +2236,7 @@
         <aside class="side-stack">
           <section class="side-card" style="--tier:${esc(tier.color)}"><h3>Nota actual</h3><div class="big-score">${esc(game.score)}<small>/10</small></div><strong class="side-tier tier-font-${esc(tier.tone)}">${esc(tier.label)}</strong></section>
           ${tierIndex >= 0 && (tierPrev || tierNext) ? `<section class="side-card"><h3>Dentro de este tier</h3><div class="rank-nav">${tierPrev ? `<button type="button" data-open-game="${esc(tierPrev.id)}"><small>← Por encima</small>${esc(tierPrev.title)}</button>` : ''}${tierNext ? `<button type="button" data-open-game="${esc(tierNext.id)}"><small>Por debajo →</small>${esc(tierNext.title)}</button>` : ''}</div></section>` : ''}
-          ${rankingMode && journeyIndex >= 0 ? rankingPanel(journey, journeyIndex, journeyPrev, journeyNext) : ''}
+          ${rankingMode && journeyIndex >= 0 ? rankingPanel(journey, journeyIndex, journeyPrev, journeyNext, catalog) : ''}
           ${editMode ? themeEditor(game, themeTitle) : ''}
         </aside>
       </div>
@@ -2175,9 +2259,9 @@
     </nav>`;
   }
 
-  function rankingPanel(journey, index, previous, next) {
+  function rankingPanel(journey, index, previous, next, catalog = 'offline') {
     const percent = journey.length ? ((index + 1) / journey.length) * 100 : 0;
-    return `<section class="side-card tour-card"><h3>Ranking completo</h3><div class="tour-position"><span>Posición global</span><strong>#${index + 1} de ${journey.length}</strong></div><div class="tour-progress"><i style="width:${percent}%"></i></div><p class="tour-help">Avanza por la lista completa, de mejor a peor.</p><div class="rank-nav">${previous ? `<button type="button" data-ranking-open="${esc(previous.id)}"><small>← Anterior</small>${esc(previous.title)}</button>` : ''}${next ? `<button type="button" data-ranking-open="${esc(next.id)}"><small>Siguiente →</small>${esc(next.title)}</button>` : `<button type="button" data-go="tierlist"><small>Fin del ranking</small>Volver a la tier list</button>`}</div><button class="tour-exit" type="button" data-go="tierlist">Terminar recorrido</button></section>`;
+    return `<section class="side-card tour-card"><h3>Ranking completo</h3><div class="tour-position"><span>Posición global</span><strong>#${index + 1} de ${journey.length}</strong></div><div class="tour-progress"><i style="width:${percent}%"></i></div><p class="tour-help">Avanza por la lista completa, de mejor a peor.</p><div class="rank-nav">${previous ? `<button type="button" data-ranking-open="${esc(previous.id)}"><small>← Anterior</small>${esc(previous.title)}</button>` : ''}${next ? `<button type="button" data-ranking-open="${esc(next.id)}"><small>Siguiente →</small>${esc(next.title)}</button>` : `<button type="button" data-go="${catalogHome(catalog)}"><small>Fin del ranking</small>Volver a la tier list</button>`}</div><button class="tour-exit" type="button" data-go="${catalogHome(catalog)}">Terminar recorrido</button></section>`;
   }
 
   function themeEditor(game, currentTitle) {
@@ -2188,7 +2272,8 @@
     const grid = byId('gameGrid');
     const count = byId('gameCount');
     if (!grid || !count) return;
-    const sorted = sortGames(games);
+    const catalog = normalizeCatalog(grid.dataset.catalog || body.dataset.catalog);
+    const sorted = sortGames(gamesForCatalog(catalog));
     const q = normalize(query);
     const filtered = q ? sorted.filter((game) => normalize(game.title).includes(q)) : sorted;
     grid.innerHTML = filtered.length ? filtered.map(gameCard).join('') : '<div class="empty-state">No encuentro ese juego.</div>';
@@ -2554,7 +2639,8 @@
       return;
     }
     if (action.hasAttribute('data-start-ranking')) {
-      const journey = rankedJourney();
+      const catalog = normalizeCatalog(action.dataset.startRanking);
+      const journey = rankedJourney(catalog);
       if (journey.length) go(`ranking/${journey[0].id}`);
       return;
     }

@@ -24,12 +24,12 @@
   <meta name="twitter:title" content="Tier List de Maus — Mi ranking de videojuegos">
   <meta name="twitter:description" content="Tier list personal e interactiva de videojuegos de Maus.">
   <meta name="twitter:image" content="https://eqmaus.github.io/maus-tierlist/social-preview-v4.6.3.jpg">
-  <title>Tier List de Maus — v4.13.7</title>
+  <title>Tier List de Maus — v5.0.0</title>
   <script>
     // Comprueba la versión publicada sin usar la caché del navegador.
     // Si hay una build nueva, abre la misma página con ?v=X para forzar
     // un documento HTML fresco y conserva la sección actual (#tierlist, etc.).
-    window.MAUS_BUILD_VERSION = '4.13.7';
+    window.MAUS_BUILD_VERSION = '5.0.0';
     window.MAUS_CHECK_LATEST_BUILD = function () {
       var currentBuild = window.MAUS_BUILD_VERSION;
       var versionUrl = new URL('./version.json', document.baseURI);
@@ -65,8 +65,8 @@
       if (event.persisted) window.MAUS_CHECK_LATEST_BUILD();
     });
   </script>
-  <link rel="stylesheet" href="css/styles.css?v=4.13.7">
-  <link rel="stylesheet" href="css/review-shared.css?v=4.13.7">
+  <link rel="stylesheet" href="css/styles.css?v=5.0.0">
+  <link rel="stylesheet" href="css/review-shared.css?v=5.0.0">
 </head>
 <body data-scene="default">
   <canvas id="stormCanvas" class="storm-canvas" aria-hidden="true"></canvas>
@@ -80,13 +80,16 @@
 
   <header class="site-header">
     <div class="header-inner">
-      <a class="brand" href="#tierlist" data-nav="tierlist" aria-label="Ir a la tier list">
+      <a class="brand" href="#tierlist" aria-label="Ir a las tier lists">
         <img class="brand-mark" src="assets/brand/simba.jpg" alt="Simba">
-        <span class="brand-copy"><strong>TIER LIST</strong><small>de Maus</small></span>
+        <span class="brand-copy"><strong>MAUS TIER LISTS</strong><small>offline · online</small></span>
       </a>
       <nav class="main-nav" aria-label="Navegación principal">
-        <a href="#tierlist" data-nav="tierlist">Tier list</a>
-        <a href="#games" data-nav="games">Reviews</a>
+        <div class="catalog-nav">
+          <a href="#tierlist" data-nav="offline" class="catalog-nav-offline">OFFLINE</a>
+          <a href="#online" data-nav="online" class="catalog-nav-online">ONLINE</a>
+        </div>
+        <a href="#games/offline" data-nav="games">Reviews</a>
         <a href="#features" data-nav="features">Features</a>
         <button id="presentationModeButton" class="nav-presentation-button" type="button">Modo presentación</button>
         <button id="appearanceButton" class="nav-appearance-button" type="button" aria-haspopup="dialog" aria-expanded="false">Apariencia</button>
@@ -131,9 +134,9 @@
     <div class="presentation-stage">
       <header class="presentation-header">
         <div class="presentation-title-block">
-          <span class="presentation-kicker">TIER LIST · EDICIÓN DE MAUS</span>
-          <h1>Mi ranking de videojuegos</h1>
-          <p>Una vista limpia para enseñar el ranking completo de un vistazo.</p>
+          <span class="presentation-kicker">TIER LIST OFFLINE · EDICIÓN DE MAUS</span>
+          <h1>Mi ranking de videojuegos offline</h1>
+          <p>Campañas, aventuras y experiencias principalmente offline.</p>
         </div>
         <div class="presentation-actions">
           <button id="presentationFullscreenButton" class="presentation-ghost-button" type="button">⛶ Pantalla completa</button>
@@ -174,10 +177,10 @@
 
   <div id="saveToast" class="save-toast" hidden>Guardado</div>
 
-  <script src="js/site-data.js?v=4.13.7"></script>
-  <script src="js/theme-music.js?v=4.13.7"></script>
-  <script src="js/review-renderer.js?v=4.13.7"></script>
-  <script src="js/app.js?v=4.13.7"></script>
-  <script src="js/storm.js?v=4.13.7"></script>
+  <script src="js/site-data.js?v=5.0.0"></script>
+  <script src="js/theme-music.js?v=5.0.0"></script>
+  <script src="js/review-renderer.js?v=5.0.0"></script>
+  <script src="js/app.js?v=5.0.0"></script>
+  <script src="js/storm.js?v=5.0.0"></script>
 </body>
 </html>

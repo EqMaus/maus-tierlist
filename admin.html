@@ -7,8 +7,8 @@
   <meta name="theme-color" content="#071018">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://api.github.com; img-src 'self' data: blob: https://avatars.githubusercontent.com; media-src 'self' blob:; style-src 'self'; script-src 'self'; base-uri 'self'; form-action 'none';">
   <title>Editor privado · Tier List de Maus</title>
-  <link rel="stylesheet" href="css/review-shared.css?v=4.13.7">
-  <link rel="stylesheet" href="css/admin.css?v=4.13.7">
+  <link rel="stylesheet" href="css/review-shared.css?v=5.0.0">
+  <link rel="stylesheet" href="css/admin.css?v=5.0.0">
 </head>
 <body>
   <header class="admin-header">
@@ -67,6 +67,10 @@
             <strong id="gameCount">0 juegos</strong>
           </div>
           <span id="versionBadge" class="version-badge">v—</span>
+        </div>
+        <div class="admin-catalog-switch" role="group" aria-label="Tipo de tier list">
+          <button id="catalogOfflineButton" class="admin-catalog-button is-active" type="button" data-admin-catalog="offline"><strong>OFFLINE</strong><small id="catalogOfflineCount">0</small></button>
+          <button id="catalogOnlineButton" class="admin-catalog-button online" type="button" data-admin-catalog="online"><strong>ONLINE</strong><small id="catalogOnlineCount">0</small></button>
         </div>
         <div class="sidebar-tools">
           <label class="search-box">
@@ -392,7 +396,7 @@
     </div>
   </div>
 
-  <script src="js/review-renderer.js?v=4.13.7"></script>
-  <script src="js/admin.js?v=4.13.7"></script>
+  <script src="js/review-renderer.js?v=5.0.0"></script>
+  <script src="js/admin.js?v=5.0.0"></script>
 </body>
 </html>

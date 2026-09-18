@@ -1,13 +1,16 @@
-MAUS TIER LIST — v4.13.7
+MAUS TIER LISTS — v5.0.0
 
-MODO MÓVIL LITE (solo teléfono/touch pequeño):
-- CERO partículas.
-- CERO lluvia/rayos/canvas.
-- CERO clima, eventos, luces ambientales, profundidad o parallax.
-- CERO movimiento del fondo: una sola imagen estática oscurecida.
-- CERO backdrop-filter.
-- La música NO se reproduce automáticamente y ni siquiera se precarga.
-- Si quieres música, aparece un botón 'Activar música'; solo entonces se carga y reproduce.
-- PC conserva todos los efectos y el comportamiento actual sin cambios.
+NUEVA ARQUITECTURA OFFLINE / ONLINE
+===================================
+- La tier list actual pasa a estar identificada claramente como OFFLINE.
+- Se añade una segunda tier list ONLINE completamente independiente.
+- Cada lista tiene ranking, recorrido y biblioteca de reviews propios.
+- La web cambia de identidad visual al entrar en ONLINE (azul/violeta, rejilla y paneles distintos).
+- El editor privado incluye selector OFFLINE / ONLINE.
+- Los juegos nuevos se crean dentro de la lista que tengas seleccionada.
+- Al publicar por primera vez desde esta versión, el editor añadirá automáticamente window.MAUS_ONLINE_GAMES a js/site-data.js.
+- NO hace falta reemplazar js/site-data.js al instalar esta actualización: hasta que añadas juegos, la lista online aparece vacía.
+- Los IDs deben seguir siendo únicos entre ambas listas.
+- El modo móvil Lite de v4.13.7 se mantiene.
 
-Este ZIP es un parche de código: no incluye js/site-data.js ni assets.
+IMPORTANTE: este ZIP sigue sin incluir js/site-data.js ni assets, para no pisar tus reviews ni multimedia actuales.
