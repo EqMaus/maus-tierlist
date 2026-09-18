@@ -3,6 +3,18 @@
 
   const canvas = document.getElementById('stormCanvas');
   const flashLayer = document.getElementById('stormFlash');
+
+  // En móvil no arrancamos ni siquiera el canvas: cero RAF, cero gotas,
+  // cero rayos y cero trabajo de CPU/GPU.
+  const mobileLite = document.body.classList.contains('mobile-performance') ||
+    window.matchMedia?.('(max-width: 900px) and (hover: none) and (pointer: coarse)')?.matches;
+
+  if (mobileLite) {
+    if (canvas) canvas.hidden = true;
+    if (flashLayer) flashLayer.hidden = true;
+    return;
+  }
+
   if (!canvas) return;
 
   const ctx = canvas.getContext('2d', { alpha: true });
@@ -10,11 +22,11 @@
 
   const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)');
   const lightningColors = [
-    [143, 211, 255], // azul hielo
-    [155, 137, 255], // violeta
-    [84, 239, 204],  // verde agua
-    [197, 220, 255], // azul pálido
-    [221, 184, 255]  // lila
+    [143, 211, 255],
+    [155, 137, 255],
+    [84, 239, 204],
+    [197, 220, 255],
+    [221, 184, 255]
   ];
 
   let width = 0;
@@ -127,7 +139,6 @@
     const [r, g, b] = lightningColor;
     ctx.save();
     ctx.globalCompositeOperation = 'screen';
-
     ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${lightningStrength * 0.045})`;
     ctx.fillRect(0, 0, width, height);
 

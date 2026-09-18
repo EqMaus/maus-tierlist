@@ -14,6 +14,7 @@
   const playerCurrentTime = byId('playerCurrentTime');
   const playerDuration = byId('playerDuration');
   const themeInfoButton = byId('themeInfoButton');
+  const mobileMusicToggleButton = byId('mobileMusicToggleButton');
   const themeInfoModal = byId('themeInfoModal');
   const themeInfoClose = byId('themeInfoClose');
   const themeInfoContent = byId('themeInfoContent');
@@ -298,6 +299,11 @@
   }
 
   function updateSceneScrollDepth() {
+    if (mobilePerformance) {
+      body.style.setProperty('--scene-scroll-y', '0px');
+      body.style.setProperty('--scene-scroll-progress', '0');
+      return;
+    }
     if (!body.classList.contains('scene-active')) {
       body.style.setProperty('--scene-scroll-y', '0px');
       body.style.setProperty('--scene-scroll-progress', '0');
@@ -464,6 +470,7 @@
   let volumeFadeFrame = 0;
   let pendingAudioRetry = false;
   let musicDrag = null;
+  let currentThemeStartAt = 0;
 
   const gameById = new Map(games.map((game) => [game.id, game]));
 
@@ -1834,33 +1841,52 @@
       clearScene();
       return;
     }
+
     body.classList.add('scene-active');
     body.dataset.scene = key;
-    body.dataset.ambientEffect = ambientEffectFor(gameId);
+    body.dataset.ambientEffect = mobilePerformance ? 'none' : ambientEffectFor(gameId);
     applySceneDirection(gameId);
-    nudgeSceneEntrance();
     updateSceneFocusState();
-    // "Ver fondo" solo tiene sentido cuando existe una imagen de fondo dedicada e inspeccionable.
+
     if (backgroundViewButton) backgroundViewButton.hidden = !photoSrc;
     if (!sceneArt) return;
+
+    // MÓVIL LITE:
+    // una única imagen estática. Sin partículas, clima, luces, profundidad,
+    // parallax, cámara, drift ni eventos.
+    if (mobilePerformance) {
+      stopClimateCycle();
+      stopAutonomousCamera(false);
+      stopSceneDrift(true);
+      body.classList.remove('scene-entering', 'climate-event');
+      body.dataset.climateState = 'normal';
+      updateSceneScrollDepth();
+
+      if (photoSrc) {
+        sceneArt.innerHTML = `<div class="scene-background-motion"><img class="scene-photo" src="${esc(photoSrc)}" alt=""></div>`;
+      } else {
+        sceneArt.innerHTML = sceneSvg(key);
+      }
+      return;
+    }
+
+    nudgeSceneEntrance();
     const lighting = sceneLightHtml(gameId);
     const ambient = ambientEffectHtml(gameId);
     const foreground = foregroundEffectHtml(gameId);
     const climateEvent = sceneEventHtml(gameId);
+
     startClimateCycle(gameId);
     startSceneDrift(gameId);
     scheduleAutonomousCamera(gameId, true);
     updateSceneScrollDepth();
+
     if (photoSrc) {
-      const depthLayers = mobilePerformance
-        ? ''
-        : `<div class="scene-depth scene-depth-back" style="background-image:url('${esc(photoSrc)}')"></div><div class="scene-depth scene-depth-front" style="background-image:url('${esc(photoSrc)}')"></div>`;
-      sceneArt.innerHTML = `<div class="scene-background-motion">${depthLayers}<img class="scene-photo" src="${esc(photoSrc)}" alt=""></div>${lighting}${ambient}${foreground}${climateEvent}`;
+      sceneArt.innerHTML = `<div class="scene-background-motion"><div class="scene-depth scene-depth-back" style="background-image:url('${esc(photoSrc)}')"></div><img class="scene-photo" src="${esc(photoSrc)}" alt=""><div class="scene-depth scene-depth-front" style="background-image:url('${esc(photoSrc)}')"></div></div>${lighting}${ambient}${foreground}${climateEvent}`;
       return;
     }
     sceneArt.innerHTML = `${sceneSvg(key)}${lighting}${ambient}${foreground}${climateEvent}`;
   }
-
 
   function presentationRows() {
     const ranked = rankedJourney();
@@ -2221,6 +2247,7 @@
   }
 
   function retryPendingAudio() {
+    if (mobilePerformance) return;
     if (!pendingAudioRetry || !audio.src || !audio.paused) return;
     void playCurrentThemeWithFade();
   }
@@ -2349,6 +2376,8 @@
 
     cancelVolumeFade();
     audio.pause();
+    body.classList.remove('mobile-music-active');
+
     if (activeObjectUrl) {
       URL.revokeObjectURL(activeObjectUrl);
       activeObjectUrl = null;
@@ -2357,16 +2386,42 @@
 
     currentGameMusicId = gameId;
     currentThemeSignature = theme.signature;
+    currentThemeStartAt = Math.max(0, Number(theme.startAt) || 0);
+
+    // En móvil ni siquiera precargamos la canción hasta que el usuario
+    // pulsa "Activar música".
+    audio.preload = mobilePerformance ? 'none' : 'metadata';
     audio.src = source;
+
     if (playerSeek) playerSeek.value = '0';
     if (playerCurrentTime) playerCurrentTime.textContent = '0:00';
     if (playerDuration) playerDuration.textContent = '0:00';
     audio.muted = false;
 
-    const requestedStart = Math.max(0, Number(theme.startAt) || 0);
+    player.hidden = false;
+    body.classList.add('player-visible');
+    playerTitle.textContent = theme.title || 'Tema del juego';
+    playerGame.textContent = gameById.get(gameId)?.title || '';
+    playerVolume.value = String(Math.round(volume * 100));
+    restoreMusicWidgetPosition();
+
+    if (mobilePerformance) {
+      pendingAudioRetry = false;
+      if (mobileMusicToggleButton) {
+        mobileMusicToggleButton.hidden = false;
+        mobileMusicToggleButton.textContent = '▶ Activar música';
+        mobileMusicToggleButton.setAttribute('aria-pressed', 'false');
+      }
+      return;
+    }
+
+    if (mobileMusicToggleButton) mobileMusicToggleButton.hidden = true;
+
     const seekToRequestedStart = () => {
       const duration = audio.duration;
-      const safeStart = Number.isFinite(duration) && duration > 0 ? Math.min(requestedStart, Math.max(0, duration - .05)) : requestedStart;
+      const safeStart = Number.isFinite(duration) && duration > 0
+        ? Math.min(currentThemeStartAt, Math.max(0, duration - .05))
+        : currentThemeStartAt;
       try { audio.currentTime = safeStart; } catch (_) {}
       if (playerCurrentTime) playerCurrentTime.textContent = formatTime(safeStart);
     };
@@ -2377,26 +2432,73 @@
       audio.addEventListener('loadedmetadata', finish, { once: true });
       audio.addEventListener('error', resolve, { once: true });
     });
+
     audio.load();
     await metadataReady;
     if (requestId !== themeRequestId) return;
 
-    player.hidden = false;
-    body.classList.add('player-visible');
-    playerTitle.textContent = theme.title || 'Tema del juego';
-    playerGame.textContent = gameById.get(gameId)?.title || '';
-    playerVolume.value = String(Math.round(volume * 100));
-    restoreMusicWidgetPosition();
-
     const played = await playCurrentThemeWithFade();
     if (!played) showSavedToast('Toca en cualquier parte para activar la música');
   }
+
+  async function toggleMobileMusic() {
+    if (!mobilePerformance || !audio.src) return;
+
+    if (!audio.paused) {
+      cancelVolumeFade();
+      audio.pause();
+      body.classList.remove('mobile-music-active');
+      if (mobileMusicToggleButton) {
+        mobileMusicToggleButton.textContent = '▶ Reanudar música';
+        mobileMusicToggleButton.setAttribute('aria-pressed', 'false');
+      }
+      return;
+    }
+
+    audio.preload = 'metadata';
+
+    const seekAndPlay = async () => {
+      const duration = audio.duration;
+      const safeStart = Number.isFinite(duration) && duration > 0
+        ? Math.min(currentThemeStartAt, Math.max(0, duration - .05))
+        : currentThemeStartAt;
+
+      if ((audio.currentTime || 0) < 0.05 && safeStart > 0) {
+        try { audio.currentTime = safeStart; } catch (_) {}
+      }
+
+      const played = await playCurrentThemeWithFade();
+      if (played) {
+        body.classList.add('mobile-music-active');
+        if (mobileMusicToggleButton) {
+          mobileMusicToggleButton.textContent = '❚❚ Pausar música';
+          mobileMusicToggleButton.setAttribute('aria-pressed', 'true');
+        }
+      }
+    };
+
+    if (audio.readyState >= 1) {
+      await seekAndPlay();
+      return;
+    }
+
+    audio.load();
+    const onReady = () => { void seekAndPlay(); };
+    audio.addEventListener('loadedmetadata', onReady, { once: true });
+  }
+
 
   function stopGameTheme(reset = true) {
     themeRequestId += 1;
     pendingAudioRetry = false;
     cancelVolumeFade();
     audio.pause();
+    body.classList.remove('mobile-music-active');
+    if (mobileMusicToggleButton) {
+      mobileMusicToggleButton.hidden = true;
+      mobileMusicToggleButton.textContent = '▶ Activar música';
+      mobileMusicToggleButton.setAttribute('aria-pressed', 'false');
+    }
     player.hidden = true;
     body.classList.remove('player-visible');
     closeThemeInfo();
@@ -2618,6 +2720,7 @@
       });
     }
 
+    mobileMusicToggleButton?.addEventListener('click', () => { void toggleMobileMusic(); });
     themeInfoButton?.addEventListener('click', openThemeInfo);
     themeInfoClose?.addEventListener('click', closeThemeInfo);
     themeInfoModal?.addEventListener('click', (event) => { if (event.target === themeInfoModal) closeThemeInfo(); });

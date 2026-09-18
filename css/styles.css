@@ -1961,7 +1961,7 @@ body.climate-event[data-climate-event="flare"] .scene-foreground{
 }
 
 /* =========================================================
-   v4.13.6 · Dirección artística, cámara autónoma y rendimiento
+   v4.13.7 · Dirección artística, cámara autónoma y rendimiento
    ========================================================= */
 :root{
   --scene-light-x:50%;
@@ -2013,7 +2013,7 @@ body[data-scene="re1-remaster"] .scene-depth-back,body[data-scene="re2-og"] .sce
 
 
 /* =========================================================
-   v4.13.6 · FONDO SIEMPRE VIVO
+   v4.13.7 · FONDO SIEMPRE VIVO
    El fondo fotográfico se mueve también durante la lectura normal.
    Las partículas NO dependen de esta capa.
    ========================================================= */
@@ -2093,7 +2093,7 @@ body.background-only .scene-background-motion{
 
 
 /* =========================================================
-   v4.13.6 · MODO RENDIMIENTO MÓVIL
+   v4.13.7 · MODO RENDIMIENTO MÓVIL
    Solo se activa en pantallas táctiles pequeñas. PC queda intacto.
    ========================================================= */
 body.mobile-performance{
@@ -2204,3 +2204,116 @@ body.mobile-performance:not(.climate-event) .scene-event{
 
 /* Nada de cambios en escritorio: estas reglas dependen de la clase que
    JS solo añade a teléfono/touch pequeño. */
+
+
+/* =========================================================
+   v4.13.7 · MÓVIL LITE
+   En teléfono prima la fluidez: una imagen estática y cero efectos.
+   Escritorio conserva el sistema visual completo.
+   ========================================================= */
+body.mobile-performance .storm-canvas,
+body.mobile-performance .storm-flash,
+body.mobile-performance .scene-backdrop,
+body.mobile-performance .scene-lighting,
+body.mobile-performance .scene-effects,
+body.mobile-performance .scene-foreground,
+body.mobile-performance .scene-event,
+body.mobile-performance .scene-depth{
+  display:none!important;
+}
+
+body.mobile-performance .scene-art{
+  transition:none!important;
+}
+
+body.mobile-performance .scene-background-motion{
+  inset:0!important;
+  animation:none!important;
+  transform:none!important;
+  transition:none!important;
+  will-change:auto!important;
+}
+
+body.mobile-performance.background-only .scene-background-motion{
+  animation:none!important;
+  transform:none!important;
+}
+
+body.mobile-performance .scene-background-motion .scene-photo,
+body.mobile-performance .scene-art .scene-photo{
+  transform:none!important;
+  animation:none!important;
+  transition:none!important;
+  will-change:auto!important;
+  filter:brightness(.58) saturate(.94)!important;
+  opacity:.82!important;
+}
+
+body.mobile-performance .screen-vignette{
+  background:rgba(2,7,11,.26)!important;
+}
+
+/* Evitamos composiciones y filtros costosos por completo en móvil. */
+body.mobile-performance *,
+body.mobile-performance *::before,
+body.mobile-performance *::after{
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
+}
+
+/* Reproductor móvil: por defecto solo título + botón de activación.
+   Los controles extra aparecen únicamente si el usuario enciende la música. */
+.mobile-music-toggle-button{
+  min-height:38px;
+  padding:8px 12px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:10px;
+  background:rgba(255,255,255,.055);
+  color:#fff;
+  font:inherit;
+  font-size:.8rem;
+  font-weight:800;
+  cursor:pointer;
+}
+
+body.mobile-performance .music-widget-progress,
+body.mobile-performance .music-widget-volume,
+body.mobile-performance .theme-info-button{
+  display:none!important;
+}
+
+body.mobile-performance.mobile-music-active .music-widget-progress,
+body.mobile-performance.mobile-music-active .music-widget-volume,
+body.mobile-performance.mobile-music-active .theme-info-button{
+  display:flex!important;
+}
+
+/* Nada de desplazamiento/zoom del fondo al hacer scroll en móvil. */
+body.mobile-performance .scene-art,
+body.mobile-performance .scene-photo,
+body.mobile-performance .scene-background-motion{
+  translate:none!important;
+}
+
+/* Eliminamos transiciones decorativas caras de paneles grandes. */
+body.mobile-performance .detail-hero,
+body.mobile-performance .review-card,
+body.mobile-performance .side-card,
+body.mobile-performance .review-section,
+body.mobile-performance .review-verdict{
+  transition:none!important;
+}
+
+@media(max-width:700px){
+  body.mobile-performance .music-widget{
+    gap:7px;
+  }
+  body.mobile-performance:not(.mobile-music-active) .music-widget{
+    grid-template-columns:minmax(0,1fr) auto!important;
+  }
+  body.mobile-performance:not(.mobile-music-active) .mobile-music-toggle-button{
+    grid-column:2;
+    grid-row:1 / span 2;
+    align-self:center;
+  }
+}
