@@ -1162,8 +1162,8 @@
         ]
       },
       {
-        "title": "Conclusión",
-        "verdict": false,
+        "title": "Veredicto final",
+        "verdict": true,
         "paragraphs": [
           "Ultimate tiene algunos problemas que quiero que el siguiente Smash arregle sin ningún tipo de duda.\nQuiero menos delay.\nQuiero un buffer mejor.\nQuiero controles muchísimo más configurables.\nQuiero que determinadas mecánicas de input funcionen mejor.\nY quiero personajes cuyo gameplay me resulte más interesante.\nPero al mismo tiempo quiero que tengan muchísimo cuidado.\nPorque hay algo que Ultimate consiguió de una forma que me parece casi perfecta:\n**hacer que jugar se sienta increíble.**\nY eso es mucho más difícil de conseguir de lo que parece.\n9/10 — SUBLIME"
         ]
