@@ -1,14 +1,12 @@
-MAUS TIER LIST — v4.12.0 VISUAL REVIEW EDITOR
+MAUS TIER LIST — v4.12.1
 
-Este ZIP es un PARCHE.
-No contiene js/site-data.js ni assets, así que no pisa tus reviews, juegos, fondos, portadas ni música actuales.
+FIX: texto en negrita dentro del Veredicto final ya no fuerza un salto de línea en la web pública.
 
-Copia el contenido de la carpeta patch encima de tu repositorio y reemplaza los archivos indicados.
+Este ZIP es un PARCHE. No contiene js/site-data.js ni assets, por lo que no pisa tus reviews ni archivos multimedia.
 
-Archivos modificados:
+Copia estos archivos encima del repositorio:
 - index.html
 - admin.html
 - version.json
 - js/app.js
-- js/admin.js
-- css/admin.css
+- css/styles.css

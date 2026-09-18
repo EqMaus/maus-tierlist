@@ -1254,7 +1254,7 @@
     const sections = reviewSectionsFor(gameId, value);
     if (!sections.length) return '<div class="review-layout"><p class="empty-review">Sin review todavía.</p></div>';
     return `<div class="review-layout">${sections.map((section) => {
-      if (section.verdict) return `<section class="review-verdict"><span>Veredicto final</span><strong>${inlineMarkdown(section.text).replace(/\n/g, '<br>')}</strong></section>`;
+      if (section.verdict) return `<section class="review-verdict"><span>Veredicto final</span><div class="review-verdict-body">${inlineMarkdown(section.text).replace(/\n/g, '<br>')}</div></section>`;
       return `<section class="review-section"><div class="review-section-head">${esc(section.title)}</div><div class="review-copy">${paragraphHtml(proseParagraphs(section.text))}</div></section>`;
     }).join('')}</div>`;
   }
@@ -1270,7 +1270,7 @@
     const html = sections.map((section) => {
       if (section.verdict) {
         const index = partIndex++;
-        return `<section class="review-verdict"><span>Veredicto final</span><strong class="review-inline-editor review-inline-verdict" contenteditable="true" spellcheck="true" data-review-edit-part="${index}" data-edit-game="${esc(gameId)}">${inlineMarkdown(section.text).replace(/\n/g, '<br>')}</strong></section>`;
+        return `<section class="review-verdict"><span>Veredicto final</span><div class="review-verdict-body review-inline-editor review-inline-verdict" contenteditable="true" spellcheck="true" data-review-edit-part="${index}" data-edit-game="${esc(gameId)}">${inlineMarkdown(section.text).replace(/\n/g, '<br>')}</div></section>`;
       }
       const paragraphs = proseParagraphs(section.text);
       const content = paragraphs.map((paragraph) => editableParagraphHtml(paragraph, gameId, partIndex++)).join('');

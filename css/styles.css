@@ -62,7 +62,7 @@ button,input{font:inherit} button{color:inherit} a{color:inherit;text-decoration
 .review-quote span,.review-verdict span{display:block;margin-bottom:10px;font-size:.74rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:#9fc1d6}
 .review-quote blockquote{margin:0;color:#fff;font-size:1.2rem;line-height:1.5;font-weight:700}
 .review-verdict{border:1px solid color-mix(in srgb,var(--tier) 34%, rgba(255,255,255,.08));border-radius:20px;padding:19px 18px;background:radial-gradient(circle at 85% 20%, color-mix(in srgb,var(--tier) 18%, transparent), transparent 24%),linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.012));box-shadow:0 12px 30px rgba(0,0,0,.12)}
-.review-verdict strong{display:block;font-size:1.3rem;line-height:1.45;color:#fff}
+.review-verdict-body{display:block;font-size:1.3rem;line-height:1.45;color:#fff;font-weight:700}.review-verdict-body strong{display:inline;font-size:inherit;line-height:inherit;color:inherit;font-weight:900}
 .review-edit-wrap{display:grid;gap:10px}
 .review-edit-wrap label{display:grid;gap:9px;font-weight:700;color:#dce6ed}
 .review-edit-wrap small{color:var(--muted)}
