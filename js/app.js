@@ -149,8 +149,9 @@
   let currentGameSceneId = null;
 
   let sceneMotionFrame = 0;
+  let sceneDriftFrame = 0;
   let sceneEnterTimer = 0;
-  const sceneMotion = { currentX: 0, currentY: 0, targetX: 0, targetY: 0 };
+  const sceneMotion = { currentX: 0, currentY: 0, targetX: 0, targetY: 0, driftX: 0, driftY: 0 };
 
   let autoCameraTimer = 0;
   const SCENE_DIRECTION = {
@@ -195,6 +196,47 @@
     if (reset) resetSceneMotion();
   }
 
+  function stopSceneDrift(reset = false) {
+    if (sceneDriftFrame) cancelAnimationFrame(sceneDriftFrame);
+    sceneDriftFrame = 0;
+    if (reset) {
+      sceneMotion.driftX = 0;
+      sceneMotion.driftY = 0;
+      updateSceneMotionVars();
+    }
+  }
+
+  function startSceneDrift(gameId) {
+    stopSceneDrift(false);
+    if (!gameId || document.hidden) return;
+    const profile = sceneDirectionFor(gameId);
+    const phaseX = Math.random() * Math.PI * 2;
+    const phaseY = Math.random() * Math.PI * 2;
+    const startedAt = performance.now();
+    const tick = (now) => {
+      if (document.hidden || currentGameSceneId !== gameId || !body.classList.contains('scene-active')) {
+        sceneDriftFrame = 0;
+        return;
+      }
+      const elapsed = now - startedAt;
+      const boost = body.classList.contains('background-only') ? 1.24 : 1;
+      const power = body.classList.contains('low-power') ? 0.82 : 1;
+      const ampX = Math.max(0.75, profile.camX * 0.16) * boost * power;
+      const ampY = Math.max(0.55, profile.camY * 0.16) * boost * power;
+      sceneMotion.driftX = (
+        Math.sin(elapsed * 0.00014 + phaseX) +
+        Math.sin(elapsed * 0.000047 + phaseX * 1.9) * 0.55
+      ) * ampX;
+      sceneMotion.driftY = (
+        Math.cos(elapsed * 0.00012 + phaseY) +
+        Math.sin(elapsed * 0.000039 + phaseY * 1.6) * 0.45
+      ) * ampY;
+      updateSceneMotionVars();
+      sceneDriftFrame = requestAnimationFrame(tick);
+    };
+    sceneDriftFrame = requestAnimationFrame(tick);
+  }
+
   function scheduleAutonomousCamera(gameId, immediate = false) {
     window.clearTimeout(autoCameraTimer);
     if (!gameId || document.hidden) return;
@@ -213,8 +255,10 @@
   }
 
   function updateSceneMotionVars() {
-    body.style.setProperty('--parallax-x', `${sceneMotion.currentX.toFixed(2)}px`);
-    body.style.setProperty('--parallax-y', `${sceneMotion.currentY.toFixed(2)}px`);
+    const combinedX = sceneMotion.currentX + sceneMotion.driftX;
+    const combinedY = sceneMotion.currentY + sceneMotion.driftY;
+    body.style.setProperty('--parallax-x', `${combinedX.toFixed(2)}px`);
+    body.style.setProperty('--parallax-y', `${combinedY.toFixed(2)}px`);
   }
 
   function animateSceneMotion() {
@@ -1753,6 +1797,7 @@
     currentGameSceneId = null;
     stopClimateCycle();
     stopAutonomousCamera();
+    stopSceneDrift(true);
     body.classList.remove('scene-active', 'scene-entering', 'scene-cinematic');
     body.dataset.scene = 'default';
     body.dataset.ambientEffect = 'none';
@@ -1785,6 +1830,7 @@
     const foreground = foregroundEffectHtml(gameId);
     const climateEvent = sceneEventHtml(gameId);
     startClimateCycle(gameId);
+    startSceneDrift(gameId);
     scheduleAutonomousCamera(gameId, true);
     updateSceneScrollDepth();
     if (photoSrc) {
@@ -2022,19 +2068,31 @@
   function updateReviewReadingProgress() {
     if (!reviewReadingProgress) return;
     const root = app?.querySelector('.review-render-root');
+    const bar = reviewReadingProgress.querySelector('i');
     if (!root || root.offsetParent === null) {
       reviewReadingProgress.classList.remove('is-active');
-      reviewReadingProgress.querySelector('i').style.width = '0%';
+      if (bar) bar.style.width = '0%';
       return;
     }
+
     const rect = root.getBoundingClientRect();
     const rootTop = window.scrollY + rect.top;
-    const start = rootTop - Math.min(130, window.innerHeight * .18);
-    const end = rootTop + root.offsetHeight - Math.min(window.innerHeight * .55, 440);
-    const span = Math.max(1, end - start);
-    const progress = Math.min(1, Math.max(0, (window.scrollY - start) / span));
+    const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    const start = Math.max(0, rootTop - Math.min(130, window.innerHeight * .18));
+    const idealEnd = rootTop + root.offsetHeight - Math.min(window.innerHeight * .55, 440);
+
+    // El final teórico de la review a veces queda por debajo del máximo scroll
+    // alcanzable por el navegador (por padding, reproductor fijo, etc.).
+    // En ese caso usamos el final real de la página para que al bajar del todo
+    // la barra llegue exactamente al 100 %.
+    const end = Math.max(start + 1, Math.min(idealEnd, maxScroll));
+    const currentScroll = Math.min(window.scrollY, maxScroll);
+    const progress = maxScroll <= start
+      ? 1
+      : Math.min(1, Math.max(0, (currentScroll - start) / Math.max(1, end - start)));
+
     reviewReadingProgress.classList.add('is-active');
-    reviewReadingProgress.querySelector('i').style.width = `${(progress * 100).toFixed(2)}%`;
+    if (bar) bar.style.width = `${(progress * 100).toFixed(2)}%`;
 
     const sections = Array.from(root.querySelectorAll('.review-render-section'));
     let activeIndex = 0;
@@ -2508,8 +2566,10 @@
         window.clearTimeout(climateCycleTimer);
         window.clearTimeout(climateEventTimer);
         window.clearTimeout(autoCameraTimer);
+        stopSceneDrift(false);
       } else if (currentGameSceneId) {
         startClimateCycle(currentGameSceneId);
+        startSceneDrift(currentGameSceneId);
         scheduleAutonomousCamera(currentGameSceneId, false);
         updateReviewReadingProgress();
       }
