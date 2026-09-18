@@ -21,8 +21,5 @@
 .review-section-nav-button:hover{color:#fff;background:rgba(255,255,255,.04)}
 .review-section-nav-button.is-active{color:#fff;border-color:color-mix(in srgb,var(--review-tier) 32%,rgba(255,255,255,.07));background:color-mix(in srgb,var(--review-tier) 10%,rgba(255,255,255,.02))}
 .review-section-nav-button.is-verdict{color:#d7c384}
-.review-reading-progress{position:fixed;left:0;right:0;top:0;height:3px;z-index:999;pointer-events:none;opacity:0;transition:opacity .2s ease;background:rgba(255,255,255,.04)}
-.review-reading-progress.is-active{opacity:1}
-.review-reading-progress>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#7fc6ec,#8ee4bc);box-shadow:0 0 13px rgba(117,207,235,.4);transition:width .08s linear}
 @media(max-width:700px){.review-section-nav{top:58px;margin-inline:-4px}.review-render-root .review-section{padding:16px}.review-render-root .review-verdict{padding:16px}.review-render-root .review-verdict-body{font-size:1.15rem}.review-section-nav-button{font-size:.68rem;padding:7px 9px}}
-@media(prefers-reduced-motion:reduce){.review-section-nav-button,.review-reading-progress>i{transition:none}}
+@media(prefers-reduced-motion:reduce){.review-section-nav-button{transition:none}}

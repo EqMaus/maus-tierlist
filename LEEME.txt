@@ -1,7 +1,10 @@
-MAUS TIER LIST — v4.13.3
+MAUS TIER LIST — v4.13.4
 
-AJUSTE DE MOVIMIENTO DE FONDOS:
-- Modo normal: ahora usa la intensidad que antes tenía 'Ver fondo'.
-- 'Ver fondo': ahora tiene aproximadamente un 33 % más de movimiento que antes.
+CAMBIOS:
+- Eliminada por completo la barra de progreso de lectura.
+- El fondo fotográfico se mueve siempre, también en modo normal.
+- El movimiento ya no depende de estar en 'Ver fondo'.
+- 'Ver fondo' usa aproximadamente un 33 % más de amplitud.
+- Las partículas siguen moviéndose por su cuenta y no van pegadas al fondo.
 
-Este ZIP sigue siendo un parche de código: no incluye js/site-data.js ni assets.
+Este ZIP es un parche de código: no incluye js/site-data.js ni assets.

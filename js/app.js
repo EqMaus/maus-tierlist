@@ -40,7 +40,6 @@
   const importEditsButton = byId('importEditsButton');
   const importEditsInput = byId('importEditsInput');
   const saveToast = byId('saveToast');
-  const reviewReadingProgress = byId('reviewReadingProgress');
 
   const games = Array.isArray(window.MAUS_GAMES) ? window.MAUS_GAMES : [];
   const scale = Array.isArray(window.MAUS_SCALE) ? window.MAUS_SCALE : [];
@@ -1803,7 +1802,6 @@
     body.dataset.ambientEffect = 'none';
     resetSceneMotion();
     updateSceneScrollDepth();
-    if (reviewReadingProgress) reviewReadingProgress.classList.remove('is-active');
     if (backgroundViewButton) backgroundViewButton.hidden = true;
     if (sceneArt) sceneArt.innerHTML = '';
   }
@@ -1834,7 +1832,7 @@
     scheduleAutonomousCamera(gameId, true);
     updateSceneScrollDepth();
     if (photoSrc) {
-      sceneArt.innerHTML = `<div class="scene-depth scene-depth-back" style="background-image:url('${esc(photoSrc)}')"></div><img class="scene-photo" src="${esc(photoSrc)}" alt=""><div class="scene-depth scene-depth-front" style="background-image:url('${esc(photoSrc)}')"></div>${lighting}${ambient}${foreground}${climateEvent}`;
+      sceneArt.innerHTML = `<div class="scene-background-motion"><div class="scene-depth scene-depth-back" style="background-image:url('${esc(photoSrc)}')"></div><img class="scene-photo" src="${esc(photoSrc)}" alt=""><div class="scene-depth scene-depth-front" style="background-image:url('${esc(photoSrc)}')"></div></div>${lighting}${ambient}${foreground}${climateEvent}`;
       return;
     }
     sceneArt.innerHTML = `${sceneSvg(key)}${lighting}${ambient}${foreground}${climateEvent}`;
@@ -2065,44 +2063,6 @@
     });
   }
 
-  function updateReviewReadingProgress() {
-    if (!reviewReadingProgress) return;
-    const root = app?.querySelector('.review-render-root');
-    const bar = reviewReadingProgress.querySelector('i');
-    if (!root || root.offsetParent === null) {
-      reviewReadingProgress.classList.remove('is-active');
-      if (bar) bar.style.width = '0%';
-      return;
-    }
-
-    const rect = root.getBoundingClientRect();
-    const rootTop = window.scrollY + rect.top;
-    const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-    const start = Math.max(0, rootTop - Math.min(130, window.innerHeight * .18));
-    const idealEnd = rootTop + root.offsetHeight - Math.min(window.innerHeight * .55, 440);
-
-    // El final teórico de la review a veces queda por debajo del máximo scroll
-    // alcanzable por el navegador (por padding, reproductor fijo, etc.).
-    // En ese caso usamos el final real de la página para que al bajar del todo
-    // la barra llegue exactamente al 100 %.
-    const end = Math.max(start + 1, Math.min(idealEnd, maxScroll));
-    const currentScroll = Math.min(window.scrollY, maxScroll);
-    const progress = maxScroll <= start
-      ? 1
-      : Math.min(1, Math.max(0, (currentScroll - start) / Math.max(1, end - start)));
-
-    reviewReadingProgress.classList.add('is-active');
-    if (bar) bar.style.width = `${(progress * 100).toFixed(2)}%`;
-
-    const sections = Array.from(root.querySelectorAll('.review-render-section'));
-    let activeIndex = 0;
-    sections.forEach((section, index) => {
-      if (section.getBoundingClientRect().top <= 175) activeIndex = index;
-    });
-    root.querySelectorAll('[data-review-nav-index]').forEach((button) => {
-      button.classList.toggle('is-active', Number(button.dataset.reviewNavIndex) === activeIndex);
-    });
-  }
 
   function renderGame(id, rankingMode) {
     const game = gameById.get(id);
@@ -2150,7 +2110,6 @@
       ${journeyIndex >= 0 ? reviewJourneyNav(journeyPrev, game, journeyNext, rankingMode) : ''}
     </div>`;
 
-    requestAnimationFrame(updateReviewReadingProgress);
     void startGameTheme(game.id);
   }
 
@@ -2557,9 +2516,7 @@
     body.classList.toggle('low-power', Boolean(lowPower));
     window.addEventListener('scroll', () => {
       updateSceneScrollDepth();
-      updateReviewReadingProgress();
     }, { passive: true });
-    window.addEventListener('resize', updateReviewReadingProgress, { passive: true });
     document.addEventListener('visibilitychange', () => {
       body.classList.toggle('page-hidden', document.hidden);
       if (document.hidden) {
@@ -2571,8 +2528,7 @@
         startClimateCycle(currentGameSceneId);
         startSceneDrift(currentGameSceneId);
         scheduleAutonomousCamera(currentGameSceneId, false);
-        updateReviewReadingProgress();
-      }
+        }
     });
 
     app.addEventListener('click', handleAppClick);
@@ -2580,9 +2536,6 @@
     app.addEventListener('change', handleAppChange);
     app.addEventListener('focusout', handleAppBlur);
     app.addEventListener('keydown', handleAppKeydown);
-    app.addEventListener('toggle', (event) => {
-      if (event.target.matches('.spoiler-review')) requestAnimationFrame(updateReviewReadingProgress);
-    }, true);
 
     if (playerSeek) {
       playerSeek.value = '0';

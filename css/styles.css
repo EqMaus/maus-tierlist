@@ -1961,7 +1961,7 @@ body.climate-event[data-climate-event="flare"] .scene-foreground{
 }
 
 /* =========================================================
-   v4.13.3 · Dirección artística, cámara autónoma y rendimiento
+   v4.13.4 · Dirección artística, cámara autónoma y rendimiento
    ========================================================= */
 :root{
   --scene-light-x:50%;
@@ -2010,3 +2010,83 @@ body[data-scene="re1-remaster"] .scene-depth-back,body[data-scene="re2-og"] .sce
 
 @media(max-width:700px){.scene-depth-front{opacity:calc(var(--scene-depth-strength) * .12)}body.background-only .scene-depth-front{opacity:calc(var(--scene-depth-strength) * .18)}}
 .scene-lighting{transform:translate3d(calc(var(--parallax-x) * .34),calc(var(--parallax-y) * .34 + var(--scene-scroll-y) * .12),0);transition:transform 10s ease-in-out,opacity 2.2s ease,filter 2.2s ease}
+
+
+/* =========================================================
+   v4.13.4 · FONDO SIEMPRE VIVO
+   El fondo fotográfico se mueve también durante la lectura normal.
+   Las partículas NO dependen de esta capa.
+   ========================================================= */
+.scene-background-motion{
+  position:absolute;
+  inset:-1.5%;
+  z-index:0;
+  overflow:visible;
+  pointer-events:none;
+  transform-origin:center center;
+  will-change:transform;
+  animation:sceneBackgroundAlwaysDrift 18s ease-in-out infinite alternate;
+}
+
+/* Modo normal: intensidad equivalente al movimiento que antes se
+   reservaba para "Ver fondo". */
+@keyframes sceneBackgroundAlwaysDrift{
+  0%{
+    transform:translate3d(-6px,-4px,0) scale(1.012);
+  }
+  34%{
+    transform:translate3d(5px,-1px,0) scale(1.016);
+  }
+  67%{
+    transform:translate3d(7px,5px,0) scale(1.013);
+  }
+  100%{
+    transform:translate3d(-4px,6px,0) scale(1.017);
+  }
+}
+
+/* Ver fondo: aproximadamente +33 % de desplazamiento. */
+body.background-only .scene-background-motion{
+  animation-name:sceneBackgroundAlwaysDriftCinematic;
+}
+@keyframes sceneBackgroundAlwaysDriftCinematic{
+  0%{
+    transform:translate3d(-8px,-5.3px,0) scale(1.016);
+  }
+  34%{
+    transform:translate3d(6.7px,-1.3px,0) scale(1.021);
+  }
+  67%{
+    transform:translate3d(9.3px,6.7px,0) scale(1.017);
+  }
+  100%{
+    transform:translate3d(-5.3px,8px,0) scale(1.022);
+  }
+}
+
+/* Las capas internas mantienen su movimiento de cámara propio.
+   La envolvente añade movimiento continuo incluso mientras la cámara
+   está entre dos destinos. */
+.scene-background-motion .scene-photo,
+.scene-background-motion .scene-depth{
+  backface-visibility:hidden;
+}
+
+/* En móvil bajamos ligeramente la amplitud visual para evitar mareo,
+   pero el fondo sigue sin quedarse estático. */
+@media(max-width:700px){
+  .scene-background-motion{
+    animation-name:sceneBackgroundAlwaysDriftMobile;
+  }
+  body.background-only .scene-background-motion{
+    animation-name:sceneBackgroundAlwaysDriftMobileCinematic;
+  }
+}
+@keyframes sceneBackgroundAlwaysDriftMobile{
+  from{transform:translate3d(-4px,-2.5px,0) scale(1.01)}
+  to{transform:translate3d(4px,4px,0) scale(1.014)}
+}
+@keyframes sceneBackgroundAlwaysDriftMobileCinematic{
+  from{transform:translate3d(-5.3px,-3.3px,0) scale(1.013)}
+  to{transform:translate3d(5.3px,5.3px,0) scale(1.018)}
+}
