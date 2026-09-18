@@ -175,21 +175,21 @@
   };
 
   const AMBIENT_EFFECT_COUNTS = {
-    'ash-embers': 38,
-    'divine-sparks': 28,
-    'ember-dust': 30,
-    'rain-sparks': 42,
-    'rain-embers': 42,
-    'cold-rain': 38,
-    'mansion-dust': 26,
-    'village-ash': 30,
-    'ominous-motes': 28,
-    'wind-dust': 34,
-    'moon-motes': 28,
-    'twilight-motes': 26,
-    'ghost-mist': 10,
-    'crystal-sparkles': 24,
-    'dark-motes': 28
+    'ash-embers': 68,
+    'divine-sparks': 54,
+    'ember-dust': 72,
+    'rain-sparks': 54,
+    'rain-embers': 56,
+    'cold-rain': 64,
+    'mansion-dust': 56,
+    'village-ash': 66,
+    'ominous-motes': 72,
+    'wind-dust': 82,
+    'moon-motes': 80,
+    'twilight-motes': 78,
+    'ghost-mist': 42,
+    'crystal-sparkles': 32,
+    'dark-motes': 34
   };
 
   function ambientEffectFor(gameId) {
