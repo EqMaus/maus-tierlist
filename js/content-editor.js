@@ -34,7 +34,8 @@
       <div class="form-card"><h3>Relacionar con un juego de la web</h3><label class="field"><span>Juego y ambiente</span><select data-track-key="gameId"><option value="">Sin juego vinculado</option>${games.map(g=>`<option value="${esc(g.id)}" ${t.gameId===g.id?'selected':''}>${esc(g.title)}</option>`).join('')}</select></label><button type="button" class="ghost-button" data-import-game ${t.gameId?'':'disabled'}>Usar su portada y su música</button><p class="field-help">Vincula la review y permite recuperar el ambiente del juego. Puedes usar un MP3 y una portada distintos para cada ficha.</p></div>
       <div class="content-media">${fileField('Portada',t.id,'cover',t.cover)}${fileField('Fondo',t.id,'background',t.background)}${fileField('MP3',t.id,'audio',t.audio)}</div>
       ${field('Segundo inicial de reproducción','startAt',t.startAt||0,'number','min="0" step="0.1"')}
-      <div class="form-card resonance-deep-editor"><h3>Más información sobre esta pieza</h3><p class="field-help">Estos campos controlan la ficha editorial pastel que se abre desde «Más información sobre esta pieza». La portada usa el mismo archivo de Portada de arriba.</p>
+      <div class="form-card resonance-deep-editor"><h3>Más información sobre esta pieza</h3><p class="field-help">Estos campos controlan la ficha editorial de Resonancias. Puedes usar una imagen distinta a la portada principal; si no eliges ninguna, se usará la portada de arriba.</p>
+      ${fileField('Imagen de la ficha',t.id,'detailCover',t.detailCover||'')}
       ${field('Cita superior','deepInfo.quote',t.deepInfo?.quote||'','textarea')}
       ${field('Contexto en el juego','deepInfo.context',t.deepInfo?.context||'','textarea')}
       ${field('Análisis musical — separa párrafos con una línea en blanco','deepInfo.analysis',(t.deepInfo?.analysis||[]).join('\n\n'),'textarea')}

@@ -2718,7 +2718,7 @@
         </div>
         <div class="resonance-info-layout">
           <aside class="resonance-info-left">
-            ${track.cover ? `<img class="resonance-info-cover" src="${esc(track.cover)}" alt="Portada relacionada con ${esc(track.title || 'la pieza')}">` : ''}
+            ${(track.detailCover || track.cover) ? `<img class="resonance-info-cover" src="${esc(track.detailCover || track.cover)}" alt="Portada relacionada con ${esc(track.title || 'la pieza')}">` : ''}
             <dl class="resonance-info-facts">
               ${track.composer ? `<div><dt>COMPOSITOR</dt><dd>${esc(track.composer)}</dd></div>` : ''}
               ${track.album ? `<div><dt>ÁLBUM</dt><dd>${esc(track.album)}</dd></div>` : ''}

@@ -96,7 +96,7 @@
       if(!String(track.title||'').trim())throw Error('Hay una ficha musical sin título.');
       if(track.published && (!String(track.game||'').trim()||!track.audio))throw Error('Completa el videojuego y el MP3 antes de publicar «'+track.title+'».');
       if(!Number.isFinite(Number(track.startAt||0))||Number(track.startAt||0)<0)throw Error('El inicio de «'+track.title+'» debe ser un número positivo o cero.');
-      for(const key of ['audio','cover','background'])if(!safeAsset(track[key]))throw Error('Recurso no válido en «'+track.title+'»: '+key);
+      for(const key of ['audio','cover','background','detailCover'])if(!safeAsset(track[key]))throw Error('Recurso no válido en «'+track.title+'»: '+key);
       if(!Array.isArray(track.sections))throw Error('Las secciones musicales no tienen el formato esperado.');
     }
     for(const [,key,label,,type,options] of fields) {
