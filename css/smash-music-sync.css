@@ -9,47 +9,63 @@
 }
 
 /*
- * Retumbar separado del movimiento normal de cámara.
- * La interfaz NO se mueve.
+ * v5.2.1
  *
- * Aplicamos translate/rotate a las capas visuales reales de la escena,
- * manteniendo intactos sus transforms de parallax/zoom internos.
+ * IMPORTANTE:
+ * body[data-scene] NO contiene el ID del juego cuando se usa un fondo
+ * fotográfico; en Smash vale "custom". Por eso v5.2.0 calculaba el
+ * retumbar correctamente pero el CSS nunca se aplicaba.
+ *
+ * Ahora el CSS depende únicamente de .music-rumble-active, una clase que
+ * el sincronizador añade SOLO cuando estamos en Smash + The Dark Realm
+ * y el tiempo actual cae dentro de uno de los intervalos definidos.
  */
-body:not(.mobile-performance)[data-scene="super-smash-bros-ultimate"] .scene-art,
-body:not(.mobile-performance)[data-scene="super-smash-bros-ultimate"] .scene-backdrop{
+
+/* Fondo y fotografía: la interfaz queda completamente fuera. */
+body:not(.mobile-performance).music-rumble-active .scene-art,
+body:not(.mobile-performance).music-rumble-active .scene-backdrop{
   translate:var(--music-rumble-x) var(--music-rumble-y);
   rotate:var(--music-rumble-rot);
   will-change:translate,rotate;
+  transition:translate .018s linear,rotate .018s linear;
 }
 
-body:not(.mobile-performance)[data-scene="super-smash-bros-ultimate"] .scene-special-effects,
-body:not(.mobile-performance)[data-scene="super-smash-bros-ultimate"] .scene-lighting,
-body:not(.mobile-performance)[data-scene="super-smash-bros-ultimate"] .scene-effects,
-body:not(.mobile-performance)[data-scene="super-smash-bros-ultimate"] .scene-foreground,
-body:not(.mobile-performance)[data-scene="super-smash-bros-ultimate"] .scene-event{
+/* Rayos, partículas, iluminación y capas atmosféricas acompañan al golpe. */
+body:not(.mobile-performance).music-rumble-active .scene-special-effects,
+body:not(.mobile-performance).music-rumble-active .scene-lighting,
+body:not(.mobile-performance).music-rumble-active .scene-effects,
+body:not(.mobile-performance).music-rumble-active .scene-foreground,
+body:not(.mobile-performance).music-rumble-active .scene-event{
   translate:var(--music-rumble-fx-x) var(--music-rumble-fx-y);
   rotate:var(--music-rumble-fx-rot);
   will-change:translate,rotate;
 }
 
-body[data-scene="super-smash-bros-ultimate"].music-rumble-active .scene-art,
-body[data-scene="super-smash-bros-ultimate"].music-rumble-active .scene-backdrop{
-  transition:translate .018s linear,rotate .018s linear;
+/* Al terminar un intervalo volvemos exactamente al punto neutro. */
+body:not(.mobile-performance):not(.music-rumble-active) .scene-art,
+body:not(.mobile-performance):not(.music-rumble-active) .scene-backdrop,
+body:not(.mobile-performance):not(.music-rumble-active) .scene-special-effects,
+body:not(.mobile-performance):not(.music-rumble-active) .scene-lighting,
+body:not(.mobile-performance):not(.music-rumble-active) .scene-effects,
+body:not(.mobile-performance):not(.music-rumble-active) .scene-foreground,
+body:not(.mobile-performance):not(.music-rumble-active) .scene-event{
+  translate:0 0;
+  rotate:0deg;
 }
 
 /* Pulso visual solamente para SUPER/GIGANTE. */
-body[data-scene="super-smash-bros-ultimate"].music-super-rumble .screen-vignette{
+body:not(.mobile-performance).music-super-rumble .screen-vignette{
   filter:brightness(calc(1 - (var(--music-rumble-power) * .12)));
 }
 
-body[data-scene="super-smash-bros-ultimate"].music-super-rumble .scene-special-effects{
+body:not(.mobile-performance).music-super-rumble .scene-special-effects{
   filter:
     saturate(calc(1 + (var(--music-rumble-power) * .30)))
     contrast(calc(1 + (var(--music-rumble-power) * .10)))
     brightness(calc(1 + (var(--music-rumble-power) * .05)));
 }
 
-/* Móvil Lite: absolutamente nada de este sistema. */
+/* Móvil Lite: este sistema permanece completamente desactivado. */
 body.mobile-performance{
   --music-rumble-x:0px!important;
   --music-rumble-y:0px!important;
