@@ -14,28 +14,7 @@
    *   - repiten exactamente cada 1:39 (99 s).
    */
 
-  const nativeSetTimeout = window.setTimeout.bind(window);
-
-  /*
-   * app.js todavía conserva el retumbar aleatorio original de Smash.
-   * Bloqueamos únicamente el callback que agenda esos retumbares.
-   * El resto de setTimeout de la web funciona exactamente igual.
-   */
-  window.setTimeout = function patchedSetTimeout(callback, delay, ...args) {
-    if (typeof callback === 'function') {
-      try {
-        const source = Function.prototype.toString.call(callback);
-        const isRandomSmashRumbleQueue =
-          source.includes('triggerSceneRumble(gameId)') &&
-          source.includes('sceneRumbleTimer') &&
-          source.includes('currentGameSceneId');
-
-        if (isRandomSmashRumbleQueue) return 0;
-      } catch (_) {}
-    }
-
-    return nativeSetTimeout(callback, delay, ...args);
-  };
+  window.MAUS_SMASH_SYNC = true;
 
   const body = document.body;
   const audio = document.getElementById('audio');
@@ -107,7 +86,7 @@
   }
 
   function shouldRun() {
-    return !isMobileLite() &&
+    return (window.MausEffects?.motionAllowed() ?? true) && !isMobileLite() &&
       !document.hidden &&
       !audio.paused &&
       isSmashRoute() &&
@@ -248,6 +227,7 @@
     clearEffect();
   }
 
+  window.addEventListener('maus:effectschange', start);
   audio.addEventListener('play', start);
   audio.addEventListener('playing', start);
 

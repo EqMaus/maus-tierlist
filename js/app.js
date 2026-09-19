@@ -154,6 +154,8 @@
   let sceneMotionFrame = 0;
   let sceneDriftFrame = 0;
   let sceneEnterTimer = 0;
+  let sceneEnterFrame = 0;
+  const effectsMotionAllowed = () => window.MausEffects?.motionAllowed() ?? true;
   const sceneMotion = {
     currentX: 0,
     currentY: 0,
@@ -291,7 +293,7 @@
   function startSceneRumble(gameId) {
     stopSceneRumble(true);
     const profile = sceneRumbleProfileFor(gameId);
-    if (!profile || mobilePerformance || !gameId) return;
+    if (!profile || mobilePerformance || !gameId || !effectsMotionAllowed() || (gameId === 'super-smash-bros-ultimate' && window.MAUS_SMASH_SYNC)) return;
 
     const queueNext = () => {
       if (currentGameSceneId !== gameId || !body.classList.contains('scene-active')) return;
@@ -343,7 +345,7 @@
 
   function startSceneDrift(gameId) {
     stopSceneDrift(false);
-    if (mobilePerformance) {
+    if (mobilePerformance || !effectsMotionAllowed()) {
       sceneMotion.driftX = 0;
       sceneMotion.driftY = 0;
       updateSceneMotionVars();
@@ -380,7 +382,7 @@
 
   function scheduleAutonomousCamera(gameId, immediate = false) {
     window.clearTimeout(autoCameraTimer);
-    if (mobilePerformance) {
+    if (mobilePerformance || !effectsMotionAllowed()) {
       sceneMotion.targetX = 0;
       sceneMotion.targetY = 0;
       queueSceneMotion();
@@ -424,7 +426,7 @@
   }
 
   function queueSceneMotion() {
-    if (sceneMotionFrame) return;
+    if (sceneMotionFrame || !effectsMotionAllowed() || document.hidden) return;
     sceneMotionFrame = requestAnimationFrame(animateSceneMotion);
   }
 
@@ -439,7 +441,7 @@
   }
 
   function updateSceneScrollDepth() {
-    if (mobilePerformance) {
+    if (mobilePerformance || !effectsMotionAllowed()) {
       body.style.setProperty('--scene-scroll-y', '0px');
       body.style.setProperty('--scene-scroll-progress', '0');
       return;
@@ -464,7 +466,9 @@
   function nudgeSceneEntrance() {
     body.classList.remove('scene-entering');
     window.clearTimeout(sceneEnterTimer);
-    requestAnimationFrame(() => body.classList.add('scene-entering'));
+    cancelAnimationFrame(sceneEnterFrame);
+    if (!effectsMotionAllowed()) return;
+    sceneEnterFrame = requestAnimationFrame(() => { sceneEnterFrame = 0; if (effectsMotionAllowed() && currentGameSceneId) body.classList.add('scene-entering'); });
     sceneEnterTimer = window.setTimeout(() => body.classList.remove('scene-entering'), 1450);
   }
 
@@ -551,6 +555,7 @@
   function stopClimateCycle() {
     window.clearTimeout(climateCycleTimer);
     window.clearTimeout(climateEventTimer);
+    climateCycleTimer = climateEventTimer = 0;
     clearClimateEvent();
     currentClimateState = 'normal';
     body.dataset.climateState = 'normal';
@@ -598,7 +603,7 @@
 
   function startClimateCycle(gameId) {
     stopClimateCycle();
-    if (!gameId) return;
+    if (!gameId || !effectsMotionAllowed() || document.hidden) return;
     applyClimateState('normal');
     scheduleClimateCycle(gameId);
     scheduleClimateEvent(gameId);
@@ -2042,7 +2047,32 @@
     }, 720);
   }
 
+  function stopSceneEffects() {
+    stopClimateCycle();
+    stopAutonomousCamera(false);
+    stopSceneDrift(true);
+    stopSceneRumble(true);
+    cancelAnimationFrame(sceneMotionFrame);
+    sceneMotionFrame = 0;
+    cancelAnimationFrame(sceneEnterFrame);
+    sceneEnterFrame = 0;
+    clearTimeout(sceneEnterTimer);
+    sceneEnterTimer = 0;
+    for (const key of Object.keys(sceneMotion)) sceneMotion[key] = 0;
+    updateSceneMotionVars();
+    body.classList.remove('scene-entering');
+    body.style.setProperty('--scene-scroll-y', '0px');
+    body.style.setProperty('--scene-scroll-progress', '0');
+  }
+
+  function refreshSceneEffects() {
+    const id = currentGameSceneId;
+    stopSceneEffects();
+    if (id) applyScene(id);
+  }
+
   function clearScene() {
+    stopSceneEffects();
     setBackgroundOnly(false);
     currentGameSceneId = null;
     stopClimateCycle();
@@ -2059,6 +2089,7 @@
   }
 
   function applyScene(gameId) {
+    stopSceneEffects();
     const photoSrc = backgroundSrcFor(gameId);
     const key = gameScenes[gameId] || (photoSrc ? 'custom' : '');
     currentGameSceneId = photoSrc ? gameId : null;
@@ -2069,7 +2100,7 @@
 
     body.classList.add('scene-active');
     body.dataset.scene = key;
-    body.dataset.ambientEffect = mobilePerformance ? 'none' : ambientEffectFor(gameId);
+    body.dataset.ambientEffect = mobilePerformance || !effectsMotionAllowed() ? 'none' : ambientEffectFor(gameId);
     applySceneDirection(gameId);
     updateSceneFocusState();
 
@@ -2079,7 +2110,7 @@
     // MÓVIL LITE:
     // una única imagen estática. Sin partículas, clima, luces, profundidad,
     // parallax, cámara, drift ni eventos.
-    if (mobilePerformance) {
+    if (mobilePerformance || !effectsMotionAllowed()) {
       stopClimateCycle();
       stopAutonomousCamera(false);
       stopSceneDrift(true);
@@ -2093,6 +2124,7 @@
       } else {
         sceneArt.innerHTML = sceneSvg(key);
       }
+      if (!mobilePerformance && window.MausEffects?.effective() === 'reduced') sceneArt.insertAdjacentHTML('beforeend', sceneLightHtml(gameId));
       return;
     }
 
@@ -2935,18 +2967,11 @@
     window.addEventListener('scroll', () => {
       updateSceneScrollDepth();
     }, { passive: true });
+    window.addEventListener('maus:effectschange', refreshSceneEffects);
     document.addEventListener('visibilitychange', () => {
       body.classList.toggle('page-hidden', document.hidden);
-      if (document.hidden) {
-        window.clearTimeout(climateCycleTimer);
-        window.clearTimeout(climateEventTimer);
-        window.clearTimeout(autoCameraTimer);
-        stopSceneDrift(false);
-      } else if (currentGameSceneId) {
-        startClimateCycle(currentGameSceneId);
-        startSceneDrift(currentGameSceneId);
-        scheduleAutonomousCamera(currentGameSceneId, false);
-        }
+      if (document.hidden) stopSceneEffects();
+      else refreshSceneEffects();
     });
 
     app.addEventListener('click', handleAppClick);
@@ -3118,6 +3143,7 @@
   }
 
   window.__MAUS_TEST__ = {
+    effectsState: () => ({ scene: currentGameSceneId, drift: Boolean(sceneDriftFrame), camera: Boolean(autoCameraTimer), motion: Boolean(sceneMotionFrame), climate: Boolean(climateCycleTimer), enter: Boolean(sceneEnterFrame) }),
     getRoute: parseRoute,
     rankedIds: () => rankedJourney().map((game) => game.id),
     renderRoute,

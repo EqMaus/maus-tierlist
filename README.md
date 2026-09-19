@@ -1,3 +1,7 @@
+# Versión 5.2.3 — Control de efectos
+
+Consulta LEEME-5.2.3.txt para instalar y usar el selector de Apariencia. Las notas siguientes son el historial anterior.
+
 # Tier List de Maus v4.2.6
 
 Cambios de esta versión:

@@ -1,3 +1,21 @@
-11 grupos de comprobaciones locales superados.
-Sintaxis, parser, publicación Git simulada, SHA UTF-8 y recargas de versión.
-No se ha publicado en GitHub ni probado la interfaz en navegador.
+Versión 5.2.3
+14 grupos de pruebas de navegador superados:
+
+- Native setTimeout preserved
+- Smash rumble follows playing track
+- 12 off/reduced/full cycles restore all Smash layers and one loop per engine; music uninterrupted
+- 100 immediate cycles leave no stale entrance callback or duplicate storm loop
+- Paused music stays paused and rumble resumes at current track time
+- All 17 game scenes recover their full layer counts after disabling
+- Navigation through all 17 games while off never restarts effects; full restores current game
+- Visible selector works by mouse and keyboard without closing panel
+- Preference survives reload
+- Background-only view survives effect changes
+- System motion preference changes stop and restore engines
+- Visibility-event lifecycle does not restart disabled effects
+- Mobile selector fits and preserves lightweight rendering
+- No uncaught browser errors
+
+11 grupos de regresión adicionales: sintaxis, parser de datos, publicación Git simulada, SHA y recargas.
+Navegador Brave/Chromium headless; escritorio y móvil emulado.
+Sin publicación real, teléfono físico ni Safari.

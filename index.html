@@ -24,12 +24,12 @@
   <meta name="twitter:title" content="Tier List de Maus — Mi ranking de videojuegos">
   <meta name="twitter:description" content="Tier list personal e interactiva de videojuegos de Maus.">
   <meta name="twitter:image" content="https://eqmaus.github.io/maus-tierlist/social-preview-v4.6.3.jpg">
-  <title>Tier List de Maus — v5.2.2</title>
+  <title>Tier List de Maus — v5.2.3</title>
   <script>
     // Comprueba la versión publicada sin usar la caché del navegador.
     // Si hay una build nueva, abre la misma página con ?v=X para forzar
     // un documento HTML fresco y conserva la sección actual (#tierlist, etc.).
-    window.MAUS_BUILD_VERSION = '5.2.2';
+    window.MAUS_BUILD_VERSION = '5.2.3';
     window.MAUS_CHECK_LATEST_BUILD = function () {
       var currentBuild = window.MAUS_BUILD_VERSION;
       var versionUrl = new URL('./version.json', document.baseURI);
@@ -77,9 +77,10 @@
       if (event.persisted) window.MAUS_CHECK_LATEST_BUILD();
     });
   </script>
-  <link rel="stylesheet" href="css/styles.css?v=5.2.2">
-  <link rel="stylesheet" href="css/review-shared.css?v=5.2.2">
-  <link rel="stylesheet" href="css/smash-music-sync.css?v=5.2.2">
+  <link rel="stylesheet" href="css/styles.css?v=5.2.3">
+  <link rel="stylesheet" href="css/review-shared.css?v=5.2.3">
+  <link rel="stylesheet" href="css/smash-music-sync.css?v=5.2.3">
+  <link rel="stylesheet" href="css/effects.css?v=5.2.3">
 </head>
 <body data-scene="default">
   <canvas id="stormCanvas" class="storm-canvas" aria-hidden="true"></canvas>
@@ -139,6 +140,15 @@
         <b>✓</b>
       </button>
     </div>
+    <fieldset class="effects-settings" aria-describedby="effectsStatus">
+      <legend>Efectos del fondo</legend>
+      <div class="effects-options">
+        <label class="effects-option"><input type="radio" name="effects-mode" value="full"><span>Completo</span></label>
+        <label class="effects-option"><input type="radio" name="effects-mode" value="reduced"><span>Reducido</span></label>
+        <label class="effects-option"><input type="radio" name="effects-mode" value="off"><span>Sin efectos</span></label>
+      </div>
+      <p id="effectsStatus" role="status" aria-live="polite"></p>
+    </fieldset>
   </section>
 
   <button id="restoreUiButton" class="restore-ui-button" type="button" hidden>Devolver interfaz</button>
@@ -190,11 +200,12 @@
 
   <div id="saveToast" class="save-toast" hidden>Guardado</div>
 
-  <script src="js/site-data.js?v=5.2.2"></script>
-  <script src="js/theme-music.js?v=5.2.2"></script>
-  <script src="js/review-renderer.js?v=5.2.2"></script>
-  <script src="js/smash-music-sync.js?v=5.2.2"></script>
-  <script src="js/app.js?v=5.2.2"></script>
-  <script src="js/storm.js?v=5.2.2"></script>
+  <script src="js/effects.js?v=5.2.3"></script>
+  <script src="js/site-data.js?v=5.2.3"></script>
+  <script src="js/theme-music.js?v=5.2.3"></script>
+  <script src="js/review-renderer.js?v=5.2.3"></script>
+  <script src="js/smash-music-sync.js?v=5.2.3"></script>
+  <script src="js/app.js?v=5.2.3"></script>
+  <script src="js/storm.js?v=5.2.3"></script>
 </body>
 </html>

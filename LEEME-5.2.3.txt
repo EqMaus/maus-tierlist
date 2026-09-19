@@ -1,0 +1,54 @@
+MAUS TIER LISTS — 5.2.3 — CONTROL DE EFECTOS
+
+En Apariencia encontrarás Efectos del fondo:
+
+- Completo: todos los efectos disponibles para el dispositivo.
+- Reducido: ambiente estático, sin cámara, partículas animadas, destellos ni temblores.
+- Sin efectos: fondo fijo, sin capas ambientales.
+
+La música, su posición, volumen y pausa no cambian al cambiar de modo.
+La elección se recuerda en este navegador si permite almacenamiento local.
+Si el sistema pide movimiento reducido, Completo aplica el ambiente estático
+y el panel lo explica. En móvil se conserva la adaptación ligera existente.
+
+Al cambiar de modo se detienen y limpian los motores de escena y después
+se reconstruyen las capas del juego actual. Smash recupera el efecto que
+corresponde al instante actual de la canción, sin volver al principio.
+También se ha eliminado el parche global de setTimeout de Smash.
+
+INSTALAR LA ACTUALIZACIÓN SOBRE 5.2.1 O 5.2.2
+1. Conserva una copia de seguridad y sincroniza tu repositorio.
+2. Copia el contenido de la carpeta maus-tierlist del ZIP de actualización
+   dentro de tu carpeta maus-tierlist, combinando carpetas y sustituyendo
+   los archivos del mismo nombre. No crees una carpeta anidada maus-tierlist.
+3. Revisa el diff en GitHub Desktop, crea un commit y haz push.
+4. Espera a que termine GitHub Pages y abre Apariencia en la versión 5.2.3.
+
+El ZIP de actualización NO contiene site-data.js ni tus recursos: tus críticas,
+notas, portadas, fondos y música se conservan. Sí incluye las correcciones
+del editor y de publicación de 5.2.2, por lo que no hace falta instalar ambos ZIP.
+
+Si has modificado el código desde la copia analizada, compara antes de sustituir.
+No uses esta versión para sobrescribir una versión posterior sin revisar.
+
+ARCHIVOS DE CÓDIGO NUEVOS O ACTUALIZADOS
+index.html
+admin.html
+version.json
+js/admin.js
+js/app.js
+js/storm.js
+js/smash-music-sync.js
+js/effects.js (nuevo)
+css/effects.css (nuevo)
+
+COMPROBACIONES
+Pruebas con navegador Chromium/Brave real en modo headless, escritorio y
+emulación móvil. 17 juegos, 12 ciclos con música y 100 ciclos inmediatos;
+restauración de capas, un bucle por motor, navegación con efectos apagados,
+pausa y reanudación musical, persistencia, teclado, vista de fondo y cambios
+de preferencia del sistema. Visibilidad comprobada mediante eventos simulados.
+Además, pasan las 11 comprobaciones de regresión de publicación/datos/versión.
+No se ha publicado en tu GitHub ni probado en un teléfono físico o Safari.
+
+La recuperación persistente de borradores del editor sigue pendiente.

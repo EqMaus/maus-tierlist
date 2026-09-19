@@ -4,17 +4,6 @@
   const canvas = document.getElementById('stormCanvas');
   const flashLayer = document.getElementById('stormFlash');
 
-  // En móvil no arrancamos ni siquiera el canvas: cero RAF, cero gotas,
-  // cero rayos y cero trabajo de CPU/GPU.
-  const mobileLite = document.body.classList.contains('mobile-performance') ||
-    window.matchMedia?.('(max-width: 900px) and (hover: none) and (pointer: coarse)')?.matches;
-
-  if (mobileLite) {
-    if (canvas) canvas.hidden = true;
-    if (flashLayer) flashLayer.hidden = true;
-    return;
-  }
-
   if (!canvas) return;
 
   const ctx = canvas.getContext('2d', { alpha: true });
@@ -174,7 +163,7 @@
   }
 
   function frame(now) {
-    if (hidden) return;
+    if (hidden || window.MausEffects?.effective() !== 'full') { raf = 0; return; }
     const dt = Math.min(0.035, Math.max(0, (now - lastTime) / 1000));
     lastTime = now;
 
@@ -193,9 +182,23 @@
   function restartAnimation() {
     if (raf) cancelAnimationFrame(raf);
     raf = 0;
+    bolts = [];
+    lightningStrength = 0;
+    flashLayer?.classList.remove('flash-now');
+    ctx.clearRect(0, 0, width, height);
+    const mobile = window.matchMedia('(max-width: 900px) and (hover: none) and (pointer: coarse)').matches;
+    const mode = window.MausEffects?.effective() || 'full';
+    canvas.hidden = mobile || mode === 'off';
+    if (flashLayer) flashLayer.hidden = mobile || mode !== 'full';
+    if (hidden || mobile || mode === 'off') return;
+    resize();
     lastTime = performance.now();
-    if (!hidden) raf = requestAnimationFrame(frame);
+    nextLightningAt = lastTime + random(1600, 4200);
+    if (mode === 'reduced' || reducedMotion?.matches) { drawStaticStorm(); return; }
+    raf = requestAnimationFrame(frame);
   }
+
+  window.addEventListener('maus:effectschange', restartAnimation);
 
   document.addEventListener('visibilitychange', () => {
     hidden = document.hidden;
