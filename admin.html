@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow,noarchive">
   <meta name="theme-color" content="#071018">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://api.github.com; img-src 'self' data: blob: https://avatars.githubusercontent.com; media-src 'self' blob:; style-src 'self'; script-src 'self'; base-uri 'self'; form-action 'none';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://api.github.com https://maus-huellas.enriquegonzalvezastiz.workers.dev; img-src 'self' data: blob: https://avatars.githubusercontent.com; media-src 'self' blob:; style-src 'self'; script-src 'self'; base-uri 'self'; form-action 'none';">
   <title>Editor privado · Tier List de Maus</title>
   <link rel="stylesheet" href="css/review-shared.css?v=5.3.0">
-  <link rel="stylesheet" href="css/admin.css?v=5.3.0">
+  <link rel="stylesheet" href="css/admin.css?v=5.3.5">
   <link rel="stylesheet" href="css/content-editor.css?v=5.3.0">
 </head>
 <body>
@@ -61,7 +61,7 @@
     </section>
 
     <section id="editorPanel" class="editor-panel" hidden>
-      <nav class="editor-sections" aria-label="Sección a editar"><button type="button" data-editor-view="games" aria-pressed="true">Videojuegos</button><button type="button" data-editor-view="music" aria-pressed="false">Archivo musical</button><button type="button" data-editor-view="site" aria-pressed="false">Portadas y web</button></nav>
+      <nav class="editor-sections" aria-label="Sección a editar"><button type="button" data-editor-view="games" aria-pressed="true">Videojuegos</button><button type="button" data-editor-view="music" aria-pressed="false">Archivo musical</button><button type="button" data-editor-view="site" aria-pressed="false">Portadas y web</button><button id="huellasAdminTab" type="button" aria-pressed="false">Huellas</button></nav>
       <aside class="game-sidebar">
         <div class="sidebar-head">
           <div>
@@ -101,6 +101,34 @@
         <div id="publishNotice" class="publish-notice" hidden></div>
 
         <div id="contentEditorRoot" hidden></div>
+        <section id="huellasAdminPanel" class="huellas-admin-panel" hidden>
+          <div class="huellas-admin-auth">
+            <div>
+              <span class="eyebrow">MODERACIÓN</span>
+              <h2>Huellas</h2>
+              <p>Consulta todas las huellas, ocúltalas temporalmente o elimínalas definitivamente.</p>
+            </div>
+            <div class="huellas-token-row">
+              <label class="field">
+                <span>ADMIN_TOKEN</span>
+                <input id="huellasAdminToken" type="password" autocomplete="off" spellcheck="false" placeholder="Pega tu token privado">
+              </label>
+              <button id="huellasConnectButton" class="primary-button" type="button">Abrir moderación</button>
+            </div>
+            <p class="field-help">El token se mantiene solo durante esta pestaña y no se publica en GitHub.</p>
+            <p id="huellasAdminStatus" class="huellas-admin-status" role="status"></p>
+          </div>
+          <div id="huellasAdminContent" hidden>
+            <div class="huellas-admin-toolbar">
+              <div>
+                <strong id="huellasAdminCount">0 huellas</strong>
+                <small>Las ocultas siguen en D1, pero desaparecen de la web pública.</small>
+              </div>
+              <button id="huellasRefreshButton" class="ghost-button" type="button">Actualizar</button>
+            </div>
+            <div id="huellasAdminList" class="huellas-admin-list"></div>
+          </div>
+        </section>
         <form id="gameForm" class="game-form" autocomplete="off">
           <section class="form-card">
             <div class="form-card-head">
@@ -403,5 +431,6 @@
   <script src="js/content-model.js?v=5.3.0"></script>
   <script src="js/content-editor.js?v=5.3.0"></script>
   <script src="js/admin.js?v=5.3.0"></script>
+  <script src="js/huellas-admin.js?v=5.3.5"></script>
 </body>
 </html>

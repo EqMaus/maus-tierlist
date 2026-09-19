@@ -489,3 +489,14 @@ code { padding: 2px 5px; border-radius: 5px; background: rgba(255,255,255,.06); 
   border-color:rgba(91,198,255,.42);
   background:linear-gradient(135deg,rgba(73,187,255,.11),rgba(130,91,230,.08));
 }
+
+/* v5.3.5 · Moderación de huellas */
+.huellas-admin-panel{display:grid;gap:18px;max-width:1100px}.huellas-admin-panel[hidden]{display:none!important}
+.huellas-admin-auth,.huellas-admin-toolbar,.huella-admin-card,.huellas-admin-empty{border:1px solid var(--line);border-radius:16px;background:rgba(7,18,27,.72)}
+.huellas-admin-auth{padding:22px}.huellas-admin-auth h2{margin:4px 0 6px;font-size:26px}.huellas-admin-auth p{margin:0;color:var(--muted)}
+.huellas-token-row{display:grid;grid-template-columns:minmax(260px,520px) auto;align-items:end;gap:12px;margin-top:18px}.huellas-token-row .field{margin:0}.huellas-token-row .primary-button{min-height:44px}
+.huellas-admin-status{min-height:20px;margin-top:10px!important;color:#77ddb0!important;font-weight:750}.huellas-admin-status.is-error{color:#ff8f9b!important}
+.huellas-admin-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:15px 18px;margin-bottom:12px}.huellas-admin-toolbar>div{display:grid;gap:3px}.huellas-admin-toolbar small{color:var(--muted)}
+.huellas-admin-list{display:grid;gap:10px}.huella-admin-card{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;padding:18px}.huella-admin-card.is-hidden{opacity:.64;border-style:dashed}.huella-admin-main{min-width:0}.huella-admin-head{display:flex;align-items:center;gap:10px}.huella-admin-head strong{font-size:16px}.huella-admin-state{padding:4px 7px;border-radius:999px;background:rgba(103,213,154,.1);color:#7ee0ad;font-size:9px;font-weight:900;letter-spacing:.12em}.is-hidden .huella-admin-state{background:rgba(255,255,255,.06);color:#93a4ae}.huella-admin-main p{margin:9px 0 10px;color:#d9e3e8;line-height:1.65;overflow-wrap:anywhere}.huella-admin-main small{color:var(--muted)}.huella-admin-actions{display:flex;align-items:center;gap:8px}.huella-delete-button{min-height:38px;padding:0 12px;border:1px solid rgba(255,92,108,.28);border-radius:9px;background:rgba(255,92,108,.08);color:#ff9aa4;font-weight:800;cursor:pointer}.huella-delete-button:hover{background:rgba(255,92,108,.14);border-color:rgba(255,92,108,.46)}.huellas-admin-empty{padding:42px;text-align:center;color:var(--muted)}
+.editor-panel.huellas-editing .editor-workspace{grid-column:1/-1}
+@media(max-width:760px){.huellas-token-row{grid-template-columns:1fr}.huellas-admin-toolbar,.huella-admin-card{align-items:stretch;grid-template-columns:1fr}.huella-admin-actions{justify-content:flex-start;flex-wrap:wrap}}
