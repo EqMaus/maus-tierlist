@@ -124,8 +124,8 @@ window.MAUS_CONTENT = {
         }
       ],
       "id": "musica-mu7uily8-mchy",
-      "published": false,
-      "featured": false
+      "published": true,
+      "featured": true
     }
   ],
   "features": [
