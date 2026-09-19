@@ -2779,3 +2779,80 @@ body.mobile-performance.scene-rumble-heavy .screen-vignette{
 
 .resonance-curiosities ul{margin:0;padding-left:20px;color:#49423a}.resonance-curiosities li{margin:0 0 9px;padding-left:4px;line-height:1.55}.resonance-curiosities li::marker{color:#aa513e}
 \n\n/* ============================================================\n   v5.4.0 · Resonancias: la ficha profunda hereda el papel editorial\n   ============================================================ */\nbody.music-space .theme-info-modal.is-resonance-info{\n  background:rgba(53,45,37,.28);\n  backdrop-filter:blur(12px) saturate(82%);\n}\nbody.music-space .theme-info-panel.is-resonance-info{\n  --paper:var(--music-paper,#eee7d9);\n  --ink:var(--music-ink,#25231f);\n  --accent:var(--music-accent,#9b4225);\n  --paper-muted:color-mix(in srgb,var(--ink) 68%,var(--paper));\n  color:var(--ink);\n  background:\n    radial-gradient(circle at 91% 7%,color-mix(in srgb,var(--accent) 8%,transparent),transparent 25%),\n    radial-gradient(circle at 8% 83%,rgba(255,255,255,.22),transparent 31%),\n    var(--paper);\n  border:1px solid color-mix(in srgb,var(--ink) 18%,transparent);\n  box-shadow:0 28px 90px rgba(45,35,27,.24);\n  font-family:Georgia,'Times New Roman',serif;\n}\nbody.music-space .theme-info-panel.is-resonance-info .theme-info-close{\n  color:var(--ink);background:color-mix(in srgb,var(--paper) 92%,white);\n  border-color:color-mix(in srgb,var(--ink) 17%,transparent);box-shadow:0 5px 18px rgba(50,40,30,.08)\n}\nbody.music-space .theme-info-panel.is-resonance-info .theme-info-close:hover{color:var(--accent);background:var(--paper)}\nbody.music-space .theme-info-panel.is-resonance-info .resonance-info-head{border-color:color-mix(in srgb,var(--ink) 22%,transparent)}\nbody.music-space .theme-info-panel.is-resonance-info .resonance-info-kicker,\nbody.music-space .theme-info-panel.is-resonance-info .resonance-info-facts dt{color:var(--accent)}\nbody.music-space .theme-info-panel.is-resonance-info .resonance-info-kicker:before{background:var(--accent)}\nbody.music-space .theme-info-panel.is-resonance-info .resonance-info-head h2,\nbody.music-space .theme-info-panel.is-resonance-info .resonance-paper-section h3{color:var(--ink)}\nbody.music-space .theme-info-panel.is-resonance-info .resonance-info-game,\nbody.music-space .theme-info-panel.is-resonance-info .resonance-info-facts dd,\nbody.music-space .theme-info-panel.is-resonance-info .resonance-paper-section p,\nbody.music-space .theme-info-panel.is-resonance-info .resonance-curiosities ul{color:var(--paper-muted)}\nbody.music-space .theme-info-panel.is-resonance-info .resonance-info-head blockquote{color:var(--accent)}\nbody.music-space .theme-info-panel.is-resonance-info .resonance-info-left,\nbody.music-space .theme-info-panel.is-resonance-info .resonance-paper-section,\nbody.music-space .theme-info-panel.is-resonance-info .resonance-info-footer{border-color:color-mix(in srgb,var(--ink) 16%,transparent)}\nbody.music-space .theme-info-panel.is-resonance-info .resonance-paper-section h3{border-bottom-color:var(--accent)}\nbody.music-space .theme-info-panel.is-resonance-info .resonance-tags span{\n  color:color-mix(in srgb,var(--accent) 72%,var(--ink));\n  border-color:color-mix(in srgb,var(--accent) 25%,transparent);\n  background:color-mix(in srgb,var(--accent) 8%,transparent)\n}\nbody.music-space .theme-info-panel.is-resonance-info .resonance-curiosities li::marker,\nbody.music-space .theme-info-panel.is-resonance-info .resonance-info-footer{color:var(--accent)}\nbody.music-space .theme-info-panel.is-resonance-info .resonance-info-footer span:before{background:color-mix(in srgb,var(--accent) 55%,transparent)}\nbody.music-space .theme-info-panel.is-resonance-info{scrollbar-color:var(--accent) color-mix(in srgb,var(--paper) 82%,var(--ink))}\nbody.music-space .theme-info-panel.is-resonance-info::-webkit-scrollbar-track{background:color-mix(in srgb,var(--paper) 82%,var(--ink));border-radius:999px}\nbody.music-space .theme-info-panel.is-resonance-info::-webkit-scrollbar-thumb{background:var(--accent);border:2px solid var(--paper);border-radius:999px}\n
+/* ============================================================
+   v5.4.1 · Resonancias — ficha de papel FIJA
+   Esta ficha NO hereda ninguno de los temas de Apariencia.
+   Referencia visual: papel marfil, tinta oscura, terracota y
+   bordes húmedos/envejecidos.
+   ============================================================ */
+.theme-info-modal.is-resonance-info,
+body.music-space .theme-info-modal.is-resonance-info{
+  background:rgba(42,35,29,.34)!important;
+  backdrop-filter:blur(12px) saturate(78%)!important;
+}
+.theme-info-panel.is-resonance-info,
+body.music-space .theme-info-panel.is-resonance-info,
+body[data-ui-theme] .theme-info-panel.is-resonance-info{
+  --paper-fixed:#eee7da;
+  --paper-light:#f6f0e6;
+  --ink-fixed:#27231e;
+  --muted-fixed:#514941;
+  --accent-fixed:#a64f3b;
+  --line-fixed:rgba(92,67,51,.22);
+  color:#27231e!important;
+  border:1px solid rgba(92,67,51,.18)!important;
+  background:
+    /* manchas húmedas laterales */
+    radial-gradient(ellipse 11% 38% at -2% 22%,rgba(92,78,66,.13) 0 22%,rgba(125,105,88,.07) 38%,transparent 70%),
+    radial-gradient(ellipse 9% 32% at 101% 13%,rgba(109,89,75,.13) 0 20%,rgba(143,116,96,.065) 43%,transparent 73%),
+    radial-gradient(ellipse 13% 42% at 101% 77%,rgba(99,82,70,.11) 0 19%,rgba(137,112,92,.055) 42%,transparent 72%),
+    radial-gradient(ellipse 12% 35% at -1% 91%,rgba(120,98,81,.10) 0 20%,rgba(147,120,98,.05) 44%,transparent 74%),
+    /* veladuras/manchas interiores */
+    radial-gradient(circle at 73% 8%,rgba(171,133,111,.095),transparent 25%),
+    radial-gradient(circle at 18% 70%,rgba(255,255,255,.34),transparent 31%),
+    radial-gradient(circle at 55% 52%,rgba(143,119,99,.035),transparent 36%),
+    linear-gradient(108deg,rgba(255,255,255,.30),transparent 17%,transparent 82%,rgba(126,104,87,.055)),
+    #eee7da!important;
+  box-shadow:0 30px 100px rgba(35,24,17,.28)!important;
+  font-family:Georgia,'Times New Roman',serif!important;
+  scrollbar-color:#a64f3b #ded3c4!important;
+}
+.theme-info-panel.is-resonance-info::before{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:0;border-radius:inherit;
+  box-shadow:inset 18px 0 32px rgba(83,67,55,.045),inset -20px 0 34px rgba(83,67,55,.055),inset 0 1px rgba(255,255,255,.65);
+  background:
+    linear-gradient(90deg,rgba(91,72,58,.045),transparent 2.5%,transparent 97%,rgba(91,72,58,.055)),
+    repeating-linear-gradient(96deg,transparent 0 43px,rgba(99,78,62,.012) 44px,transparent 46px 91px);
+}
+.theme-info-panel.is-resonance-info > *{position:relative;z-index:1}
+.theme-info-panel.is-resonance-info .theme-info-close,
+body[data-ui-theme] .theme-info-panel.is-resonance-info .theme-info-close{
+  color:#27231e!important;background:rgba(247,241,231,.94)!important;
+  border-color:rgba(67,50,39,.15)!important;box-shadow:0 5px 18px rgba(50,40,30,.08)!important;
+}
+.theme-info-panel.is-resonance-info .theme-info-close:hover{color:#a64f3b!important;background:#f7f0e5!important}
+.theme-info-panel.is-resonance-info .resonance-info-head{border-color:rgba(83,62,46,.24)!important}
+.theme-info-panel.is-resonance-info .resonance-info-kicker,
+.theme-info-panel.is-resonance-info .resonance-info-facts dt{color:#a64f3b!important}
+.theme-info-panel.is-resonance-info .resonance-info-kicker:before{background:#a64f3b!important}
+.theme-info-panel.is-resonance-info .resonance-info-head h2,
+.theme-info-panel.is-resonance-info .resonance-paper-section h3{color:#27231e!important}
+.theme-info-panel.is-resonance-info .resonance-info-game,
+.theme-info-panel.is-resonance-info .resonance-info-facts dd,
+.theme-info-panel.is-resonance-info .resonance-paper-section p,
+.theme-info-panel.is-resonance-info .resonance-curiosities ul{color:#514941!important}
+.theme-info-panel.is-resonance-info .resonance-info-head blockquote{color:#934838!important}
+.theme-info-panel.is-resonance-info .resonance-info-left,
+.theme-info-panel.is-resonance-info .resonance-paper-section,
+.theme-info-panel.is-resonance-info .resonance-info-footer{border-color:rgba(83,62,46,.18)!important}
+.theme-info-panel.is-resonance-info .resonance-paper-section h3{border-bottom-color:#a64f3b!important}
+.theme-info-panel.is-resonance-info .resonance-tags span{
+  color:#764739!important;border-color:rgba(151,83,61,.13)!important;background:rgba(184,107,83,.09)!important
+}
+.theme-info-panel.is-resonance-info .resonance-curiosities li::marker,
+.theme-info-panel.is-resonance-info .resonance-info-footer{color:#a64f3b!important}
+.theme-info-panel.is-resonance-info .resonance-info-footer span:before{background:rgba(166,79,59,.5)!important}
+.theme-info-panel.is-resonance-info::-webkit-scrollbar{width:10px}
+.theme-info-panel.is-resonance-info::-webkit-scrollbar-track{background:#ded3c4!important;border-radius:999px}
+.theme-info-panel.is-resonance-info::-webkit-scrollbar-thumb{background:#a64f3b!important;border:2px solid #eee7da!important;border-radius:999px}
+.theme-info-panel.is-resonance-info::-webkit-scrollbar-thumb:hover{background:#8f402f!important}
