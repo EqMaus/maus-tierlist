@@ -5,44 +5,51 @@
   --music-rumble-fx-x:0px;
   --music-rumble-fx-y:0px;
   --music-rumble-fx-rot:0deg;
-  --music-super-duration:1.45s;
+  --music-rumble-power:0;
 }
 
 /*
- * El retumbar mueve únicamente la escena. La interfaz se queda quieta.
+ * Retumbar separado del movimiento normal de cámara.
+ * La interfaz NO se mueve.
+ *
+ * Aplicamos translate/rotate a las capas visuales reales de la escena,
+ * manteniendo intactos sus transforms de parallax/zoom internos.
  */
-body:not(.mobile-performance) .scene-background-motion{
+body:not(.mobile-performance)[data-scene="super-smash-bros-ultimate"] .scene-art,
+body:not(.mobile-performance)[data-scene="super-smash-bros-ultimate"] .scene-backdrop{
   translate:var(--music-rumble-x) var(--music-rumble-y);
   rotate:var(--music-rumble-rot);
-  will-change:transform,translate,rotate;
+  will-change:translate,rotate;
 }
 
-body:not(.mobile-performance) .scene-special-effects,
-body:not(.mobile-performance) .scene-lighting{
+body:not(.mobile-performance)[data-scene="super-smash-bros-ultimate"] .scene-special-effects,
+body:not(.mobile-performance)[data-scene="super-smash-bros-ultimate"] .scene-lighting,
+body:not(.mobile-performance)[data-scene="super-smash-bros-ultimate"] .scene-effects,
+body:not(.mobile-performance)[data-scene="super-smash-bros-ultimate"] .scene-foreground,
+body:not(.mobile-performance)[data-scene="super-smash-bros-ultimate"] .scene-event{
   translate:var(--music-rumble-fx-x) var(--music-rumble-fx-y);
   rotate:var(--music-rumble-fx-rot);
+  will-change:translate,rotate;
 }
 
-body.music-rumble-active .scene-background-motion{
-  transition:translate .025s linear,rotate .025s linear;
+body[data-scene="super-smash-bros-ultimate"].music-rumble-active .scene-art,
+body[data-scene="super-smash-bros-ultimate"].music-rumble-active .scene-backdrop{
+  transition:translate .018s linear,rotate .018s linear;
 }
 
-body.music-super-rumble .screen-vignette{
-  animation:musicSuperRumbleVignette var(--music-super-duration) ease-out both;
+/* Pulso visual solamente para SUPER/GIGANTE. */
+body[data-scene="super-smash-bros-ultimate"].music-super-rumble .screen-vignette{
+  filter:brightness(calc(1 - (var(--music-rumble-power) * .12)));
 }
 
-body.music-super-rumble .scene-special-effects{
-  filter:saturate(1.28) contrast(1.08) brightness(1.045);
+body[data-scene="super-smash-bros-ultimate"].music-super-rumble .scene-special-effects{
+  filter:
+    saturate(calc(1 + (var(--music-rumble-power) * .30)))
+    contrast(calc(1 + (var(--music-rumble-power) * .10)))
+    brightness(calc(1 + (var(--music-rumble-power) * .05)));
 }
 
-@keyframes musicSuperRumbleVignette{
-  0%,100%{opacity:1;filter:brightness(1)}
-  8%{opacity:.78;filter:brightness(.82)}
-  20%{opacity:1;filter:brightness(1.08)}
-  38%{opacity:.88;filter:brightness(.91)}
-  58%{opacity:1;filter:brightness(1.035)}
-}
-
+/* Móvil Lite: absolutamente nada de este sistema. */
 body.mobile-performance{
   --music-rumble-x:0px!important;
   --music-rumble-y:0px!important;
@@ -50,15 +57,16 @@ body.mobile-performance{
   --music-rumble-fx-x:0px!important;
   --music-rumble-fx-y:0px!important;
   --music-rumble-fx-rot:0deg!important;
+  --music-rumble-power:0!important;
 }
 
-body.mobile-performance .scene-background-motion,
+body.mobile-performance .scene-art,
+body.mobile-performance .scene-backdrop,
 body.mobile-performance .scene-special-effects,
-body.mobile-performance .scene-lighting{
+body.mobile-performance .scene-lighting,
+body.mobile-performance .scene-effects,
+body.mobile-performance .scene-foreground,
+body.mobile-performance .scene-event{
   translate:0 0!important;
   rotate:0deg!important;
-}
-
-body.mobile-performance.music-super-rumble .screen-vignette{
-  animation:none!important;
 }

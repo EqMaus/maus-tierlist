@@ -2,36 +2,35 @@
   'use strict';
 
   /*
-   * v5.1.9 · Super Smash Bros. Ultimate
-   * The Dark Realm — retumbares sincronizados con el loop musical real.
+   * v5.2.0 · Smash Ultimate / The Dark Realm
    *
-   * El patrón musical vuelve a empezar cada 1:39 (99 segundos).
-   * Los eventos se calculan desde audio.currentTime, por lo que:
-   * - siguen sincronizados durante todo el MP3 extendido;
-   * - se reajustan al mover manualmente la barra;
-   * - si se busca dentro de un retumbar largo, éste reaparece en el punto
-   *   correcto de su duración;
-   * - no hay retumbares fuera de los tiempos definidos aquí.
+   * CAMBIO CLAVE:
+   * Ya no "disparamos" efectos cuando el reloj cruza un timestamp.
+   * En cada frame calculamos qué retumbar corresponde EXACTAMENTE al
+   * audio.currentTime actual. Así los efectos:
+   *   - no se pierden;
+   *   - se mantienen durante todo su intervalo;
+   *   - se recolocan instantáneamente al mover la barra;
+   *   - repiten exactamente cada 1:39 (99 s).
    */
 
   const nativeSetTimeout = window.setTimeout.bind(window);
 
   /*
-   * app.js v5.1.7 todavía contiene un motor de retumbares aleatorios.
-   * Este archivo carga antes que app.js y neutraliza únicamente el timer
-   * que programa esos retumbares en Smash, sin tocar cámara, clima ni otros timers.
+   * app.js todavía conserva el retumbar aleatorio original de Smash.
+   * Bloqueamos únicamente el callback que agenda esos retumbares.
+   * El resto de setTimeout de la web funciona exactamente igual.
    */
   window.setTimeout = function patchedSetTimeout(callback, delay, ...args) {
     if (typeof callback === 'function') {
       try {
         const source = Function.prototype.toString.call(callback);
-        if (
+        const isRandomSmashRumbleQueue =
           source.includes('triggerSceneRumble(gameId)') &&
-          source.includes('profile.waitMin') &&
-          source.includes('profile.waitMax')
-        ) {
-          return 0;
-        }
+          source.includes('sceneRumbleTimer') &&
+          source.includes('currentGameSceneId');
+
+        if (isRandomSmashRumbleQueue) return 0;
       } catch (_) {}
     }
 
@@ -43,50 +42,54 @@
   if (!body || !audio) return;
 
   const SMASH_ID = 'super-smash-bros-ultimate';
-  const LOOP_SECONDS = 99;
+  const LOOP = 99;
   const MOBILE_QUERY = '(max-width: 900px) and (hover: none) and (pointer: coarse)';
 
   /*
-   * Timeline exacta de UN loop de The Dark Realm.
+   * Timeline de UN loop (0:00 → 1:39).
+   * start/end están en segundos del loop musical.
    *
-   * duration está en milisegundos.
-   * Los triples/cuádruples son golpes separados reales.
+   * kind:
+   *   hit     = golpe corto con ataque/caída rápida.
+   *   sustain = retumbar continuo durante TODO el intervalo.
    */
   const EVENTS = [
-    { at: 8.00,  kind: 'weak',          duration: 430,  strength: 0.38, speed: 1.08, mode: 'hit' },
+    { start: 8.00, end: 8.48, kind: 'hit', strength: 0.40, speed: 1.00 },
 
-    { at: 15.00, kind: 'triple-medium', duration: 180,  strength: 0.88, speed: 1.62, mode: 'hit' },
-    { at: 15.23, kind: 'triple-medium', duration: 180,  strength: 0.88, speed: 1.62, mode: 'hit' },
-    { at: 15.46, kind: 'triple-medium', duration: 180,  strength: 0.88, speed: 1.62, mode: 'hit' },
+    { start: 15.00, end: 15.17, kind: 'hit', strength: 0.90, speed: 1.65 },
+    { start: 15.28, end: 15.45, kind: 'hit', strength: 0.90, speed: 1.65 },
+    { start: 15.56, end: 15.73, kind: 'hit', strength: 0.90, speed: 1.65 },
 
-    { at: 16.00, kind: 'very-strong',   duration: 1500, strength: 2.20, speed: 0.96, mode: 'sustain' },
+    { start: 16.00, end: 17.50, kind: 'sustain', strength: 2.20, speed: 0.95 },
 
-    { at: 24.00, kind: 'strong-long',   duration: 3500, strength: 1.58, speed: 0.58, mode: 'sustain' },
+    { start: 24.00, end: 26.50, kind: 'sustain', strength: 1.72, speed: 0.72 },
 
-    { at: 30.00, kind: 'quad',          duration: 145,  strength: 0.96, speed: 1.78, mode: 'hit' },
-    { at: 30.18, kind: 'quad',          duration: 145,  strength: 0.96, speed: 1.78, mode: 'hit' },
-    { at: 30.36, kind: 'quad',          duration: 145,  strength: 0.96, speed: 1.78, mode: 'hit' },
-    { at: 30.54, kind: 'quad',          duration: 145,  strength: 0.96, speed: 1.78, mode: 'hit' },
+    /* 6 mini-retumbares entre 0:30 y 0:31.5 */
+    { start: 30.00, end: 30.18, kind: 'hit', strength: 1.02, speed: 1.85 },
+    { start: 30.30, end: 30.48, kind: 'hit', strength: 1.02, speed: 1.85 },
+    { start: 30.60, end: 30.78, kind: 'hit', strength: 1.02, speed: 1.85 },
+    { start: 30.90, end: 31.08, kind: 'hit', strength: 1.02, speed: 1.85 },
+    { start: 31.20, end: 31.38, kind: 'hit', strength: 1.02, speed: 1.85 },
+    { start: 31.50, end: 31.68, kind: 'hit', strength: 1.02, speed: 1.85 },
 
-    { at: 34.00, kind: 'super',         duration: 3500, strength: 3.05, speed: 0.78, mode: 'sustain', cinematic: true },
+    { start: 34.00, end: 37.50, kind: 'sustain', strength: 3.05, speed: 0.66, cinematic: true },
 
-    { at: 50.00, kind: 'strong',        duration: 1500, strength: 1.62, speed: 0.94, mode: 'sustain' },
+    { start: 42.00, end: 43.50, kind: 'sustain', strength: 1.82, speed: 0.82 },
 
-    { at: 57.00, kind: 'triple-strong', duration: 205,  strength: 1.48, speed: 1.62, mode: 'hit' },
-    { at: 57.23, kind: 'triple-strong', duration: 205,  strength: 1.48, speed: 1.62, mode: 'hit' },
-    { at: 57.46, kind: 'triple-strong', duration: 205,  strength: 1.48, speed: 1.62, mode: 'hit' },
+    { start: 50.00, end: 51.50, kind: 'sustain', strength: 1.68, speed: 0.88 },
 
-    { at: 58.00, kind: 'strong-short',  duration: 1000, strength: 1.62, speed: 1.00, mode: 'sustain' },
+    { start: 57.00, end: 57.18, kind: 'hit', strength: 1.50, speed: 1.70 },
+    { start: 57.28, end: 57.46, kind: 'hit', strength: 1.50, speed: 1.70 },
+    { start: 57.56, end: 57.74, kind: 'hit', strength: 1.50, speed: 1.70 },
 
-    { at: 74.00, kind: 'weak-late',     duration: 560,  strength: 0.52, speed: 1.06, mode: 'hit' },
+    { start: 58.00, end: 60.00, kind: 'sustain', strength: 1.78, speed: 0.82 },
 
-    { at: 85.00, kind: 'giant',         duration: 2000, strength: 3.55, speed: 0.72, mode: 'sustain', cinematic: true }
+    { start: 74.00, end: 74.55, kind: 'hit', strength: 0.54, speed: 1.05 },
+
+    { start: 85.00, end: 87.00, kind: 'sustain', strength: 3.65, speed: 0.60, cinematic: true }
   ];
 
   let frame = 0;
-  let lastAudioTime = null;
-  let pulses = [];
-  let cinematicTimer = 0;
 
   function isMobileLite() {
     return body.classList.contains('mobile-performance') ||
@@ -103,7 +106,7 @@
       src.includes('the-dark-realm');
   }
 
-  function shouldSync() {
+  function shouldRun() {
     return !isMobileLite() &&
       !document.hidden &&
       !audio.paused &&
@@ -111,251 +114,164 @@
       isSmashTrack();
   }
 
-  function modLoop(seconds) {
-    return ((seconds % LOOP_SECONDS) + LOOP_SECONDS) % LOOP_SECONDS;
+  function loopPosition(seconds) {
+    return ((seconds % LOOP) + LOOP) % LOOP;
   }
 
-  function clearVars() {
+  function envelope(event, position) {
+    const local = position - event.start;
+    const duration = event.end - event.start;
+
+    if (event.kind === 'hit') {
+      const t = Math.min(1, Math.max(0, local / duration));
+      return Math.pow(Math.sin(Math.PI * t), 0.58);
+    }
+
+    /*
+     * Sustain: entra rápido, permanece fuerte TODO el tramo y cae sólo
+     * durante los últimos ~120 ms. No vuelve a cero en mitad del retumbar.
+     */
+    const attack = Math.min(1, local / 0.085);
+    const release = Math.min(1, Math.max(0, event.end - position) / 0.12);
+    return Math.min(attack, release);
+  }
+
+  function clearEffect() {
     body.style.setProperty('--music-rumble-x', '0px');
     body.style.setProperty('--music-rumble-y', '0px');
     body.style.setProperty('--music-rumble-rot', '0deg');
     body.style.setProperty('--music-rumble-fx-x', '0px');
     body.style.setProperty('--music-rumble-fx-y', '0px');
     body.style.setProperty('--music-rumble-fx-rot', '0deg');
-    body.style.setProperty('--music-super-duration', '1.45s');
+    body.style.setProperty('--music-rumble-power', '0');
     body.classList.remove('music-rumble-active', 'music-super-rumble');
   }
 
-  function stopSync(clearPulseState = true) {
-    if (frame) cancelAnimationFrame(frame);
-    frame = 0;
-    lastAudioTime = null;
+  function renderAtAudioTime(audioTime) {
+    const position = loopPosition(audioTime);
 
-    if (clearPulseState) {
-      pulses = [];
-      window.clearTimeout(cinematicTimer);
-      cinematicTimer = 0;
-      clearVars();
-    }
-  }
-
-  function setCinematicPulse(durationMs) {
-    body.classList.remove('music-super-rumble');
-    body.style.setProperty('--music-super-duration', `${Math.max(0.12, durationMs / 1000).toFixed(2)}s`);
-
-    requestAnimationFrame(() => {
-      body.classList.add('music-super-rumble');
-    });
-
-    window.clearTimeout(cinematicTimer);
-    cinematicTimer = nativeSetTimeout(() => {
-      body.classList.remove('music-super-rumble');
-      cinematicTimer = 0;
-    }, Math.max(120, durationMs));
-  }
-
-  function addPulse(event, elapsedMs = 0) {
-    const safeElapsed = Math.max(0, Math.min(event.duration - 1, elapsedMs));
-    const remaining = Math.max(1, event.duration - safeElapsed);
-
-    pulses.push({
-      ...event,
-      startedAt: performance.now() - safeElapsed,
-      phaseX: Math.random() * Math.PI * 2,
-      phaseY: Math.random() * Math.PI * 2
-    });
-
-    if (event.cinematic) setCinematicPulse(remaining);
-  }
-
-  function envelopeFor(pulse, elapsed) {
-    const duration = pulse.duration;
-
-    if (pulse.mode === 'sustain') {
-      // Ataque rápido, cuerpo sostenido y caída al final.
-      const attack = Math.min(1, elapsed / Math.min(120, duration * 0.14));
-      const release = Math.min(1, Math.max(0, duration - elapsed) / Math.min(260, duration * 0.18));
-      return Math.min(attack, release);
-    }
-
-    const t = Math.min(1, Math.max(0, elapsed / duration));
-    return Math.pow(Math.sin(Math.PI * t), 0.68);
-  }
-
-  function processTimeline(previous, current, now) {
-    if (!Number.isFinite(previous) || !Number.isFinite(current)) return;
-    if (current <= previous) return;
-
-    // Un salto grande es un seek: no reproducimos retrospectivamente
-    // todos los golpes que quedaron entre ambos tiempos.
-    if ((current - previous) > 0.80) return;
-
-    const firstLoop = Math.max(0, Math.floor(previous / LOOP_SECONDS) - 1);
-    const lastLoop = Math.max(firstLoop, Math.floor(current / LOOP_SECONDS) + 1);
-
-    for (let loopIndex = firstLoop; loopIndex <= lastLoop; loopIndex += 1) {
-      const loopStart = loopIndex * LOOP_SECONDS;
-
-      for (const event of EVENTS) {
-        const eventTime = loopStart + event.at;
-
-        if (eventTime > previous && eventTime <= current + 0.024) {
-          const latenessMs = Math.max(0, (current - eventTime) * 1000);
-          addPulse(event, Math.min(latenessMs, event.duration - 1));
-        }
-      }
-    }
-  }
-
-  function restoreActivePulsesAt(audioTime) {
-    pulses = [];
-    window.clearTimeout(cinematicTimer);
-    cinematicTimer = 0;
-    body.classList.remove('music-super-rumble');
-
-    const position = modLoop(audioTime);
-
-    for (const event of EVENTS) {
-      const elapsedSeconds = position - event.at;
-      const durationSeconds = event.duration / 1000;
-
-      if (elapsedSeconds >= 0 && elapsedSeconds < durationSeconds) {
-        addPulse(event, elapsedSeconds * 1000);
-      }
-    }
-
-    renderPulses(performance.now());
-  }
-
-  function renderPulses(now) {
     let x = 0;
     let y = 0;
-    let rot = 0;
-    let strongest = 0;
+    let rotation = 0;
+    let power = 0;
+    let cinematic = false;
 
-    const cinematicBoost = body.classList.contains('background-only') ? 1.20 : 1;
-    const next = [];
+    for (let i = 0; i < EVENTS.length; i += 1) {
+      const event = EVENTS[i];
+      if (position < event.start || position >= event.end) continue;
 
-    for (const pulse of pulses) {
-      const elapsed = now - pulse.startedAt;
-      if (elapsed < 0 || elapsed >= pulse.duration) continue;
+      const env = envelope(event, position);
+      if (env <= 0) continue;
 
-      next.push(pulse);
+      const local = position - event.start;
+      const strength = event.strength;
+      const speed = event.speed;
 
-      const envelope = envelopeFor(pulse, elapsed);
-      const speed = pulse.speed;
-      const strength = pulse.strength * cinematicBoost;
-      const grit = ((Math.random() * 2) - 1) * (pulse.mode === 'sustain' ? 0.12 : 0.17);
-
+      /*
+       * Ondas determinadas exclusivamente por el tiempo de la canción.
+       * No dependen de performance.now(), timers ni del momento en que
+       * empezaste a reproducir: al hacer seek caemos en la fase correcta.
+       */
+      const phase = event.start * 0.731 + i * 1.173;
       const waveX =
-        Math.sin(elapsed * 0.040 * speed + pulse.phaseX) +
-        Math.sin(elapsed * 0.071 * speed + pulse.phaseX * 1.71) * 0.42;
+        Math.sin((local * 48 * speed) + phase) +
+        Math.sin((local * 79 * speed) + phase * 1.63) * 0.42;
 
       const waveY =
-        Math.sin(elapsed * 0.052 * speed + pulse.phaseY) +
-        Math.sin(elapsed * 0.089 * speed + pulse.phaseY * 1.49) * 0.34;
+        Math.sin((local * 59 * speed) + phase * 0.71) +
+        Math.sin((local * 91 * speed) + phase * 1.29) * 0.34;
 
-      x += (waveX + grit) * 2.25 * strength * envelope;
-      y += (waveY + grit * 0.62) * 1.35 * strength * envelope;
-      rot += (Math.sin(elapsed * 0.036 * speed + 0.4) + grit * 0.28) *
-        0.075 * strength * envelope;
+      const waveR =
+        Math.sin((local * 41 * speed) + phase * 0.43);
 
-      strongest = Math.max(strongest, strength * envelope);
+      x += waveX * 2.65 * strength * env;
+      y += waveY * 1.62 * strength * env;
+      rotation += waveR * 0.092 * strength * env;
+
+      power = Math.max(power, strength * env);
+      cinematic = cinematic || Boolean(event.cinematic);
     }
 
-    pulses = next;
+    if (body.classList.contains('background-only')) {
+      x *= 1.18;
+      y *= 1.18;
+      rotation *= 1.18;
+      power *= 1.10;
+    }
 
-    // Los golpes gigantes pueden ser muy bestias sin sacar la imagen del marco.
-    x = Math.max(-17, Math.min(17, x));
-    y = Math.max(-11, Math.min(11, y));
-    rot = Math.max(-0.56, Math.min(0.56, rot));
+    x = Math.max(-20, Math.min(20, x));
+    y = Math.max(-13, Math.min(13, y));
+    rotation = Math.max(-0.62, Math.min(0.62, rotation));
 
     body.style.setProperty('--music-rumble-x', `${x.toFixed(2)}px`);
     body.style.setProperty('--music-rumble-y', `${y.toFixed(2)}px`);
-    body.style.setProperty('--music-rumble-rot', `${rot.toFixed(3)}deg`);
+    body.style.setProperty('--music-rumble-rot', `${rotation.toFixed(3)}deg`);
 
     body.style.setProperty('--music-rumble-fx-x', `${(x * 0.76).toFixed(2)}px`);
     body.style.setProperty('--music-rumble-fx-y', `${(y * 0.76).toFixed(2)}px`);
-    body.style.setProperty('--music-rumble-fx-rot', `${(rot * 0.52).toFixed(3)}deg`);
+    body.style.setProperty('--music-rumble-fx-rot', `${(rotation * 0.54).toFixed(3)}deg`);
+    body.style.setProperty('--music-rumble-power', Math.min(1, power / 3.65).toFixed(3));
 
-    body.classList.toggle('music-rumble-active', strongest > 0.02);
+    body.classList.toggle('music-rumble-active', power > 0.025);
+    body.classList.toggle('music-super-rumble', cinematic && power > 0.08);
   }
 
-  function tick(now) {
-    if (!shouldSync()) {
+  function tick() {
+    if (!shouldRun()) {
       frame = 0;
-      pulses = [];
-      clearVars();
+      clearEffect();
       return;
     }
 
     const current = Number.isFinite(audio.currentTime) ? audio.currentTime : 0;
+    renderAtAudioTime(current);
+    frame = requestAnimationFrame(tick);
+  }
 
-    if (lastAudioTime === null) {
-      lastAudioTime = current;
-    } else if (current + 0.05 < lastAudioTime) {
-      // El archivo ha hecho loop o se ha retrocedido.
-      lastAudioTime = current;
-      restoreActivePulsesAt(current);
-    } else {
-      processTimeline(lastAudioTime, current, now);
-      lastAudioTime = current;
+  function start() {
+    if (frame) cancelAnimationFrame(frame);
+    frame = 0;
+
+    if (!shouldRun()) {
+      clearEffect();
+      return;
     }
 
-    renderPulses(now);
+    /* Aplicación inmediata: también hace que un seek se vea al instante. */
+    renderAtAudioTime(Number.isFinite(audio.currentTime) ? audio.currentTime : 0);
     frame = requestAnimationFrame(tick);
   }
 
-  function startSync({ restorePosition = false } = {}) {
-    if (!shouldSync()) return;
-
+  function stop() {
     if (frame) cancelAnimationFrame(frame);
-
-    const current = Number.isFinite(audio.currentTime) ? audio.currentTime : 0;
-    lastAudioTime = current;
-
-    if (restorePosition) restoreActivePulsesAt(current);
-
-    frame = requestAnimationFrame(tick);
+    frame = 0;
+    clearEffect();
   }
 
-  audio.addEventListener('play', () => {
-    startSync({ restorePosition: true });
+  audio.addEventListener('play', start);
+  audio.addEventListener('playing', start);
+
+  /*
+   * NO detenemos el motor durante seeking.
+   * Mientras arrastras/saltas, currentTime cambia y el siguiente frame
+   * recalcula directamente el efecto correcto para esa posición.
+   */
+  audio.addEventListener('seeking', start);
+  audio.addEventListener('seeked', start);
+  audio.addEventListener('timeupdate', () => {
+    if (!audio.paused) start();
   });
 
-  audio.addEventListener('pause', () => {
-    stopSync(true);
-  });
-
-  audio.addEventListener('seeking', () => {
-    stopSync(true);
-  });
-
-  audio.addEventListener('seeked', () => {
-    const current = Number.isFinite(audio.currentTime) ? audio.currentTime : 0;
-    lastAudioTime = current;
-
-    // Esto hace que mover la canción a 25 s, 35 s, 50.5 s, 85.5 s, etc.
-    // reconstruya inmediatamente el retumbar que corresponde a ese instante.
-    restoreActivePulsesAt(current);
-
-    if (!audio.paused) startSync({ restorePosition: true });
-  });
-
-  audio.addEventListener('emptied', () => {
-    stopSync(true);
-  });
+  audio.addEventListener('pause', stop);
+  audio.addEventListener('emptied', stop);
 
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-      stopSync(true);
-    } else if (!audio.paused) {
-      startSync({ restorePosition: true });
-    }
+    if (document.hidden) stop();
+    else if (!audio.paused) start();
   });
 
   window.addEventListener('hashchange', () => {
-    stopSync(true);
-    if (!audio.paused) startSync({ restorePosition: true });
+    if (isSmashRoute() && !audio.paused) start();
+    else stop();
   });
 })();
