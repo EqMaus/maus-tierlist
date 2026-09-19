@@ -1173,7 +1173,15 @@
     "background": "assets/backgrounds/super-smash-bros-ultimate-bg-v5-0-1.png",
     "music": {
       "src": "assets/audio/super-smash-bros-ultimate-theme-v5-1-3.mp3",
-      "title": "The Dark Realm   Super Smash Bros. Ultimate Music Extended"
+      "title": "The Dark Realm   Super Smash Bros. Ultimate Music Extended",
+      "composer": "Composición: noisycroak Co., Ltd. · Arreglo: BANDAI NAMCO Studios Inc. · Supervisor de arreglo: Rio Hamamoto",
+      "context": "Tema asociado a The Dark Realm, la vertiente oscura de World of Light en Super Smash Bros. Ultimate. Funciona como contrapunto musical al mundo de luz y lleva la identidad central del modo aventura hacia un terreno mucho más amenazante.",
+      "where": "Suena durante la exploración del mapa de The Dark Realm en World of Light. Una vez desbloqueado, también forma parte de la selección musical disponible para Battlefield, Small Battlefield, Big Battlefield y Final Destination.",
+      "sound": "Oscuro, pesado y constantemente inquieto. Reutiliza el lenguaje musical central de Ultimate, pero lo transforma con armonías más amenazantes, graves mucho más presentes y una orquestación que parece estar siempre acumulando tensión. No necesita convertirse en una batalla constante para transmitir peligro: incluso sus momentos más contenidos tienen algo incómodo debajo.",
+      "meaning": "Es la cara oscura de World of Light hecha música. No pretende crear una identidad completamente separada, sino deformar una que ya conocemos. Por eso funciona tan bien: seguimos sintiendo que estamos dentro del mismo Smash Ultimate, pero algo se ha torcido.",
+      "feeling": "Amenaza, misterio y una sensación bastante apocalíptica. Tiene épica, pero no una épica triunfal; parece más bien la música de haber entrado en una zona donde el mundo ya ha salido perdiendo.",
+      "intent": "Su principal función es cambiar inmediatamente la lectura emocional de la exploración. El mapa sigue siendo World of Light, pero la música deja claro que las reglas atmosféricas han cambiado. Mantiene la escala enorme propia de Ultimate mientras sustituye buena parte de la luminosidad de su identidad principal por tensión y oscuridad.",
+      "detail": "Lo interesante es que no rompe con la identidad musical de Ultimate: la retuerce. Esa familiaridad deformada hace que The Dark Realm resulte mucho más efectivo que si simplemente utilizara una pieza oscura completamente independiente. Es reconocible y extraña al mismo tiempo."
     }
   },
   {
@@ -1314,8 +1322,16 @@
     ],
     "music": {
       "startAt": 137,
-      "title": "League of Legends - Main Theme 2009",
-      "src": "assets/audio/league-of-legends-theme-v5-1-1.mp3"
+      "title": "Welcome to League of Legends — Main Theme (2009)",
+      "src": "assets/audio/league-of-legends-theme-v5-1-1.mp3",
+      "composer": "Duncan Watt y Daniel Vulcano",
+      "context": "Uno de los temas ligados a la primera identidad musical de League of Legends. Pertenece a la época inicial del juego y fue recopilado posteriormente por Riot como parte de la banda sonora oficial de Season 1.",
+      "where": "Está asociado a la presentación original de League of Legends y a su primera etapa. Más que representar a un campeón, región o evento concreto, funciona como una carta de presentación del juego y del universo que Riot estaba empezando a construir.",
+      "sound": "Fantasía orquestal muy directa: una melodía central clara, cuerdas, metales y percusión que van aumentando la escala progresivamente. Tiene bastante menos artificio que muchas composiciones modernas de League y precisamente por eso suena tan identificable con aquella primera época del juego.",
+      "meaning": "Representa League of Legends antes de que Runeterra tuviese la enorme cantidad de identidades musicales que tiene ahora. No habla de Demacia, Jonia, un campeón concreto o unos Worlds: intenta representar al propio juego como un gran enfrentamiento de fantasía.",
+      "feeling": "Aventura, solemnidad y bastante nostalgia. Tiene esa clase de épica de finales de los 2000 que intenta convencerte de que estás entrando en un mundo muchísimo más grande de lo que realmente has visto todavía.",
+      "intent": "Su trabajo es presentar League como algo importante antes incluso de empezar una partida. En lugar de centrarse en la velocidad o el caos de una teamfight, construye expectativa y da al juego una identidad de fantasía heroica mucho más seria y monumental.",
+      "detail": "Hoy resulta especialmente interesante por contraste. League tiene ahora música de campeones, regiones, grupos virtuales, cinemáticas y competiciones internacionales con producciones gigantescas. Este tema es mucho más sencillo y clásico, así que termina funcionando casi como una cápsula del tiempo de lo que League of Legends quería ser en sus primeros años."
     },
     "cover": "assets/covers/league-of-legends-v5-1-1.jpg",
     "background": "assets/backgrounds/league-of-legends-bg-v5-1-1.png"
