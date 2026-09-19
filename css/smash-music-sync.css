@@ -5,12 +5,11 @@
   --music-rumble-fx-x:0px;
   --music-rumble-fx-y:0px;
   --music-rumble-fx-rot:0deg;
+  --music-super-duration:1.45s;
 }
 
 /*
- * La sacudida se aplica a la escena, no a la interfaz.
- * Usamos las propiedades individuales translate/rotate para componer
- * el retumbar por encima de las animaciones y transforms existentes.
+ * El retumbar mueve únicamente la escena. La interfaz se queda quieta.
  */
 body:not(.mobile-performance) .scene-background-motion{
   translate:var(--music-rumble-x) var(--music-rumble-y);
@@ -29,7 +28,7 @@ body.music-rumble-active .scene-background-motion{
 }
 
 body.music-super-rumble .screen-vignette{
-  animation:musicSuperRumbleVignette 1.45s ease-out both;
+  animation:musicSuperRumbleVignette var(--music-super-duration) ease-out both;
 }
 
 body.music-super-rumble .scene-special-effects{
@@ -38,10 +37,10 @@ body.music-super-rumble .scene-special-effects{
 
 @keyframes musicSuperRumbleVignette{
   0%,100%{opacity:1;filter:brightness(1)}
-  10%{opacity:.78;filter:brightness(.82)}
-  22%{opacity:1;filter:brightness(1.08)}
-  36%{opacity:.88;filter:brightness(.91)}
-  54%{opacity:1;filter:brightness(1.035)}
+  8%{opacity:.78;filter:brightness(.82)}
+  20%{opacity:1;filter:brightness(1.08)}
+  38%{opacity:.88;filter:brightness(.91)}
+  58%{opacity:1;filter:brightness(1.035)}
 }
 
 body.mobile-performance{
