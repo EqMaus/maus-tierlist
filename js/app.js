@@ -2686,8 +2686,82 @@
     return `<section class="theme-lore-section"><span>${esc(title)}</span><p>${esc(text)}</p></section>`;
   }
 
+  function resonanceInfoFor(gameId) {
+    if (!String(gameId || '').startsWith('music:')) return null;
+    const trackId = String(gameId).slice(6);
+    const track = editorial.tracks.find(item => item.id === trackId);
+    if (!track) return null;
+
+    // Esta ficha es deliberadamente distinta de las notas editoriales de Resonancias:
+    // amplía la lectura musical y filosófica en vez de repetir la ficha principal.
+    if (track.id === 'musica-mu7uily8-mchy') {
+      return {
+        track,
+        quote: 'Hay sonidos que no explican nada y, precisamente por eso, consiguen decirlo todo.',
+        context: 'White Noiz aparece al principio de Silent Hill 2, cuando James está solo frente al espejo. Antes de que el viaje haya empezado de verdad, la pieza ya coloca al jugador dentro de un espacio mental ambiguo: quietud por fuera, ruido por dentro.',
+        analysis: [
+          'White Noiz no necesita una melodía protagonista ni un ritmo que conduzca la escucha. Su fuerza está en la textura: capas difusas, ruido, resonancias y sonidos sostenidos que parecen existir a medio camino entre música y ambiente. Nada termina de imponerse y, por eso, la pieza se siente suspendida.',
+          'Ese carácter borroso importa. En vez de ordenar el espacio, el sonido lo vuelve incierto. Hay elementos que parecen acercarse y alejarse sin que podamos fijarlos del todo; la escucha no encuentra un centro cómodo. La pieza no avanza hacia una resolución clara: permanece, como un pensamiento que vuelve una y otra vez sin llegar a formularse.',
+          'La belleza nace de esa fricción. Lo áspero y lo delicado conviven sin anularse. White Noiz puede resultar acogedora y perturbadora al mismo tiempo, y esa contradicción encaja con una obra en la que el afecto, la culpa, el recuerdo y el dolor tampoco aparecen separados limpiamente.'
+        ],
+        meaning: [
+          'Puede leerse como una traducción sonora de algo que Silent Hill 2 repite constantemente: la imposibilidad de relacionarnos con el pasado de una forma completamente limpia. Recordar no es reproducir lo que ocurrió; es reconstruirlo desde quien somos ahora. Por eso un recuerdo puede ser refugio y herida a la vez.',
+          'En White Noiz, el ruido no funciona necesariamente como algo que haya que eliminar para encontrar una señal pura debajo. El ruido es parte del significado. Esa falta de nitidez se parece a la manera en que una emoción profunda puede sentirse antes de poder nombrarse. Sabemos que hay algo ahí, pero todavía no tenemos palabras capaces de encerrarlo.',
+          'Por eso la pieza funciona especialmente bien al comienzo: no revela a James, pero nos acostumbra a habitar su incertidumbre. No nos cuenta qué piensa. Nos deja dentro de una sensación incompleta, y esa incompletitud se vuelve una forma de intimidad.'
+        ],
+        why: 'Lo memorable de White Noiz no está en explicarnos Silent Hill 2, sino en preparar un estado de escucha. Convierte el silencio previo al viaje en algo cargado de significado y hace que una escena casi inmóvil parezca contener ya todo el peso emocional que todavía desconocemos.',
+        closing: 'El recuerdo no siempre vuelve como una imagen. A veces vuelve como ruido.'
+      };
+    }
+    return { track };
+  }
+
+  function resonanceParagraphs(items) {
+    return (items || []).map(text => `<p>${esc(text)}</p>`).join('');
+  }
+
   function openThemeInfo() {
     if (!themeInfoModal || !themeInfoContent || !currentGameMusicId) return;
+
+    const resonance = resonanceInfoFor(currentGameMusicId);
+    if (resonance) {
+      const track = resonance.track;
+      const panel = themeInfoModal.querySelector('.theme-info-panel');
+      themeInfoModal.classList.add('is-resonance-info');
+      panel?.classList.add('is-resonance-info');
+      const tags = (track.tags || []).map(tag => `<span>${esc(tag)}</span>`).join('');
+      themeInfoContent.innerHTML = `
+        <div class="resonance-info-head">
+          <span class="resonance-info-kicker">RESONANCIAS</span>
+          <h2 id="themeInfoHeading">${esc(track.title || 'Pieza')}</h2>
+          <p class="resonance-info-game">${esc(track.game || '')}${track.year ? ` · ${esc(String(track.year).match(/\d{4}/)?.[0] || track.year)}` : ''}</p>
+          ${resonance.quote ? `<blockquote>${esc(resonance.quote)}</blockquote>` : ''}
+        </div>
+        <div class="resonance-info-layout">
+          <aside class="resonance-info-left">
+            ${track.cover ? `<img class="resonance-info-cover" src="${esc(track.cover)}" alt="Portada relacionada con ${esc(track.title || 'la pieza')}">` : ''}
+            <dl class="resonance-info-facts">
+              ${track.composer ? `<div><dt>COMPOSITOR</dt><dd>${esc(track.composer)}</dd></div>` : ''}
+              ${track.album ? `<div><dt>ÁLBUM</dt><dd>${esc(track.album)}</dd></div>` : ''}
+              ${track.year ? `<div><dt>PUBLICACIÓN</dt><dd>${esc(track.year)}</dd></div>` : ''}
+            </dl>
+            ${resonance.context ? `<section class="resonance-paper-section"><h3>Contexto en el juego</h3><p>${esc(resonance.context)}</p></section>` : ''}
+            ${tags ? `<section class="resonance-paper-section resonance-tags"><h3>Etiquetas</h3><div>${tags}</div></section>` : ''}
+          </aside>
+          <main class="resonance-info-right">
+            ${resonance.analysis ? `<section class="resonance-paper-section"><h3>Análisis musical</h3>${resonanceParagraphs(resonance.analysis)}</section>` : ''}
+            ${resonance.meaning ? `<section class="resonance-paper-section"><h3>Significado y tema</h3>${resonanceParagraphs(resonance.meaning)}</section>` : ''}
+            ${resonance.why ? `<section class="resonance-paper-section"><h3>Por qué funciona</h3><p>${esc(resonance.why)}</p></section>` : ''}
+          </main>
+        </div>
+        ${resonance.closing ? `<div class="resonance-info-footer"><em>“${esc(resonance.closing)}”</em><span>${esc((track.game || '').toUpperCase())}</span></div>` : ''}`;
+      themeInfoModal.hidden = false;
+      body.classList.add('theme-info-open');
+      return;
+    }
+
+    themeInfoModal.classList.remove('is-resonance-info');
+    themeInfoModal.querySelector('.theme-info-panel')?.classList.remove('is-resonance-info');
     const info = themeInfoFor(currentGameMusicId);
     if (!info) return;
     const game = gameById.get(currentGameMusicId);
