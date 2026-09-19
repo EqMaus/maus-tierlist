@@ -1,0 +1,31 @@
+MAUS TIER LIST — 5.3.0
+
+NOVEDADES
+• Archivo musical independiente, sin notas ni puestos. Empieza vacío.
+• Nombre provisional: Resonancias. Puedes cambiarlo desde Portadas y web (título musical y etiqueta de navegación).
+• Estética editorial con papel cálido, tipografía serif, portadas y fichas con créditos, etiquetas y textos por secciones.
+• Reproductor compartido con Pausar/Reanudar en ordenador y móvil. Conserva la posición y coordina los efectos musicales.
+• «Información del tema» pasa a «Información de la música».
+• Editor con tres espacios: videojuegos, archivo musical y portadas/web.
+• Formularios para identidad, navegación, portada inicial, textos de las portadas, imágenes, colores, ancho, presentación, Features y archivo musical. Vista previa antes de publicar.
+• Fichas musicales: crear, duplicar, ordenar, eliminar, destacar, guardar como borrador y publicar. Portada, MP3 propio, créditos, juego asociado y secciones de texto. También puedes reutilizar recursos de un juego existente.
+• Se amplía el editor de videojuegos con traslado de catálogo, colores de niveles y eliminación.
+• Contenido y recursos se publican juntos mediante una única actualización de la rama.
+
+ACTUALIZAR DESDE 5.2.3
+1. En GitHub Desktop, haz Fetch/Pull para tener tus últimas ediciones publicadas.
+2. Descomprime el ZIP de actualización. Copia el CONTENIDO de la carpeta maus-tierlist dentro de tu repositorio y sustituye los archivos correspondientes. No crees una carpeta maus-tierlist dentro de otra.
+3. Revisa los cambios en GitHub Desktop; haz commit de todos los archivos de esta actualización juntos y Push normal. No se necesita Force Push.
+4. Espera al despliegue de GitHub Pages y recarga la web y el editor.
+
+El ZIP de actualización conserva site-data.js, theme-music.js y assets: no sustituye tus juegos, reviews ni sus recursos. El ZIP completo es una copia de la web con los datos disponibles al preparar esta versión; usa preferentemente la actualización si has seguido editando.
+
+IMPORTANTE: js/content-data.js contiene el nuevo archivo musical y los ajustes de la web. Se entrega vacío de fichas para esta primera instalación. Una vez publiques tus fichas o ajustes, NO vuelvas a sobrescribir ese archivo con el de esta descarga: perderías esas ediciones. Si has modificado el código después de 5.2.3, compara los cambios antes de sustituirlo.
+
+PRIMERA FICHA
+Entra en el editor y abre Archivo musical. Añade una ficha, escribe el título y el juego, elige una portada y un MP3 (o reutiliza los de un juego), y redacta tus secciones. La vista previa permite revisar el resultado. Activa su publicación cuando quieras que aparezca en la colección y usa el botón general Publicar. Un borrador guardado mediante Publicar permanece fuera de la colección; los cambios sin publicar siguen pendientes en la sesión del editor.
+
+Los controles visuales y de contenido se editan mediante formularios. Crear componentes nuevos o cambiar la estructura de programación sigue requiriendo modificar el código.
+
+VALIDACIÓN
+Consulta COMPROBACIONES-5.3.0.txt. Las operaciones de GitHub se probaron con una API simulada; esta entrega no se ha subido a tu repositorio ni desplegado. Las pruebas móviles usan emulación en Chromium, no un teléfono físico ni Safari.

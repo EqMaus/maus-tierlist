@@ -24,12 +24,12 @@
   <meta name="twitter:title" content="Tier List de Maus — Mi ranking de videojuegos">
   <meta name="twitter:description" content="Tier list personal e interactiva de videojuegos de Maus.">
   <meta name="twitter:image" content="https://eqmaus.github.io/maus-tierlist/social-preview-v4.6.3.jpg">
-  <title>Tier List de Maus — v5.2.3</title>
+  <title>Tier List de Maus — v5.3.0</title>
   <script>
     // Comprueba la versión publicada sin usar la caché del navegador.
     // Si hay una build nueva, abre la misma página con ?v=X para forzar
     // un documento HTML fresco y conserva la sección actual (#tierlist, etc.).
-    window.MAUS_BUILD_VERSION = '5.2.3';
+    window.MAUS_BUILD_VERSION = '5.3.0';
     window.MAUS_CHECK_LATEST_BUILD = function () {
       var currentBuild = window.MAUS_BUILD_VERSION;
       var versionUrl = new URL('./version.json', document.baseURI);
@@ -77,10 +77,11 @@
       if (event.persisted) window.MAUS_CHECK_LATEST_BUILD();
     });
   </script>
-  <link rel="stylesheet" href="css/styles.css?v=5.2.3">
-  <link rel="stylesheet" href="css/review-shared.css?v=5.2.3">
-  <link rel="stylesheet" href="css/smash-music-sync.css?v=5.2.3">
-  <link rel="stylesheet" href="css/effects.css?v=5.2.3">
+  <link rel="stylesheet" href="css/styles.css?v=5.3.0">
+  <link rel="stylesheet" href="css/review-shared.css?v=5.3.0">
+  <link rel="stylesheet" href="css/smash-music-sync.css?v=5.3.0">
+  <link rel="stylesheet" href="css/effects.css?v=5.3.0">
+  <link rel="stylesheet" href="css/music-library.css?v=5.3.0">
 </head>
 <body data-scene="default">
   <canvas id="stormCanvas" class="storm-canvas" aria-hidden="true"></canvas>
@@ -103,6 +104,7 @@
           <a href="#tierlist" data-nav="offline" class="catalog-nav-offline">OFFLINE</a>
           <a href="#online" data-nav="online" class="catalog-nav-online">ONLINE</a>
         </div>
+        <a href="#music" data-nav="music">Resonancias</a>
         <a href="#games/offline" data-nav="games">Reviews</a>
         <a href="#features" data-nav="features">Features</a>
         <button id="presentationModeButton" class="nav-presentation-button" type="button">Modo presentación</button>
@@ -186,26 +188,29 @@
       <span>Volumen</span>
       <input id="playerVolume" class="range volume-range" type="range" min="0" max="100" value="52" aria-label="Volumen">
     </label>
-    <button id="mobileMusicToggleButton" class="mobile-music-toggle-button" type="button" aria-pressed="false" hidden>▶ Activar música</button>
-    <button id="themeInfoButton" class="theme-info-button" type="button">Información del tema</button>
+    <button id="mobileMusicToggleButton" class="mobile-music-toggle-button" type="button" aria-pressed="false">▶ Reproducir</button>
+    <button id="themeInfoButton" class="theme-info-button" type="button">Información de la música</button>
     <audio id="audio" preload="metadata" loop></audio>
   </section>
 
   <div id="themeInfoModal" class="theme-info-modal" hidden>
     <section class="theme-info-panel" role="dialog" aria-modal="true" aria-labelledby="themeInfoHeading">
-      <button id="themeInfoClose" class="theme-info-close" type="button" aria-label="Cerrar información del tema">×</button>
+      <button id="themeInfoClose" class="theme-info-close" type="button" aria-label="Cerrar información de la música">×</button>
       <div id="themeInfoContent"></div>
     </section>
   </div>
 
   <div id="saveToast" class="save-toast" hidden>Guardado</div>
 
-  <script src="js/effects.js?v=5.2.3"></script>
-  <script src="js/site-data.js?v=5.2.3"></script>
-  <script src="js/theme-music.js?v=5.2.3"></script>
-  <script src="js/review-renderer.js?v=5.2.3"></script>
-  <script src="js/smash-music-sync.js?v=5.2.3"></script>
-  <script src="js/app.js?v=5.2.3"></script>
-  <script src="js/storm.js?v=5.2.3"></script>
+  <script src="js/content-model.js?v=5.3.0"></script>
+  <script src="js/content-data.js?v=5.3.0"></script>
+  <script src="js/music-library.js?v=5.3.0"></script>
+  <script src="js/effects.js?v=5.3.0"></script>
+  <script src="js/site-data.js?v=5.3.0"></script>
+  <script src="js/theme-music.js?v=5.3.0"></script>
+  <script src="js/review-renderer.js?v=5.3.0"></script>
+  <script src="js/smash-music-sync.js?v=5.3.0"></script>
+  <script src="js/app.js?v=5.3.0"></script>
+  <script src="js/storm.js?v=5.3.0"></script>
 </body>
 </html>

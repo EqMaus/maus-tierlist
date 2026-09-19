@@ -187,10 +187,11 @@
     flashLayer?.classList.remove('flash-now');
     ctx.clearRect(0, 0, width, height);
     const mobile = window.matchMedia('(max-width: 900px) and (hover: none) and (pointer: coarse)').matches;
+    const musicSpace = location.hash === '#music' || location.hash.startsWith('#music/');
     const mode = window.MausEffects?.effective() || 'full';
-    canvas.hidden = mobile || mode === 'off';
-    if (flashLayer) flashLayer.hidden = mobile || mode !== 'full';
-    if (hidden || mobile || mode === 'off') return;
+    canvas.hidden = mobile || musicSpace || mode === 'off';
+    if (flashLayer) flashLayer.hidden = mobile || musicSpace || mode !== 'full';
+    if (hidden || mobile || musicSpace || mode === 'off') return;
     resize();
     lastTime = performance.now();
     nextLightningAt = lastTime + random(1600, 4200);
@@ -199,6 +200,7 @@
   }
 
   window.addEventListener('maus:effectschange', restartAnimation);
+  window.addEventListener('hashchange', restartAnimation);
 
   document.addEventListener('visibilitychange', () => {
     hidden = document.hidden;

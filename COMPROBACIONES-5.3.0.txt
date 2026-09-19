@@ -1,0 +1,21 @@
+VALIDACIÓN LOCAL 5.3.0
+
+OK — Musical archive starts empty and distinct, with no ratings
+OK — Visible pause/resume preserves time through 8 real click cycles and clears musical rumble
+OK — Rapid pause/resume and effect toggles respect the final playback intent
+OK — Pause during metadata loading and navigation cancel pending playback safely
+OK — Repeated music/game navigation restores scenery and a single shared player
+OK — Visual editor updates home text in isolated live preview before publishing
+OK — Music entry can borrow an existing track, edit paragraphs and preview safely
+OK — Games, site content and music publish together with one branch update
+OK — Published music ficha renders without scores; both playback buttons stay synchronized and Smash follows its music
+OK — Published home and brand edits appear on public web
+OK — Asset upload conflict leaves branch intact and the draft can retry without loss
+OK — New MP3 uploads atomically and a saved draft stays out of the public collection
+OK — Publishing a draft, search and playback of its own MP3 work
+OK — Reconnect reads all published editorial changes back from GitHub format
+OK — Game catalog transfer, tier colors, deletion and discard work in the visual editor
+OK — Mobile music catalogue, ficha and player work with explicit playback
+OK — No uncaught JavaScript errors in public app or editor
+
+Además: sintaxis JavaScript verificada; catálogo musical vacío; datos de videojuegos y todos sus recursos idénticos al repositorio de origen. Regresión de efectos sobre los 17 juegos, 12 ciclos de modos y 100 cambios rápidos. GitHub simulado, sin publicación real.

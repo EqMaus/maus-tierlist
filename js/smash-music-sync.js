@@ -76,7 +76,7 @@
   }
 
   function isSmashRoute() {
-    return String(location.hash || '').includes(SMASH_ID);
+    return audio.dataset.sceneGameId === SMASH_ID && body.classList.contains('scene-active');
   }
 
   function isSmashTrack() {

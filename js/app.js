@@ -1,6 +1,9 @@
 (function () {
   'use strict';
 
+  let editorial = window.MausContentModel.normalize(window.MAUS_CONTENT);
+  const copy = key => editorial.settings[key] || '';
+  const textLines = value => esc(value).replace(/\n/g, '<br>');
   const byId = (id) => document.getElementById(id);
   const app = byId('app');
   const body = document.body;
@@ -145,7 +148,7 @@
   const MUSIC_WIDGET_POS_KEY = 'mausTierMusicWidgetPositionV1';
   const UI_THEME_KEY = 'mausTierUiThemeV1';
   let volume = clamp(Number(safeGet(localStore, MUSIC_VOLUME_KEY, '.52')), 0, 1, .52);
-  let uiTheme = String(safeGet(localStore, UI_THEME_KEY, 'default') || 'default');
+  let uiTheme = String(safeGet(localStore, UI_THEME_KEY, copy('defaultTheme')) || copy('defaultTheme'));
   let toastTimer = 0;
   let themeRequestId = 0;
   let currentGameSceneId = null;
@@ -614,10 +617,61 @@
   let activeObjectUrl = null;
   let volumeFadeFrame = 0;
   let pendingAudioRetry = false;
+  let playbackIntent = false;
+  let playbackEpoch = 0;
+  let audioHasPlayed = false;
+  let metadataCleanup = null;
   let musicDrag = null;
   let currentThemeStartAt = 0;
 
   const gameById = new Map(games.map((game) => [game.id, game]));
+
+  function registerMusicEntries() {
+    for (const key of gameById.keys()) if (key.startsWith('music:')) gameById.delete(key);
+    for (const track of editorial.tracks) {
+      const original = gameById.get(track.gameId);
+      const fallback = original ? { ...builtInMusic[original.id], ...musicDeepDive[original.id], ...original.music } : {};
+      gameById.set('music:' + track.id, { id: 'music:' + track.id, title: track.game,
+        cover: track.cover, background: track.background || (original ? backgroundSrcFor(original.id) : ''),
+        _sceneGameId: track.gameId || 'music:' + track.id,
+        music: { ...fallback, src: track.audio, title: track.title, composer: track.composer,
+          startAt: Number(track.startAt) || 0, detail: (track.sections || []).flatMap(section => section.paragraphs || []).join('\n\n') }
+      });
+    }
+  }
+  function applyEditorialSettings() {
+    const setText = (selector, text) => { const node = document.querySelector(selector); if (node) node.textContent = text; };
+    setText('.brand-copy strong', copy('brand')); setText('.brand-copy small', copy('tagline'));
+    const brand = document.querySelector('.brand'); if (brand) brand.href = '#' + copy('homeRoute');
+    const logo = document.querySelector('.brand-mark'); if (logo) { if (copy('logo')) logo.src = copy('logo'); logo.alt = copy('brand'); logo.hidden = !copy('logo'); }
+    for (const [nav,key] of [['offline','navOffline'],['online','navOnline'],['music','navMusic'],['games','navReviews'],['features','navFeatures']]) setText('[data-nav="'+nav+'"]',copy(key));
+    setText('#presentationModeButton',copy('navPresentation')); setText('#appearanceButton',copy('navAppearance'));
+    setText('.presentation-footer span',copy('presentationFooter'));
+    document.title = copy('documentTitle') + ' — v' + window.MAUS_BUILD_VERSION;
+    document.querySelector('meta[name="description"]')?.setAttribute('content',copy('description'));
+    const root = document.documentElement;
+    root.style.setProperty('--accent',copy('accent'));
+    root.style.setProperty('--max',Math.min(1800,Math.max(960,Number(copy('maxWidth'))||1220))+'px');
+    root.style.setProperty('--music-paper',copy('musicPaper'));
+    root.style.setProperty('--music-ink',copy('musicInk'));
+    root.style.setProperty('--music-accent',copy('musicAccent'));
+    root.style.setProperty('--music-columns',['2','3','4'].includes(copy('musicColumns'))?copy('musicColumns'):'3');
+    if (new URL(location.href).searchParams.has('preview')) applyUiTheme(copy('defaultTheme'),false);
+  }
+  function renderMusicPage(id) {
+    updateNav('music');
+    const track = editorial.tracks.find(item => item.id === id && item.published);
+    if (!id) { stopGameTheme(true); app.innerHTML = window.MausMusic.collection(editorial); return; }
+    if (!track) {
+      stopGameTheme(true);
+      app.innerHTML = '<div class="page music-page"><h1>Esta ficha no está publicada.</h1><p><a href="#music">Volver a la colección →</a></p></div>';
+      return;
+    }
+    applyScene(track.background ? 'music:' + track.id : track.gameId || 'music:' + track.id);
+    app.innerHTML = window.MausMusic.detail(track, editorial);
+    void startGameTheme('music:' + track.id);
+  }
+
 
   const MOBILE_PERFORMANCE_QUERY = '(max-width: 900px) and (hover: none) and (pointer: coarse)';
   const mobilePerformance = window.matchMedia(MOBILE_PERFORMANCE_QUERY).matches;
@@ -2174,10 +2228,8 @@
     const title = presentationMode.querySelector('.presentation-title-block h1');
     const lead = presentationMode.querySelector('.presentation-title-block p');
     if (kicker) kicker.textContent = isOnline ? 'TIER LIST ONLINE · EDICIÓN DE MAUS' : 'TIER LIST OFFLINE · EDICIÓN DE MAUS';
-    if (title) title.textContent = isOnline ? 'Mi ranking de videojuegos online' : 'Mi ranking de videojuegos offline';
-    if (lead) lead.textContent = isOnline
-      ? 'Competitivo, cooperativo y multijugador: el ranking online separado del resto.'
-      : 'Campañas, aventuras y experiencias principalmente offline.';
+    if (title) title.textContent = copy(isOnline ? 'onlinePresentationTitle' : 'offlinePresentationTitle');
+    if (lead) lead.textContent = copy(isOnline ? 'onlinePresentationLead' : 'offlinePresentationLead');
 
     presentationMode.classList.toggle('presentation-online', isOnline);
     presentationStats.innerHTML = `
@@ -2277,8 +2329,12 @@
       setAppearanceOpen(false);
       const route = parseRoute();
       clearScene();
+      body.classList.toggle('music-space', route.section === 'music');
+      if (presentationModeButton) presentationModeButton.hidden = route.section === 'music';
 
-      if (route.section === 'game' && route.id && gameById.has(route.id)) {
+      if (route.section === 'music') {
+        renderMusicPage(route.id);
+      } else if (route.section === 'game' && route.id && gameById.has(route.id)) {
         const catalog = normalizeCatalog(gameById.get(route.id)?._catalog);
         applyCatalogMode(catalog);
         updateNav('game', catalog);
@@ -2308,7 +2364,8 @@
         renderTierList('offline');
       }
 
-      if (app) app.focus({ preventScroll: true });
+      // An embedded preview must never steal the editor's typing focus.
+      if (app && !new URL(location.href).searchParams.has('preview')) app.focus({ preventScroll: true });
       window.scrollTo(0, 0);
     } catch (error) {
       renderFallback(error);
@@ -2323,19 +2380,17 @@
     const rows = scale.filter((row) => Number(row.score) >= 3);
     const topScore = ranked.length ? Math.max(...ranked.map((game) => Number(game.score))) : 0;
 
-    const title = isOnline
-      ? 'Mi ranking online,<br>separado del resto.'
-      : 'Mi ranking offline,<br>con cada review detrás.';
-    const lead = isOnline
-      ? 'Aquí van únicamente juegos cuyo núcleo está en el multijugador, competitivo o cooperativo online. Su ranking es independiente del offline.'
-      : 'Campañas, aventuras y experiencias principalmente offline. Pulsa cualquier juego para abrir directamente su ficha.';
-    const eyebrow = isOnline ? 'TIER LIST · ONLINE' : 'TIER LIST · OFFLINE';
+    const prefix = isOnline ? 'online' : 'offline';
+    const title = textLines(copy(prefix+'Title'));
+    const lead = textLines(copy(prefix+'Lead'));
+    const eyebrow = esc(copy(prefix+'Eyebrow'));
     const pageClass = isOnline ? 'online-tier-page' : 'offline-tier-page';
 
     app.innerHTML = `<div class="page ${pageClass}">
       <div class="catalog-switch" aria-label="Elegir tier list">
-        <button type="button" class="catalog-switch-button offline${!isOnline ? ' is-active' : ''}" data-go="tierlist"><span>OFFLINE</span><small>Campañas · single player</small></button>
-        <button type="button" class="catalog-switch-button online${isOnline ? ' is-active' : ''}" data-go="online"><span>ONLINE</span><small>Competitivo · coop · multijugador</small></button>
+        <button type="button" class="catalog-switch-button offline${!isOnline ? ' is-active' : ''}" data-go="tierlist"><span>${esc(copy('navOffline'))}</span><small>${esc(copy('offlineSwitch'))}</small></button>
+        <button type="button" class="catalog-switch-button online${isOnline ? ' is-active' : ''}" data-go="online"><span>${esc(copy('navOnline'))}</span><small>${esc(copy('onlineSwitch'))}</small></button>
+        <button type="button" class="catalog-switch-button music" data-go="music"><span>♫ ${esc(copy('navMusic'))}</span><small>${esc(copy('musicSwitch'))}</small></button>
       </div>
       <section class="tier-hero">
         <div>
@@ -2343,15 +2398,16 @@
           <h1 class="page-title">${title}</h1>
           <p class="page-lead">${lead}</p>
           <div class="hero-actions">
-            <button class="primary-button" type="button" data-start-ranking="${normalized}">▶ Leer ranking de arriba a abajo</button>
-            <button class="secondary-button" type="button" data-go="${catalogReviewsRoute(normalized)}">Ver reviews ${isOnline ? 'online' : 'offline'}</button>
+            <button class="primary-button" type="button" data-start-ranking="${normalized}">${esc(copy('readRanking'))}</button>
+            <button class="secondary-button" type="button" data-go="${catalogReviewsRoute(normalized)}">${esc(copy(isOnline ? 'onlineReviewsButton' : 'offlineReviewsButton'))}</button>
           </div>
-          <p class="tour-explainer">${isOnline ? 'La posición de un juego online no afecta a su posición en la tier list offline.' : 'Dentro de un mismo tier, cuanto más a la izquierda está, más arriba lo tengo.'}</p>
+          <p class="tour-explainer">${textLines(copy(prefix+'Note'))}</p>
         </div>
         <aside class="tier-hero-panel ${isOnline ? 'online-hero-panel' : ''}">
+          ${copy(prefix+'HeroImage') ? '<img class="home-feature-image" src="'+esc(copy(prefix+'HeroImage'))+'" alt="">' : ''}
           <span class="catalog-hero-badge">${isOnline ? 'ONLINE' : 'OFFLINE'}</span>
           <strong>${ranked.length} reviews</strong>
-          <small>${isOnline ? 'ranking multijugador independiente' : 'ordenados según mi tier list offline actual'}</small>
+          <small>${esc(copy(prefix+'Stats'))}</small>
           <div class="hero-stat-grid"><div class="hero-stat"><b>${ranked.length ? `${esc(topScore)}/10` : '—'}</b><span>nota más alta</span></div><div class="hero-stat"><b>${new Set(ranked.map((game) => game.score)).size}</b><span>tiers ocupados</span></div></div>
         </aside>
       </section>
@@ -2384,31 +2440,15 @@
         <button type="button" class="catalog-switch-button offline${!isOnline ? ' is-active' : ''}" data-go="games/offline"><span>REVIEWS OFFLINE</span><small>${offlineGames.length} juegos</small></button>
         <button type="button" class="catalog-switch-button online${isOnline ? ' is-active' : ''}" data-go="games/online"><span>REVIEWS ONLINE</span><small>${onlineGames.length} juegos</small></button>
       </div>
-      <div class="library-top"><div><span class="eyebrow">${isOnline ? 'REVIEWS · ONLINE' : 'REVIEWS · OFFLINE'}</span><h1 class="page-title">${isOnline ? 'Mis juegos online.' : 'Mis juegos offline.'}</h1><p class="page-lead">${isOnline ? 'Biblioteca independiente para juegos multijugador y competitivos.' : 'Campañas y experiencias principalmente offline.'}</p></div></div>
-      <div class="library-toolbar"><label class="search-field"><input id="gameSearch" type="search" autocomplete="off" placeholder="Buscar una review…"></label><span id="gameCount" class="library-count">${sorted.length} reviews</span></div>
+      <div class="library-top"><div><span class="eyebrow">${isOnline ? 'REVIEWS · ONLINE' : 'REVIEWS · OFFLINE'}</span><h1 class="page-title">${textLines(copy(isOnline ? 'onlineReviewsTitle' : 'offlineReviewsTitle'))}</h1><p class="page-lead">${textLines(copy(isOnline ? 'onlineReviewsLead' : 'offlineReviewsLead'))}</p></div></div>
+      <div class="library-toolbar"><label class="search-field"><input id="gameSearch" type="search" autocomplete="off" placeholder="${esc(copy('reviewSearch'))}"></label><span id="gameCount" class="library-count">${sorted.length} reviews</span></div>
       <div id="gameGrid" class="game-grid" data-catalog="${normalized}" style="margin-top:18px">${sorted.length ? sorted.map(gameCard).join('') : `<div class="library-empty-state"><strong>No hay reviews online todavía.</strong><span>Añádelas desde el editor privado.</span></div>`}</div>
     </div>`;
   }
 
   function renderFeatures() {
     stopGameTheme(true);
-    app.innerHTML = `<div class="page features-page">
-      <section class="features-hero">
-        <div><span class="eyebrow">GUÍA DE LA WEB</span><h1 class="page-title">Qué hay aquí y dónde tocar.</h1><p class="page-lead">Una guía rápida para saber qué puedes explorar sin tener que descubrir cada función por accidente.</p></div>
-        <div class="features-hero-mark" aria-hidden="true"><span>?</span></div>
-      </section>
-      <div class="features-grid">
-        <article class="feature-card"><span class="feature-index">01</span><h2>Dos tier lists</h2><p>La web separa por completo los juegos <strong>offline</strong> de los <strong>online</strong>. Cada uno tiene su ranking, su biblioteca de reviews y su recorrido.</p><div class="feature-dual-actions"><button type="button" data-go="tierlist">Offline →</button><button type="button" data-go="online">Online →</button></div></article>
-        <article class="feature-card"><span class="feature-index">02</span><h2>Reviews</h2><p>Reúne todas las fichas en una biblioteca más directa. Puedes buscar por nombre y abrir cualquier tarjeta para entrar en la review.</p><button type="button" data-go="games">Ir a Reviews →</button></article>
-        <article class="feature-card"><span class="feature-index">03</span><h2>Dentro de una ficha</h2><p>Encontrarás mi texto completo, la nota actual, el tier y navegación para seguir recorriendo juegos sin volver atrás constantemente.</p><small>DÓNDE · Abriendo cualquier juego</small></article>
-        <article class="feature-card"><span class="feature-index">04</span><h2>Música</h2><p>Cada ficha puede tener su propio tema. El reproductor flotante permite cambiar volumen, avanzar o retroceder en la canción y abrir una ficha dedicada con contexto musical.</p><small>DÓNDE · Reproductor flotante</small></article>
-        <article class="feature-card"><span class="feature-index">05</span><h2>Fondos</h2><p>Cuando una ficha tiene un fondo dedicado, aparece <strong>Ver fondo</strong> en la cabecera. Ese botón oculta la interfaz para dejar la imagen completamente a la vista.</p><small>DÓNDE · Esquina superior derecha de las fichas compatibles</small></article>
-        <article class="feature-card"><span class="feature-index">06</span><h2>Recorrido del ranking</h2><p>Desde la Tier list puedes iniciar una lectura de arriba a abajo. La web conserva el orden global y te deja avanzar o retroceder entre posiciones.</p><small>DÓNDE · “Leer ranking de arriba a abajo”</small></article>
-        <article class="feature-card"><span class="feature-index">07</span><h2>Apariencia</h2><p>La interfaz tiene tres paletas: <strong>Original</strong>, <strong>Negro &amp; Rojo</strong> y <strong>Azul &amp; Amarillo</strong>. La elección se recuerda en este navegador sin alterar los fondos ni el color propio de los tiers.</p><small>DÓNDE · Botón “Apariencia” de la cabecera</small></article>
-        <article class="feature-card"><span class="feature-index">08</span><h2>Modo presentación</h2><p>Abre una versión a pantalla completa del ranking, pensada para enseñarlo de forma limpia: tiers, posiciones, portadas y notas sin el resto de la navegación.</p><small>DÓNDE · Botón “Modo presentación” de la cabecera</small></article>
-      </div>
-      <section class="features-foot"><span>CONSEJO</span><p>Si algo parece interactivo, normalmente lo es: tarjetas, navegación entre juegos, reproductor, fondos y selector de apariencia reaccionan al pasar el ratón o al pulsarlos.</p></section>
-    </div>`;
+    app.innerHTML = '<div class="page features-page"><section class="features-hero"><div><span class="eyebrow">GUÍA DE LA WEB</span><h1 class="page-title">'+textLines(copy('featuresTitle'))+'</h1><p class="page-lead">'+textLines(copy('featuresLead'))+'</p></div></section><div class="features-grid">'+editorial.features.map((item,i)=>'<article class="feature-card"><span class="feature-index">'+String(i+1).padStart(2,'0')+'</span><h2>'+esc(item.title)+'</h2><p>'+textLines(item.text)+'</p><button type="button" data-go="'+esc(item.route||'tierlist')+'">'+esc(item.label||'Explorar')+' →</button></article>').join('')+'</div></div>';
   }
 
   function gameCard(game) {
@@ -2556,24 +2596,64 @@
     volumeFadeFrame = requestAnimationFrame(tick);
   }
 
-  async function playCurrentThemeWithFade() {
-    if (!audio.src) return false;
+  function syncPlaybackUi() {
+    const active = playbackIntent || !audio.paused;
+    const label = active ? '❚❚ Pausar' : audioHasPlayed ? '▶ Reanudar' : '▶ Reproducir';
+    if (mobileMusicToggleButton) {
+      mobileMusicToggleButton.hidden = false;
+      mobileMusicToggleButton.textContent = label;
+      mobileMusicToggleButton.setAttribute('aria-label', active ? 'Pausar música' : audioHasPlayed ? 'Reanudar música' : 'Reproducir música');
+      mobileMusicToggleButton.setAttribute('aria-pressed', String(active));
+    }
+    document.querySelectorAll('[data-music-play]').forEach(button => {
+      button.textContent = label;
+      button.setAttribute('aria-pressed', String(active));
+    });
+    body.classList.toggle('mobile-music-active', audioHasPlayed);
+    body.classList.toggle('music-is-playing', !audio.paused);
+  }
+
+  function pauseCurrentTheme() {
+    playbackIntent = false;
+    playbackEpoch += 1;
+    pendingAudioRetry = false;
+    cancelVolumeFade();
+    audio.pause();
+    syncPlaybackUi();
+  }
+
+  async function playCurrentThemeWithFade(automatic = false) {
+    if (!audio.getAttribute('src')) return false;
+    const epoch = ++playbackEpoch;
+    const request = themeRequestId;
+    playbackIntent = true;
+    pendingAudioRetry = false;
+    audio.preload = 'metadata';
+    syncPlaybackUi();
     try {
       audio.volume = Math.min(volume, Math.max(.006, volume * .045));
       await audio.play();
-      pendingAudioRetry = false;
-      fadeAudioToTarget(3600);
+      if (epoch !== playbackEpoch || request !== themeRequestId) {
+        if (!playbackIntent) audio.pause();
+        return false;
+      }
+      fadeAudioToTarget(automatic ? 3600 : 600);
+      audioHasPlayed = true;
+      syncPlaybackUi();
       return true;
     } catch (_) {
-      pendingAudioRetry = true;
+      if (epoch !== playbackEpoch || request !== themeRequestId) return false;
+      playbackIntent = false;
+      pendingAudioRetry = automatic && !mobilePerformance;
+      syncPlaybackUi();
       return false;
     }
   }
 
-  function retryPendingAudio() {
-    if (mobilePerformance) return;
-    if (!pendingAudioRetry || !audio.src || !audio.paused) return;
-    void playCurrentThemeWithFade();
+  function retryPendingAudio(event) {
+    if (event?.target?.closest?.('#mobileMusicToggleButton,[data-music-play]')) return;
+    if (!pendingAudioRetry || !audio.getAttribute('src') || !audio.paused) return;
+    void playCurrentThemeWithFade(false);
   }
 
   function themeInfoFor(gameId) {
@@ -2678,142 +2758,75 @@
 
   async function startGameTheme(gameId) {
     const requestId = ++themeRequestId;
+    metadataCleanup?.();
+    metadataCleanup = null;
+    pauseCurrentTheme();
     const theme = await resolveTheme(gameId);
     if (requestId !== themeRequestId) return;
-
-    if (!theme) {
-      stopGameTheme(true);
-      return;
-    }
-
-    let source = theme.src || '';
-    if (theme.blob) source = URL.createObjectURL(theme.blob);
-    if (!source) {
-      stopGameTheme(true);
-      return;
-    }
-
-    if (requestId !== themeRequestId) {
-      if (theme.blob) URL.revokeObjectURL(source);
-      return;
-    }
-
-    cancelVolumeFade();
-    audio.pause();
-    body.classList.remove('mobile-music-active');
-
-    if (activeObjectUrl) {
-      URL.revokeObjectURL(activeObjectUrl);
-      activeObjectUrl = null;
-    }
-    if (theme.blob) activeObjectUrl = source;
-
+    if (!theme) { stopGameTheme(true); return; }
+    const source = theme.blob ? URL.createObjectURL(theme.blob) : theme.src || '';
+    if (!source) { stopGameTheme(true); return; }
+    if (activeObjectUrl) URL.revokeObjectURL(activeObjectUrl);
+    activeObjectUrl = theme.blob ? source : null;
     currentGameMusicId = gameId;
     currentThemeSignature = theme.signature;
     currentThemeStartAt = Math.max(0, Number(theme.startAt) || 0);
-
-    // En móvil ni siquiera precargamos la canción hasta que el usuario
-    // pulsa "Activar música".
+    audioHasPlayed = false;
+    playbackIntent = !mobilePerformance && !new URL(location.href).searchParams.has('preview');
     audio.preload = mobilePerformance ? 'none' : 'metadata';
+    audio.dataset.sceneGameId = gameById.get(gameId)?._sceneGameId || gameId;
     audio.src = source;
-
+    audio.muted = false;
     if (playerSeek) playerSeek.value = '0';
     if (playerCurrentTime) playerCurrentTime.textContent = '0:00';
     if (playerDuration) playerDuration.textContent = '0:00';
-    audio.muted = false;
-
     player.hidden = false;
     body.classList.add('player-visible');
-    playerTitle.textContent = theme.title || 'Tema del juego';
+    playerTitle.textContent = theme.title || 'Música del juego';
     playerGame.textContent = gameById.get(gameId)?.title || '';
     playerVolume.value = String(Math.round(volume * 100));
     restoreMusicWidgetPosition();
-
-    if (mobilePerformance) {
-      pendingAudioRetry = false;
-      if (mobileMusicToggleButton) {
-        mobileMusicToggleButton.hidden = false;
-        mobileMusicToggleButton.textContent = '▶ Activar música';
-        mobileMusicToggleButton.setAttribute('aria-pressed', 'false');
-      }
-      return;
-    }
-
-    if (mobileMusicToggleButton) mobileMusicToggleButton.hidden = true;
-
-    const seekToRequestedStart = () => {
+    syncPlaybackUi();
+    const initialStart = currentThemeStartAt;
+    const seek = () => {
+      if (requestId !== themeRequestId) return;
       const duration = audio.duration;
-      const safeStart = Number.isFinite(duration) && duration > 0
-        ? Math.min(currentThemeStartAt, Math.max(0, duration - .05))
-        : currentThemeStartAt;
-      try { audio.currentTime = safeStart; } catch (_) {}
-      if (playerCurrentTime) playerCurrentTime.textContent = formatTime(safeStart);
+      const at = Number.isFinite(duration) && duration > 0 ? Math.min(initialStart, Math.max(0, duration - .05)) : initialStart;
+      try { audio.currentTime = at; } catch (_) {}
     };
-
-    const metadataReady = new Promise((resolve) => {
-      if (audio.readyState >= 1) { seekToRequestedStart(); resolve(); return; }
-      const finish = () => { seekToRequestedStart(); resolve(); };
-      audio.addEventListener('loadedmetadata', finish, { once: true });
-      audio.addEventListener('error', resolve, { once: true });
-    });
-
+    let settle;
+    const ready = new Promise(resolve => { settle = resolve; });
+    const cleanup = () => {
+      audio.removeEventListener('loadedmetadata', onReady);
+      audio.removeEventListener('error', onError);
+      if (metadataCleanup === cleanup) metadataCleanup = null;
+      settle(false);
+    };
+    const onReady = () => { seek(); settle(true); cleanup(); };
+    const onError = () => { settle(false); cleanup(); };
+    metadataCleanup = cleanup;
+    audio.addEventListener('loadedmetadata', onReady);
+    audio.addEventListener('error', onError);
+    if (mobilePerformance) return;
     audio.load();
-    await metadataReady;
-    if (requestId !== themeRequestId) return;
-
-    const played = await playCurrentThemeWithFade();
-    if (!played) showSavedToast('Toca en cualquier parte para activar la música');
+    const loaded = await ready;
+    if (!loaded || requestId !== themeRequestId || !playbackIntent) return;
+    const played = await playCurrentThemeWithFade(true);
+    if (!played && pendingAudioRetry) showSavedToast('Pulsa Reproducir para escuchar la música');
   }
 
   async function toggleMobileMusic() {
-    if (!mobilePerformance || !audio.src) return;
-
-    if (!audio.paused) {
-      cancelVolumeFade();
-      audio.pause();
-      body.classList.remove('mobile-music-active');
-      if (mobileMusicToggleButton) {
-        mobileMusicToggleButton.textContent = '▶ Reanudar música';
-        mobileMusicToggleButton.setAttribute('aria-pressed', 'false');
-      }
-      return;
-    }
-
-    audio.preload = 'metadata';
-
-    const seekAndPlay = async () => {
-      const duration = audio.duration;
-      const safeStart = Number.isFinite(duration) && duration > 0
-        ? Math.min(currentThemeStartAt, Math.max(0, duration - .05))
-        : currentThemeStartAt;
-
-      if ((audio.currentTime || 0) < 0.05 && safeStart > 0) {
-        try { audio.currentTime = safeStart; } catch (_) {}
-      }
-
-      const played = await playCurrentThemeWithFade();
-      if (played) {
-        body.classList.add('mobile-music-active');
-        if (mobileMusicToggleButton) {
-          mobileMusicToggleButton.textContent = '❚❚ Pausar música';
-          mobileMusicToggleButton.setAttribute('aria-pressed', 'true');
-        }
-      }
-    };
-
-    if (audio.readyState >= 1) {
-      await seekAndPlay();
-      return;
-    }
-
-    audio.load();
-    const onReady = () => { void seekAndPlay(); };
-    audio.addEventListener('loadedmetadata', onReady, { once: true });
+    if (!audio.getAttribute('src')) return;
+    if (playbackIntent || !audio.paused) pauseCurrentTheme();
+    else await playCurrentThemeWithFade(false);
   }
-
 
   function stopGameTheme(reset = true) {
     themeRequestId += 1;
+    metadataCleanup?.();
+    metadataCleanup = null;
+    pauseCurrentTheme();
+    audioHasPlayed = false;
     pendingAudioRetry = false;
     cancelVolumeFade();
     audio.pause();
@@ -2860,6 +2873,8 @@
   }
 
   function handleAppClick(event) {
+    if (event.target.closest('[data-music-play]')) { void toggleMobileMusic(); return; }
+    if (event.target.closest('[data-music-scroll]')) { event.preventDefault(); byId('musicCollection')?.scrollIntoView({behavior: window.MausEffects?.motionAllowed() ? 'smooth' : 'instant'}); return; }
     const reviewJump = event.target.closest('[data-review-jump]');
     if (reviewJump && app.contains(reviewJump)) {
       const target = document.getElementById(reviewJump.dataset.reviewJump);
@@ -2897,6 +2912,7 @@
   }
 
   function handleAppInput(event) {
+    if (event.target.id === 'musicSearch') { window.MausMusic.filter(editorial,event.target.value); return; }
     if (event.target.id === 'gameSearch') renderSearchResults(event.target.value);
   }
 
@@ -3039,6 +3055,9 @@
     }
 
     mobileMusicToggleButton?.addEventListener('click', () => { void toggleMobileMusic(); });
+    audio.addEventListener('playing', () => { audioHasPlayed = true; syncPlaybackUi(); });
+    audio.addEventListener('pause', () => { body.classList.remove('music-is-playing'); syncPlaybackUi(); });
+    audio.addEventListener('ended', () => { playbackIntent = false; syncPlaybackUi(); });
     themeInfoButton?.addEventListener('click', openThemeInfo);
     themeInfoClose?.addEventListener('click', closeThemeInfo);
     themeInfoModal?.addEventListener('click', (event) => { if (event.target === themeInfoModal) closeThemeInfo(); });
@@ -3058,6 +3077,8 @@
     document.addEventListener('keydown', retryPendingAudio, { capture: true });
 
     audio.addEventListener('error', () => {
+      pauseCurrentTheme();
+      metadataCleanup?.();
       if (!player.hidden) showSavedToast('No se pudo cargar este tema musical');
     });
 
@@ -3151,11 +3172,19 @@
     visibleIds: () => visibleTierGames().map((game) => game.id)
   };
 
+  registerMusicEntries();
+  applyEditorialSettings();
+  window.addEventListener('message', event => {
+    if (!new URL(location.href).searchParams.has('preview') || parent === window || event.source !== parent || event.origin !== location.origin || event.data?.type !== 'maus-editor-preview') return;
+    editorial = window.MausContentModel.normalize(event.data.content);
+    if (event.data.previewTrack) { const entry = editorial.tracks.find(t => t.id === event.data.previewTrack); if (entry) entry.published = true; }
+    registerMusicEntries(); applyEditorialSettings(); renderRoute();
+  });
   validateInitialData();
   applyUiTheme(uiTheme, false);
   bindStaticEvents();
   updateEditUi();
-  if (!location.hash) history.replaceState(null, '', '#tierlist');
+  if (!location.hash) history.replaceState(null, '', '#' + copy('homeRoute'));
   updateSceneMotionVars();
   updateSceneScrollDepth();
   renderRoute();

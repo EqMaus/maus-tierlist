@@ -1185,11 +1185,11 @@ const ADMIN_CURATED_REVIEW_SPECS = {
   }
 
   function currentSnapshot() {
-    return JSON.stringify({ games, scale });
+    return JSON.stringify({ games, scale, editorial: contentEditor.snapshot() });
   }
 
   function hasPendingFiles() {
-    return Object.values(pendingFiles).some((entry) => entry && (entry.cover || entry.background || entry.music));
+    return contentEditor.hasPendingFiles() || Object.values(pendingFiles).some((entry) => entry && (entry.cover || entry.background || entry.music));
   }
 
   function isDirty() {
@@ -1205,6 +1205,8 @@ const ADMIN_CURATED_REVIEW_SPECS = {
 
   function setBusy(active, title = 'Publicando cambios…', text = 'No cierres esta pestaña.') {
     busyOverlay.hidden = !active;
+    editorPanel.inert = active;
+    loginPanel.inert = active;
     busyTitle.textContent = title;
     busyText.textContent = text;
   }
@@ -1423,6 +1425,7 @@ const ADMIN_CURATED_REVIEW_SPECS = {
       <label class="tier-row">
         <span class="tier-score">${esc(row.score)}</span>
         <input type="text" data-tier-index="${index}" value="${esc(row.label)}" aria-label="Nombre del tier ${esc(row.score)}">
+        <input type="color" data-tier-color="${index}" value="${esc(row.color)}" aria-label="Color del tier ${esc(row.score)}">
       </label>`).join('');
   }
 
@@ -1558,6 +1561,7 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     gameIdBadge.textContent = game.id;
     newGameBadge.hidden = !newGameIds.has(game.id);
     fieldTitle.value = game.title || '';
+    $('fieldCatalog').value = game._catalog || 'offline';
     fieldYear.value = game.year || '';
     fieldPlatform.value = game.platform || '';
     fieldFranchise.value = game.franchise || '';
@@ -1604,6 +1608,7 @@ const ADMIN_CURATED_REVIEW_SPECS = {
       game.tierOrder = Number.isFinite(parsed) ? parsed : 0;
     } else game[field] = target.value;
 
+    if (field === '_catalog') activeCatalog = normalizeCatalog(game._catalog);
     editorTitle.textContent = game.title || game.id;
     editorSubtitle.textContent = `${game._catalog === 'online' ? 'ONLINE' : 'OFFLINE'} · ${game.platform || 'Sin plataforma'} · ${game.year || 'Sin año'}`;
     updateCounts();
@@ -1658,6 +1663,7 @@ const ADMIN_CURATED_REVIEW_SPECS = {
   }
 
   function validateData() {
+    contentEditor.validate();
     const ids = new Set();
     for (const game of games) {
       if (!game.id || ids.has(game.id)) throw new Error(`ID inválido o duplicado: ${game.id || '(vacío)'}`);
@@ -1714,22 +1720,28 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     musicFile.value = '';
   }
 
+  async function getEditorialFile(ref = BRANCH) {
+    try { return await getFile('js/content-data.js',ref); }
+    catch(error) { if(error.status === 404) return { sha: '', content: window.MausContentModel.serialize(window.MausContentModel.defaults()) }; throw error; }
+  }
+
   async function loadRemoteData() {
     setBusy(true, 'Cargando datos…', 'Leyendo la versión publicada desde GitHub.');
     try {
-      const [siteDataFile, indexFile, versionFile] = await Promise.all([
-        getFile('js/site-data.js'),
-        getFile('index.html'),
-        getFile('version.json')
+      const branch = await apiFetch(API + '/git/ref/heads/' + BRANCH);
+      const head = branch.object.sha;
+      const [siteDataFile, indexFile, versionFile, editorialFile] = await Promise.all([
+        getFile('js/site-data.js',head), getFile('index.html',head), getFile('version.json',head), getEditorialFile(head)
       ]);
       const parsed = parseSiteData(siteDataFile.content);
       games = clone(parsed.games);
       scale = clone(parsed.scale);
+      contentEditor.load(window.MausContentModel.parse(editorialFile.content));
       activeCatalog = 'offline';
       reviewHistory.clear();
       reviewFocusSnapshot = '';
       currentVersion = parseVersion(versionFile.content);
-      baseShas = { siteData: siteDataFile.sha, index: indexFile.sha, version: versionFile.sha };
+      baseShas = { siteData: siteDataFile.sha, index: indexFile.sha, version: versionFile.sha, editorial: editorialFile.sha };
       baseSnapshot = currentSnapshot();
       newGameIds = new Set();
       resetPendingFiles();
@@ -1739,6 +1751,7 @@ const ADMIN_CURATED_REVIEW_SPECS = {
       renderTierEditor();
       renderGameList();
       renderSelectedGame();
+      contentEditor.refresh();
       updateDirtyUi();
     } finally {
       setBusy(false);
@@ -1770,6 +1783,7 @@ const ADMIN_CURATED_REVIEW_SPECS = {
   }
 
   function logout() {
+    contentEditor.reset();
     token = '';
     games = [];
     scale = [];
@@ -1909,12 +1923,12 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     try {
       const branch = await apiFetch(API + '/git/ref/heads/' + BRANCH);
       const head = branch.object.sha;
-      const [freshSiteData, freshIndex, freshVersion] = await Promise.all([
-        getFile('js/site-data.js', head), getFile('index.html', head), getFile('version.json', head)
+      const [freshSiteData, freshIndex, freshVersion, freshEditorial] = await Promise.all([
+        getFile('js/site-data.js', head), getFile('index.html', head), getFile('version.json', head), getEditorialFile(head)
       ]);
       publicationEntries = [];
 
-      if (freshSiteData.sha !== baseShas.siteData || freshIndex.sha !== baseShas.index || freshVersion.sha !== baseShas.version) {
+      if (freshSiteData.sha !== baseShas.siteData || freshIndex.sha !== baseShas.index || freshVersion.sha !== baseShas.version || freshEditorial.sha !== baseShas.editorial) {
         throw new Error('El repositorio cambió desde que abriste el editor. Pulsa “Descartar” para recargar la versión actual y vuelve a aplicar tu cambio.');
       }
 
@@ -1931,7 +1945,9 @@ const ADMIN_CURATED_REVIEW_SPECS = {
 
       await uploadPendingAssets(publishGames, nextVersion);
 
-      const nextIndex = bumpIndexVersion(freshIndex.content, remoteVersion, nextVersion);
+      const publishEditorial = await contentEditor.prepare(nextVersion, (path,file) => putBinaryFile(path,file));
+      const nextEditorial = window.MausContentModel.serialize(publishEditorial);
+      const nextIndex = window.MausContentModel.applyHtml(bumpIndexVersion(freshIndex.content, remoteVersion, nextVersion),publishEditorial,nextVersion);
       const nextSiteData = serializeSiteData(publishGames, scale);
       const nextVersionJson = `${JSON.stringify({ version: nextVersion }, null, 2)}\n`;
 
@@ -1939,11 +1955,13 @@ const ADMIN_CURATED_REVIEW_SPECS = {
       const entries = [...publicationEntries,
         { path: 'index.html', mode: '100644', type: 'blob', content: nextIndex },
         { path: 'js/site-data.js', mode: '100644', type: 'blob', content: nextSiteData },
-        { path: 'version.json', mode: '100644', type: 'blob', content: nextVersionJson }
+        { path: 'version.json', mode: '100644', type: 'blob', content: nextVersionJson },
+        { path: 'js/content-data.js', mode: '100644', type: 'blob', content: nextEditorial }
       ];
-      const nextShas = { siteData: await gitBlobSha(nextSiteData), index: await gitBlobSha(nextIndex), version: await gitBlobSha(nextVersionJson) };
+      const nextShas = { siteData: await gitBlobSha(nextSiteData), index: await gitBlobSha(nextIndex), version: await gitBlobSha(nextVersionJson), editorial: await gitBlobSha(nextEditorial) };
       await commitPublication(head, entries, 'Editor: publica v' + nextVersion);
       games = publishGames;
+      contentEditor.accept(publishEditorial);
       currentVersion = nextVersion;
       versionBadge.textContent = 'v' + currentVersion;
       baseShas = nextShas;
@@ -1953,8 +1971,9 @@ const ADMIN_CURATED_REVIEW_SPECS = {
       resetPendingFiles();
       renderGameList();
       renderSelectedGame();
+      contentEditor.refresh();
       updateDirtyUi();
-      showNotice(`Publicado como <strong>v${esc(nextVersion)}</strong>. Las tier lists offline y online, portadas, fondos y MP3 nuevos ya forman parte del repositorio. GitHub Pages puede tardar unos segundos en desplegarlo. <a href="./?v=${encodeURIComponent(nextVersion)}#tierlist" target="_blank" rel="noreferrer">Abrir la versión publicada ↗</a>`);
+      showNotice(`Publicado como <strong>v${esc(nextVersion)}</strong>. Los juegos, el archivo musical, las portadas de la web y los recursos se han guardado juntos. GitHub Pages puede tardar unos segundos en desplegarlo. <a href="./?v=${encodeURIComponent(nextVersion)}#tierlist" target="_blank" rel="noreferrer">Abrir la versión publicada ↗</a>`);
     } catch (error) {
       showNotice(esc(error.message || 'No se pudieron publicar los cambios.'), true);
     } finally {
@@ -2031,6 +2050,30 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     showNotice('Borrador creado. Completa la ficha, añade los archivos que quieras y pulsa <strong>Guardar y publicar</strong>.');
   }
 
+  const contentEditor = window.MausContentEditor.create({
+    getGames: () => games,
+    getGameMedia: game => ({ cover: legacyOrCustomCover(game), music: musicForEditor(game) }),
+    onChange: updateDirtyUi,
+    notice: (text,error) => showNotice(esc(text),error),
+    onGamesView: renderSelectedGame
+  });
+
+  tierEditor.addEventListener('input', event => {
+    if (event.target.dataset.tierColor === undefined) return;
+    scale[Number(event.target.dataset.tierColor)].color = event.target.value;
+    renderReviewPreview(); updateDirtyUi();
+  });
+  $('deleteGameButton').addEventListener('click', () => {
+    const game = selectedGame();
+    if (!game || !confirm('¿Eliminar «' + game.title + '»? Se aplicará cuando publiques. Los archivos del juego se conservarán.')) return;
+    games = games.filter(item => item.id !== game.id);
+    delete pendingFiles[game.id];
+    Object.keys(previewUrls).filter(key => key.startsWith(game.id + ':')).forEach(revokePreview);
+    contentEditor.removeGameReference(game.id);
+    newGameIds.delete(game.id);
+    selectedId = sortedGames(activeCatalog)[0]?.id || '';
+    renderGameList(); renderSelectedGame(); updateDirtyUi();
+  });
   connectButton.addEventListener('click', () => void connect(tokenInput.value));
   tokenInput.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {

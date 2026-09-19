@@ -7,8 +7,9 @@
   <meta name="theme-color" content="#071018">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://api.github.com; img-src 'self' data: blob: https://avatars.githubusercontent.com; media-src 'self' blob:; style-src 'self'; script-src 'self'; base-uri 'self'; form-action 'none';">
   <title>Editor privado · Tier List de Maus</title>
-  <link rel="stylesheet" href="css/review-shared.css?v=5.2.3">
-  <link rel="stylesheet" href="css/admin.css?v=5.2.3">
+  <link rel="stylesheet" href="css/review-shared.css?v=5.3.0">
+  <link rel="stylesheet" href="css/admin.css?v=5.3.0">
+  <link rel="stylesheet" href="css/content-editor.css?v=5.3.0">
 </head>
 <body>
   <header class="admin-header">
@@ -27,7 +28,7 @@
     <section id="loginPanel" class="login-panel">
       <div class="login-copy">
         <span class="eyebrow">ADMINISTRACIÓN</span>
-        <h1>Edita la tier list sin tocar código</h1>
+        <h1>Edita tu web sin tocar código</h1>
         <p>Este editor publica los cambios directamente en <strong>EqMaus/maus-tierlist</strong>. El token nunca se incluye en la web ni se envía a ningún sitio que no sea la API oficial de GitHub.</p>
       </div>
 
@@ -60,6 +61,7 @@
     </section>
 
     <section id="editorPanel" class="editor-panel" hidden>
+      <nav class="editor-sections" aria-label="Sección a editar"><button type="button" data-editor-view="games" aria-pressed="true">Videojuegos</button><button type="button" data-editor-view="music" aria-pressed="false">Archivo musical</button><button type="button" data-editor-view="site" aria-pressed="false">Portadas y web</button></nav>
       <aside class="game-sidebar">
         <div class="sidebar-head">
           <div>
@@ -98,6 +100,7 @@
 
         <div id="publishNotice" class="publish-notice" hidden></div>
 
+        <div id="contentEditorRoot" hidden></div>
         <form id="gameForm" class="game-form" autocomplete="off">
           <section class="form-card">
             <div class="form-card-head">
@@ -105,7 +108,7 @@
                 <span class="eyebrow">FICHA</span>
                 <h2>Datos del juego</h2>
               </div>
-              <div class="card-head-badges">
+              <div class="card-head-badges"><button id="deleteGameButton" type="button" class="ghost-button">Eliminar juego</button>
                 <span id="newGameBadge" class="new-game-badge" hidden>NUEVO</span>
                 <span id="gameIdBadge" class="id-badge">—</span>
               </div>
@@ -117,7 +120,7 @@
                 <input id="fieldTitle" data-field="title" type="text">
               </label>
               <label class="field">
-                <span>Año</span>
+                <span>Catálogo</span><select id="fieldCatalog" data-field="_catalog"><option value="offline">Offline</option><option value="online">Online</option></select></label><label class="field"><span>Año</span>
                 <input id="fieldYear" data-field="year" type="text" inputmode="numeric">
               </label>
               <label class="field">
@@ -396,7 +399,9 @@
     </div>
   </div>
 
-  <script src="js/review-renderer.js?v=5.2.3"></script>
-  <script src="js/admin.js?v=5.2.3"></script>
+  <script src="js/review-renderer.js?v=5.3.0"></script>
+  <script src="js/content-model.js?v=5.3.0"></script>
+  <script src="js/content-editor.js?v=5.3.0"></script>
+  <script src="js/admin.js?v=5.3.0"></script>
 </body>
 </html>
