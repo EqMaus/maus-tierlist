@@ -2758,3 +2758,23 @@ body.mobile-performance.scene-rumble-heavy .screen-vignette{
 .resonance-info-footer{display:flex;align-items:center;gap:24px;margin-top:28px;padding-top:20px;border-top:1px solid rgba(155,75,56,.35);color:#9a4d3d}.resonance-info-footer em{font-size:1.02rem}.resonance-info-footer span{display:flex;align-items:center;gap:16px;margin-left:auto;font-family:Arial,sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.34em}.resonance-info-footer span:before{content:'';width:110px;height:1px;background:rgba(155,75,56,.55)}
 @media(max-width:900px){.theme-info-panel.is-resonance-info{padding:28px 24px}.theme-info-panel.is-resonance-info .resonance-info-head h2{padding-right:0}.resonance-info-head blockquote{position:static;width:auto;margin:16px 0 0;text-align:left}.resonance-info-layout{grid-template-columns:1fr;gap:28px}.resonance-info-left{padding-right:0;border-right:0;border-bottom:1px solid rgba(83,62,46,.18);padding-bottom:26px}}
 @media(max-width:560px){.theme-info-modal.is-resonance-info{padding:6px}.theme-info-panel.is-resonance-info{padding:22px 16px;border-radius:15px}.resonance-info-left{grid-template-columns:1fr}.resonance-info-cover{max-width:360px}.resonance-info-facts{grid-template-columns:1fr 1fr}.resonance-info-footer span:before{display:none}.resonance-info-footer{align-items:flex-start;flex-direction:column}.resonance-info-footer span{margin-left:0}}
+
+
+/* ============================================================
+   v5.3.9 · Resonancias: ficha editorial final + scrollbars
+   ============================================================ */
+:root{scrollbar-width:thin;scrollbar-color:rgba(255,103,124,.58) rgba(7,13,18,.38)}
+*::-webkit-scrollbar{width:10px;height:10px}
+*::-webkit-scrollbar-track{background:rgba(7,13,18,.34)}
+*::-webkit-scrollbar-thumb{background:linear-gradient(180deg,rgba(255,113,132,.72),rgba(164,66,81,.68));border:2px solid rgba(7,13,18,.34);border-radius:999px}
+*::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,rgba(255,132,148,.9),rgba(188,76,92,.84))}
+.theme-info-panel.is-resonance-info{scrollbar-width:thin;scrollbar-color:#a95a45 rgba(222,210,193,.55)}
+.theme-info-panel.is-resonance-info::-webkit-scrollbar-track{background:rgba(222,210,193,.55);border-radius:999px}
+.theme-info-panel.is-resonance-info::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#b96852,#92503f);border:2px solid rgba(238,229,216,.8);border-radius:999px}
+.theme-info-panel.is-resonance-info{padding-top:36px}
+.theme-info-panel.is-resonance-info .theme-info-close{position:absolute;float:none;top:22px;right:22px;margin:0;z-index:8;background:rgba(247,241,231,.94)}
+.theme-info-panel.is-resonance-info .resonance-info-head{padding-right:64px}
+.theme-info-panel.is-resonance-info .resonance-info-head blockquote{right:66px;max-width:300px}
+@media(max-width:900px){.theme-info-panel.is-resonance-info .resonance-info-head{padding-right:58px}.theme-info-panel.is-resonance-info .resonance-info-head blockquote{max-width:none}}
+
+.resonance-curiosities ul{margin:0;padding-left:20px;color:#49423a}.resonance-curiosities li{margin:0 0 9px;padding-left:4px;line-height:1.55}.resonance-curiosities li::marker{color:#aa513e}

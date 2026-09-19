@@ -123,6 +123,25 @@ window.MAUS_CONTENT = {
           ]
         }
       ],
+      "deepInfo": {
+        "quote": "Hay silencios que gritan más fuerte que cualquier sonido.",
+        "context": "Es la primera pieza musical que escuchas en Silent Hill 2. Acompaña la escena del baño del apartamento de James, introduciendo el tono emocional del juego desde el primer minuto. Es, en cierto modo, una puerta de entrada directa a su mente.",
+        "analysis": [
+          "White Noiz es una pieza construida desde la contradicción. Yamaoka combina capas de ruido estático, distorsiones, drones y texturas ambientales con elementos mínimos que apenas se insinúan, creando una sensación de inestabilidad constante. No sigue una estructura tradicional; en su lugar, se mueve como un pensamiento intrusivo, evolucionando de forma orgánica, casi accidental, como si la propia canción estuviera rota.",
+          "El uso del ruido no es gratuito: convierte lo desagradable en algo bello, haciendo que el sonido ‘sucio’ se funda con la atmósfera hasta que ya no sabes dónde acaba uno y empieza la otra. Esa ambigüedad es clave en Silent Hill 2, un juego donde nada es lo que parece y donde la realidad y la culpa se mezclan hasta volverse indistinguibles."
+        ],
+        "meaning": [
+          "White Noiz representa el estado mental de James al inicio del juego: culpa, confusión, deseo de olvidar y una profunda sensación de vacío. El ruido blanco del título puede interpretarse como la incapacidad de escuchar con claridad, como una mente que intenta ahogar algo horrible pero que, precisamente por ello, lo mantiene siempre presente.",
+          "Es una introducción perfecta al tema central del juego: cómo los recuerdos, incluso los que queremos enterrar, siguen resonando dentro de nosotros. White Noiz no da respuestas; solo te sumerge en una atmósfera emocional que acompaña todo el viaje."
+        ],
+        "why": "Porque en apenas unos minutos consigue transmitir el tono de Silent Hill 2: melancolía, culpa, ambigüedad y una belleza profundamente perturbadora. No es solo una canción de inicio, es una declaración de intenciones. White Noiz te prepara para escuchar el resto del juego de una forma distinta: sabiendo que, a veces, el ruido dice más que la música.",
+        "curiosities": [
+          "Su identidad depende más de la textura, el ruido y el espacio que de una melodía protagonista.",
+          "Funciona como umbral emocional antes de que la historia haya revelado prácticamente nada sobre James.",
+          "Su mezcla de intimidad e incomodidad resume una de las contradicciones fundamentales de Silent Hill 2: encontrar belleza dentro de algo profundamente doloroso."
+        ],
+        "closing": "El ruido también tiene alma."
+      },
       "id": "musica-mu7uily8-mchy",
       "published": true,
       "featured": true
