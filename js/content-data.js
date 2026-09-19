@@ -68,7 +68,66 @@ window.MAUS_CONTENT = {
     "musicAccent": "#9b4225",
     "musicColumns": "3"
   },
-  "tracks": [],
+  "tracks": [
+    {
+      "title": "White Noiz",
+      "game": "Silent Hill 2",
+      "gameId": "",
+      "composer": "Akira Yamaoka",
+      "album": "Silent Hill 2 Original Soundtracks",
+      "year": "3 de octubre de 2001",
+      "excerpt": "White Noiz convierte el inicio de Silent Hill 2 en un instante suspendido. Sus texturas difusas envuelven la escena del espejo en una mezcla de intimidad e inquietud: hay algo cercano en ese sonido, pero también una distancia imposible de resolver. Una pieza breve cuya atmósfera permanece mucho después de terminar.",
+      "tags": [
+        "Ambient",
+        "terror psicológico",
+        "melancolía",
+        "introspección",
+        "atmósfera",
+        "PlayStation 2"
+      ],
+      "cover": "assets/music/musica-mu7uily8-mchy-cover-v5-3-1.jpg",
+      "background": "assets/music/musica-mu7uily8-mchy-background-v5-3-1.png",
+      "audio": "assets/music/musica-mu7uily8-mchy-audio-v5-3-1.mp3",
+      "startAt": 0,
+      "sections": [
+        {
+          "title": "Quedarme a escuchar",
+          "paragraphs": [
+            "Descubrí «White Noiz» la primera vez que jugué al Silent Hill 2 original. No recuerdo si entonces me impactó tanto como ahora. Probablemente no: hay cosas de este juego que te golpean con mucha más fuerza después de terminarlo, cuando pasa el tiempo y empiezas a comprender lo que te ha dejado dentro.",
+            "Pero sí recuerdo quedarme en el baño del inicio para escucharla. No quería avanzar porque no quería que dejase de sonar. Esa mezcla de magnetismo, melancolía e incomodidad extraña ya tenía algo que me retenía allí.",
+            "Hoy ese recuerdo resume bastante bien mi relación con esta pieza: querer permanecer escuchando algo que me remueve por dentro."
+          ]
+        },
+        {
+          "title": "El ruido en la cabeza de James",
+          "paragraphs": [
+            "White Noiz me hace sentir vacío. Nostalgia. Me trae la sensación de esos recuerdos llenos de vida que siguen dentro de ti, aunque lo que recuerdas ya no esté.",
+            "Al escucharla, siento que me acerco a la cabeza de James. Para mí, refleja de una forma extraordinaria ese ruido que lleva dentro y que nunca consigue ordenar. Hay algo en su atmósfera que me permite entenderlo desde un lugar al que las palabras no llegan con la misma facilidad.",
+            "Después de conocer su historia, volver a esta música pesa de otra manera. Escucho el comienzo del juego con todo lo que ahora sé, y ese ruido adquiere una intimidad mucho más dolorosa."
+          ]
+        },
+        {
+          "title": "Lo que deja dentro",
+          "paragraphs": [
+            "White Noiz tiene algo hipnótico: su mezcla de melancolía e inquietud hace que quiera seguir escuchándola, quedarme un poco más en esa atmósfera. Hay una intimidad extraña en su sonido, una sensación de estar escuchando algo que cuesta expresar. Para mí, refleja de forma extraordinaria ese ruido que James lleva en la cabeza y que nunca consigue ordenar.",
+            "Fuera del juego, la pieza me lleva a mis propios recuerdos. A momentos llenos de vida que me gustaría volver a habitar, aunque solo fuera durante unos minutos. Recordarlos consuela, pero también duele saber que no puedo regresar. La música sostiene ambas sensaciones con una naturalidad que me parece preciosa.",
+            "Ahí reside buena parte de su fuerza: en lo mucho que puede remover siendo una pieza tan breve. Con el tiempo, cada escucha parece recoger algo más de mi propia vida. Y mientras suena, lo que echo de menos se siente un poco más cerca."
+          ]
+        },
+        {
+          "title": "Por qué empezar aquí",
+          "paragraphs": [
+            "Quería inaugurar esta colección con «White Noiz» porque me encanta y porque quizá sea mi pieza favorita de Silent Hill 2. Eso ya significa muchísimo para mí.",
+            "A día de hoy, Silent Hill 2 es el videojuego que más plenamente considero una obra maestra. Me desgarró el alma como ningún otro, y mi relación con su música está atravesada por esa experiencia. Con el tiempo, White Noiz, ha ido concentrando buena parte de lo que ese juego me hace sentir.",
+            "Por eso quiero darle este primer espacio: todavía vuelvo a ella y encuentro ese magnetismo que un día me hizo quedarme en un baño, delante de un espejo, sin querer avanzar."
+          ]
+        }
+      ],
+      "id": "musica-mu7uily8-mchy",
+      "published": true,
+      "featured": true
+    }
+  ],
   "features": [
     {
       "title": "Dos rankings, dos formas de jugar",
