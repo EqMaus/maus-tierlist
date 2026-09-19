@@ -154,10 +154,23 @@
   let sceneMotionFrame = 0;
   let sceneDriftFrame = 0;
   let sceneEnterTimer = 0;
-  const sceneMotion = { currentX: 0, currentY: 0, targetX: 0, targetY: 0, driftX: 0, driftY: 0 };
+  const sceneMotion = {
+    currentX: 0,
+    currentY: 0,
+    targetX: 0,
+    targetY: 0,
+    driftX: 0,
+    driftY: 0,
+    rumbleX: 0,
+    rumbleY: 0,
+    rumbleRot: 0
+  };
 
+  let sceneRumbleFrame = 0;
+  let sceneRumbleTimer = 0;
   let autoCameraTimer = 0;
   const SCENE_DIRECTION = {
+    'super-smash-bros-ultimate': { lightX:'62%', lightY:'27%', lightA:'rgba(126,207,255,.30)', lightB:'rgba(112,118,255,.18)', camX:21, camY:12, camMin:6500, camMax:11500, depth:.92, pos:'56% 48%', backSolid:'36%', backFade:'66%', frontSolid:'25%', frontFade:'60%' },
     'gow1': { lightX:'73%', lightY:'8%', lightA:'rgba(171,202,255,.24)', lightB:'rgba(239,184,109,.11)', camX:10, camY:6, camMin:17000, camMax:29000, depth:.72, pos:'55% 50%', backSolid:'35%', backFade:'68%', frontSolid:'28%', frontFade:'65%' },
     'gow2': { lightX:'54%', lightY:'7%', lightA:'rgba(155,199,255,.30)', lightB:'rgba(255,179,89,.18)', camX:11, camY:7, camMin:16000, camMax:28000, depth:.86, pos:'50% 50%', backSolid:'46%', backFade:'72%', frontSolid:'24%', frontFade:'57%' },
     'gow3': { lightX:'47%', lightY:'44%', lightA:'rgba(255,99,49,.32)', lightB:'rgba(255,181,92,.13)', camX:12, camY:7, camMin:14000, camMax:25000, depth:.92, pos:'53% 52%', backSolid:'32%', backFade:'62%', frontSolid:'34%', frontFade:'70%' },
@@ -177,6 +190,121 @@
 
   function sceneDirectionFor(gameId) {
     return SCENE_DIRECTION[gameId] || { lightX:'50%', lightY:'18%', lightA:'rgba(255,255,255,.18)', lightB:'rgba(116,188,235,.08)', camX:6, camY:4, camMin:20000, camMax:34000, depth:.55, pos:'50% 50%', backSolid:'42%', backFade:'70%', frontSolid:'24%', frontFade:'61%' };
+  }
+
+  const SCENE_RUMBLE_PROFILES = {
+    'super-smash-bros-ultimate': {
+      waitMin: 4400,
+      waitMax: 9200,
+      durationMin: 620,
+      durationMax: 1050,
+      ampX: 2.25,
+      ampY: 1.35,
+      rot: 0.075,
+      heavyChance: 0.28,
+      heavyMultiplier: 1.72
+    }
+  };
+
+  function sceneRumbleProfileFor(gameId) {
+    return SCENE_RUMBLE_PROFILES[gameId] || null;
+  }
+
+  function stopSceneRumble(reset = true) {
+    window.clearTimeout(sceneRumbleTimer);
+    sceneRumbleTimer = 0;
+
+    if (sceneRumbleFrame) cancelAnimationFrame(sceneRumbleFrame);
+    sceneRumbleFrame = 0;
+
+    body.classList.remove('scene-rumbling', 'scene-rumble-heavy');
+
+    if (reset) {
+      sceneMotion.rumbleX = 0;
+      sceneMotion.rumbleY = 0;
+      sceneMotion.rumbleRot = 0;
+      updateSceneMotionVars();
+    }
+  }
+
+  function triggerSceneRumble(gameId) {
+    const profile = sceneRumbleProfileFor(gameId);
+    if (!profile || mobilePerformance || document.hidden || currentGameSceneId !== gameId) return;
+
+    if (sceneRumbleFrame) cancelAnimationFrame(sceneRumbleFrame);
+
+    const heavy = Math.random() < profile.heavyChance;
+    const strength = heavy ? profile.heavyMultiplier : 1;
+    const cinematic = body.classList.contains('background-only') ? 1.20 : 1;
+    const ampX = profile.ampX * strength * cinematic;
+    const ampY = profile.ampY * strength * cinematic;
+    const ampRot = profile.rot * strength * cinematic;
+    const duration = randomIntBetween(
+      profile.durationMin + (heavy ? 150 : 0),
+      profile.durationMax + (heavy ? 280 : 0)
+    );
+    const startedAt = performance.now();
+
+    body.classList.add('scene-rumbling');
+    body.classList.toggle('scene-rumble-heavy', heavy);
+
+    const tick = (now) => {
+      if (document.hidden || currentGameSceneId !== gameId || !body.classList.contains('scene-active')) {
+        sceneRumbleFrame = 0;
+        body.classList.remove('scene-rumbling', 'scene-rumble-heavy');
+        return;
+      }
+
+      const elapsed = now - startedAt;
+      const t = Math.min(1, elapsed / duration);
+      const envelope = Math.pow(Math.sin(t * Math.PI), .72);
+
+      // Baja frecuencia: busca sensación de impacto/retumbe, no vibracion constante.
+      const lowX = Math.sin(elapsed * .041) + Math.sin(elapsed * .071 + 1.2) * .42;
+      const lowY = Math.sin(elapsed * .052 + .7) + Math.sin(elapsed * .089) * .34;
+      const grit = ((Math.random() * 2) - 1) * .18;
+
+      sceneMotion.rumbleX = (lowX + grit) * ampX * envelope;
+      sceneMotion.rumbleY = (lowY + grit * .65) * ampY * envelope;
+      sceneMotion.rumbleRot = (Math.sin(elapsed * .036 + .4) + grit * .28) * ampRot * envelope;
+      updateSceneMotionVars();
+
+      if (t < 1) {
+        sceneRumbleFrame = requestAnimationFrame(tick);
+      } else {
+        sceneMotion.rumbleX = 0;
+        sceneMotion.rumbleY = 0;
+        sceneMotion.rumbleRot = 0;
+        updateSceneMotionVars();
+        body.classList.remove('scene-rumbling', 'scene-rumble-heavy');
+        sceneRumbleFrame = 0;
+      }
+    };
+
+    sceneRumbleFrame = requestAnimationFrame(tick);
+  }
+
+  function startSceneRumble(gameId) {
+    stopSceneRumble(true);
+    const profile = sceneRumbleProfileFor(gameId);
+    if (!profile || mobilePerformance || !gameId) return;
+
+    const queueNext = () => {
+      if (currentGameSceneId !== gameId || !body.classList.contains('scene-active')) return;
+
+      if (document.hidden) {
+        sceneRumbleTimer = window.setTimeout(queueNext, 1500);
+        return;
+      }
+
+      triggerSceneRumble(gameId);
+      sceneRumbleTimer = window.setTimeout(
+        queueNext,
+        randomIntBetween(profile.waitMin, profile.waitMax)
+      );
+    };
+
+    sceneRumbleTimer = window.setTimeout(queueNext, randomIntBetween(1600, 3200));
   }
 
   function applySceneDirection(gameId) {
@@ -270,10 +398,11 @@
   }
 
   function updateSceneMotionVars() {
-    const combinedX = sceneMotion.currentX + sceneMotion.driftX;
-    const combinedY = sceneMotion.currentY + sceneMotion.driftY;
+    const combinedX = sceneMotion.currentX + sceneMotion.driftX + sceneMotion.rumbleX;
+    const combinedY = sceneMotion.currentY + sceneMotion.driftY + sceneMotion.rumbleY;
     body.style.setProperty('--parallax-x', `${combinedX.toFixed(2)}px`);
     body.style.setProperty('--parallax-y', `${combinedY.toFixed(2)}px`);
+    body.style.setProperty('--scene-rotation', `${sceneMotion.rumbleRot.toFixed(3)}deg`);
   }
 
   function animateSceneMotion() {
@@ -298,7 +427,11 @@
   function resetSceneMotion() {
     sceneMotion.targetX = 0;
     sceneMotion.targetY = 0;
+    sceneMotion.rumbleX = 0;
+    sceneMotion.rumbleY = 0;
+    sceneMotion.rumbleRot = 0;
     queueSceneMotion();
+    updateSceneMotionVars();
   }
 
   function updateSceneScrollDepth() {
@@ -786,7 +919,7 @@
 
   function preview(value, max = 170) {
     const clean = String(value || '').replace(/[*_#>-]/g, '').replace(/\s+/g, ' ').trim();
-    return clean.length > max ? `${clean.slice(0, max).trim()}…` : clean;
+    return clean.length > max ? `${clean.slice(0, max).trim()}â€¦` : clean;
   }
 
   function inlineMarkdown(value) {
@@ -800,7 +933,7 @@
   function splitSentences(value) {
     const text = String(value || '').replace(/\r/g, '').trim();
     if (!text) return [];
-    const parts = text.match(/[^.!?…]+(?:[.!?…]+|$)/gu);
+    const parts = text.match(/[^.!?â€¦]+(?:[.!?â€¦]+|$)/gu);
     return (parts || [text]).map((part) => part.trim()).filter(Boolean);
   }
 
@@ -851,7 +984,7 @@
       "verdict": false
     },
     {
-      "title": "Música, enemigos y feedback",
+      "title": "MÃºsica, enemigos y feedback",
       "marker": "La banda sonora es la polla",
       "verdict": false
     },
@@ -861,44 +994,44 @@
       "verdict": false
     },
     {
-      "title": "Modo Titán",
+      "title": "Modo TitÃ¡n",
       "marker": "Me he visto obligado a jugar",
       "verdict": false
     },
     {
       "title": "Veredicto final",
-      "marker": "Le doy un sólido 7",
+      "marker": "Le doy un sÃ³lido 7",
       "verdict": true
     }
   ],
   "re3-og": [
     {
-      "title": "Nemesis y atmósfera",
+      "title": "Nemesis y atmÃ³sfera",
       "marker": null,
       "verdict": false
     },
     {
       "title": "Esquiva y combate",
-      "marker": "El sistema de esquiva es buenísimo",
+      "marker": "El sistema de esquiva es buenÃ­simo",
       "verdict": false
     },
     {
       "title": "Escenarios y ritmo",
-      "marker": "Los escenarios están tremendos.",
+      "marker": "Los escenarios estÃ¡n tremendos.",
       "verdict": false
     },
     {
-      "title": "Música, sonido y personajes",
-      "marker": "La música, aunque suena",
+      "title": "MÃºsica, sonido y personajes",
+      "marker": "La mÃºsica, aunque suena",
       "verdict": false
     },
     {
-      "title": "Dificultad, recursos y duración",
-      "marker": "Me he pasado el juego en la dificultad más alta",
+      "title": "Dificultad, recursos y duraciÃ³n",
+      "marker": "Me he pasado el juego en la dificultad mÃ¡s alta",
       "verdict": false
     },
     {
-      "title": "Sensación final",
+      "title": "SensaciÃ³n final",
       "marker": "Tirar abajo a Nemesis",
       "verdict": false
     },
@@ -910,18 +1043,18 @@
   ],
   "majoras-mask": [
     {
-      "title": "Primera impresión",
+      "title": "Primera impresiÃ³n",
       "marker": null,
       "verdict": false
     },
     {
-      "title": "Gameplay y sistema de tres días",
+      "title": "Gameplay y sistema de tres dÃ­as",
       "marker": "El gameplay funciona muy bien.",
       "verdict": false
     },
     {
-      "title": "Tono y atmósfera",
-      "marker": "Lo más fuerte que tiene Majora’s Mask",
+      "title": "Tono y atmÃ³sfera",
+      "marker": "Lo mÃ¡s fuerte que tiene Majoraâ€™s Mask",
       "verdict": false
     },
     {
@@ -935,13 +1068,13 @@
       "verdict": false
     },
     {
-      "title": "Música y balance final",
-      "marker": "La música en general es buenísima.",
+      "title": "MÃºsica y balance final",
+      "marker": "La mÃºsica en general es buenÃ­sima.",
       "verdict": false
     },
     {
       "title": "Veredicto final",
-      "marker": "La nota a día de hoy",
+      "marker": "La nota a dÃ­a de hoy",
       "verdict": true
     }
   ],
@@ -957,13 +1090,13 @@
       "verdict": false
     },
     {
-      "title": "Jefes, música y doblaje",
+      "title": "Jefes, mÃºsica y doblaje",
       "marker": "GOW3 tiene las mejores batallas",
       "verdict": false
     },
     {
       "title": "Secretos y feedback",
-      "marker": "También, los cofres *secretos*",
+      "marker": "TambiÃ©n, los cofres *secretos*",
       "verdict": false
     },
     {
@@ -989,17 +1122,17 @@
       "verdict": false
     },
     {
-      "title": "Jefes, música y doblaje",
-      "marker": "Los bosses son quizás",
+      "title": "Jefes, mÃºsica y doblaje",
+      "marker": "Los bosses son quizÃ¡s",
       "verdict": false
     },
     {
-      "title": "Progresión, feedback y dificultad",
+      "title": "ProgresiÃ³n, feedback y dificultad",
       "marker": "Los cofres secretos de este juego",
       "verdict": false
     },
     {
-      "title": "Puzles, presentación y duración",
+      "title": "Puzles, presentaciÃ³n y duraciÃ³n",
       "marker": "Ah, y este juego tiene los mejores puzzles",
       "verdict": false
     },
@@ -1011,7 +1144,7 @@
   ],
   "sotc": [
     {
-      "title": "Mundo y primera impresión",
+      "title": "Mundo y primera impresiÃ³n",
       "marker": null,
       "verdict": false
     },
@@ -1026,13 +1159,13 @@
       "verdict": false
     },
     {
-      "title": "Jugabilidad y cámara",
-      "marker": "La jugabilidad está bien",
+      "title": "Jugabilidad y cÃ¡mara",
+      "marker": "La jugabilidad estÃ¡ bien",
       "verdict": false
     },
     {
-      "title": "Música e historia",
-      "marker": "La música es uno de los puntos fuertes.",
+      "title": "MÃºsica e historia",
+      "marker": "La mÃºsica es uno de los puntos fuertes.",
       "verdict": false
     },
     {
@@ -1041,20 +1174,20 @@
       "verdict": false
     },
     {
-      "title": "Conclusión",
+      "title": "ConclusiÃ³n",
       "marker": "Un juego que mucha gente",
       "verdict": false
     }
   ],
   "re9": [
     {
-      "title": "Atmósfera y Raccoon City",
+      "title": "AtmÃ³sfera y Raccoon City",
       "marker": null,
       "verdict": false
     },
     {
       "title": "Historia y encuentros",
-      "marker": "Lo más memorable del juego es su historia",
+      "marker": "Lo mÃ¡s memorable del juego es su historia",
       "verdict": false
     },
     {
@@ -1063,60 +1196,60 @@
       "verdict": false
     },
     {
-      "title": "Escenarios y tensión",
-      "marker": "Raccoon City es el escenario que más me gustó",
+      "title": "Escenarios y tensiÃ³n",
+      "marker": "Raccoon City es el escenario que mÃ¡s me gustÃ³",
       "verdict": false
     },
     {
-      "title": "Música y sonido",
-      "marker": "La música cumple como acompañamiento",
+      "title": "MÃºsica y sonido",
+      "marker": "La mÃºsica cumple como acompaÃ±amiento",
       "verdict": false
     },
     {
-      "title": "Puzles y exploración",
-      "marker": "Los puzzles están bien",
+      "title": "Puzles y exploraciÃ³n",
+      "marker": "Los puzzles estÃ¡n bien",
       "verdict": false
     },
     {
-      "title": "Doblaje y apartado técnico",
-      "marker": "El doblaje Inglés del juego",
+      "title": "Doblaje y apartado tÃ©cnico",
+      "marker": "El doblaje InglÃ©s del juego",
       "verdict": false
     },
     {
-      "title": "Dificultad, ritmo y duración",
+      "title": "Dificultad, ritmo y duraciÃ³n",
       "marker": "La dificultad es intermedia",
       "verdict": false
     },
     {
       "title": "Decisiones y final",
-      "marker": "También añadir que al final del juego",
+      "marker": "TambiÃ©n aÃ±adir que al final del juego",
       "verdict": false
     },
     {
-      "title": "Conclusión",
+      "title": "ConclusiÃ³n",
       "marker": "Como juego, es **excelente**",
       "verdict": false
     }
   ],
   "re2-og": [
     {
-      "title": "Primera impresión y comisaría",
+      "title": "Primera impresiÃ³n y comisarÃ­a",
       "marker": null,
       "verdict": false
     },
     {
       "title": "Controles y ritmo",
-      "marker": "Además, entre que te mueves",
+      "marker": "AdemÃ¡s, entre que te mueves",
       "verdict": false
     },
     {
-      "title": "Enemigos y tensión",
+      "title": "Enemigos y tensiÃ³n",
       "marker": "Los zombies siguen siendo lo que son",
       "verdict": false
     },
     {
-      "title": "Personajes y música",
-      "marker": "Los personajes están guays.",
+      "title": "Personajes y mÃºsica",
+      "marker": "Los personajes estÃ¡n guays.",
       "verdict": false
     },
     {
@@ -1137,27 +1270,27 @@
       "verdict": false
     },
     {
-      "title": "Ritmo y acción",
+      "title": "Ritmo y acciÃ³n",
       "marker": "El ritmo general es muy bueno",
       "verdict": false
     },
     {
-      "title": "Leon, música y Buhonero",
-      "marker": "Leon S. Kennedy aquí ya está",
+      "title": "Leon, mÃºsica y Buhonero",
+      "marker": "Leon S. Kennedy aquÃ­ ya estÃ¡",
       "verdict": false
     },
     {
-      "title": "Ashley y acompañamiento",
-      "marker": "Por último, Ashley",
+      "title": "Ashley y acompaÃ±amiento",
+      "marker": "Por Ãºltimo, Ashley",
       "verdict": false
     },
     {
-      "title": "Terror, enemigos y tensión",
+      "title": "Terror, enemigos y tensiÃ³n",
       "marker": "**Lo malo:**",
       "verdict": false
     },
     {
-      "title": "Tramo final y duración",
+      "title": "Tramo final y duraciÃ³n",
       "marker": "El tramo final es, claramente",
       "verdict": false
     },
@@ -1169,7 +1302,7 @@
   ],
   "medievil": [
     {
-      "title": "Primera impresión y ritmo",
+      "title": "Primera impresiÃ³n y ritmo",
       "marker": null,
       "verdict": false
     },
@@ -1179,27 +1312,27 @@
       "verdict": false
     },
     {
-      "title": "Cámara, combate y armas",
-      "marker": "La cámara tampoco es ninguna maravilla",
+      "title": "CÃ¡mara, combate y armas",
+      "marker": "La cÃ¡mara tampoco es ninguna maravilla",
       "verdict": false
     },
     {
       "title": "Dificultad y Barco Fantasma",
-      "marker": "La dificultad generalmente está bien.",
+      "marker": "La dificultad generalmente estÃ¡ bien.",
       "verdict": false
     },
     {
-      "title": "Niveles, Cálices y Galería",
-      "marker": "Por suerte, el diseño de niveles",
+      "title": "Niveles, CÃ¡lices y GalerÃ­a",
+      "marker": "Por suerte, el diseÃ±o de niveles",
       "verdict": false
     },
     {
       "title": "Jefes y enemigos",
-      "marker": "Los jefes... sin más.",
+      "marker": "Los jefes... sin mÃ¡s.",
       "verdict": false
     },
     {
-      "title": "Ambientación, música y sonido",
+      "title": "AmbientaciÃ³n, mÃºsica y sonido",
       "marker": "Pero si hay dos cosas donde MediEvil",
       "verdict": false
     },
@@ -1236,18 +1369,18 @@
       "verdict": false
     },
     {
-      "title": "Escenarios y adaptación",
+      "title": "Escenarios y adaptaciÃ³n",
       "marker": "- Los escenarios son visualmente chulos",
       "verdict": false
     },
     {
-      "title": "Música, personajes y puzles",
-      "marker": "La música por lo general es buena",
+      "title": "MÃºsica, personajes y puzles",
+      "marker": "La mÃºsica por lo general es buena",
       "verdict": false
     },
     {
-      "title": "Acción, ritmo y sensaciones",
-      "marker": "Y bueno, el juego se mantiene gracias a la acción",
+      "title": "AcciÃ³n, ritmo y sensaciones",
+      "marker": "Y bueno, el juego se mantiene gracias a la acciÃ³n",
       "verdict": false
     },
     {
@@ -1258,22 +1391,22 @@
   ],
   "re1-remaster": [
     {
-      "title": "Atmósfera y controles",
+      "title": "AtmÃ³sfera y controles",
       "marker": null,
       "verdict": false
     },
     {
-      "title": "Mansión y backtracking",
-      "marker": "El diseño de niveles es **regulero**.",
+      "title": "MansiÃ³n y backtracking",
+      "marker": "El diseÃ±o de niveles es **regulero**.",
       "verdict": false
     },
     {
       "title": "Enemigos y puzles",
-      "marker": "Los zombies son en su mayoría obstáculos",
+      "marker": "Los zombies son en su mayorÃ­a obstÃ¡culos",
       "verdict": false
     },
     {
-      "title": "Zonas y música",
+      "title": "Zonas y mÃºsica",
       "marker": "El juego aunque el 70% del tiempo",
       "verdict": false
     },
@@ -1283,13 +1416,13 @@
       "verdict": false
     },
     {
-      "title": "Sensación y rejugabilidad",
+      "title": "SensaciÃ³n y rejugabilidad",
       "marker": "No me parece un juego que se pueda considerar",
       "verdict": false
     },
     {
       "title": "Balance final",
-      "marker": "¿Me ha gustado más este remastered",
+      "marker": "Â¿Me ha gustado mÃ¡s este remastered",
       "verdict": false
     },
     {
@@ -1300,7 +1433,7 @@
   ],
   "pokemon-diamond": [
     {
-      "title": "Primera impresión",
+      "title": "Primera impresiÃ³n",
       "marker": null,
       "verdict": false
     },
@@ -1327,7 +1460,7 @@
   ],
   "pokemon-black": [
     {
-      "title": "Primera impresión",
+      "title": "Primera impresiÃ³n",
       "marker": null,
       "verdict": false
     },
@@ -1342,8 +1475,8 @@
       "verdict": false
     },
     {
-      "title": "Comparación con Diamante",
-      "marker": "No dista mucho del Pokémon Diamante",
+      "title": "ComparaciÃ³n con Diamante",
+      "marker": "No dista mucho del PokÃ©mon Diamante",
       "verdict": false
     },
     {
@@ -1370,16 +1503,16 @@
     },
     {
       "title": "Personajes y Ganondorf",
-      "marker": "Los personajes están bastante bien.",
+      "marker": "Los personajes estÃ¡n bastante bien.",
       "verdict": false
     },
     {
-      "title": "Música e historia",
+      "title": "MÃºsica e historia",
       "marker": "La banda sonora es espectacular.",
       "verdict": false
     },
     {
-      "title": "Conclusión",
+      "title": "ConclusiÃ³n",
       "marker": "En conjunto, Twilight Princess",
       "verdict": false
     },
@@ -1393,14 +1526,14 @@
 
   function guessSectionTitle(text, index, total) {
     const n = normalize(text);
-    if (index === 0) return 'Primera impresión';
-    if (/(musica|banda sonora|sonido|doblaje|voz|efectos de sonido)/.test(n)) return 'Música y sonido';
+    if (index === 0) return 'Primera impresiÃ³n';
+    if (/(musica|banda sonora|sonido|doblaje|voz|efectos de sonido)/.test(n)) return 'MÃºsica y sonido';
     if (/(historia|lore|personaj|protagon|final|villan|narrativ)/.test(n)) return 'Historia y personajes';
-    if (/(escenario|mundo|atmosfera|ambient|nivel|explor|backtracking|mazmorr|zona)/.test(n)) return 'Mundo y atmósfera';
+    if (/(escenario|mundo|atmosfera|ambient|nivel|explor|backtracking|mazmorr|zona)/.test(n)) return 'Mundo y atmÃ³sfera';
     if (/(combate|gameplay|control|arma|enemig|boss|jefe|esquiva|feedback|puzzle|puzle)/.test(n)) return 'Jugabilidad y combate';
     if (/(dificultad|ritmo|duracion|rejug|horas|muertes|reto)/.test(n)) return 'Ritmo, dificultad y rejugabilidad';
-    if (index === total - 1) return 'Conclusión';
-    return 'Análisis';
+    if (index === total - 1) return 'ConclusiÃ³n';
+    return 'AnÃ¡lisis';
   }
 
   function curatedReviewSections(gameId, value) {
@@ -1453,7 +1586,7 @@
       const verdict = Boolean(section.verdict);
       const title = verdict
         ? 'Veredicto final'
-        : String(section.title || `Sección ${index + 1}`).trim();
+        : String(section.title || `SecciÃ³n ${index + 1}`).trim();
       const paragraphs = Array.isArray(section.paragraphs)
         ? section.paragraphs.map((paragraph) => String(paragraph || '').trim()).filter(Boolean)
         : [];
@@ -1476,7 +1609,7 @@
     if (window.MausReviewRenderer) {
       return window.MausReviewRenderer.render(sections, { navigator: true, idPrefix: `review-${gameId}` });
     }
-    if (!sections.length) return '<div class="review-layout"><p class="empty-review">Sin review todavía.</p></div>';
+    if (!sections.length) return '<div class="review-layout"><p class="empty-review">Sin review todavÃ­a.</p></div>';
     return `<div class="review-layout">${sections.map((section) => {
       if (section.verdict) return `<section class="review-verdict"><span>Veredicto final</span><div class="review-verdict-body">${inlineMarkdown(section.text).replace(/\n/g, '<br>')}</div></section>`;
       return `<section class="review-section"><div class="review-section-head">${esc(section.title)}</div><div class="review-copy">${paragraphHtml(proseParagraphs(section.text))}</div></section>`;
@@ -1489,7 +1622,7 @@
 
   function reviewEditorHtml(value, gameId) {
     const sections = reviewSectionsFor(gameId, value);
-    if (!sections.length) return '<div class="review-layout"><p class="empty-review">Sin review todavía.</p></div>';
+    if (!sections.length) return '<div class="review-layout"><p class="empty-review">Sin review todavÃ­a.</p></div>';
     let partIndex = 0;
     const html = sections.map((section) => {
       if (section.verdict) {
@@ -1605,8 +1738,8 @@
     body.classList.toggle('edit-mode', editMode);
     if (editModeButton) {
       editModeButton.classList.toggle('is-unlocked', editMode);
-      editModeButton.innerHTML = editMode ? '🔓 <span>Edición activa</span>' : '🔒 <span>Editar</span>';
-      editModeButton.setAttribute('aria-label', editMode ? 'Salir del modo edición' : 'Abrir modo edición');
+      editModeButton.innerHTML = editMode ? 'ðŸ”“ <span>EdiciÃ³n activa</span>' : 'ðŸ”’ <span>Editar</span>';
+      editModeButton.setAttribute('aria-label', editMode ? 'Salir del modo ediciÃ³n' : 'Abrir modo ediciÃ³n');
     }
     if (editToolbar) editToolbar.hidden = !editMode;
   }
@@ -1658,7 +1791,7 @@
       persistEditStore();
       location.reload();
     } catch (_) {
-      showSavedToast('La copia no es válida');
+      showSavedToast('La copia no es vÃ¡lida');
     }
   }
 
@@ -1718,7 +1851,7 @@
         tx.objectStore(AUDIO_DB_STORE).delete(gameId);
         tx.oncomplete = resolve;
         tx.onerror = () => reject(tx.error || new Error('Error eliminando tema'));
-        tx.onabort = () => reject(tx.error || new Error('Eliminación cancelada'));
+        tx.onabort = () => reject(tx.error || new Error('EliminaciÃ³n cancelada'));
       });
     } finally {
       db.close();
@@ -1911,6 +2044,7 @@
     stopClimateCycle();
     stopAutonomousCamera();
     stopSceneDrift(true);
+    stopSceneRumble(true);
     body.classList.remove('scene-active', 'scene-entering', 'scene-cinematic');
     body.dataset.scene = 'default';
     body.dataset.ambientEffect = 'none';
@@ -1938,13 +2072,14 @@
     if (backgroundViewButton) backgroundViewButton.hidden = !photoSrc;
     if (!sceneArt) return;
 
-    // MÓVIL LITE:
-    // una única imagen estática. Sin partículas, clima, luces, profundidad,
-    // parallax, cámara, drift ni eventos.
+    // MÃ“VIL LITE:
+    // una Ãºnica imagen estÃ¡tica. Sin partÃ­culas, clima, luces, profundidad,
+    // parallax, cÃ¡mara, drift ni eventos.
     if (mobilePerformance) {
       stopClimateCycle();
       stopAutonomousCamera(false);
       stopSceneDrift(true);
+      stopSceneRumble(true);
       body.classList.remove('scene-entering', 'climate-event');
       body.dataset.climateState = 'normal';
       updateSceneScrollDepth();
@@ -1967,6 +2102,7 @@
     startClimateCycle(gameId);
     startSceneDrift(gameId);
     scheduleAutonomousCamera(gameId, true);
+    startSceneRumble(gameId);
     updateSceneScrollDepth();
 
     if (photoSrc) {
@@ -2001,17 +2137,17 @@
     const kicker = presentationMode.querySelector('.presentation-kicker');
     const title = presentationMode.querySelector('.presentation-title-block h1');
     const lead = presentationMode.querySelector('.presentation-title-block p');
-    if (kicker) kicker.textContent = isOnline ? 'TIER LIST ONLINE · EDICIÓN DE MAUS' : 'TIER LIST OFFLINE · EDICIÓN DE MAUS';
+    if (kicker) kicker.textContent = isOnline ? 'TIER LIST ONLINE Â· EDICIÃ“N DE MAUS' : 'TIER LIST OFFLINE Â· EDICIÃ“N DE MAUS';
     if (title) title.textContent = isOnline ? 'Mi ranking de videojuegos online' : 'Mi ranking de videojuegos offline';
     if (lead) lead.textContent = isOnline
       ? 'Competitivo, cooperativo y multijugador: el ranking online separado del resto.'
-      : 'Campañas, aventuras y experiencias principalmente offline.';
+      : 'CampaÃ±as, aventuras y experiencias principalmente offline.';
 
     presentationMode.classList.toggle('presentation-online', isOnline);
     presentationStats.innerHTML = `
       <div><strong>${ranked.length}</strong><span>JUEGOS</span></div>
       <div><strong>${rows.length}</strong><span>TIERS OCUPADOS</span></div>
-      <div><strong>${esc(topScore)}/10</strong><span>NOTA MÁS ALTA</span></div>`;
+      <div><strong>${esc(topScore)}/10</strong><span>NOTA MÃS ALTA</span></div>`;
     presentationTiers.innerHTML = rows.length ? rows.map((row) => `
       <section class="presentation-tier" style="--tier:${esc(row.color)}">
         <div class="presentation-tier-label">
@@ -2024,11 +2160,11 @@
             return `<button class="presentation-game" type="button" data-presentation-game="${esc(game.id)}" title="Abrir review de ${esc(game.title)}">
               <span class="presentation-rank">#${game.globalRank}</span>
               ${cover ? `<img src="${esc(cover)}" alt="Portada de ${esc(game.title)}">` : ''}
-              <span class="presentation-game-copy"><strong>${esc(game.title)}</strong><small>${esc(game.score)}/10 · ${esc(row.label)}</small></span>
+              <span class="presentation-game-copy"><strong>${esc(game.title)}</strong><small>${esc(game.score)}/10 Â· ${esc(row.label)}</small></span>
             </button>`;
           }).join('')}
         </div>
-      </section>`).join('') : `<div class="presentation-empty">${isOnline ? 'Todavía no hay juegos online publicados.' : 'Todavía no hay juegos publicados.'}</div>`;
+      </section>`).join('') : `<div class="presentation-empty">${isOnline ? 'TodavÃ­a no hay juegos online publicados.' : 'TodavÃ­a no hay juegos publicados.'}</div>`;
   }
 
   async function requestPresentationFullscreen() {
@@ -2097,7 +2233,7 @@
     stopGameTheme(true);
     clearScene();
     updateNav('tierlist', 'offline');
-    app.innerHTML = `<div class="page"><section class="recovery-card"><span class="eyebrow">RECUPERACIÓN</span><h1>La vista no pudo cargarse.</h1><p>La aplicación ha evitado quedarse bloqueada. Puedes volver a la tier list y seguir usando la web.</p><button class="primary-button" type="button" data-go="tierlist">Volver a la tier list offline</button></section></div>`;
+    app.innerHTML = `<div class="page"><section class="recovery-card"><span class="eyebrow">RECUPERACIÃ“N</span><h1>La vista no pudo cargarse.</h1><p>La aplicaciÃ³n ha evitado quedarse bloqueada. Puedes volver a la tier list y seguir usando la web.</p><button class="primary-button" type="button" data-go="tierlist">Volver a la tier list offline</button></section></div>`;
   }
 
   function renderRoute() {
@@ -2153,17 +2289,17 @@
 
     const title = isOnline
       ? 'Mi ranking online,<br>separado del resto.'
-      : 'Mi ranking offline,<br>con cada review detrás.';
+      : 'Mi ranking offline,<br>con cada review detrÃ¡s.';
     const lead = isOnline
-      ? 'Aquí van únicamente juegos cuyo núcleo está en el multijugador, competitivo o cooperativo online. Su ranking es independiente del offline.'
-      : 'Campañas, aventuras y experiencias principalmente offline. Pulsa cualquier juego para abrir directamente su ficha.';
-    const eyebrow = isOnline ? 'TIER LIST · ONLINE' : 'TIER LIST · OFFLINE';
+      ? 'AquÃ­ van Ãºnicamente juegos cuyo nÃºcleo estÃ¡ en el multijugador, competitivo o cooperativo online. Su ranking es independiente del offline.'
+      : 'CampaÃ±as, aventuras y experiencias principalmente offline. Pulsa cualquier juego para abrir directamente su ficha.';
+    const eyebrow = isOnline ? 'TIER LIST Â· ONLINE' : 'TIER LIST Â· OFFLINE';
     const pageClass = isOnline ? 'online-tier-page' : 'offline-tier-page';
 
     app.innerHTML = `<div class="page ${pageClass}">
       <div class="catalog-switch" aria-label="Elegir tier list">
-        <button type="button" class="catalog-switch-button offline${!isOnline ? ' is-active' : ''}" data-go="tierlist"><span>OFFLINE</span><small>Campañas · single player</small></button>
-        <button type="button" class="catalog-switch-button online${isOnline ? ' is-active' : ''}" data-go="online"><span>ONLINE</span><small>Competitivo · coop · multijugador</small></button>
+        <button type="button" class="catalog-switch-button offline${!isOnline ? ' is-active' : ''}" data-go="tierlist"><span>OFFLINE</span><small>CampaÃ±as Â· single player</small></button>
+        <button type="button" class="catalog-switch-button online${isOnline ? ' is-active' : ''}" data-go="online"><span>ONLINE</span><small>Competitivo Â· coop Â· multijugador</small></button>
       </div>
       <section class="tier-hero">
         <div>
@@ -2171,24 +2307,24 @@
           <h1 class="page-title">${title}</h1>
           <p class="page-lead">${lead}</p>
           <div class="hero-actions">
-            <button class="primary-button" type="button" data-start-ranking="${normalized}">▶ Leer ranking de arriba a abajo</button>
+            <button class="primary-button" type="button" data-start-ranking="${normalized}">â–¶ Leer ranking de arriba a abajo</button>
             <button class="secondary-button" type="button" data-go="${catalogReviewsRoute(normalized)}">Ver reviews ${isOnline ? 'online' : 'offline'}</button>
           </div>
-          <p class="tour-explainer">${isOnline ? 'La posición de un juego online no afecta a su posición en la tier list offline.' : 'Dentro de un mismo tier, cuanto más a la izquierda está, más arriba lo tengo.'}</p>
+          <p class="tour-explainer">${isOnline ? 'La posiciÃ³n de un juego online no afecta a su posiciÃ³n en la tier list offline.' : 'Dentro de un mismo tier, cuanto mÃ¡s a la izquierda estÃ¡, mÃ¡s arriba lo tengo.'}</p>
         </div>
         <aside class="tier-hero-panel ${isOnline ? 'online-hero-panel' : ''}">
           <span class="catalog-hero-badge">${isOnline ? 'ONLINE' : 'OFFLINE'}</span>
           <strong>${ranked.length} reviews</strong>
-          <small>${isOnline ? 'ranking multijugador independiente' : 'ordenados según mi tier list offline actual'}</small>
-          <div class="hero-stat-grid"><div class="hero-stat"><b>${ranked.length ? `${esc(topScore)}/10` : '—'}</b><span>nota más alta</span></div><div class="hero-stat"><b>${new Set(ranked.map((game) => game.score)).size}</b><span>tiers ocupados</span></div></div>
+          <small>${isOnline ? 'ranking multijugador independiente' : 'ordenados segÃºn mi tier list offline actual'}</small>
+          <div class="hero-stat-grid"><div class="hero-stat"><b>${ranked.length ? `${esc(topScore)}/10` : 'â€”'}</b><span>nota mÃ¡s alta</span></div><div class="hero-stat"><b>${new Set(ranked.map((game) => game.score)).size}</b><span>tiers ocupados</span></div></div>
         </aside>
       </section>
-      ${isOnline && !ranked.length ? `<section class="online-empty-intro"><span>LISTA NUEVA</span><strong>La tier list online está preparada.</strong><p>Los juegos online se añaden desde el editor privado y quedan completamente separados de los juegos offline.</p></section>` : ''}
+      ${isOnline && !ranked.length ? `<section class="online-empty-intro"><span>LISTA NUEVA</span><strong>La tier list online estÃ¡ preparada.</strong><p>Los juegos online se aÃ±aden desde el editor privado y quedan completamente separados de los juegos offline.</p></section>` : ''}
       <div class="tier-list">${rows.map((row) => {
         const tierGames = ranked.filter((game) => Number(game.score) === Number(row.score)).sort((a, b) => ((a.tierOrder ?? 999) - (b.tierOrder ?? 999)) || a.title.localeCompare(b.title, 'es'));
         return `<section class="tier-row" style="--tier:${esc(row.color)}">
           <div class="tier-label"><strong class="tier-font-${esc(row.tone)}" ${editMode && !isOnline ? `contenteditable="true" spellcheck="true" data-edit-tier-score="${esc(row.score)}"` : ''}>${esc(row.label)}</strong><span>${esc(row.score)}</span></div>
-          <div class="tier-games">${tierGames.length ? tierGames.map((game, index) => tierCard(game, index, row)).join('') : `<div class="tier-empty">${isOnline ? 'Sin juegos online todavía' : 'Sin juegos todavía'}</div>`}</div>
+          <div class="tier-games">${tierGames.length ? tierGames.map((game, index) => tierCard(game, index, row)).join('') : `<div class="tier-empty">${isOnline ? 'Sin juegos online todavÃ­a' : 'Sin juegos todavÃ­a'}</div>`}</div>
         </section>`;
       }).join('')}</div>
     </div>`;
@@ -2212,9 +2348,9 @@
         <button type="button" class="catalog-switch-button offline${!isOnline ? ' is-active' : ''}" data-go="games/offline"><span>REVIEWS OFFLINE</span><small>${offlineGames.length} juegos</small></button>
         <button type="button" class="catalog-switch-button online${isOnline ? ' is-active' : ''}" data-go="games/online"><span>REVIEWS ONLINE</span><small>${onlineGames.length} juegos</small></button>
       </div>
-      <div class="library-top"><div><span class="eyebrow">${isOnline ? 'REVIEWS · ONLINE' : 'REVIEWS · OFFLINE'}</span><h1 class="page-title">${isOnline ? 'Mis juegos online.' : 'Mis juegos offline.'}</h1><p class="page-lead">${isOnline ? 'Biblioteca independiente para juegos multijugador y competitivos.' : 'Campañas y experiencias principalmente offline.'}</p></div></div>
-      <div class="library-toolbar"><label class="search-field"><input id="gameSearch" type="search" autocomplete="off" placeholder="Buscar una review…"></label><span id="gameCount" class="library-count">${sorted.length} reviews</span></div>
-      <div id="gameGrid" class="game-grid" data-catalog="${normalized}" style="margin-top:18px">${sorted.length ? sorted.map(gameCard).join('') : `<div class="library-empty-state"><strong>No hay reviews online todavía.</strong><span>Añádelas desde el editor privado.</span></div>`}</div>
+      <div class="library-top"><div><span class="eyebrow">${isOnline ? 'REVIEWS Â· ONLINE' : 'REVIEWS Â· OFFLINE'}</span><h1 class="page-title">${isOnline ? 'Mis juegos online.' : 'Mis juegos offline.'}</h1><p class="page-lead">${isOnline ? 'Biblioteca independiente para juegos multijugador y competitivos.' : 'CampaÃ±as y experiencias principalmente offline.'}</p></div></div>
+      <div class="library-toolbar"><label class="search-field"><input id="gameSearch" type="search" autocomplete="off" placeholder="Buscar una reviewâ€¦"></label><span id="gameCount" class="library-count">${sorted.length} reviews</span></div>
+      <div id="gameGrid" class="game-grid" data-catalog="${normalized}" style="margin-top:18px">${sorted.length ? sorted.map(gameCard).join('') : `<div class="library-empty-state"><strong>No hay reviews online todavÃ­a.</strong><span>AÃ±Ã¡delas desde el editor privado.</span></div>`}</div>
     </div>`;
   }
 
@@ -2222,27 +2358,27 @@
     stopGameTheme(true);
     app.innerHTML = `<div class="page features-page">
       <section class="features-hero">
-        <div><span class="eyebrow">GUÍA DE LA WEB</span><h1 class="page-title">Qué hay aquí y dónde tocar.</h1><p class="page-lead">Una guía rápida para saber qué puedes explorar sin tener que descubrir cada función por accidente.</p></div>
+        <div><span class="eyebrow">GUÃA DE LA WEB</span><h1 class="page-title">QuÃ© hay aquÃ­ y dÃ³nde tocar.</h1><p class="page-lead">Una guÃ­a rÃ¡pida para saber quÃ© puedes explorar sin tener que descubrir cada funciÃ³n por accidente.</p></div>
         <div class="features-hero-mark" aria-hidden="true"><span>?</span></div>
       </section>
       <div class="features-grid">
-        <article class="feature-card"><span class="feature-index">01</span><h2>Dos tier lists</h2><p>La web separa por completo los juegos <strong>offline</strong> de los <strong>online</strong>. Cada uno tiene su ranking, su biblioteca de reviews y su recorrido.</p><div class="feature-dual-actions"><button type="button" data-go="tierlist">Offline →</button><button type="button" data-go="online">Online →</button></div></article>
-        <article class="feature-card"><span class="feature-index">02</span><h2>Reviews</h2><p>Reúne todas las fichas en una biblioteca más directa. Puedes buscar por nombre y abrir cualquier tarjeta para entrar en la review.</p><button type="button" data-go="games">Ir a Reviews →</button></article>
-        <article class="feature-card"><span class="feature-index">03</span><h2>Dentro de una ficha</h2><p>Encontrarás mi texto completo, la nota actual, el tier y navegación para seguir recorriendo juegos sin volver atrás constantemente.</p><small>DÓNDE · Abriendo cualquier juego</small></article>
-        <article class="feature-card"><span class="feature-index">04</span><h2>Música</h2><p>Cada ficha puede tener su propio tema. El reproductor flotante permite cambiar volumen, avanzar o retroceder en la canción y abrir una ficha dedicada con contexto musical.</p><small>DÓNDE · Reproductor flotante</small></article>
-        <article class="feature-card"><span class="feature-index">05</span><h2>Fondos</h2><p>Cuando una ficha tiene un fondo dedicado, aparece <strong>Ver fondo</strong> en la cabecera. Ese botón oculta la interfaz para dejar la imagen completamente a la vista.</p><small>DÓNDE · Esquina superior derecha de las fichas compatibles</small></article>
-        <article class="feature-card"><span class="feature-index">06</span><h2>Recorrido del ranking</h2><p>Desde la Tier list puedes iniciar una lectura de arriba a abajo. La web conserva el orden global y te deja avanzar o retroceder entre posiciones.</p><small>DÓNDE · “Leer ranking de arriba a abajo”</small></article>
-        <article class="feature-card"><span class="feature-index">07</span><h2>Apariencia</h2><p>La interfaz tiene tres paletas: <strong>Original</strong>, <strong>Negro &amp; Rojo</strong> y <strong>Azul &amp; Amarillo</strong>. La elección se recuerda en este navegador sin alterar los fondos ni el color propio de los tiers.</p><small>DÓNDE · Botón “Apariencia” de la cabecera</small></article>
-        <article class="feature-card"><span class="feature-index">08</span><h2>Modo presentación</h2><p>Abre una versión a pantalla completa del ranking, pensada para enseñarlo de forma limpia: tiers, posiciones, portadas y notas sin el resto de la navegación.</p><small>DÓNDE · Botón “Modo presentación” de la cabecera</small></article>
+        <article class="feature-card"><span class="feature-index">01</span><h2>Dos tier lists</h2><p>La web separa por completo los juegos <strong>offline</strong> de los <strong>online</strong>. Cada uno tiene su ranking, su biblioteca de reviews y su recorrido.</p><div class="feature-dual-actions"><button type="button" data-go="tierlist">Offline â†’</button><button type="button" data-go="online">Online â†’</button></div></article>
+        <article class="feature-card"><span class="feature-index">02</span><h2>Reviews</h2><p>ReÃºne todas las fichas en una biblioteca mÃ¡s directa. Puedes buscar por nombre y abrir cualquier tarjeta para entrar en la review.</p><button type="button" data-go="games">Ir a Reviews â†’</button></article>
+        <article class="feature-card"><span class="feature-index">03</span><h2>Dentro de una ficha</h2><p>EncontrarÃ¡s mi texto completo, la nota actual, el tier y navegaciÃ³n para seguir recorriendo juegos sin volver atrÃ¡s constantemente.</p><small>DÃ“NDE Â· Abriendo cualquier juego</small></article>
+        <article class="feature-card"><span class="feature-index">04</span><h2>MÃºsica</h2><p>Cada ficha puede tener su propio tema. El reproductor flotante permite cambiar volumen, avanzar o retroceder en la canciÃ³n y abrir una ficha dedicada con contexto musical.</p><small>DÃ“NDE Â· Reproductor flotante</small></article>
+        <article class="feature-card"><span class="feature-index">05</span><h2>Fondos</h2><p>Cuando una ficha tiene un fondo dedicado, aparece <strong>Ver fondo</strong> en la cabecera. Ese botÃ³n oculta la interfaz para dejar la imagen completamente a la vista.</p><small>DÃ“NDE Â· Esquina superior derecha de las fichas compatibles</small></article>
+        <article class="feature-card"><span class="feature-index">06</span><h2>Recorrido del ranking</h2><p>Desde la Tier list puedes iniciar una lectura de arriba a abajo. La web conserva el orden global y te deja avanzar o retroceder entre posiciones.</p><small>DÃ“NDE Â· â€œLeer ranking de arriba a abajoâ€</small></article>
+        <article class="feature-card"><span class="feature-index">07</span><h2>Apariencia</h2><p>La interfaz tiene tres paletas: <strong>Original</strong>, <strong>Negro &amp; Rojo</strong> y <strong>Azul &amp; Amarillo</strong>. La elecciÃ³n se recuerda en este navegador sin alterar los fondos ni el color propio de los tiers.</p><small>DÃ“NDE Â· BotÃ³n â€œAparienciaâ€ de la cabecera</small></article>
+        <article class="feature-card"><span class="feature-index">08</span><h2>Modo presentaciÃ³n</h2><p>Abre una versiÃ³n a pantalla completa del ranking, pensada para enseÃ±arlo de forma limpia: tiers, posiciones, portadas y notas sin el resto de la navegaciÃ³n.</p><small>DÃ“NDE Â· BotÃ³n â€œModo presentaciÃ³nâ€ de la cabecera</small></article>
       </div>
-      <section class="features-foot"><span>CONSEJO</span><p>Si algo parece interactivo, normalmente lo es: tarjetas, navegación entre juegos, reproductor, fondos y selector de apariencia reaccionan al pasar el ratón o al pulsarlos.</p></section>
+      <section class="features-foot"><span>CONSEJO</span><p>Si algo parece interactivo, normalmente lo es: tarjetas, navegaciÃ³n entre juegos, reproductor, fondos y selector de apariencia reaccionan al pasar el ratÃ³n o al pulsarlos.</p></section>
     </div>`;
   }
 
   function gameCard(game) {
     const tier = tierInfo(game.score);
     const cover = coverSrc(game);
-    return `<article class="game-card" style="--tier:${esc(tier.color)}"><button type="button" data-open-game="${esc(game.id)}" aria-label="Abrir review de ${esc(game.title)}"><span class="card-arrow">↗</span>${cover ? `<img class="game-card-cover" src="${esc(cover)}" alt="" loading="lazy">` : `<div class="game-card-cover cover-fallback">${esc(game.title.slice(0, 1))}</div>`}<div class="game-card-content"><div class="game-score"><b>${esc(game.score)}</b><small>/10</small></div><span class="game-tier tier-font-${esc(tier.tone)}">${esc(tier.label)}</span><h3>${esc(game.title)}</h3><p>${esc(preview(game.review, 235))}</p></div></button></article>`;
+    return `<article class="game-card" style="--tier:${esc(tier.color)}"><button type="button" data-open-game="${esc(game.id)}" aria-label="Abrir review de ${esc(game.title)}"><span class="card-arrow">â†—</span>${cover ? `<img class="game-card-cover" src="${esc(cover)}" alt="" loading="lazy">` : `<div class="game-card-cover cover-fallback">${esc(game.title.slice(0, 1))}</div>`}<div class="game-card-content"><div class="game-score"><b>${esc(game.score)}</b><small>/10</small></div><span class="game-tier tier-font-${esc(tier.tone)}">${esc(tier.label)}</span><h3>${esc(game.title)}</h3><p>${esc(preview(game.review, 235))}</p></div></button></article>`;
   }
 
   function preloadSceneBackgrounds(ids) {
@@ -2286,23 +2422,23 @@
     const reviewDisplay = editMode
       ? reviewEditor
       : hasSpoilers
-        ? `<details class="spoiler-review"><summary><span class="spoiler-open-label">⚠ Esta review contiene spoilers · abrir review</span><span class="spoiler-close-label">Cerrar review</span></summary>${reviewRead}</details>`
+        ? `<details class="spoiler-review"><summary><span class="spoiler-open-label">âš  Esta review contiene spoilers Â· abrir review</span><span class="spoiler-close-label">Cerrar review</span></summary>${reviewRead}</details>`
         : reviewRead;
-    const scoreEditor = editMode ? `<select class="score-editor" data-edit-game="${esc(game.id)}" data-edit-field="score">${scale.map((row) => `<option value="${esc(row.score)}" ${Number(row.score) === Number(game.score) ? 'selected' : ''}>${esc(row.score)} · ${esc(row.label)}</option>`).join('')}</select>` : `<strong>${esc(game.score)}/10</strong>`;
-    const titleDisplay = editMode ? `<input class="title-editor" data-edit-game="${esc(game.id)}" data-edit-field="title" value="${esc(game.title)}" aria-label="Título del juego">` : esc(game.title);
+    const scoreEditor = editMode ? `<select class="score-editor" data-edit-game="${esc(game.id)}" data-edit-field="score">${scale.map((row) => `<option value="${esc(row.score)}" ${Number(row.score) === Number(game.score) ? 'selected' : ''}>${esc(row.score)} Â· ${esc(row.label)}</option>`).join('')}</select>` : `<strong>${esc(game.score)}/10</strong>`;
+    const titleDisplay = editMode ? `<input class="title-editor" data-edit-game="${esc(game.id)}" data-edit-field="title" value="${esc(game.title)}" aria-label="TÃ­tulo del juego">` : esc(game.title);
     const cover = coverSrc(game);
 
     app.innerHTML = `<div class="page game-page">
-      <div class="detail-top"><button class="back-button" type="button" data-go="${catalogHome(catalog)}">← Volver a la tier list ${isOnline ? 'online' : 'offline'}</button><span class="eyebrow">${rankingMode ? `${isOnline ? 'ONLINE' : 'OFFLINE'} · RANKING · LECTURA EN ORDEN` : `${isOnline ? 'ONLINE' : 'OFFLINE'} · REVIEW PERSONAL`}</span></div>
+      <div class="detail-top"><button class="back-button" type="button" data-go="${catalogHome(catalog)}">â† Volver a la tier list ${isOnline ? 'online' : 'offline'}</button><span class="eyebrow">${rankingMode ? `${isOnline ? 'ONLINE' : 'OFFLINE'} Â· RANKING Â· LECTURA EN ORDEN` : `${isOnline ? 'ONLINE' : 'OFFLINE'} Â· REVIEW PERSONAL`}</span></div>
       <section class="detail-hero" style="--tier:${esc(tier.color)}">
         ${cover ? `<img class="detail-cover" src="${esc(cover)}" alt="Portada de ${esc(game.title)}">` : ''}
-        <div class="detail-hero-copy"><span class="eyebrow">${esc(tier.label)}</span><h1>${titleDisplay}</h1><div class="detail-scoreline"><span class="score-badge">${scoreEditor}</span><span class="tier-badge tier-font-${esc(tier.tone)}">${esc(tier.label)}</span>${themeTitle ? `<span class="music-badge">♫ ${esc(themeTitle)}</span>` : ''}</div></div>
+        <div class="detail-hero-copy"><span class="eyebrow">${esc(tier.label)}</span><h1>${titleDisplay}</h1><div class="detail-scoreline"><span class="score-badge">${scoreEditor}</span><span class="tier-badge tier-font-${esc(tier.tone)}">${esc(tier.label)}</span>${themeTitle ? `<span class="music-badge">â™« ${esc(themeTitle)}</span>` : ''}</div></div>
       </section>
       <div class="detail-grid">
         <article class="review-card" style="--tier:${esc(tier.color)};--review-tier:${esc(tier.color)}"><div class="review-card-head"><div><span class="eyebrow">MI REVIEW</span><h2>Review</h2></div></div>${reviewDisplay}</article>
         <aside class="side-stack">
           <section class="side-card" style="--tier:${esc(tier.color)}"><h3>Nota actual</h3><div class="big-score">${esc(game.score)}<small>/10</small></div><strong class="side-tier tier-font-${esc(tier.tone)}">${esc(tier.label)}</strong></section>
-          ${tierIndex >= 0 && (tierPrev || tierNext) ? `<section class="side-card"><h3>Dentro de este tier</h3><div class="rank-nav">${tierPrev ? `<button type="button" data-open-game="${esc(tierPrev.id)}"><small>← Por encima</small>${esc(tierPrev.title)}</button>` : ''}${tierNext ? `<button type="button" data-open-game="${esc(tierNext.id)}"><small>Por debajo →</small>${esc(tierNext.title)}</button>` : ''}</div></section>` : ''}
+          ${tierIndex >= 0 && (tierPrev || tierNext) ? `<section class="side-card"><h3>Dentro de este tier</h3><div class="rank-nav">${tierPrev ? `<button type="button" data-open-game="${esc(tierPrev.id)}"><small>â† Por encima</small>${esc(tierPrev.title)}</button>` : ''}${tierNext ? `<button type="button" data-open-game="${esc(tierNext.id)}"><small>Por debajo â†’</small>${esc(tierNext.title)}</button>` : ''}</div></section>` : ''}
           ${rankingMode && journeyIndex >= 0 ? rankingPanel(journey, journeyIndex, journeyPrev, journeyNext, catalog) : ''}
           ${editMode ? themeEditor(game, themeTitle) : ''}
         </aside>
@@ -2316,19 +2452,19 @@
   function reviewJourneyNav(previous, current, next, rankingMode) {
     const prevAttr = rankingMode ? 'data-ranking-open' : 'data-open-game';
     const nextAttr = rankingMode ? 'data-ranking-open' : 'data-open-game';
-    return `<nav class="review-journey-nav" aria-label="Navegación entre reviews">
-      <div class="review-journey-head"><span>SEGUIR RECORRIENDO</span><small>Ordenado según la tier list actual</small></div>
+    return `<nav class="review-journey-nav" aria-label="NavegaciÃ³n entre reviews">
+      <div class="review-journey-head"><span>SEGUIR RECORRIENDO</span><small>Ordenado segÃºn la tier list actual</small></div>
       <div class="review-journey-links">
-        ${previous ? `<button class="journey-link journey-link-prev" type="button" ${prevAttr}="${esc(previous.id)}"><span>← ANTERIOR</span><strong>${esc(previous.title)}</strong><small>${esc(previous.score)}/10</small></button>` : `<span class="journey-edge">Estás en el primer juego del ranking.</span>`}
+        ${previous ? `<button class="journey-link journey-link-prev" type="button" ${prevAttr}="${esc(previous.id)}"><span>â† ANTERIOR</span><strong>${esc(previous.title)}</strong><small>${esc(previous.score)}/10</small></button>` : `<span class="journey-edge">EstÃ¡s en el primer juego del ranking.</span>`}
         <div class="journey-current"><small>AHORA</small><strong>${esc(current.title)}</strong></div>
-        ${next ? `<button class="journey-link journey-link-next" type="button" ${nextAttr}="${esc(next.id)}"><span>SIGUIENTE →</span><strong>${esc(next.title)}</strong><small>${esc(next.score)}/10</small></button>` : `<span class="journey-edge journey-edge-end">Has llegado al final del ranking.</span>`}
+        ${next ? `<button class="journey-link journey-link-next" type="button" ${nextAttr}="${esc(next.id)}"><span>SIGUIENTE â†’</span><strong>${esc(next.title)}</strong><small>${esc(next.score)}/10</small></button>` : `<span class="journey-edge journey-edge-end">Has llegado al final del ranking.</span>`}
       </div>
     </nav>`;
   }
 
   function rankingPanel(journey, index, previous, next, catalog = 'offline') {
     const percent = journey.length ? ((index + 1) / journey.length) * 100 : 0;
-    return `<section class="side-card tour-card"><h3>Ranking completo</h3><div class="tour-position"><span>Posición global</span><strong>#${index + 1} de ${journey.length}</strong></div><div class="tour-progress"><i style="width:${percent}%"></i></div><p class="tour-help">Avanza por la lista completa, de mejor a peor.</p><div class="rank-nav">${previous ? `<button type="button" data-ranking-open="${esc(previous.id)}"><small>← Anterior</small>${esc(previous.title)}</button>` : ''}${next ? `<button type="button" data-ranking-open="${esc(next.id)}"><small>Siguiente →</small>${esc(next.title)}</button>` : `<button type="button" data-go="${catalogHome(catalog)}"><small>Fin del ranking</small>Volver a la tier list</button>`}</div><button class="tour-exit" type="button" data-go="${catalogHome(catalog)}">Terminar recorrido</button></section>`;
+    return `<section class="side-card tour-card"><h3>Ranking completo</h3><div class="tour-position"><span>PosiciÃ³n global</span><strong>#${index + 1} de ${journey.length}</strong></div><div class="tour-progress"><i style="width:${percent}%"></i></div><p class="tour-help">Avanza por la lista completa, de mejor a peor.</p><div class="rank-nav">${previous ? `<button type="button" data-ranking-open="${esc(previous.id)}"><small>â† Anterior</small>${esc(previous.title)}</button>` : ''}${next ? `<button type="button" data-ranking-open="${esc(next.id)}"><small>Siguiente â†’</small>${esc(next.title)}</button>` : `<button type="button" data-go="${catalogHome(catalog)}"><small>Fin del ranking</small>Volver a la tier list</button>`}</div><button class="tour-exit" type="button" data-go="${catalogHome(catalog)}">Terminar recorrido</button></section>`;
   }
 
   function themeEditor(game, currentTitle) {
@@ -2427,23 +2563,23 @@
       <h2 id="themeInfoHeading">${esc(info.title || 'Tema del juego')}</h2>
       <p class="theme-info-game">${esc(game?.title || '')}</p>
       <div class="theme-info-meta">
-        ${info.composer ? `<span><small>CRÉDITOS</small>${esc(info.composer)}</span>` : ''}
+        ${info.composer ? `<span><small>CRÃ‰DITOS</small>${esc(info.composer)}</span>` : ''}
         ${info.context ? `<span><small>CONTEXTO</small>${esc(info.context)}</span>` : ''}
       </div>
       ${info.thesis ? `<div class="theme-thesis"><small>LECTURA DEL TEMA</small><strong>${esc(info.thesis)}</strong></div>` : ''}
       <div class="theme-lore-grid">
-        ${infoSection('Dónde suena', info.where)}
-        ${infoSection('Cómo suena', info.sound)}
-        ${infoSection('Qué representa', info.meaning)}
-        ${infoSection('Qué hace sentir', info.feeling)}
-        ${infoSection('Función e intención musical', info.intent)}
-        ${infoSection('Cómo dialoga con el gameplay', info.gameplay)}
+        ${infoSection('DÃ³nde suena', info.where)}
+        ${infoSection('CÃ³mo suena', info.sound)}
+        ${infoSection('QuÃ© representa', info.meaning)}
+        ${infoSection('QuÃ© hace sentir', info.feeling)}
+        ${infoSection('FunciÃ³n e intenciÃ³n musical', info.intent)}
+        ${infoSection('CÃ³mo dialoga con el gameplay', info.gameplay)}
         ${infoSection('Detalle musical clave', info.craft)}
         ${infoSection('El contraste que crea', info.contrast)}
-        ${infoSection('Por qué se queda en la memoria', info.memory)}
-        ${infoSection('Por qué funciona', info.detail)}
+        ${infoSection('Por quÃ© se queda en la memoria', info.memory)}
+        ${infoSection('Por quÃ© funciona', info.detail)}
       </div>
-      <p class="theme-info-note">Las secciones de uso y créditos describen datos del juego y su banda sonora. Cuando no existe una declaración pública que fije la intención exacta del compositor, las secciones interpretativas explican la lectura narrativa y musical que se desprende de cómo se utiliza el tema.</p>`;
+      <p class="theme-info-note">Las secciones de uso y crÃ©ditos describen datos del juego y su banda sonora. Cuando no existe una declaraciÃ³n pÃºblica que fije la intenciÃ³n exacta del compositor, las secciones interpretativas explican la lectura narrativa y musical que se desprende de cÃ³mo se utiliza el tema.</p>`;
     themeInfoModal.hidden = false;
     body.classList.add('theme-info-open');
   }
@@ -2540,8 +2676,8 @@
     currentThemeSignature = theme.signature;
     currentThemeStartAt = Math.max(0, Number(theme.startAt) || 0);
 
-    // En móvil ni siquiera precargamos la canción hasta que el usuario
-    // pulsa "Activar música".
+    // En mÃ³vil ni siquiera precargamos la canciÃ³n hasta que el usuario
+    // pulsa "Activar mÃºsica".
     audio.preload = mobilePerformance ? 'none' : 'metadata';
     audio.src = source;
 
@@ -2561,7 +2697,7 @@
       pendingAudioRetry = false;
       if (mobileMusicToggleButton) {
         mobileMusicToggleButton.hidden = false;
-        mobileMusicToggleButton.textContent = '▶ Activar música';
+        mobileMusicToggleButton.textContent = 'â–¶ Activar mÃºsica';
         mobileMusicToggleButton.setAttribute('aria-pressed', 'false');
       }
       return;
@@ -2590,7 +2726,7 @@
     if (requestId !== themeRequestId) return;
 
     const played = await playCurrentThemeWithFade();
-    if (!played) showSavedToast('Toca en cualquier parte para activar la música');
+    if (!played) showSavedToast('Toca en cualquier parte para activar la mÃºsica');
   }
 
   async function toggleMobileMusic() {
@@ -2601,7 +2737,7 @@
       audio.pause();
       body.classList.remove('mobile-music-active');
       if (mobileMusicToggleButton) {
-        mobileMusicToggleButton.textContent = '▶ Reanudar música';
+        mobileMusicToggleButton.textContent = 'â–¶ Reanudar mÃºsica';
         mobileMusicToggleButton.setAttribute('aria-pressed', 'false');
       }
       return;
@@ -2623,7 +2759,7 @@
       if (played) {
         body.classList.add('mobile-music-active');
         if (mobileMusicToggleButton) {
-          mobileMusicToggleButton.textContent = '❚❚ Pausar música';
+          mobileMusicToggleButton.textContent = 'âšâš Pausar mÃºsica';
           mobileMusicToggleButton.setAttribute('aria-pressed', 'true');
         }
       }
@@ -2648,7 +2784,7 @@
     body.classList.remove('mobile-music-active');
     if (mobileMusicToggleButton) {
       mobileMusicToggleButton.hidden = true;
-      mobileMusicToggleButton.textContent = '▶ Activar música';
+      mobileMusicToggleButton.textContent = 'â–¶ Activar mÃºsica';
       mobileMusicToggleButton.setAttribute('aria-pressed', 'false');
     }
     player.hidden = true;
@@ -2659,8 +2795,8 @@
       audio.load();
       currentGameMusicId = null;
       currentThemeSignature = '';
-      playerTitle.textContent = '—';
-      playerGame.textContent = '—';
+      playerTitle.textContent = 'â€”';
+      playerGame.textContent = 'â€”';
       if (playerSeek) playerSeek.value = '0';
       if (playerCurrentTime) playerCurrentTime.textContent = '0:00';
       if (playerDuration) playerDuration.textContent = '0:00';
@@ -2732,7 +2868,7 @@
     const target = event.target;
     if (target.matches('[data-edit-game][data-edit-field="score"]')) {
       if (saveGameField(target.dataset.editGame, 'score', target.value)) renderRoute();
-      else showSavedToast('Esa nota no es válida');
+      else showSavedToast('Esa nota no es vÃ¡lida');
       return;
     }
     if (target.matches('[data-theme-file]')) {
@@ -2744,7 +2880,7 @@
     const target = event.target;
     if (target.matches('[data-edit-game][data-edit-field="title"]')) {
       if (!saveGameField(target.dataset.editGame, 'title', target.value)) {
-        showSavedToast('El título no puede quedar vacío');
+        showSavedToast('El tÃ­tulo no puede quedar vacÃ­o');
         renderRoute();
       }
       return;
@@ -2753,14 +2889,14 @@
       const gameId = target.dataset.editGame;
       const review = collectInlineReview(gameId);
       if (!saveGameField(gameId, 'review', review)) {
-        showSavedToast('La review no puede quedar vacía');
+        showSavedToast('La review no puede quedar vacÃ­a');
         renderRoute();
       }
       return;
     }
     if (target.matches('[data-edit-game][data-edit-field="review"]')) {
       if (!saveGameField(target.dataset.editGame, 'review', target.value)) {
-        showSavedToast('La review no puede quedar vacía');
+        showSavedToast('La review no puede quedar vacÃ­a');
         renderRoute();
       }
       return;
@@ -2815,8 +2951,8 @@
     app.addEventListener('focusout', handleAppBlur);
     app.addEventListener('keydown', handleAppKeydown);
 
-    // Navegación de secciones: si no caben todas, la rueda del ratón
-    // desplaza la banda horizontalmente. En móvil el swipe sigue siendo nativo.
+    // NavegaciÃ³n de secciones: si no caben todas, la rueda del ratÃ³n
+    // desplaza la banda horizontalmente. En mÃ³vil el swipe sigue siendo nativo.
     app.addEventListener('wheel', (event) => {
       const track = event.target.closest?.('.review-section-nav-track');
       if (!track || track.scrollWidth <= track.clientWidth + 1) return;
@@ -2942,7 +3078,7 @@
       adminGateError.textContent = '';
       const valid = await passwordMatches(adminPassword.value);
       if (!valid) {
-        adminGateError.textContent = 'Contraseña incorrecta.';
+        adminGateError.textContent = 'ContraseÃ±a incorrecta.';
         adminPassword.select();
         return;
       }
@@ -2971,7 +3107,7 @@
   function validateInitialData() {
     const ids = new Set();
     for (const game of games) {
-      if (!game?.id || ids.has(game.id)) throw new Error(`ID de juego inválido o duplicado: ${game?.id || 'vacío'}`);
+      if (!game?.id || ids.has(game.id)) throw new Error(`ID de juego invÃ¡lido o duplicado: ${game?.id || 'vacÃ­o'}`);
       ids.add(game.id);
       if (!scale.some((row) => Number(row.score) === Number(game.score))) throw new Error(`La nota ${game.score} de ${game.title} no existe en la escala`);
     }

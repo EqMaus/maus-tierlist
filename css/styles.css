@@ -94,7 +94,7 @@ body[data-scene="pokemon-diamond"]{--scene-a:rgba(78,151,238,.2);--scene-b:rgba(
 body[data-scene="pokemon-black"]{--scene-a:rgba(90,98,112,.2);--scene-b:rgba(70,121,224,.09)}
 .tier-font-very-good{font-family:Georgia,serif;font-style:italic}.tier-font-quite-good{font-weight:750}.tier-font-good{font-weight:720}.tier-font-decent{font-weight:650}.tier-font-meh{font-weight:500;letter-spacing:.02em}
 
-/* ===== MODO EDICIÓN PRIVADO ===== */
+/* ===== MODO EDICIÃ“N PRIVADO ===== */
 .edit-lock-button{
   margin-left:8px;
   min-height:40px;
@@ -289,7 +289,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 @keyframes scenePulse{0%,100%{opacity:.55}50%{opacity:.95}}
 @keyframes sceneTwinkle{0%,100%{opacity:.18}50%{opacity:.58}}
 
-/* ===== v4.2.4 edición inline de reviews ===== */
+/* ===== v4.2.4 ediciÃ³n inline de reviews ===== */
 .review-layout-editable .review-inline-editor[contenteditable="true"]{
   outline:none!important;
   outline-offset:0!important;
@@ -384,7 +384,7 @@ body.theme-info-open{overflow:hidden}
 }
 
 
-/* ===== v4.3.2 navegación entre reviews + entrada cinematográfica + información musical ampliada ===== */
+/* ===== v4.3.2 navegaciÃ³n entre reviews + entrada cinematogrÃ¡fica + informaciÃ³n musical ampliada ===== */
 .review-journey-nav{
   margin-top:20px;border:1px solid rgba(255,255,255,.07);border-radius:21px;padding:18px;
   background:linear-gradient(155deg,rgba(8,21,31,.76),rgba(5,14,21,.67));
@@ -473,7 +473,7 @@ body.theme-info-open{overflow:hidden}
 .features-foot span{color:#7ec1ab;font-size:.63rem;font-weight:950;letter-spacing:.15em}
 .features-foot p{margin:0;color:#8095a2;font-size:.82rem;line-height:1.6}
 
-/* Más presencia: el contenido de una ficha entra por capas, no de golpe. */
+/* MÃ¡s presencia: el contenido de una ficha entra por capas, no de golpe. */
 .game-page .detail-top{animation:gameUiInV440 .95s cubic-bezier(.16,.78,.24,1) both}
 .game-page .detail-hero{animation:gameUiInV440 1.15s .12s cubic-bezier(.16,.78,.24,1) both}
 .game-page .detail-grid{animation:gameUiInV440 1.35s .30s cubic-bezier(.16,.78,.24,1) both}
@@ -493,11 +493,11 @@ body.theme-info-open{overflow:hidden}
   .game-card,.game-card:hover,.game-card:focus-within{transform:none!important}
   .game-page .detail-top,.game-page .detail-hero,.game-page .detail-grid,.game-page .review-journey-nav,.scene-art .scene-photo,.music-widget:not([hidden]){animation:none!important}
 }
-/* El atributo hidden debe prevalecer sobre el display del botón. */
+/* El atributo hidden debe prevalecer sobre el display del botÃ³n. */
 .background-view-button[hidden]{display:none!important}
 
 
-/* ===== v4.5.0 presentación + transiciones de fondo + ajustes de audio ===== */
+/* ===== v4.5.0 presentaciÃ³n + transiciones de fondo + ajustes de audio ===== */
 .nav-presentation-button{
   border:1px solid rgba(122,214,182,.14);border-radius:11px;padding:9px 13px;
   background:linear-gradient(145deg,rgba(100,223,180,.075),rgba(119,189,246,.035));
@@ -518,7 +518,7 @@ body.background-only .screen-vignette{opacity:.46}
 body.background-only .restore-ui-button{opacity:1;transform:none}
 body.background-restoring .restore-ui-button{opacity:0;transform:translateY(-8px) scale(.98);transition-delay:0s}
 
-/* Modo presentación */
+/* Modo presentaciÃ³n */
 body.presentation-active{overflow:hidden}
 .presentation-mode{
   position:fixed;inset:0;z-index:300;width:100vw;height:100dvh;overflow:hidden;
@@ -593,7 +593,7 @@ body.presentation-active{overflow:hidden}
 .spoiler-review[open] .spoiler-close-label{display:inline}
 
 
-/* ===== v4.6.0 · tiempo musical + selector de apariencia ===== */
+/* ===== v4.6.0 Â· tiempo musical + selector de apariencia ===== */
 .nav-appearance-button{
   min-height:39px;display:inline-flex;align-items:center;justify-content:center;padding:0 13px;
   border:1px solid rgba(255,255,255,.08);border-radius:11px;background:rgba(255,255,255,.028);
@@ -756,8 +756,8 @@ body.background-only .appearance-popover{display:none!important}
 
 
 /* =========================================================
-   v4.11.0 · EFECTOS AMBIENTALES DE LOS FONDOS (ajustados)
-   Más exagerados y con personalidad propia por juego.
+   v4.11.0 Â· EFECTOS AMBIENTALES DE LOS FONDOS (ajustados)
+   MÃ¡s exagerados y con personalidad propia por juego.
    ========================================================= */
 .scene-art { overflow: hidden; }
 .scene-art .scene-photo { position: absolute; inset: 0; z-index: 0; }
@@ -787,7 +787,7 @@ body.background-only .appearance-popover{display:none!important}
   will-change: transform, opacity;
 }
 
-/* God of War III · mucha más ceniza y brasas */
+/* God of War III Â· mucha mÃ¡s ceniza y brasas */
 .effect-ash-embers::before {
   background: radial-gradient(circle at 50% 20%, rgba(255,140,74,.08), transparent 40%),
               linear-gradient(180deg, rgba(50,35,25,.16), transparent 40%, rgba(0,0,0,.2));
@@ -809,7 +809,7 @@ body.background-only .appearance-popover{display:none!important}
   animation: ambientEmberRiseHot calc(var(--d) * .7) ease-out var(--delay) infinite;
 }
 
-/* God of War II · mucho más marcado, motas divinas y energía */
+/* God of War II Â· mucho mÃ¡s marcado, motas divinas y energÃ­a */
 .effect-divine-sparks::before {
   background: radial-gradient(circle at 52% 24%, rgba(255,228,147,.09), transparent 36%),
               radial-gradient(circle at 60% 30%, rgba(100,165,255,.06), transparent 40%);
@@ -833,7 +833,7 @@ body.background-only .appearance-popover{display:none!important}
   box-shadow: 0 0 12px rgba(143,198,255,.45);
 }
 
-/* God of War I · muchísimo más polvo y aire de desierto sucio */
+/* God of War I Â· muchÃ­simo mÃ¡s polvo y aire de desierto sucio */
 .effect-ember-dust::before {
   background: linear-gradient(180deg, rgba(154,109,64,.14), rgba(0,0,0,0) 28%),
               radial-gradient(circle at 30% 72%, rgba(183,130,71,.12), transparent 45%);
@@ -880,7 +880,7 @@ body.background-only .appearance-popover{display:none!important}
 .effect-rain-embers .ambient-v0,
 .effect-rain-embers .ambient-v4 { animation: ambientEmberRiseHot calc(var(--d) * .78) ease-out var(--delay) infinite; }
 
-/* RE2 · muchísimo más polvo, menos lluvia */
+/* RE2 Â· muchÃ­simo mÃ¡s polvo, menos lluvia */
 .effect-cold-rain::before {
   background: linear-gradient(180deg, rgba(145,165,183,.08), transparent 20%),
               radial-gradient(circle at 55% 44%, rgba(211,218,227,.06), transparent 46%);
@@ -900,7 +900,7 @@ body.background-only .appearance-popover{display:none!important}
   animation: ambientCrossDraft calc(var(--d) * .8) linear var(--delay) infinite;
 }
 
-/* RE1 · hojas beige/marrones y viento polvoriento */
+/* RE1 Â· hojas beige/marrones y viento polvoriento */
 .effect-mansion-dust::before {
   background: linear-gradient(180deg, rgba(127,108,82,.09), transparent 26%);
 }
@@ -924,7 +924,7 @@ body.background-only .appearance-popover{display:none!important}
   animation: ambientDustGust calc(var(--d) * .7) linear var(--delay) infinite;
 }
 
-/* RE4 · muchísimo más marcado */
+/* RE4 Â· muchÃ­simo mÃ¡s marcado */
 .effect-village-ash::before {
   background: linear-gradient(180deg, rgba(138,94,54,.1), transparent 24%);
 }
@@ -942,7 +942,7 @@ body.background-only .appearance-popover{display:none!important}
   animation: ambientEmberRiseHot calc(var(--d) * .78) ease-out var(--delay) infinite;
 }
 
-/* Requiem · muchísimo más viento sucio y polvo */
+/* Requiem Â· muchÃ­simo mÃ¡s viento sucio y polvo */
 .effect-ominous-motes::before {
   background: linear-gradient(180deg, rgba(92,77,60,.11), transparent 22%),
               radial-gradient(circle at 62% 28%, rgba(122,98,75,.08), transparent 40%);
@@ -968,7 +968,7 @@ body.background-only .appearance-popover{display:none!important}
   animation: ambientCrossDraft calc(var(--d) * .6) linear var(--delay) infinite;
 }
 
-/* SOTC · viento brutal, lluvia, partículas rojas y relámpagos rojos */
+/* SOTC Â· viento brutal, lluvia, partÃ­culas rojas y relÃ¡mpagos rojos */
 .effect-wind-dust::before {
   background: linear-gradient(180deg, rgba(83,63,60,.08), transparent 20%),
               radial-gradient(circle at 70% 28%, rgba(184,38,48,.09), transparent 24%);
@@ -1006,7 +1006,7 @@ body.background-only .appearance-popover{display:none!important}
   animation: ambientRainStorm calc(var(--d) * .22) linear var(--delay) infinite;
 }
 
-/* Majora's Mask · muchísimo más exagerado + luciérnagas lilas y verdes */
+/* Majora's Mask Â· muchÃ­simo mÃ¡s exagerado + luciÃ©rnagas lilas y verdes */
 .effect-moon-motes::before {
   background: radial-gradient(circle at 72% 18%, rgba(222,118,255,.12), transparent 24%),
               radial-gradient(circle at 24% 72%, rgba(92,255,154,.06), transparent 22%);
@@ -1033,7 +1033,7 @@ body.background-only .appearance-popover{display:none!important}
   box-shadow: 0 0 12px rgba(204,118,255,.74), 0 0 22px rgba(204,118,255,.32);
 }
 
-/* Twilight Princess · muchísimo más crepuscular */
+/* Twilight Princess Â· muchÃ­simo mÃ¡s crepuscular */
 .effect-twilight-motes::before {
   background: radial-gradient(circle at 50% 50%, rgba(106,205,233,.08), transparent 36%),
               radial-gradient(circle at 62% 38%, rgba(255,173,80,.09), transparent 26%);
@@ -1060,7 +1060,7 @@ body.background-only .appearance-popover{display:none!important}
   box-shadow: 0 0 11px rgba(255,139,40,.45);
 }
 
-/* MediEvil · hojas verde oscuro y viento */
+/* MediEvil Â· hojas verde oscuro y viento */
 .effect-ghost-mist::before {
   background: linear-gradient(180deg, rgba(63,105,70,.08), transparent 22%);
 }
@@ -1084,7 +1084,7 @@ body.background-only .appearance-popover{display:none!important}
   animation: ambientCrossDraft calc(var(--d) * .7) linear var(--delay) infinite;
 }
 
-/* Pokémon Diamante y Negro · rayos de sol coherentes */
+/* PokÃ©mon Diamante y Negro Â· rayos de sol coherentes */
 .effect-crystal-sparkles::before,
 .effect-dark-motes::before {
   inset: -10% -5%;
@@ -1248,9 +1248,9 @@ body.background-only .appearance-popover{display:none!important}
 
 
 /* =========================================================
-   v4.11.0 · INMERSIÓN TOTAL
-   Parallax, color grading, iluminación dinámica
-   y modo “Ver fondo” mucho más cinematográfico.
+   v4.11.0 Â· INMERSIÃ“N TOTAL
+   Parallax, color grading, iluminaciÃ³n dinÃ¡mica
+   y modo â€œVer fondoâ€ mucho mÃ¡s cinematogrÃ¡fico.
    ========================================================= */
 :root{
   --parallax-x:0px;
@@ -1347,7 +1347,7 @@ body.background-only .appearance-popover{display:none!important}
     radial-gradient(circle at 50% 50%, transparent 44%, var(--scene-vignette-extra) 100%);
 }
 
-/* Entrada más teatral al abrir una review */
+/* Entrada mÃ¡s teatral al abrir una review */
 body.scene-entering .scene-art,
 body.scene-entering .scene-backdrop{
   animation:sceneWake .95s cubic-bezier(.15,.8,.2,1) both;
@@ -1375,7 +1375,7 @@ body.scene-active .side-card{
   box-shadow:0 18px 50px rgba(0,0,0,.16), inset 0 1px 0 rgba(255,255,255,.02);
 }
 
-/* Modo Ver fondo: más cinemático */
+/* Modo Ver fondo: mÃ¡s cinemÃ¡tico */
 body.background-only{
   --scene-zoom:1.075;
 }
@@ -1548,9 +1548,9 @@ body[data-scene="pokemon-black"]{
 
 
 /* =========================================================
-   v4.11.0 · INMERSIÓN VISUAL REAL
-   Más profundidad, parallax perceptible, primer plano, luz
-   y un “Ver fondo” claramente cinematográfico.
+   v4.11.0 Â· INMERSIÃ“N VISUAL REAL
+   MÃ¡s profundidad, parallax perceptible, primer plano, luz
+   y un â€œVer fondoâ€ claramente cinematogrÃ¡fico.
    ========================================================= */
 :root{--scene-scroll-y:0px;--scene-scroll-progress:0}
 
@@ -1641,22 +1641,22 @@ body.scene-entering .scene-foreground{animation:immersiveForegroundArrival 1.4s 
 
 
 /* =========================================================
-   v4.11.0 · PARTÍCULAS INDEPENDIENTES DEL RATÓN
-   Las partículas siguen sus propias animaciones y no reciben
+   v4.11.0 Â· PARTÃCULAS INDEPENDIENTES DEL RATÃ“N
+   Las partÃ­culas siguen sus propias animaciones y no reciben
    desplazamiento por parallax del cursor.
    ========================================================= */
 
-/* Capa de partículas medias: completamente independiente */
+/* Capa de partÃ­culas medias: completamente independiente */
 .scene-effects{
   transform:none !important;
 }
 
-/* Capa de partículas cercanas: también independiente */
+/* Capa de partÃ­culas cercanas: tambiÃ©n independiente */
 .scene-foreground{
   transform:none !important;
 }
 
-/* En "Ver fondo" pueden ganar presencia, pero sin seguir al ratón */
+/* En "Ver fondo" pueden ganar presencia, pero sin seguir al ratÃ³n */
 body.background-only .scene-effects{
   transform:scale(1.05) !important;
 }
@@ -1682,9 +1682,9 @@ body.scene-entering .scene-foreground{
 
 
 /* =========================================================
-   v4.11.0 · CLIMA VIVO AUTÓNOMO
-   La escena cambia sola entre calma, normal, intensidad y ráfagas.
-   Además, aparecen eventos raros puntuales por juego.
+   v4.11.0 Â· CLIMA VIVO AUTÃ“NOMO
+   La escena cambia sola entre calma, normal, intensidad y rÃ¡fagas.
+   AdemÃ¡s, aparecen eventos raros puntuales por juego.
    ========================================================= */
 :root{
   --climate-mid-opacity:.92;
@@ -1754,7 +1754,7 @@ body.climate-event .scene-event{opacity:1}
   will-change:transform,opacity;
 }
 
-/* ráfagas de ceniza/brasas */
+/* rÃ¡fagas de ceniza/brasas */
 .event-ash-embers .scene-event-particle,
 .event-ember-dust .scene-event-particle,
 .event-village-ash .scene-event-particle,
@@ -1820,7 +1820,7 @@ body.climate-event .event-ominous-motes::before{opacity:1;animation:eventSweep 1
 }
 body.climate-event .event-wind-dust::after{opacity:1;animation:eventLightningFlash 2.8s linear both}
 
-/* luciérnagas / crepúsculo */
+/* luciÃ©rnagas / crepÃºsculo */
 .event-moon-motes .scene-event-particle{
   border-radius:50%;
   background:rgba(222,122,255,.95);
@@ -1961,7 +1961,7 @@ body.climate-event[data-climate-event="flare"] .scene-foreground{
 }
 
 /* =========================================================
-   v5.1.1 · Dirección artística, cámara autónoma y rendimiento
+   v5.1.1 Â· DirecciÃ³n artÃ­stica, cÃ¡mara autÃ³noma y rendimiento
    ========================================================= */
 :root{
   --scene-light-x:50%;
@@ -1992,15 +1992,15 @@ body.scene-active .scene-depth{transition:transform 10s ease-in-out,opacity 2s e
 body.climate-event .scene-event{animation:rareEventEnvelope 4.2s ease both}
 @keyframes rareEventEnvelope{0%{opacity:0}12%{opacity:1}72%{opacity:1}100%{opacity:0}}
 
-/* Pausa real cuando la pestaña deja de estar visible. */
+/* Pausa real cuando la pestaÃ±a deja de estar visible. */
 body.page-hidden .scene-effects *,body.page-hidden .scene-foreground *,body.page-hidden .scene-event *,body.page-hidden .scene-lighting *,body.page-hidden .scene-art::before,body.page-hidden .scene-art::after{animation-play-state:paused!important}
 
-/* Densidad adaptativa en móvil/equipos modestos. */
+/* Densidad adaptativa en mÃ³vil/equipos modestos. */
 body.low-power .scene-effects .ambient-particle:nth-child(n+38),body.low-power .scene-foreground .foreground-particle:nth-child(n+12),body.low-power .scene-event .scene-event-particle:nth-child(n+10){display:none!important}
 body.low-power .scene-depth-back{display:none}
 body.low-power .scene-lighting{filter:saturate(.96)}
 
-/* Más contraste entre juegos sin añadir capas interactivas. */
+/* MÃ¡s contraste entre juegos sin aÃ±adir capas interactivas. */
 body[data-scene="majoras-mask"] .scene-depth-front{filter:saturate(1.2) contrast(1.08) brightness(.68) hue-rotate(4deg)}
 body[data-scene="sotc"] .scene-depth-back{filter:saturate(.92) contrast(1.12) brightness(.62)}
 body[data-scene="gow3"] .scene-depth-front{filter:saturate(1.2) contrast(1.1) brightness(.7)}
@@ -2013,9 +2013,9 @@ body[data-scene="re1-remaster"] .scene-depth-back,body[data-scene="re2-og"] .sce
 
 
 /* =========================================================
-   v5.1.1 · FONDO SIEMPRE VIVO
-   El fondo fotográfico se mueve también durante la lectura normal.
-   Las partículas NO dependen de esta capa.
+   v5.1.1 Â· FONDO SIEMPRE VIVO
+   El fondo fotogrÃ¡fico se mueve tambiÃ©n durante la lectura normal.
+   Las partÃ­culas NO dependen de esta capa.
    ========================================================= */
 .scene-background-motion{
   position:absolute;
@@ -2064,16 +2064,16 @@ body.background-only .scene-background-motion{
   }
 }
 
-/* Las capas internas mantienen su movimiento de cámara propio.
-   La envolvente añade movimiento continuo incluso mientras la cámara
-   está entre dos destinos. */
+/* Las capas internas mantienen su movimiento de cÃ¡mara propio.
+   La envolvente aÃ±ade movimiento continuo incluso mientras la cÃ¡mara
+   estÃ¡ entre dos destinos. */
 .scene-background-motion .scene-photo,
 .scene-background-motion .scene-depth{
   backface-visibility:hidden;
 }
 
-/* En móvil bajamos ligeramente la amplitud visual para evitar mareo,
-   pero el fondo sigue sin quedarse estático. */
+/* En mÃ³vil bajamos ligeramente la amplitud visual para evitar mareo,
+   pero el fondo sigue sin quedarse estÃ¡tico. */
 @media(max-width:700px){
   .scene-background-motion{
     animation-name:sceneBackgroundAlwaysDriftMobile;
@@ -2093,14 +2093,14 @@ body.background-only .scene-background-motion{
 
 
 /* =========================================================
-   v5.1.1 · MODO RENDIMIENTO MÓVIL
-   Solo se activa en pantallas táctiles pequeñas. PC queda intacto.
+   v5.1.1 Â· MODO RENDIMIENTO MÃ“VIL
+   Solo se activa en pantallas tÃ¡ctiles pequeÃ±as. PC queda intacto.
    ========================================================= */
 body.mobile-performance{
   --scene-scroll-y:0px;
 }
 
-/* Mantiene el fondo vivo con UNA sola animación CSS barata. */
+/* Mantiene el fondo vivo con UNA sola animaciÃ³n CSS barata. */
 body.mobile-performance .scene-background-motion{
   animation-duration:22s;
   animation-timing-function:ease-in-out;
@@ -2136,7 +2136,7 @@ body.mobile-performance .scene-lighting{
   mix-blend-mode:normal!important;
 }
 
-/* Quitamos las operaciones GPU más caras de las partículas.
+/* Quitamos las operaciones GPU mÃ¡s caras de las partÃ­culas.
    Siguen animadas; simplemente son muchas menos y sin blur/sombras pesadas. */
 body.mobile-performance .scene-effects,
 body.mobile-performance .scene-foreground,
@@ -2151,7 +2151,7 @@ body.mobile-performance .scene-event-particle{
   box-shadow:none!important;
 }
 
-/* El grano animado y overlays secundarios cuestan bastante en móvil. */
+/* El grano animado y overlays secundarios cuestan bastante en mÃ³vil. */
 body.mobile-performance .scene-art::after{
   display:none!important;
 }
@@ -2160,7 +2160,7 @@ body.mobile-performance .scene-backdrop::after{
 }
 
 /* Backdrop-filter sobre superficies grandes es uno de los mayores costes
-   al hacer scroll. En móvil usamos fondos algo más opacos equivalentes. */
+   al hacer scroll. En mÃ³vil usamos fondos algo mÃ¡s opacos equivalentes. */
 body.mobile-performance .site-header,
 body.mobile-performance .global-player,
 body.mobile-performance .detail-hero,
@@ -2203,12 +2203,12 @@ body.mobile-performance:not(.climate-event) .scene-event{
 }
 
 /* Nada de cambios en escritorio: estas reglas dependen de la clase que
-   JS solo añade a teléfono/touch pequeño. */
+   JS solo aÃ±ade a telÃ©fono/touch pequeÃ±o. */
 
 
 /* =========================================================
-   v5.1.1 · MÓVIL LITE
-   En teléfono prima la fluidez: una imagen estática y cero efectos.
+   v5.1.1 Â· MÃ“VIL LITE
+   En telÃ©fono prima la fluidez: una imagen estÃ¡tica y cero efectos.
    Escritorio conserva el sistema visual completo.
    ========================================================= */
 body.mobile-performance .storm-canvas,
@@ -2253,7 +2253,7 @@ body.mobile-performance .screen-vignette{
   background:rgba(2,7,11,.26)!important;
 }
 
-/* Evitamos composiciones y filtros costosos por completo en móvil. */
+/* Evitamos composiciones y filtros costosos por completo en mÃ³vil. */
 body.mobile-performance *,
 body.mobile-performance *::before,
 body.mobile-performance *::after{
@@ -2261,8 +2261,8 @@ body.mobile-performance *::after{
   backdrop-filter:none!important;
 }
 
-/* Reproductor móvil: por defecto solo título + botón de activación.
-   Los controles extra aparecen únicamente si el usuario enciende la música. */
+/* Reproductor mÃ³vil: por defecto solo tÃ­tulo + botÃ³n de activaciÃ³n.
+   Los controles extra aparecen Ãºnicamente si el usuario enciende la mÃºsica. */
 .mobile-music-toggle-button{
   min-height:38px;
   padding:8px 12px;
@@ -2288,7 +2288,7 @@ body.mobile-performance.mobile-music-active .theme-info-button{
   display:flex!important;
 }
 
-/* Nada de desplazamiento/zoom del fondo al hacer scroll en móvil. */
+/* Nada de desplazamiento/zoom del fondo al hacer scroll en mÃ³vil. */
 body.mobile-performance .scene-art,
 body.mobile-performance .scene-photo,
 body.mobile-performance .scene-background-motion{
@@ -2320,7 +2320,7 @@ body.mobile-performance .review-verdict{
 
 
 /* =========================================================
-   v5.1.1 · DOS TIER LISTS: OFFLINE / ONLINE
+   v5.1.1 Â· DOS TIER LISTS: OFFLINE / ONLINE
    ========================================================= */
 .catalog-nav{
   display:flex;
@@ -2511,7 +2511,7 @@ body.online-mode .side-card{
 
 
 /* =========================================================
-   v5.1.1 · Relámpagos cinematográficos para Smash Ultimate
+   v5.1.1 Â· RelÃ¡mpagos cinematogrÃ¡ficos para Smash Ultimate
    ========================================================= */
 .scene-special-effects{
   position:absolute;
@@ -2686,4 +2686,84 @@ body.online-mode .side-card{
 }
 body.mobile-performance .scene-special-effects{
   display:none!important;
+}
+
+/* =========================================================
+   v5.1.7 · Smash Ultimate — camara viva + retumbares
+   ========================================================= */
+:root{
+  --scene-rotation:0deg;
+}
+
+/* El retumbe se suma a la camara existente, pero no mueve la interfaz. */
+.scene-art .scene-photo,
+.scene-art svg{
+  transform:
+    translate3d(
+      calc(var(--parallax-x) * .55),
+      calc(var(--parallax-y) * .55),
+      0
+    )
+    rotate(var(--scene-rotation))
+    scale(var(--scene-zoom));
+}
+
+.scene-depth-back{
+  transform:
+    translate3d(
+      calc(var(--parallax-x) * .34),
+      calc(var(--parallax-y) * .34 + var(--scene-scroll-y) * .16),
+      0
+    )
+    rotate(calc(var(--scene-rotation) * .22))
+    scale(1.035);
+}
+
+.scene-depth-front{
+  transform:
+    translate3d(
+      calc(var(--parallax-x) * 1.25),
+      calc(var(--parallax-y) * 1.25 + var(--scene-scroll-y) * .62),
+      0
+    )
+    rotate(calc(var(--scene-rotation) * .42))
+    scale(1.052);
+}
+
+.scene-special-effects{
+  transform:
+    translate3d(
+      calc(var(--parallax-x) * 1.08),
+      calc(var(--parallax-y) * 1.08),
+      0
+    )
+    rotate(calc(var(--scene-rotation) * .28));
+}
+
+body.scene-rumbling .screen-vignette{
+  transition:opacity .12s ease,filter .12s ease;
+}
+
+body.scene-rumble-heavy .screen-vignette{
+  animation:smashHeavyRumbleVignette 1.15s ease-out both;
+}
+
+body.scene-rumble-heavy .scene-special-effects{
+  filter:saturate(1.22) contrast(1.06) brightness(1.035);
+}
+
+@keyframes smashHeavyRumbleVignette{
+  0%,100%{opacity:1;filter:brightness(1)}
+  18%{opacity:.86;filter:brightness(.88)}
+  32%{opacity:1;filter:brightness(1.05)}
+  48%{opacity:.93;filter:brightness(.94)}
+}
+
+/* Móvil Lite: sin rotacion ni retumbares. */
+body.mobile-performance{
+  --scene-rotation:0deg!important;
+}
+body.mobile-performance.scene-rumbling .screen-vignette,
+body.mobile-performance.scene-rumble-heavy .screen-vignette{
+  animation:none!important;
 }
