@@ -26,7 +26,7 @@
     // Comprueba la versión publicada sin usar la caché del navegador.
     // Si hay una build nueva, abre la misma página con ?v=X para forzar
     // un documento HTML fresco y conserva la sección actual (#tierlist, etc.).
-    window.MAUS_BUILD_VERSION = '5.3.9';
+    window.MAUS_BUILD_VERSION = '5.4.1';
     window.MAUS_CHECK_LATEST_BUILD = function () {
       var currentBuild = window.MAUS_BUILD_VERSION;
       var versionUrl = new URL('./version.json', document.baseURI);
@@ -74,11 +74,11 @@
       if (event.persisted) window.MAUS_CHECK_LATEST_BUILD();
     });
   </script>
-  <link rel="stylesheet" href="css/styles.css?v=5.3.9">
-  <link rel="stylesheet" href="css/review-shared.css?v=5.3.9">
-  <link rel="stylesheet" href="css/smash-music-sync.css?v=5.3.9">
-  <link rel="stylesheet" href="css/effects.css?v=5.3.9">
-  <link rel="stylesheet" href="css/music-library.css?v=5.3.9">
+  <link rel="stylesheet" href="css/styles.css?v=5.4.1">
+  <link rel="stylesheet" href="css/review-shared.css?v=5.4.1">
+  <link rel="stylesheet" href="css/smash-music-sync.css?v=5.4.1">
+  <link rel="stylesheet" href="css/effects.css?v=5.4.1">
+  <link rel="stylesheet" href="css/music-library.css?v=5.4.1">
 </head>
 <body data-scene="default">
   <canvas id="stormCanvas" class="storm-canvas" aria-hidden="true"></canvas>
@@ -204,17 +204,17 @@
 
   <div id="saveToast" class="save-toast" hidden>Guardado</div>
 
-  <script src="js/content-model.js?v=5.3.9"></script>
-  <script src="js/content-data.js?v=5.3.9"></script>
-  <script src="js/music-library.js?v=5.3.9"></script>
-  <script src="js/effects.js?v=5.3.9"></script>
-  <script src="js/site-data.js?v=5.3.9"></script>
-  <script src="js/theme-music.js?v=5.3.9"></script>
-  <script src="js/review-renderer.js?v=5.3.9"></script>
-  <script src="js/smash-music-sync.js?v=5.3.9"></script>
+  <script src="js/content-model.js?v=5.4.1"></script>
+  <script src="js/content-data.js?v=5.4.1"></script>
+  <script src="js/music-library.js?v=5.4.1"></script>
+  <script src="js/effects.js?v=5.4.1"></script>
+  <script src="js/site-data.js?v=5.4.1"></script>
+  <script src="js/theme-music.js?v=5.4.1"></script>
+  <script src="js/review-renderer.js?v=5.4.1"></script>
+  <script src="js/smash-music-sync.js?v=5.4.1"></script>
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
-  <script src="js/huellas.js?v=5.3.9"></script>
-  <script src="js/app.js?v=5.3.9"></script>
-  <script src="js/storm.js?v=5.3.9"></script>
+  <script src="js/huellas.js?v=5.4.1"></script>
+  <script src="js/app.js?v=5.4.1"></script>
+  <script src="js/storm.js?v=5.4.1"></script>
 </body>
 </html>
