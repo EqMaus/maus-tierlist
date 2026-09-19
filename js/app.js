@@ -2663,10 +2663,21 @@
   }
 
   function themeInfoFor(gameId) {
-    const built = builtInMusic[gameId] && typeof builtInMusic[gameId] === 'object' ? builtInMusic[gameId] : {};
-    const deep = musicDeepDive[gameId] && typeof musicDeepDive[gameId] === 'object' ? musicDeepDive[gameId] : {};
-    const custom = gameById.get(gameId)?.music;
-    const info = custom && typeof custom === 'object' ? { ...built, ...deep, ...custom } : { ...built, ...deep };
+    // En Resonancias, el botón “Más información sobre esta pieza” debe abrir
+    // la ficha musical profunda del JUEGO original, no repetir el texto editorial
+    // de la propia ficha de Resonancias.
+    const entry = gameById.get(gameId);
+    const sourceId = String(gameId || '').startsWith('music:')
+      ? String(entry?._sceneGameId || '')
+      : gameId;
+
+    const built = builtInMusic[sourceId] && typeof builtInMusic[sourceId] === 'object' ? builtInMusic[sourceId] : {};
+    const deep = musicDeepDive[sourceId] && typeof musicDeepDive[sourceId] === 'object' ? musicDeepDive[sourceId] : {};
+    const sourceCustom = gameById.get(sourceId)?.music;
+    const info = sourceCustom && typeof sourceCustom === 'object'
+      ? { ...built, ...deep, ...sourceCustom }
+      : { ...built, ...deep };
+
     return Object.keys(info).length ? info : null;
   }
 

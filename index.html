@@ -21,7 +21,7 @@
   <meta name="twitter:title" content="Tier List de Maus">
   <meta name="twitter:description" content="Videojuegos, críticas y músicas que se quedan conmigo.">
   <meta name="twitter:image" content="https://eqmaus.github.io/maus-tierlist/social-preview-v4.6.3.jpg">
-  <title>Tier List de Maus — v5.3.5</title>
+  <title>Tier List de Maus — v5.3.7</title>
   <script>
     // Comprueba la versión publicada sin usar la caché del navegador.
     // Si hay una build nueva, abre la misma página con ?v=X para forzar
@@ -74,11 +74,11 @@
       if (event.persisted) window.MAUS_CHECK_LATEST_BUILD();
     });
   </script>
-  <link rel="stylesheet" href="css/styles.css?v=5.3.4">
-  <link rel="stylesheet" href="css/review-shared.css?v=5.3.4">
-  <link rel="stylesheet" href="css/smash-music-sync.css?v=5.3.4">
-  <link rel="stylesheet" href="css/effects.css?v=5.3.4">
-  <link rel="stylesheet" href="css/music-library.css?v=5.3.4">
+  <link rel="stylesheet" href="css/styles.css?v=5.3.7">
+  <link rel="stylesheet" href="css/review-shared.css?v=5.3.7">
+  <link rel="stylesheet" href="css/smash-music-sync.css?v=5.3.7">
+  <link rel="stylesheet" href="css/effects.css?v=5.3.7">
+  <link rel="stylesheet" href="css/music-library.css?v=5.3.7">
 </head>
 <body data-scene="default">
   <canvas id="stormCanvas" class="storm-canvas" aria-hidden="true"></canvas>
@@ -96,15 +96,19 @@
         <img class="brand-mark" src="assets/brand/simba.jpg" alt="Simba">
         <span class="brand-copy"><strong>MAUS TIER LISTS</strong><small>offline · online</small></span>
       </a>
+      <a href="#huellas" data-nav="huellas" class="header-comments-link" aria-label="Abrir comentarios">
+        <span class="header-comments-icon" aria-hidden="true">✦</span>
+        <span>Comentarios</span>
+        <strong class="header-new-badge">NEW!</strong>
+      </a>
       <nav class="main-nav" aria-label="Navegación principal">
         <div class="catalog-nav">
           <a href="#tierlist" data-nav="offline" class="catalog-nav-offline">OFFLINE</a>
           <a href="#online" data-nav="online" class="catalog-nav-online">ONLINE</a>
         </div>
-        <a href="#music" data-nav="music">Resonancias</a>
+        <a href="#music" data-nav="music" class="nav-resonancias"><span class="nav-resonancias-mark" aria-hidden="true">◖◗</span> Resonancias</a>
         <a href="#games/offline" data-nav="games">Reviews</a>
         <a href="#features" data-nav="features">Features</a>
-        <a href="#huellas" data-nav="huellas">Deja tu huella</a>
         <button id="presentationModeButton" class="nav-presentation-button" type="button">Modo presentación</button>
         <button id="appearanceButton" class="nav-appearance-button" type="button" aria-haspopup="dialog" aria-expanded="false">Apariencia</button>
       </nav>
@@ -200,17 +204,17 @@
 
   <div id="saveToast" class="save-toast" hidden>Guardado</div>
 
-  <script src="js/content-model.js?v=5.3.4"></script>
-  <script src="js/content-data.js?v=5.3.4"></script>
-  <script src="js/music-library.js?v=5.3.4"></script>
-  <script src="js/effects.js?v=5.3.4"></script>
-  <script src="js/site-data.js?v=5.3.4"></script>
-  <script src="js/theme-music.js?v=5.3.4"></script>
-  <script src="js/review-renderer.js?v=5.3.4"></script>
-  <script src="js/smash-music-sync.js?v=5.3.4"></script>
+  <script src="js/content-model.js?v=5.3.7"></script>
+  <script src="js/content-data.js?v=5.3.7"></script>
+  <script src="js/music-library.js?v=5.3.7"></script>
+  <script src="js/effects.js?v=5.3.7"></script>
+  <script src="js/site-data.js?v=5.3.7"></script>
+  <script src="js/theme-music.js?v=5.3.7"></script>
+  <script src="js/review-renderer.js?v=5.3.7"></script>
+  <script src="js/smash-music-sync.js?v=5.3.7"></script>
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
-  <script src="js/huellas.js?v=5.3.4"></script>
-  <script src="js/app.js?v=5.3.4"></script>
-  <script src="js/storm.js?v=5.3.4"></script>
+  <script src="js/huellas.js?v=5.3.7"></script>
+  <script src="js/app.js?v=5.3.7"></script>
+  <script src="js/storm.js?v=5.3.7"></script>
 </body>
 </html>
