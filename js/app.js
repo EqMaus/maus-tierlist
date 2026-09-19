@@ -2330,6 +2330,7 @@
       const route = parseRoute();
       clearScene();
       body.classList.toggle('music-space', route.section === 'music');
+      if (themeInfoButton) themeInfoButton.textContent = route.section === 'music' ? 'Más información sobre esta pieza' : 'Información de la música';
       if (presentationModeButton) presentationModeButton.hidden = route.section === 'music';
 
       if (route.section === 'music') {

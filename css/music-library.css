@@ -6,7 +6,8 @@ body.music-space .main-nav a.is-active{box-shadow:inset 0 -2px var(--music-accen
 body.music-space .nav-appearance-button,body.music-space .nav-presentation-button,body.music-space .background-view-button{color:var(--music-ink,#25231f);background:transparent;border-color:var(--border)}
 body.music-space .app-shell{max-width:1320px;padding:34px 44px 90px}
 body.music-space .storm-canvas,body.music-space .storm-flash,body.music-space .scene-backdrop,body.music-space .screen-vignette{display:none}
-body.music-space .scene-art{opacity:.11!important;mix-blend-mode:multiply}
+body.music-space .scene-art{opacity:.18!important;mix-blend-mode:multiply}
+body.music-space.background-only .scene-art{opacity:.65!important;mix-blend-mode:normal}
 .music-page{position:relative;color:var(--music-ink,#25231f)}
 .music-masthead{display:flex;justify-content:space-between;gap:20px;padding-bottom:18px;border-bottom:1px solid currentColor;font-size:.64rem;font-weight:700;letter-spacing:.15em}
 .music-intro{display:grid;grid-template-columns:1.3fr 1fr;gap:80px;align-items:center;padding:70px 0 76px}
@@ -67,4 +68,47 @@ body.music-space .appearance-popover{color:#f5f8fb;background:#14212b;--muted:#a
 @media(min-width:761px){.catalog-switch:not(.compact){grid-template-columns:repeat(3,minmax(0,1fr))}.catalog-switch-button{flex-wrap:wrap}}
 .music-search .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
 body.music-space.mobile-performance .site-header{background:var(--music-paper,#eee7d9)!important}
+/* Resonancias: one shared audio player, dressed as a small record deck. */
+body.music-space #player{
+  background:var(--music-paper,#eee7d9);color:var(--music-ink,#25231f);
+  border:1px solid color-mix(in srgb,var(--music-ink,#25231f) 22%,transparent);
+  border-radius:16px;box-shadow:0 10px 28px #30261924;backdrop-filter:none;
+  padding:16px;max-height:calc(100dvh - 24px);overflow:auto;
+}
+body.music-space #player::before{
+  content:"";display:block;width:112px;height:112px;margin:0 auto 14px;border-radius:50%;
+  background:radial-gradient(circle,var(--music-paper,#eee7d9) 0 3%,#342e29 3.5% 5%,transparent 5.5%),
+    radial-gradient(circle,transparent 0 13%,#f3e2c788 13.5% 14%,transparent 14.5%),
+    radial-gradient(circle,var(--music-accent,#9b4225) 0 28%,transparent 29%),
+    repeating-radial-gradient(circle,transparent 0 2px,#b9a88b22 2.5px 3px,transparent 3.5px 4px),
+    conic-gradient(from 25deg,#282621,#555047 15%,#262420 27%,#24221f 52%,#5c554b 66%,#24221f 80%,#282621);
+  box-shadow:0 4px 10px #30261935,inset 0 0 0 1px #24221f;
+  animation:resonancias-vinyl 14s linear infinite;animation-play-state:paused;
+}
+body.music-space.music-is-playing #player::before{animation-play-state:running}
+body.music-space:is([data-effects="off"],[data-effects="reduced"],.background-only) #player::before{animation-play-state:paused}
+@keyframes resonancias-vinyl{to{transform:rotate(360deg)}}
+body.music-space #player .music-widget-title{font:400 1.25rem/1.2 Georgia,serif;color:inherit;text-align:center}
+body.music-space #player .music-widget-game{color:inherit;opacity:.72;text-align:center}
+body.music-space #player :is(.music-widget-volume,.music-widget-times,.music-time-separator,#playerCurrentTime){color:inherit}
+body.music-space #player .range{accent-color:var(--music-accent,#9b4225)}
+body.music-space #player :is(.theme-info-button,.mobile-music-toggle-button){color:inherit;background:transparent;border:1px solid var(--border);box-shadow:none;text-shadow:none}
+body.music-space #player .mobile-music-toggle-button{width:100%;margin-top:10px;font-weight:600}
+body.music-space #player .theme-info-button{font-size:.7rem;font-weight:600;line-height:1.5;margin-top:8px}
+body.music-space #player :is(.theme-info-button,.mobile-music-toggle-button):hover{background:#8e715314;border-color:var(--music-accent,#9b4225)}
+body.music-space #player :is(button,input):focus-visible{outline:2px solid var(--music-accent,#9b4225);outline-offset:3px}
+/* Entrance animations use fill-mode:both; explicitly hide the deck in background view. */
+body.music-space.background-only #player{visibility:hidden}
+@media(max-width:760px){
+  body.music-space #player{display:grid!important;grid-template-columns:56px minmax(0,1fr) auto!important;gap:3px 10px;padding:10px 12px;width:calc(100% - 20px);left:10px!important;right:10px!important;top:auto!important;bottom:10px!important;border-radius:14px}
+  body.music-space #player::before{grid-column:1;grid-row:1/span 2;width:52px;height:52px;margin:0;align-self:center}
+  body.music-space #player .music-widget-title{grid-column:2;grid-row:1;text-align:left;font-size:1.05rem;align-self:end}
+  body.music-space #player .music-widget-game{grid-column:2;grid-row:2;text-align:left;margin:0;align-self:start}
+  body.music-space #player #mobileMusicToggleButton{grid-column:3;grid-row:1/span 2;width:auto;margin:0;padding:8px;align-self:center}
+  body.music-space #player .music-widget-progress{display:block!important;grid-column:1/-1;grid-row:3;margin-top:5px}
+  body.music-space #player .music-widget-volume{display:grid!important;grid-column:1/-1;grid-row:4;margin-top:3px}
+  body.music-space #player .theme-info-button{display:block!important;grid-column:1/-1;grid-row:5;padding:5px;margin-top:3px}
+  body.music-space.player-visible .app-shell{padding-bottom:235px}
+}
+@media(prefers-reduced-motion:reduce){body.music-space #player::before{animation:none}}
 @media(max-width:760px){.main-nav .catalog-nav{grid-column:1/-1}.main-nav>a{grid-column:span 2;min-width:0;overflow-wrap:anywhere}body.music-space .main-nav .nav-appearance-button{grid-column:1/-1}}

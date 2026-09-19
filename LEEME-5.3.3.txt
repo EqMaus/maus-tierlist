@@ -1,0 +1,18 @@
+RESONANCIAS — ACTUALIZACIÓN 5.3.3
+
+Reproductor con vinilo en tonos crema; gira al reproducir y se detiene al pausar. Respeta los modos de efectos y la preferencia de movimiento reducido. Conserva el audio compartido y los controles originales de tiempo, volumen y pausa.
+En Resonancias el botón se llama «Más información sobre esta pieza». En videojuegos conserva «Información de la música» y su aspecto anterior.
+Fondo durante la lectura: opacidad del 11 % al 18 %. En «Ver fondo»: 65 %, ocultando completamente el reproductor. Al regresar se recupera la opacidad de lectura.
+Diseño compacto para móvil con todos los controles visibles.
+
+INSTALACIÓN
+1. Haz Fetch/Pull en GitHub Desktop antes de copiar los archivos. La copia local estaba dos commits por detrás; esta entrega tiene en cuenta la publicación 5.3.2 y su index.html.
+2. Copia el contenido de la carpeta maus-tierlist del ZIP en la raíz del repositorio, sustituyendo los archivos correspondientes. No anides otra carpeta maus-tierlist.
+3. Haz commit y Push normal. No necesitas Force Push.
+4. Espera al despliegue y recarga. Si ves el diseño antiguo, utiliza Ctrl+F5.
+
+El paquete NO contiene content-data.js, site-data.js ni assets. Tu ficha White Noiz, sus textos, portada, audio, fondo y los demás contenidos no se sustituyen.
+Contiene index.html actualizado desde la publicación 5.3.2, version.json, js/app.js y css/music-library.css. Si has cambiado el código o los metadatos de index.html después de esa publicación, compara primero esos cambios.
+
+PRUEBAS
+Reproducción y pausa repetidas, cambios rápidos, carga pendiente, navegación entre música/videojuegos, controles de tiempo y volumen, modos de efectos, paletas roja/azul/original, ocultar/restaurar interfaz y tamaños móviles de 320 y 390 px. Comprobación visual con la ficha publicada de White Noiz y sus recursos reales. Sin errores JavaScript detectados. Pruebas locales en Chromium/Brave; móvil emulado. Esta entrega no se ha publicado ni subido a GitHub.
