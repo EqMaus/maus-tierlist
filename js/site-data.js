@@ -1170,7 +1170,11 @@
       }
     ],
     "cover": "assets/covers/super-smash-bros-ultimate-v5-0-1.avif",
-    "background": "assets/backgrounds/super-smash-bros-ultimate-bg-v5-0-1.png"
+    "background": "assets/backgrounds/super-smash-bros-ultimate-bg-v5-0-1.png",
+    "music": {
+      "src": "assets/audio/super-smash-bros-ultimate-theme-v5-1-3.mp3",
+      "title": "The Dark Realm   Super Smash Bros. Ultimate Music Extended"
+    }
   },
   {
     "id": "league-of-legends",
