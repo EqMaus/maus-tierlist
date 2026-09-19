@@ -154,10 +154,23 @@
   let sceneMotionFrame = 0;
   let sceneDriftFrame = 0;
   let sceneEnterTimer = 0;
-  const sceneMotion = { currentX: 0, currentY: 0, targetX: 0, targetY: 0, driftX: 0, driftY: 0 };
+  const sceneMotion = {
+    currentX: 0,
+    currentY: 0,
+    targetX: 0,
+    targetY: 0,
+    driftX: 0,
+    driftY: 0,
+    rumbleX: 0,
+    rumbleY: 0,
+    rumbleRot: 0
+  };
 
+  let sceneRumbleFrame = 0;
+  let sceneRumbleTimer = 0;
   let autoCameraTimer = 0;
   const SCENE_DIRECTION = {
+    'super-smash-bros-ultimate': { lightX:'62%', lightY:'27%', lightA:'rgba(126,207,255,.30)', lightB:'rgba(112,118,255,.18)', camX:21, camY:12, camMin:6500, camMax:11500, depth:.92, pos:'56% 48%', backSolid:'36%', backFade:'66%', frontSolid:'25%', frontFade:'60%' },
     'gow1': { lightX:'73%', lightY:'8%', lightA:'rgba(171,202,255,.24)', lightB:'rgba(239,184,109,.11)', camX:10, camY:6, camMin:17000, camMax:29000, depth:.72, pos:'55% 50%', backSolid:'35%', backFade:'68%', frontSolid:'28%', frontFade:'65%' },
     'gow2': { lightX:'54%', lightY:'7%', lightA:'rgba(155,199,255,.30)', lightB:'rgba(255,179,89,.18)', camX:11, camY:7, camMin:16000, camMax:28000, depth:.86, pos:'50% 50%', backSolid:'46%', backFade:'72%', frontSolid:'24%', frontFade:'57%' },
     'gow3': { lightX:'47%', lightY:'44%', lightA:'rgba(255,99,49,.32)', lightB:'rgba(255,181,92,.13)', camX:12, camY:7, camMin:14000, camMax:25000, depth:.92, pos:'53% 52%', backSolid:'32%', backFade:'62%', frontSolid:'34%', frontFade:'70%' },
@@ -177,6 +190,125 @@
 
   function sceneDirectionFor(gameId) {
     return SCENE_DIRECTION[gameId] || { lightX:'50%', lightY:'18%', lightA:'rgba(255,255,255,.18)', lightB:'rgba(116,188,235,.08)', camX:6, camY:4, camMin:20000, camMax:34000, depth:.55, pos:'50% 50%', backSolid:'42%', backFade:'70%', frontSolid:'24%', frontFade:'61%' };
+  }
+
+  const SCENE_RUMBLE_PROFILES = {
+    'super-smash-bros-ultimate': {
+      waitMin: 4400,
+      waitMax: 9200,
+      durationMin: 620,
+      durationMax: 1050,
+      ampX: 2.25,
+      ampY: 1.35,
+      rot: 0.075,
+      heavyChance: 0.28,
+      heavyMultiplier: 1.72
+    }
+  };
+
+  function sceneRumbleProfileFor(gameId) {
+    return SCENE_RUMBLE_PROFILES[gameId] || null;
+  }
+
+  function stopSceneRumble(reset = true) {
+    window.clearTimeout(sceneRumbleTimer);
+    sceneRumbleTimer = 0;
+
+    if (sceneRumbleFrame) cancelAnimationFrame(sceneRumbleFrame);
+    sceneRumbleFrame = 0;
+
+    body.classList.remove('scene-rumbling', 'scene-rumble-heavy');
+
+    if (reset) {
+      sceneMotion.rumbleX = 0;
+      sceneMotion.rumbleY = 0;
+      sceneMotion.rumbleRot = 0;
+      updateSceneMotionVars();
+    }
+  }
+
+  function triggerSceneRumble(gameId) {
+    const profile = sceneRumbleProfileFor(gameId);
+    if (!profile || mobilePerformance || document.hidden || currentGameSceneId !== gameId) return;
+
+    if (sceneRumbleFrame) cancelAnimationFrame(sceneRumbleFrame);
+
+    const heavy = Math.random() < profile.heavyChance;
+    const strength = heavy ? profile.heavyMultiplier : 1;
+    const cinematic = body.classList.contains('background-only') ? 1.20 : 1;
+    const ampX = profile.ampX * strength * cinematic;
+    const ampY = profile.ampY * strength * cinematic;
+    const ampRot = profile.rot * strength * cinematic;
+    const duration = randomIntBetween(
+      profile.durationMin + (heavy ? 150 : 0),
+      profile.durationMax + (heavy ? 280 : 0)
+    );
+    const startedAt = performance.now();
+
+    body.classList.add('scene-rumbling');
+    body.classList.toggle('scene-rumble-heavy', heavy);
+
+    const tick = (now) => {
+      if (document.hidden || currentGameSceneId !== gameId || !body.classList.contains('scene-active')) {
+        sceneMotion.rumbleX = 0;
+        sceneMotion.rumbleY = 0;
+        sceneMotion.rumbleRot = 0;
+        updateSceneMotionVars();
+        sceneRumbleFrame = 0;
+        body.classList.remove('scene-rumbling', 'scene-rumble-heavy');
+        return;
+      }
+
+      const elapsed = now - startedAt;
+      const t = Math.min(1, elapsed / duration);
+      const envelope = Math.pow(Math.sin(t * Math.PI), .72);
+
+      // Dos frecuencias bajas superpuestas: retumbe, no vibración mecánica constante.
+      const lowX = Math.sin(elapsed * .041) + Math.sin(elapsed * .071 + 1.2) * .42;
+      const lowY = Math.sin(elapsed * .052 + .7) + Math.sin(elapsed * .089) * .34;
+      const grit = ((Math.random() * 2) - 1) * .18;
+
+      sceneMotion.rumbleX = (lowX + grit) * ampX * envelope;
+      sceneMotion.rumbleY = (lowY + grit * .65) * ampY * envelope;
+      sceneMotion.rumbleRot = (Math.sin(elapsed * .036 + .4) + grit * .28) * ampRot * envelope;
+      updateSceneMotionVars();
+
+      if (t < 1) {
+        sceneRumbleFrame = requestAnimationFrame(tick);
+      } else {
+        sceneMotion.rumbleX = 0;
+        sceneMotion.rumbleY = 0;
+        sceneMotion.rumbleRot = 0;
+        updateSceneMotionVars();
+        body.classList.remove('scene-rumbling', 'scene-rumble-heavy');
+        sceneRumbleFrame = 0;
+      }
+    };
+
+    sceneRumbleFrame = requestAnimationFrame(tick);
+  }
+
+  function startSceneRumble(gameId) {
+    stopSceneRumble(true);
+    const profile = sceneRumbleProfileFor(gameId);
+    if (!profile || mobilePerformance || !gameId) return;
+
+    const queueNext = () => {
+      if (currentGameSceneId !== gameId || !body.classList.contains('scene-active')) return;
+
+      if (document.hidden) {
+        sceneRumbleTimer = window.setTimeout(queueNext, 1500);
+        return;
+      }
+
+      triggerSceneRumble(gameId);
+      sceneRumbleTimer = window.setTimeout(
+        queueNext,
+        randomIntBetween(profile.waitMin, profile.waitMax)
+      );
+    };
+
+    sceneRumbleTimer = window.setTimeout(queueNext, randomIntBetween(1600, 3200));
   }
 
   function applySceneDirection(gameId) {
@@ -270,10 +402,11 @@
   }
 
   function updateSceneMotionVars() {
-    const combinedX = sceneMotion.currentX + sceneMotion.driftX;
-    const combinedY = sceneMotion.currentY + sceneMotion.driftY;
+    const combinedX = sceneMotion.currentX + sceneMotion.driftX + sceneMotion.rumbleX;
+    const combinedY = sceneMotion.currentY + sceneMotion.driftY + sceneMotion.rumbleY;
     body.style.setProperty('--parallax-x', `${combinedX.toFixed(2)}px`);
     body.style.setProperty('--parallax-y', `${combinedY.toFixed(2)}px`);
+    body.style.setProperty('--scene-rotation', `${sceneMotion.rumbleRot.toFixed(3)}deg`);
   }
 
   function animateSceneMotion() {
@@ -298,7 +431,11 @@
   function resetSceneMotion() {
     sceneMotion.targetX = 0;
     sceneMotion.targetY = 0;
+    sceneMotion.rumbleX = 0;
+    sceneMotion.rumbleY = 0;
+    sceneMotion.rumbleRot = 0;
     queueSceneMotion();
+    updateSceneMotionVars();
   }
 
   function updateSceneScrollDepth() {
@@ -1911,6 +2048,7 @@
     stopClimateCycle();
     stopAutonomousCamera();
     stopSceneDrift(true);
+    stopSceneRumble(true);
     body.classList.remove('scene-active', 'scene-entering', 'scene-cinematic');
     body.dataset.scene = 'default';
     body.dataset.ambientEffect = 'none';
@@ -1945,6 +2083,7 @@
       stopClimateCycle();
       stopAutonomousCamera(false);
       stopSceneDrift(true);
+      stopSceneRumble(true);
       body.classList.remove('scene-entering', 'climate-event');
       body.dataset.climateState = 'normal';
       updateSceneScrollDepth();
@@ -1967,6 +2106,7 @@
     startClimateCycle(gameId);
     startSceneDrift(gameId);
     scheduleAutonomousCamera(gameId, true);
+    startSceneRumble(gameId);
     updateSceneScrollDepth();
 
     if (photoSrc) {

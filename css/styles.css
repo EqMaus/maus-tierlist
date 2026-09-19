@@ -1324,7 +1324,7 @@ body.background-only .appearance-popover{display:none!important}
 .scene-art svg,
 .scene-art .scene-photo{
   transition:transform .35s ease-out, filter .45s ease, opacity .45s ease;
-  transform:translate3d(calc(var(--parallax-x) * .55), calc(var(--parallax-y) * .55), 0) scale(var(--scene-zoom));
+  transform:translate3d(calc(var(--parallax-x) * .55), calc(var(--parallax-y) * .55), 0) rotate(var(--scene-rotation)) scale(var(--scene-zoom));
   transform-origin:center center;
 }
 .scene-art svg{
@@ -1964,6 +1964,7 @@ body.climate-event[data-climate-event="flare"] .scene-foreground{
    v5.1.1 · Dirección artística, cámara autónoma y rendimiento
    ========================================================= */
 :root{
+  --scene-rotation:0deg;
   --scene-light-x:50%;
   --scene-light-y:18%;
   --scene-light-a-color:rgba(255,255,255,.18);
@@ -1977,8 +1978,8 @@ body.climate-event[data-climate-event="flare"] .scene-foreground{
 }
 .scene-art .scene-photo{object-position:var(--scene-object-position);will-change:transform,filter}
 .scene-depth{position:absolute;inset:-2%;background-repeat:no-repeat;background-size:cover;background-position:var(--scene-object-position);pointer-events:none;will-change:transform,opacity;opacity:calc(var(--scene-depth-strength) * .15)}
-.scene-depth-back{z-index:-1;mask-image:linear-gradient(to bottom,#000 0 var(--scene-depth-back-solid),transparent var(--scene-depth-back-fade));-webkit-mask-image:linear-gradient(to bottom,#000 0 var(--scene-depth-back-solid),transparent var(--scene-depth-back-fade));filter:saturate(1.05) brightness(.74);transform:translate3d(calc(var(--parallax-x) * .34),calc(var(--parallax-y) * .34 + var(--scene-scroll-y) * .16),0) scale(1.035)}
-.scene-depth-front{z-index:1;mask-image:linear-gradient(to top,#000 0 var(--scene-depth-front-solid),transparent var(--scene-depth-front-fade));-webkit-mask-image:linear-gradient(to top,#000 0 var(--scene-depth-front-solid),transparent var(--scene-depth-front-fade));filter:saturate(1.12) contrast(1.04) brightness(.72) blur(.35px);opacity:calc(var(--scene-depth-strength) * .2);transform:translate3d(calc(var(--parallax-x) * 1.25),calc(var(--parallax-y) * 1.25 + var(--scene-scroll-y) * .62),0) scale(1.052)}
+.scene-depth-back{z-index:-1;mask-image:linear-gradient(to bottom,#000 0 var(--scene-depth-back-solid),transparent var(--scene-depth-back-fade));-webkit-mask-image:linear-gradient(to bottom,#000 0 var(--scene-depth-back-solid),transparent var(--scene-depth-back-fade));filter:saturate(1.05) brightness(.74);transform:translate3d(calc(var(--parallax-x) * .34),calc(var(--parallax-y) * .34 + var(--scene-scroll-y) * .16),0) rotate(calc(var(--scene-rotation) * .22)) scale(1.035)}
+.scene-depth-front{z-index:1;mask-image:linear-gradient(to top,#000 0 var(--scene-depth-front-solid),transparent var(--scene-depth-front-fade));-webkit-mask-image:linear-gradient(to top,#000 0 var(--scene-depth-front-solid),transparent var(--scene-depth-front-fade));filter:saturate(1.12) contrast(1.04) brightness(.72) blur(.35px);opacity:calc(var(--scene-depth-strength) * .2);transform:translate3d(calc(var(--parallax-x) * 1.25),calc(var(--parallax-y) * 1.25 + var(--scene-scroll-y) * .62),0) rotate(calc(var(--scene-rotation) * .42)) scale(1.052)}
 .scene-lighting span:first-child{left:calc(var(--scene-light-x) - 21vw)!important;top:calc(var(--scene-light-y) - 21vw)!important;background:radial-gradient(circle,var(--scene-light-a-color),transparent 68%)!important}
 .scene-lighting span:last-child{right:auto!important;bottom:auto!important;left:calc(var(--scene-light-x) - 8vw)!important;top:calc(var(--scene-light-y) + 3vh)!important;background:radial-gradient(circle,var(--scene-light-b-color),transparent 70%)!important}
 .scene-art::before{background:linear-gradient(180deg,var(--scene-grade-top),transparent 30%,transparent 68%,var(--scene-grade-bottom)),radial-gradient(circle at var(--scene-light-x) var(--scene-light-y),var(--scene-light-a-color),transparent 30%)!important}
@@ -2519,7 +2520,7 @@ body.online-mode .side-card{
   z-index:7;
   overflow:hidden;
   pointer-events:none;
-  transform:translate3d(calc(var(--parallax-x) * 1.08),calc(var(--parallax-y) * 1.08),0);
+  transform:translate3d(calc(var(--parallax-x) * 1.08),calc(var(--parallax-y) * 1.08),0) rotate(calc(var(--scene-rotation) * .28));
   transition:transform .22s ease-out, opacity .28s ease;
   filter:saturate(1.16) contrast(1.04);
 }
@@ -2686,4 +2687,30 @@ body.online-mode .side-card{
 }
 body.mobile-performance .scene-special-effects{
   display:none!important;
+}
+
+/* =========================================================
+   v5.1.7 · Smash Ultimate — cámara viva + retumbares
+   ========================================================= */
+body.scene-rumbling .screen-vignette{
+  transition:opacity .12s ease,filter .12s ease;
+}
+body.scene-rumble-heavy .screen-vignette{
+  animation:smashHeavyRumbleVignette 1.15s ease-out both;
+}
+body.scene-rumble-heavy .scene-special-effects{
+  filter:saturate(1.22) contrast(1.06) brightness(1.035);
+}
+@keyframes smashHeavyRumbleVignette{
+  0%,100%{opacity:1;filter:brightness(1)}
+  18%{opacity:.86;filter:brightness(.88)}
+  32%{opacity:1;filter:brightness(1.05)}
+  48%{opacity:.93;filter:brightness(.94)}
+}
+body.mobile-performance{
+  --scene-rotation:0deg!important;
+}
+body.mobile-performance.scene-rumbling .screen-vignette,
+body.mobile-performance.scene-rumble-heavy .screen-vignette{
+  animation:none!important;
 }
