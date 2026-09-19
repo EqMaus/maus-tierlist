@@ -2358,6 +2358,11 @@
         applyCatalogMode('offline');
         updateNav('features', 'offline');
         renderFeatures();
+      } else if (route.section === 'huellas') {
+        applyCatalogMode('offline');
+        updateNav('huellas', 'offline');
+        if (window.MausHuellas) window.MausHuellas.render(app);
+        else app.innerHTML = '<div class="page"><section class="recovery-card"><h1>Deja tu huella</h1><p>No se pudo cargar esta sección.</p></section></div>'; 
       } else {
         if (route.section !== 'tierlist' || route.id) history.replaceState(null, '', '#tierlist');
         applyCatalogMode('offline');
