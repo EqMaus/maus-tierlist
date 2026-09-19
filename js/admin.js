@@ -1273,54 +1273,72 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     return btoa(binary);
   }
 
-  async function getFile(path) {
+  async function getFile(path, ref = BRANCH) {
     const encoded = path.split('/').map(encodeURIComponent).join('/');
-    const data = await apiFetch(`${API}/contents/${encoded}?ref=${encodeURIComponent(BRANCH)}&_=${Date.now()}`);
+    const data = await apiFetch(`${API}/contents/${encoded}?ref=${encodeURIComponent(ref)}&_=${Date.now()}`);
     if (!data || data.type !== 'file' || typeof data.content !== 'string') throw new Error(`No se pudo leer ${path}`);
     return { sha: data.sha, content: decodeBase64(data.content) };
   }
 
-  async function putFile(path, content, sha, message) {
-    const encoded = path.split('/').map(encodeURIComponent).join('/');
-    return apiFetch(`${API}/contents/${encoded}`, {
-      method: 'PUT',
-      body: JSON.stringify({ message, content: encodeBase64(content), sha, branch: BRANCH })
+  // Prepare Git objects without changing the published branch.
+  let publicationEntries = [];
+  async function putBinaryFile(path, file) {
+    const blob = await apiFetch(API + '/git/blobs', {
+      method: 'POST', body: JSON.stringify({ content: await fileToBase64(file), encoding: 'base64' })
     });
+    publicationEntries.push({ path, mode: '100644', type: 'blob', sha: blob.sha });
   }
 
-  async function getPathSha(path) {
-    const encoded = path.split('/').map(encodeURIComponent).join('/');
-    try {
-      const data = await apiFetch(`${API}/contents/${encoded}?ref=${encodeURIComponent(BRANCH)}&_=${Date.now()}`);
-      return data && data.type === 'file' ? String(data.sha || '') : '';
-    } catch (error) {
-      if (error.status === 404) return '';
-      throw error;
+  async function gitBlobSha(content) {
+    const bytes = new TextEncoder().encode(content);
+    const prefix = new TextEncoder().encode('blob ' + bytes.length + '\0');
+    const input = new Uint8Array(prefix.length + bytes.length);
+    input.set(prefix); input.set(bytes, prefix.length);
+    return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-1', input)), b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  async function commitPublication(head, entries, message) {
+    const parent = await apiFetch(API + '/git/commits/' + head);
+    const tree = await apiFetch(API + '/git/trees', {
+      method: 'POST', body: JSON.stringify({ base_tree: parent.tree.sha, tree: entries })
+    });
+    const commit = await apiFetch(API + '/git/commits', {
+      method: 'POST', body: JSON.stringify({ message, tree: tree.sha, parents: [head] })
+    });
+    // A concurrent commit makes this non-fast-forward and GitHub rejects it.
+    await apiFetch(API + '/git/refs/heads/' + BRANCH, {
+      method: 'PATCH', body: JSON.stringify({ sha: commit.sha, force: false })
+    });
+    return tree.tree;
+  }
+
+  function readDataArray(text, name, optional = false) {
+    const marker = new RegExp('window\\.' + name + '\\s*=\\s*').exec(text);
+    if (!marker) {
+      if (optional) return [];
+      throw new Error('Falta ' + name + ' en js/site-data.js.');
     }
-  }
-
-  async function putBinaryFile(path, file, message) {
-    const encoded = path.split('/').map(encodeURIComponent).join('/');
-    const content = await fileToBase64(file);
-    const sha = await getPathSha(path);
-    const body = { message, content, branch: BRANCH };
-    if (sha) body.sha = sha;
-    return apiFetch(`${API}/contents/${encoded}`, {
-      method: 'PUT',
-      body: JSON.stringify(body)
-    });
+    const start = marker.index + marker[0].length;
+    if (text[start] !== '[') throw new Error('Se esperaba un array en ' + name);
+    let depth = 0, quoted = false, escaped = false;
+    for (let i = start; i < text.length; i++) {
+      const char = text[i];
+      if (quoted) {
+        if (escaped) escaped = false;
+        else if (char === '\\') escaped = true;
+        else if (char === '"') quoted = false;
+      } else if (char === '"') quoted = true;
+      else if (char === '[') depth++;
+      else if (char === ']' && --depth === 0) return JSON.parse(text.slice(start, i + 1));
+    }
+    throw new Error('Array incompleto: ' + name);
   }
 
   function parseSiteData(source) {
     const text = String(source);
-    const gamesMatch = text.match(/window\.MAUS_GAMES\s*=\s*(\[[\s\S]*?\]);/);
-    const onlineMatch = text.match(/window\.MAUS_ONLINE_GAMES\s*=\s*(\[[\s\S]*?\]);/);
-    const scaleMatch = text.match(/window\.MAUS_SCALE\s*=\s*(\[[\s\S]*?\]);/);
-    if (!gamesMatch || !scaleMatch) throw new Error('No se pudo interpretar js/site-data.js.');
-
-    const offline = JSON.parse(gamesMatch[1]);
-    const online = onlineMatch ? JSON.parse(onlineMatch[1]) : [];
-    const parsedScale = JSON.parse(scaleMatch[1]);
+    const offline = readDataArray(text, 'MAUS_GAMES');
+    const online = readDataArray(text, 'MAUS_ONLINE_GAMES', true);
+    const parsedScale = readDataArray(text, 'MAUS_SCALE');
 
     if (!Array.isArray(offline) || !Array.isArray(online) || !Array.isArray(parsedScale)) {
       throw new Error('Los datos del sitio no tienen el formato esperado.');
@@ -1889,11 +1907,12 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     setBusy(true, 'Publicando cambios…', 'Comprobando que nadie haya modificado los archivos desde que abriste el editor.');
 
     try {
+      const branch = await apiFetch(API + '/git/ref/heads/' + BRANCH);
+      const head = branch.object.sha;
       const [freshSiteData, freshIndex, freshVersion] = await Promise.all([
-        getFile('js/site-data.js'),
-        getFile('index.html'),
-        getFile('version.json')
+        getFile('js/site-data.js', head), getFile('index.html', head), getFile('version.json', head)
       ]);
+      publicationEntries = [];
 
       if (freshSiteData.sha !== baseShas.siteData || freshIndex.sha !== baseShas.index || freshVersion.sha !== baseShas.version) {
         throw new Error('El repositorio cambió desde que abriste el editor. Pulsa “Descartar” para recargar la versión actual y vuelve a aplicar tu cambio.');
@@ -1916,23 +1935,19 @@ const ADMIN_CURATED_REVIEW_SPECS = {
       const nextSiteData = serializeSiteData(publishGames, scale);
       const nextVersionJson = `${JSON.stringify({ version: nextVersion }, null, 2)}\n`;
 
-      busyText.textContent = `Preparando v${nextVersion}…`;
-      const indexResult = await putFile('index.html', nextIndex, freshIndex.sha, `Editor: prepara v${nextVersion}`);
-
-      busyText.textContent = 'Guardando juegos, notas, reviews y recursos…';
-      const dataResult = await putFile('js/site-data.js', nextSiteData, freshSiteData.sha, `Editor: actualiza contenido v${nextVersion}`);
-
-      busyText.textContent = 'Activando la nueva versión para todos…';
-      const versionResult = await putFile('version.json', nextVersionJson, freshVersion.sha, `Editor: publica v${nextVersion}`);
-
+      busyText.textContent = 'Publicando todos los cambios en un único commit…';
+      const entries = [...publicationEntries,
+        { path: 'index.html', mode: '100644', type: 'blob', content: nextIndex },
+        { path: 'js/site-data.js', mode: '100644', type: 'blob', content: nextSiteData },
+        { path: 'version.json', mode: '100644', type: 'blob', content: nextVersionJson }
+      ];
+      const nextShas = { siteData: await gitBlobSha(nextSiteData), index: await gitBlobSha(nextIndex), version: await gitBlobSha(nextVersionJson) };
+      await commitPublication(head, entries, 'Editor: publica v' + nextVersion);
       games = publishGames;
       currentVersion = nextVersion;
-      versionBadge.textContent = `v${currentVersion}`;
-      baseShas = {
-        siteData: dataResult?.content?.sha || '',
-        index: indexResult?.content?.sha || '',
-        version: versionResult?.content?.sha || ''
-      };
+      versionBadge.textContent = 'v' + currentVersion;
+      baseShas = nextShas;
+
       baseSnapshot = currentSnapshot();
       newGameIds = new Set();
       resetPendingFiles();

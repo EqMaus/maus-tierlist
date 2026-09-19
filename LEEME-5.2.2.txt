@@ -1,0 +1,37 @@
+MAUS TIER LISTS — 5.2.2
+
+Paquete completo basado en la copia local 5.2.1 inspeccionada.
+Incluye los 17 juegos, sus críticas, imágenes y música. No incluye .git.
+
+CORRECCIONES
+- Publicación del editor: prepara recursos y contenido y activa todo con
+  un único commit y una actualización de rama sin force push.
+- El comprobador solo recarga hacia versiones superiores y limita el intento.
+- El editor lee correctamente textos con ];, comillas y corchetes.
+- Se actualiza el versionado de los recursos del editor.
+
+INSTALACIÓN EN TU REPOSITORIO EXISTENTE
+1. Guarda una copia de seguridad y sincroniza los cambios pendientes.
+2. De este paquete copia SOLO estos cuatro archivos, sustituyendo los anteriores:
+   index.html
+   admin.html
+   version.json
+   js/admin.js
+3. Revisa los cambios en GitHub Desktop, crea un commit y haz push.
+4. Cuando finalice el despliegue, comprueba que aparece la versión 5.2.2.
+
+Si has seguido editando desde la copia 5.2.1 o ya tienes una versión posterior,
+no sustituyas archivos sin comparar primero. No reemplaces site-data.js ni assets
+para aplicar estas correcciones: la copia completa se incluye para disponer
+del proyecto, pero podría ser anterior a tus últimas críticas publicadas.
+
+VALIDACIÓN Y LÍMITES
+11 grupos de comprobaciones locales superados; ver COMPROBACIONES.txt.
+Las llamadas de publicación se probaron con una API simulada, sin credenciales.
+No se ha publicado esta versión ni se ha probado visualmente en navegador.
+La recuperación persistente de borradores y los ajustes de Smash siguen pendientes.
+
+Referencia del flujo Git usado:
+https://docs.github.com/en/rest/git/trees
+
+Los documentos README.md y LEEME.txt anteriores se conservan como historial.
