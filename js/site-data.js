@@ -398,8 +398,8 @@
         ]
       },
       {
-        "title": "Conclusión",
-        "verdict": false,
+        "title": "Veredicto final",
+        "verdict": true,
         "paragraphs": [
           "Un juego que mucha gente puede decir que simplemente es 'malo' o 'un coñazo', y lo podría entender, pero que tiene algo distinto, una magia difícil de explicar. Lo he disfrutado y seguro que en algunos años lo vuelvo a jugar. Nota final: **Un 8**"
         ]
@@ -488,8 +488,8 @@
         ]
       },
       {
-        "title": "Conclusión",
-        "verdict": false,
+        "title": "Veredicto final",
+        "verdict": true,
         "paragraphs": [
           "Como juego, es **excelente**, de principio a fin. La historia es muy muy buena, la experiencia vivida es intensa, y el factor rejugable es notable. Puesto que en mi jerarquía, **EXCELENTE** significa 7.5, ahí lo pongo.",
           "Añado también que este juego, como el RE2 y 4, tiene a Leon S. Kennedy, que es un prota de putísima madre."
@@ -1507,8 +1507,8 @@
         ]
       },
       {
-        "title": "Conclusión",
-        "verdict": false,
+        "title": "Veredicto final",
+        "verdict": true,
         "paragraphs": [
           "Paladins me parece uno de los ejemplos más claros que conozco de un videojuego que podría haber llegado muchísimo más lejos.\nTenía una base extraordinaria.\nPersonajes con una expresión mecánica enorme.\nUn sistema de cartas y talentos fantástico.\nCombate rápido y satisfactorio.\nBuen feedback.\nProfundidad estratégica.\nUna identidad muy marcada.\nY un juego en equipo que, cuando funciona, puede producir momentos increíbles.\nPero también ha sido víctima constante de sus propios problemas técnicos, de decisiones cuestionables, de un balance progresivamente más complicado, de cheats, aim assist, matchmaking y de una acumulación de contenido sobre unos cimientos que necesitaban muchísimo más cuidado del que recibieron.\nSé perfectamente todos los defectos que tiene.\nSé perfectamente hasta qué punto ha empeorado respecto al juego que conocí.\nY sé que si hubiese descubierto Paladins mucho más tarde, jamás significaría para mí lo que significa ahora.\nPero no puedo valorar este juego haciendo como si todos esos años nunca existieron.\nPorque existieron.\nY fueron algunos de los mejores años que he tenido jugando a videojuegos.\nPaladins no solamente me entretuvo, me dio un equipo, me dio competición, me dio emoción, personas, historias y momentos que recuerdo y recordaré hasta mi último día...\nMe dio un sitio al que durante mucho tiempo quería volver **cada día.**\nAsí que sí.\nLa nota está descaradamente carrileada por mi experiencia personal.\nPero esta es **mi** review.\nY no podría ser de otra manera.\n9/10 — Sublime"
         ]
