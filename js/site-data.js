@@ -1057,6 +1057,122 @@
         ]
       }
     ]
+  },
+  {
+    "id": "medievil-2",
+    "title": "Medievil 2",
+    "year": "2000",
+    "platform": "PlayStation",
+    "franchise": "MediEvil",
+    "score": 6,
+    "label": "Bueno",
+    "tierOrder": 4,
+    "tierVisible": true,
+    "reviewDate": "01/10/2026",
+    "spoilers": false,
+    "ambientEffect": "cold-rain",
+    "excerpt": "Tema de la pantalla principal de MediEvil 2 que reinterpreta el sonido gótico y caricaturesco de la saga para presentar su nuevo Londres victoriano. Oscuro, misterioso y teatral, mantiene el espíritu del primer juego mientras establece una atmósfera más siniestra.",
+    "review": "Me gustó menos que el primero, la verdad. No me parece un mal juego, pero sí uno bastante menos redondo en general.\n\n**Fortesque me gusta bastante menos aquí**. En el primero me parecía mucho más carismático precisamente porque era un esqueleto que balbuceaba desde dentro de un cubo de basura.\nAquí le dan una personalidad mucho más de payaso y no me convence. Pierde bastante del encanto que tenía antes.\n\nEl movimiento también me parece **ligeramente peor que en MediEvil 1**.\nNo sabría señalar exactamente qué pasa, pero hay algo relacionado con las físicas que termina haciendo que moverse se sienta más torpe e impreciso.\nEl primero ya tenía sus cosas, pero aquí noto todavía más esa sensación de ir con dos banana-boats.\n\nLas armas, en general, también me parecen menos chulas.\nHay menos armas de esas que se te quedan grabadas como míticas. Eso sí, el juego tiene una especie de **Minigun a la que llama “Revólver”**, y eso es bastante estiloso. Una mini-ametralladora es un revólver, sí sí, de toda la vida.\n\nDonde creo que MediEvil 2 pega uno de sus mayores bajones es en los **niveles**.\nEl Museo está bastante guay, pero desde el segundo nivel, Washington, hasta aproximadamente el nivel posterior al combate de boxeo, hay una racha de niveles que me parecen bastante malos.\nY el nivel anterior al combate de boxeo es probablemente el peor del juego. El combate en sí es malo, pero al menos tiene gracia.\nDespués de todo ese tramo el juego mejora bastante.\n\nEl ritmo está okay.\nDura unas **cinco horas**, aproximadamente lo mismo que el primero, pero tiene menos niveles y estos son más largos.\nPersonalmente prefiero muchísimo la estructura del primero: más niveles, pero más cortos. Me parece bastante más dinámica e interesante que estar tanto tiempo metido en una misma fase.\n\n**Los jefes sí me parecen mejores que los del primer juego**.\nEl dinosaurio esqueleto está bastante guay y, sobre todo, **The Demon** me parece un jefe muy chulo.\nEn general recuerdo más los enfrentamientos de este que los del primero.\n\nLa música tampoco decepciona.\nSigue siendo muy buena, aunque tiene un estilo bastante diferente. Temas como **The Ripper, The Demon o The Museum** son ejemplos rápidos de música que me parece muy, muy chula.\n\nLa historia también me parece más interesante que la del primero.\nHan pasado unos **500 años** desde la derrota de Zarok y estamos en el Londres de 1886. El Magnate encuentra el libro de hechizos de Zarok y utiliza su magia para resucitar a los muertos, lo que acaba despertando otra vez a Dan, cuyo cadáver estaba expuesto en un museo.\nA partir de ahí, un profesor y un fantasma reclutan a Dan para recuperar las páginas del libro.\nTambién aparecen personajes como **Kiya**, una especie de princesa egipcia momificada, **Winston**, un fantasma tocapelotas que hace de ayudante; **el profesor Kift**, que básicamente organiza toda la operación contra El Magnate, y el propio **Magnate** que funciona como el nuevo villano principal.\nAdemás, la historia termina metiendo a Jack el Destripador, viajes en el tiempo y demás movidas. Es bastante más elaborada que la del primer juego y tiene más cosas pasando.\n\nLuego están **los finales**, que no los entiendo.\nLos desarrolladores decidieron que, si recoges todos los cálices, obtienes el final que claramente parece el malo: Dan y Kiya usan la máquina del tiempo y acaban encontrándose con una versión monstruosa de El Magnate y te dan a entender que éste se los come.\nEn cambio, si no consigues todos los cálices, Dan y Kiya simplemente regresan juntos al descanso eterno, que parece muchísimo más un final feliz y cerrado.\nHay rumores por ahí de que, de entre todos los bugs que este juego tiene, ese es uno de ellos, los finales intercambiados.\n\n¿Lo rejugaría?\nBueno, probablemente sí. Tampoco es un juego al que no quiera volver nunca, pero tengo claramente **menos ganas de rejugarlo que el primero**.\n\nEn general, MediEvil 2 mejora algunas cosas —los jefes y la historia principalmente—, pero para mí pierde bastante en otras mucho más importantes: Fortesque tiene menos carisma, el movimiento es más torpe, las armas son menos memorables y tiene una racha bastante fea de niveles.\n**6/10 — Bueno.**",
+    "reviewSections": [
+      {
+        "title": "Sensaciones generales",
+        "verdict": false,
+        "paragraphs": [
+          "Me gustó menos que el primero, la verdad. No me parece un mal juego, pero sí uno bastante menos redondo en general."
+        ]
+      },
+      {
+        "title": "Fortesque",
+        "verdict": false,
+        "paragraphs": [
+          "**Fortesque me gusta bastante menos aquí**. En el primero me parecía mucho más carismático precisamente porque era un esqueleto que balbuceaba desde dentro de un cubo de basura.\nAquí le dan una personalidad mucho más de payaso y no me convence. Pierde bastante del encanto que tenía antes."
+        ]
+      },
+      {
+        "title": "Movimiento y físicas",
+        "verdict": false,
+        "paragraphs": [
+          "El movimiento también me parece **ligeramente peor que en MediEvil 1**.\nNo sabría señalar exactamente qué pasa, pero hay algo relacionado con las físicas que termina haciendo que moverse se sienta más torpe e impreciso.\nEl primero ya tenía sus cosas, pero aquí noto todavía más esa sensación de ir con dos banana-boats."
+        ]
+      },
+      {
+        "title": "Armas",
+        "verdict": false,
+        "paragraphs": [
+          "Las armas, en general, también me parecen menos chulas.\nHay menos armas de esas que se te quedan grabadas como míticas. Eso sí, el juego tiene una especie de **Minigun a la que llama “Revólver”**, y eso es bastante estiloso. Una mini-ametralladora es un revólver, sí sí, de toda la vida."
+        ]
+      },
+      {
+        "title": "Niveles",
+        "verdict": false,
+        "paragraphs": [
+          "Donde creo que MediEvil 2 pega uno de sus mayores bajones es en los **niveles**.\nEl Museo está bastante guay, pero desde el segundo nivel, Washington, hasta aproximadamente el nivel posterior al combate de boxeo, hay una racha de niveles que me parecen bastante malos.\nY el nivel anterior al combate de boxeo es probablemente el peor del juego. El combate en sí es malo, pero al menos tiene gracia.\nDespués de todo ese tramo el juego mejora bastante."
+        ]
+      },
+      {
+        "title": "Ritmo y duración",
+        "verdict": false,
+        "paragraphs": [
+          "El ritmo está okay.\nDura unas **cinco horas**, aproximadamente lo mismo que el primero, pero tiene menos niveles y estos son más largos.\nPersonalmente prefiero muchísimo la estructura del primero: más niveles, pero más cortos. Me parece bastante más dinámica e interesante que estar tanto tiempo metido en una misma fase."
+        ]
+      },
+      {
+        "title": "Jefes",
+        "verdict": false,
+        "paragraphs": [
+          "**Los jefes sí me parecen mejores que los del primer juego**.\nEl dinosaurio esqueleto está bastante guay y, sobre todo, **The Demon** me parece un jefe muy chulo.\nEn general recuerdo más los enfrentamientos de este que los del primero."
+        ]
+      },
+      {
+        "title": "Música",
+        "verdict": false,
+        "paragraphs": [
+          "La música tampoco decepciona.\nSigue siendo muy buena, aunque tiene un estilo bastante diferente. Temas como **The Ripper, The Demon o The Museum** son ejemplos rápidos de música que me parece muy, muy chula."
+        ]
+      },
+      {
+        "title": "Historia y personajes",
+        "verdict": false,
+        "paragraphs": [
+          "La historia también me parece más interesante que la del primero.\nHan pasado unos **500 años** desde la derrota de Zarok y estamos en el Londres de 1886. El Magnate encuentra el libro de hechizos de Zarok y utiliza su magia para resucitar a los muertos, lo que acaba despertando otra vez a Dan, cuyo cadáver estaba expuesto en un museo.\nA partir de ahí, un profesor y un fantasma reclutan a Dan para recuperar las páginas del libro.\nTambién aparecen personajes como **Kiya**, una especie de princesa egipcia momificada, **Winston**, un fantasma tocapelotas que hace de ayudante; **el profesor Kift**, que básicamente organiza toda la operación contra El Magnate, y el propio **Magnate** que funciona como el nuevo villano principal.\nAdemás, la historia termina metiendo a Jack el Destripador, viajes en el tiempo y demás movidas. Es bastante más elaborada que la del primer juego y tiene más cosas pasando."
+        ]
+      },
+      {
+        "title": "Los finales",
+        "verdict": false,
+        "paragraphs": [
+          "Luego están **los finales**, que no los entiendo.\nLos desarrolladores decidieron que, si recoges todos los cálices, obtienes el final que claramente parece el malo: Dan y Kiya usan la máquina del tiempo y acaban encontrándose con una versión monstruosa de El Magnate y te dan a entender que éste se los come.\nEn cambio, si no consigues todos los cálices, Dan y Kiya simplemente regresan juntos al descanso eterno, que parece muchísimo más un final feliz y cerrado.\nHay rumores por ahí de que, de entre todos los bugs que este juego tiene, ese es uno de ellos, los finales intercambiados."
+        ]
+      },
+      {
+        "title": "Rejugabilidad",
+        "verdict": false,
+        "paragraphs": [
+          "¿Lo rejugaría?\nBueno, probablemente sí. Tampoco es un juego al que no quiera volver nunca, pero tengo claramente **menos ganas de rejugarlo que el primero**."
+        ]
+      },
+      {
+        "title": "Veredicto final",
+        "verdict": true,
+        "paragraphs": [
+          "En general, MediEvil 2 mejora algunas cosas —los jefes y la historia principalmente—, pero para mí pierde bastante en otras mucho más importantes: Fortesque tiene menos carisma, el movimiento es más torpe, las armas son menos memorables y tiene una racha bastante fea de niveles.\n**6/10 — Bueno.**"
+        ]
+      }
+    ],
+    "music": {
+      "title": "Old London (Title Screen)",
+      "composer": "Andrew Barnabas y Paul Arnold. Los créditos originales de MediEvil 2 atribuyen la banda sonora original a ambos compositores.",
+      "context": "Old London funciona prácticamente como la primera presentación musical de la nueva identidad de MediEvil: sigue siendo MediEvil, pero ahora filtrado por una estética londinense, gótica y decimonónica.",
+      "where": "Suena en la pantalla de título / menú principal del juego, después de las secuencias introductorias.",
+      "sound": "Es una pieza de carácter orquestal, gótico y teatral, con ese tono deliberadamente caricaturesco tan propio de MediEvil.\nNo busca transmitir terror puro. Hay algo retorcido y siniestro en la armonía y en la instrumentación, pero constantemente mantiene ese componente de cuento oscuro y aventura fantástica.\nLa música parece oscilar entre lo amenazante y lo juguetón, algo muy característico de la identidad musical de la saga.",
+      "meaning": "Representa principalmente el nuevo escenario de MediEvil 2: el Londres victoriano resucitado y deformado por lo sobrenatural.\nTambién funciona como puente entre los dos juegos. Musicalmente sigue reconociéndose como MediEvil, pero cambia el ambiente medieval del primero por uno más urbano, victoriano y gótico.\nEsto encaja directamente con lo explicado por sus compositores: querían conservar el estilo del primer juego mientras adoptaban un carácter más oscuro acorde con la nueva ambientación.",
+      "feeling": "Principalmente:\nIntriga + aventura + oscuridad + cierta extravagancia.\nDa la sensación de estar entrando en una especie de película antigua de monstruos o en un cuento de terror victoriano que no se toma completamente en serio a sí mismo.\nNo genera una sensación especialmente opresiva. Más bien prepara al jugador para algo macabro pero divertido.",
+      "intent": "Su función es establecer inmediatamente la identidad de MediEvil 2.\nAntes siquiera de empezar a jugar, comunica:\nEsto sigue siendo MediEvil, pero ya no estamos en Gallowmere.\n\nLa música tiene que introducir Londres, mantener la personalidad musical de la saga y preparar al jugador para una aventura ligeramente más oscura que la anterior.\nEsto último no es simplemente una interpretación: Barnabas y Arnold describieron explícitamente la música de la secuela como estilísticamente coherente con la del primer juego, pero con un tono general aparentemente más oscuro.",
+      "detail": "Funciona especialmente bien porque no abandona la personalidad musical del primer juego para representar Londres.\nPodrían haber convertido la banda sonora simplemente en “música victoriana”, pero mantienen esa mezcla característica de orquesta, fantasía, terror caricaturesco y melodías exageradamente teatrales.\nAsí, la pantalla de título consigue hacer dos cosas a la vez:\nrecordarnos al primer MediEvil y presentarnos inmediatamente el mundo del segundo.\nEs probablemente la característica más importante del tema.",
+      "src": "assets/audio/medievil-2-theme-v5-4-5.mp3"
+    },
+    "cover": "assets/covers/medievil-2-v5-4-5.jpg",
+    "background": "assets/backgrounds/medievil-2-bg-v5-4-5.webp"
   }
 ];
 
