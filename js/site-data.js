@@ -1644,6 +1644,129 @@
     },
     "cover": "assets/covers/paladins-v5-4-2.avif",
     "background": "assets/backgrounds/paladins-bg-v5-4-2.png"
+  },
+  {
+    "id": "apex-legends",
+    "title": "Apex Legends",
+    "year": "2019",
+    "platform": "PC",
+    "franchise": "Titanfall",
+    "score": 9,
+    "label": "Sublime",
+    "tierOrder": 1,
+    "tierVisible": true,
+    "reviewDate": "3/10/2026",
+    "spoilers": false,
+    "ambientEffect": "divine-sparks",
+    "excerpt": "Tema principal épico y futurista que mezcla orquesta, percusión y electrónica para transmitir la sensación de entrar en una competición enorme y peligrosa.",
+    "review": "El movimiento y el control de *Apex Legends* es, para mí, **el mejor que he visto nunca**.\nSi sabes moverte de verdad, la cantidad de opciones que tienes para gestionar cualquier situación únicamente mediante el movimiento es absurda. Es muy difícil sentir que no tienes ninguna salida porque siempre existe alguna posibilidad: reposicionarte, escapar, cerrar distancia, cambiar de altura o simplemente hacer que al rival le cueste muchísimo seguirte.\nY la kinestesia es rica no: **deliciosa**. Caminar, correr, saltar, deslizarse, encadenar wall jumps, strafes, tap strafes, super glides, mantle jumps, high jumps y combinar todas esas cosas entre ellas... **buah**.\nTodo se siente **bsolutamente responsivo**.\n\nEl gunplay mantiene exactamente el mismo nivel: **absoluto**.\nSimplemente coger un arma ya da gusto. Disparar, recargar, cambiar a otra, escucharla, ver sus animaciones... hay tantísimo cariño puesto en estas pequeñas cosas que las armas transmiten una sensación de poder y satisfacción difícilmente comparable con la de otros shooters.\nY después está el feedback.\nAcertar disparos se siente bien. Vaciar un cargador entero sobre alguien se siente bien. Romperle el escudo a un enemigo se siente **increíble**. Noquearlo también...\nEl diseño sonoro, las animaciones y las respuestas visuales trabajan constantemente para hacer que absolutamente todo lo que haces tenga impacto.\nSobre este apartado directamente **no tengo malas palabras. No existen**.\n\nAquí ya baja bastante.\nNingún personaje me parece especialmente chulo. En general me parecen bastante planos y sin demasiada personalidad jugable como para que me importe especialmente ninguno.\n**Horizon** es probablemente la que más divertida me resulta, principalmente gracias a su pasiva y cómo afecta al movimiento. **Lifeline** también me gusta porque permite jugar más rápido: poder ahorrarte el tiempo de revivir manualmente a alguien o depender menos de ciertas acciones lentas, como curarte, hace que todo fluya mejor.\nPero, en general, las leyendas simplemente cumplen, y ya, nada más.**\n**\nY hay otro problema bastante más importante: en determinadas situaciones las habilidades tienen demasiado peso. Hay combates en los que parece que ya no te ha ganado alguien porque haya disparado mejor, sino porque se han acumulado habilidades hasta matarte.\nY en un juego con un gunplay tan bueno, que las habilidades terminen eclipsándolo me parece especialmente contraproducente.\n\nLos combates pueden ser **increíbles o absolutamente asquerosos**.\nDepende completamente de la situación.\nPuedes encontrarte una squad mirándote desde 200 metros con tres snipers mientras tú tienes dos jeringas, cuatro balas y todas esas posibilidades de hacer cosas.\nPero también puedes terminar metido en una pelea en un espacio relativamente cerrado, con ultis de Bangalore y Gibraltar cayendo por todas partes, casas y desniveles para cubrirte, gente moviéndose constantemente y Wingmans, R-99s y Peacekeepers sonando por todos lados.\nY cuando consigues ganar una pelea así...\n**Te sientes como Dios.**\nPocos juegos consiguen producir esos momentos de la misma manera.\nEl problema son las *third parties*. Ganar una pelea, quedarte hecho mierda y que aparezca otro equipo completamente fresco detrás es un coñazo. Y esto se vuelve muchísimo peor por uno de los mayores problemas técnicos del juego: el audio.\n\nA nivel de armas, impactos, escudos y feedback, el sonido es espectacular.\nA nivel de información posicional es **una mierda**.\nLos pasos prácticamente dejan de existir en cuanto hay suficiente ruido alrededor. Si estás disparándote con alguien y aparece otro tío desde un ángulo que no estás viendo, hay muchísimas veces en las que simplemente **no lo vas a escuchar**.\nY te vas a joder.\nEn un juego donde constantemente necesitas saber dónde están varios jugadores diferentes, esto es un problema enorme y suficiente como para quitarte las ganas de seguir jugando.\n\nPara mí, los tres grandes son bastante claros:\n**King's Canyon, World's Edge y Olympus.**\nEspecialmente en sus versiones originales o cercanas a ellas.\nDespués empezaron a llegar nuevos mapas y modificaciones importantes sobre esos tres y, sinceramente, no creo que muchas de esas decisiones hayan mejorado el juego.\nApex ya tenía unos escenarios con un flujo muy claro, y con el tiempo han ido tocando cosas que, como mínimo para mí, funcionaban mejor antes.\n\nAquí existe un problema fundamental: **a mí los Battle Royale nunca me han gustado**.\nNo me gusta depender tanto de la suerte.\nNo me gusta no saber qué arma voy a encontrar. No saber si voy a tener la munición que necesito. No saber si encontraré suficientes curas. No saber si el equipo de al lado va a aterrizar encima de tres armas mientras yo encuentro una puta mierda...\nPara mí, el formato Battle Royale **perjudica al gameplay de Apex**.\nPorque debajo del RNG hay un sistema de movimiento y disparos extraordinario que funcionaría perfectamente en circunstancias mucho más controladas.\nPor eso considero que **Arenas era de lo mejor que tenía el juego**. El modo necesitaba cambios y tenía sus propios problemas, pero eliminaba gran parte de las cosas que menos me gustan del Battle Royale y permitía disfrutar mucho más directamente del combate.\n\nEl matchmaking es **una auténtica PUTA mierda**.\nSin ninguna duda.\nPuedes entrar después de estar tres años sin tocar el juego y encontrarte una partida donde el jugador promedio tiene, con un único personaje, diecisiete veces más horas que tú en *Apex Legends* entero.\nMientras tanto, el juego te pone dos compañeros que mueren en la primera pelea porque se han caído de la silla de ruedas y, en el resto de equipos, aparecen Predators que dedican **19 horas al día exclusivamente a jugar al Apex**.\nLa diferencia entre jugadores dentro de una misma partida puede llegar a ser absurda.\nY a esto hay que añadir smurfs, chetos y controllers, y demás mierdas.\nLo especialmente frustrante es que muchos de estos problemas serían muchísimo menos importantes si el matchmaking simplemente consiguiera ponerte contra gente que juega **más o menos en las mismas condiciones que tú.**\n\nEl ecosistema competitivo también se ha vuelto mucho menos agradable con los años.\nHay una cantidad enorme de jugadores de mando y, además, sigue existiendo el problema de **dispositivos** y **configuraciones** que permiten aprovechar \"**ayudas**\" o **automatizaciones** que ensucian todavía más las partidas.\nA esto se suman los chetos convencionales.\nEl resultado es que ya no sabes si te ha matado alguien jugando como tú, y con 3 naves espaciales instaladas en su ordenador para tener aim assist al 0.8 y no tener recoil.\n\nLa música no tiene una presencia especialmente grande durante las partidas.\nLa poca que hay me parece correcta. **Está bien**, acompaña y cumple su función, pero no es uno de los apartados que definen el juego para mí.\n\nLos modelos de los personajes, las skins, los banners, las insignias y buena parte de los cosméticos me parecen:\n**feos.**\nPero feos, feos, feos **con ganas**.\nNunca ha sido un juego cuyo apartado cosmético me haya generado demasiado interés. Muchas veces miro skins supuestamente importantes y simplemente me parecen una PUTA MIERDA.\nLas reliquias son más irregulares: **algunas son la polla y otras son una mierda**. (Pero al menos las hay que son la polla, que QUÉ MENOS con el dinero que cuestan)...\n\nEntre aproximadamente **2020 y 2023**, Apex me parecía mucho más divertido.\nHabía menos jugadores completamente obsesionados con el juego, menos presencia de ciertas **dinámicas **asociadas al mando, menos sensación de estar rodeado constantemente de smurfs y chetos y, en general, entrar a jugar era bastante más agradable.\nY realmente nada de eso tendría por qué destruir la experiencia si el matchmaking hiciera correctamente su trabajo y de si, simplemente existiera una forma de separar a jugadores con un mando enchufado a su PC o consola con jugadores de teclado y ratón.* (Pero claro, entonces no encontrarías partida nunca si eres de teclado y ratón, porque serías el único pringao).*\nEl problema es entrar después de años sin jugar y que el juego decida que deberías enfrentarte a gente cuya existencia gira alrededor de ganar esa partida, y **da igual** si para ganar tienen que enchufar un CRONUS ZEN, o DOS, lo importante es que tú pierdas.\nAhí deja de ser divertido.\n\nLo curioso de *Apex Legends* es que puedo decir todo esto y seguir considerándolo un juego **sublime**.\nPorque debajo de todos esos problemas hay algo extraordinario.\nEl movimiento. Las techs. Las armas. Los disparos. La kinestesia. El feedback. La libertad que tienes para expresarte mediante las mecánicas.\nY especialmente **lo que el juego es capaz de hacerte sentir cuando todo sale bien**.\nUna buena pelea de Apex donde estás moviéndote bien, acertando disparos, cambiando de posición constantemente, sobreviviendo por centímetros y finalmente ganas puede ser una de las experiencias más satisfactorias que he tenido en un shooter.\nActualmente jugarlo ya no me resulta divertido de manera consistente. Hay demasiadas cosas alrededor del núcleo jugable que terminan jodiendo la experiencia.\n\nApex desde hace ya bastante tiempo tiene unos problemas que eclipsan absolutamente todo lo bueno que tiene el juego.\nPero eso no cambia lo muchísimo que me gustan sus mejores partes ni todo lo que me ha dado durante los años que lo jugué.\nPorque con el núcleo que tiene, **Apex Legends podría ser todavía muchísimo mejor de lo que es**.\n**9/10 — Sublime**",
+    "reviewSections": [
+      {
+        "title": "Movimiento y control",
+        "verdict": false,
+        "paragraphs": [
+          "El movimiento y el control de *Apex Legends* es, para mí, **el mejor que he visto nunca**.\nSi sabes moverte de verdad, la cantidad de opciones que tienes para gestionar cualquier situación únicamente mediante el movimiento es absurda. Es muy difícil sentir que no tienes ninguna salida porque siempre existe alguna posibilidad: reposicionarte, escapar, cerrar distancia, cambiar de altura o simplemente hacer que al rival le cueste muchísimo seguirte.\nY la kinestesia es rica no: **deliciosa**. Caminar, correr, saltar, deslizarse, encadenar wall jumps, strafes, tap strafes, super glides, mantle jumps, high jumps y combinar todas esas cosas entre ellas... **buah**.\nTodo se siente **bsolutamente responsivo**."
+        ]
+      },
+      {
+        "title": "Gunplay y feedback",
+        "verdict": false,
+        "paragraphs": [
+          "El gunplay mantiene exactamente el mismo nivel: **absoluto**.\nSimplemente coger un arma ya da gusto. Disparar, recargar, cambiar a otra, escucharla, ver sus animaciones... hay tantísimo cariño puesto en estas pequeñas cosas que las armas transmiten una sensación de poder y satisfacción difícilmente comparable con la de otros shooters.\nY después está el feedback.\nAcertar disparos se siente bien. Vaciar un cargador entero sobre alguien se siente bien. Romperle el escudo a un enemigo se siente **increíble**. Noquearlo también...\nEl diseño sonoro, las animaciones y las respuestas visuales trabajan constantemente para hacer que absolutamente todo lo que haces tenga impacto.\nSobre este apartado directamente **no tengo malas palabras. No existen**."
+        ]
+      },
+      {
+        "title": "Personajes",
+        "verdict": false,
+        "paragraphs": [
+          "Aquí ya baja bastante.\nNingún personaje me parece especialmente chulo. En general me parecen bastante planos y sin demasiada personalidad jugable como para que me importe especialmente ninguno.\n**Horizon** es probablemente la que más divertida me resulta, principalmente gracias a su pasiva y cómo afecta al movimiento. **Lifeline** también me gusta porque permite jugar más rápido: poder ahorrarte el tiempo de revivir manualmente a alguien o depender menos de ciertas acciones lentas, como curarte, hace que todo fluya mejor.\nPero, en general, las leyendas simplemente cumplen, y ya, nada más.**\n**\nY hay otro problema bastante más importante: en determinadas situaciones las habilidades tienen demasiado peso. Hay combates en los que parece que ya no te ha ganado alguien porque haya disparado mejor, sino porque se han acumulado habilidades hasta matarte.\nY en un juego con un gunplay tan bueno, que las habilidades terminen eclipsándolo me parece especialmente contraproducente."
+        ]
+      },
+      {
+        "title": "Combates",
+        "verdict": false,
+        "paragraphs": [
+          "Los combates pueden ser **increíbles o absolutamente asquerosos**.\nDepende completamente de la situación.\nPuedes encontrarte una squad mirándote desde 200 metros con tres snipers mientras tú tienes dos jeringas, cuatro balas y todas esas posibilidades de hacer cosas.\nPero también puedes terminar metido en una pelea en un espacio relativamente cerrado, con ultis de Bangalore y Gibraltar cayendo por todas partes, casas y desniveles para cubrirte, gente moviéndose constantemente y Wingmans, R-99s y Peacekeepers sonando por todos lados.\nY cuando consigues ganar una pelea así...\n**Te sientes como Dios.**\nPocos juegos consiguen producir esos momentos de la misma manera.\nEl problema son las *third parties*. Ganar una pelea, quedarte hecho mierda y que aparezca otro equipo completamente fresco detrás es un coñazo. Y esto se vuelve muchísimo peor por uno de los mayores problemas técnicos del juego: el audio."
+        ]
+      },
+      {
+        "title": "Audio",
+        "verdict": false,
+        "paragraphs": [
+          "A nivel de armas, impactos, escudos y feedback, el sonido es espectacular.\nA nivel de información posicional es **una mierda**.\nLos pasos prácticamente dejan de existir en cuanto hay suficiente ruido alrededor. Si estás disparándote con alguien y aparece otro tío desde un ángulo que no estás viendo, hay muchísimas veces en las que simplemente **no lo vas a escuchar**.\nY te vas a joder.\nEn un juego donde constantemente necesitas saber dónde están varios jugadores diferentes, esto es un problema enorme y suficiente como para quitarte las ganas de seguir jugando."
+        ]
+      },
+      {
+        "title": "Mapas",
+        "verdict": false,
+        "paragraphs": [
+          "Para mí, los tres grandes son bastante claros:\n**King's Canyon, World's Edge y Olympus.**\nEspecialmente en sus versiones originales o cercanas a ellas.\nDespués empezaron a llegar nuevos mapas y modificaciones importantes sobre esos tres y, sinceramente, no creo que muchas de esas decisiones hayan mejorado el juego.\nApex ya tenía unos escenarios con un flujo muy claro, y con el tiempo han ido tocando cosas que, como mínimo para mí, funcionaban mejor antes."
+        ]
+      },
+      {
+        "title": "Battle Royale",
+        "verdict": false,
+        "paragraphs": [
+          "Aquí existe un problema fundamental: **a mí los Battle Royale nunca me han gustado**.\nNo me gusta depender tanto de la suerte.\nNo me gusta no saber qué arma voy a encontrar. No saber si voy a tener la munición que necesito. No saber si encontraré suficientes curas. No saber si el equipo de al lado va a aterrizar encima de tres armas mientras yo encuentro una puta mierda...\nPara mí, el formato Battle Royale **perjudica al gameplay de Apex**.\nPorque debajo del RNG hay un sistema de movimiento y disparos extraordinario que funcionaría perfectamente en circunstancias mucho más controladas.\nPor eso considero que **Arenas era de lo mejor que tenía el juego**. El modo necesitaba cambios y tenía sus propios problemas, pero eliminaba gran parte de las cosas que menos me gustan del Battle Royale y permitía disfrutar mucho más directamente del combate."
+        ]
+      },
+      {
+        "title": "Matchmaking",
+        "verdict": false,
+        "paragraphs": [
+          "El matchmaking es **una auténtica PUTA mierda**.\nSin ninguna duda.\nPuedes entrar después de estar tres años sin tocar el juego y encontrarte una partida donde el jugador promedio tiene, con un único personaje, diecisiete veces más horas que tú en *Apex Legends* entero.\nMientras tanto, el juego te pone dos compañeros que mueren en la primera pelea porque se han caído de la silla de ruedas y, en el resto de equipos, aparecen Predators que dedican **19 horas al día exclusivamente a jugar al Apex**.\nLa diferencia entre jugadores dentro de una misma partida puede llegar a ser absurda.\nY a esto hay que añadir smurfs, chetos y controllers, y demás mierdas.\nLo especialmente frustrante es que muchos de estos problemas serían muchísimo menos importantes si el matchmaking simplemente consiguiera ponerte contra gente que juega **más o menos en las mismas condiciones que tú.**"
+        ]
+      },
+      {
+        "title": "Mandos, \"ayuditas\", y chetos",
+        "verdict": false,
+        "paragraphs": [
+          "El ecosistema competitivo también se ha vuelto mucho menos agradable con los años.\nHay una cantidad enorme de jugadores de mando y, además, sigue existiendo el problema de **dispositivos** y **configuraciones** que permiten aprovechar \"**ayudas**\" o **automatizaciones** que ensucian todavía más las partidas.\nA esto se suman los chetos convencionales.\nEl resultado es que ya no sabes si te ha matado alguien jugando como tú, y con 3 naves espaciales instaladas en su ordenador para tener aim assist al 0.8 y no tener recoil."
+        ]
+      },
+      {
+        "title": "Música",
+        "verdict": false,
+        "paragraphs": [
+          "La música no tiene una presencia especialmente grande durante las partidas.\nLa poca que hay me parece correcta. **Está bien**, acompaña y cumple su función, pero no es uno de los apartados que definen el juego para mí."
+        ]
+      },
+      {
+        "title": "Dirección artística y cosméticos",
+        "verdict": false,
+        "paragraphs": [
+          "Los modelos de los personajes, las skins, los banners, las insignias y buena parte de los cosméticos me parecen:\n**feos.**\nPero feos, feos, feos **con ganas**.\nNunca ha sido un juego cuyo apartado cosmético me haya generado demasiado interés. Muchas veces miro skins supuestamente importantes y simplemente me parecen una PUTA MIERDA.\nLas reliquias son más irregulares: **algunas son la polla y otras son una mierda**. (Pero al menos las hay que son la polla, que QUÉ MENOS con el dinero que cuestan)..."
+        ]
+      },
+      {
+        "title": "Apex antes y Apex ahora",
+        "verdict": false,
+        "paragraphs": [
+          "Entre aproximadamente **2020 y 2023**, Apex me parecía mucho más divertido.\nHabía menos jugadores completamente obsesionados con el juego, menos presencia de ciertas **dinámicas **asociadas al mando, menos sensación de estar rodeado constantemente de smurfs y chetos y, en general, entrar a jugar era bastante más agradable.\nY realmente nada de eso tendría por qué destruir la experiencia si el matchmaking hiciera correctamente su trabajo y de si, simplemente existiera una forma de separar a jugadores con un mando enchufado a su PC o consola con jugadores de teclado y ratón.* (Pero claro, entonces no encontrarías partida nunca si eres de teclado y ratón, porque serías el único pringao).*\nEl problema es entrar después de años sin jugar y que el juego decida que deberías enfrentarte a gente cuya existencia gira alrededor de ganar esa partida, y **da igual** si para ganar tienen que enchufar un CRONUS ZEN, o DOS, lo importante es que tú pierdas.\nAhí deja de ser divertido."
+        ]
+      },
+      {
+        "title": "Veredicto final",
+        "verdict": true,
+        "paragraphs": [
+          "Lo curioso de *Apex Legends* es que puedo decir todo esto y seguir considerándolo un juego **sublime**.\nPorque debajo de todos esos problemas hay algo extraordinario.\nEl movimiento. Las techs. Las armas. Los disparos. La kinestesia. El feedback. La libertad que tienes para expresarte mediante las mecánicas.\nY especialmente **lo que el juego es capaz de hacerte sentir cuando todo sale bien**.\nUna buena pelea de Apex donde estás moviéndote bien, acertando disparos, cambiando de posición constantemente, sobreviviendo por centímetros y finalmente ganas puede ser una de las experiencias más satisfactorias que he tenido en un shooter.\nActualmente jugarlo ya no me resulta divertido de manera consistente. Hay demasiadas cosas alrededor del núcleo jugable que terminan jodiendo la experiencia.\n\nApex desde hace ya bastante tiempo tiene unos problemas que eclipsan absolutamente todo lo bueno que tiene el juego.\nPero eso no cambia lo muchísimo que me gustan sus mejores partes ni todo lo que me ha dado durante los años que lo jugué.\nPorque con el núcleo que tiene, **Apex Legends podría ser todavía muchísimo mejor de lo que es**.\n**9/10 — Sublime**"
+        ]
+      }
+    ],
+    "music": {
+      "title": "Mix of Themes",
+      "composer": "Stephen Barton. La versión original se publicó el 22 de febrero de 2019 dentro de Apex Legends (Original Soundtrack). Barton figura además como productor; entre los créditos técnicos aparecen Steve Genewick en mezcla, Malcolm Luker y Jamie Luker en mezcla adicional, Gavin Lurssen y Reuben Cohen en mastering, y Nick Spezia en grabación.",
+      "context": "Es el tema principal de Apex Legends y una de las piezas que establece la identidad musical original del juego. El soundtrack inicial de 2019 tenía solo cinco temas principales, todos compuestos por Stephen Barton.",
+      "where": "Funciona como música principal asociada a la presentación y al menú/lobby del juego, y su motivo musical reaparece o se reinterpreta en otros momentos del flujo de partida, especialmente alrededor de el lobby, la preparación y el salto",
+      "sound": "Tiene una base orquestal y electrónica muy contundente, con metales grandes, percusión pesada, cuerdas, sintetizadores y un carácter muy cinematográfico. Suena heroico, agresivo y futurista, pero sin perder cierta sensación de aventura.",
+      "meaning": "Representa bastante bien la idea central de Apex: competición, espectáculo, peligro y grandeza. No parece música de guerra pura, sino música de “entrar y demostrar quién eres\".",
+      "feeling": "Da sensación de anticipación, poder y épica. Tiene ese punto de “algo grande va a pasar” que encaja especialmente bien antes de entrar en partida.",
+      "intent": "Su función principal es darle al juego una identidad reconocible desde el primer momento. El tema establece un motivo musical que después puede reutilizarse en distintas variantes para selección de personaje, preparación, salto o victoria, ayudando a que todo forme parte del mismo lenguaje musical. El álbum original, de hecho, separa esas fases en piezas como Preparing The Arena, Choose Your Legend, You Are The Jumpmaster y Victory & Lobby Redux.",
+      "detail": "Funciona porque combina muy bien escala orquestal con sonido tecnológico. Los metales y la percusión le dan peso y heroicidad, mientras que la electrónica evita que suene como una banda sonora genérica. Además, su motivo es suficientemente simple y reconocible como para poder transformarse según el momento sin perder identidad.",
+      "src": "assets/audio/apex-legends-theme-v5-4-6.mp3"
+    },
+    "cover": "assets/covers/apex-legends-v5-4-6.jpg",
+    "background": "assets/backgrounds/apex-legends-bg-v5-4-6.png"
   }
 ];
 
