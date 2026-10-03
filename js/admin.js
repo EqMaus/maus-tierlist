@@ -118,6 +118,7 @@
   const excerptCount = $('excerptCount');
   const reviewCount = $('reviewCount');
   const tierEditor = $('tierEditor');
+  const addTierButton = $('addTierButton');
   const dirtyBadge = $('dirtyBadge');
   const discardButton = $('discardButton');
   const publishButton = $('publishButton');
@@ -1420,13 +1421,74 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     fieldScore.innerHTML = scale.map((row) => `<option value="${esc(row.score)}">${esc(row.score)} — ${esc(row.label)}</option>`).join('');
   }
 
+  const TIER_FONT_OPTIONS = [
+    ['default', 'Predeterminada'],
+    ['serif', 'Serif clásica'],
+    ['sans', 'Sans moderna'],
+    ['rounded', 'Redondeada'],
+    ['mono', 'Monoespaciada']
+  ];
+
+  function tierFontValue(row) {
+    return TIER_FONT_OPTIONS.some(([value]) => value === row.fontFamily) ? row.fontFamily : 'default';
+  }
+
+  function normalizeTierOrdersForScore(score) {
+    const items = games
+      .filter((game) => Number(game.score) === Number(score))
+      .sort((a, b) => ((a.tierOrder ?? 999) - (b.tierOrder ?? 999)) || String(a.title).localeCompare(String(b.title), 'es'));
+    items.forEach((game, index) => { game.tierOrder = index; });
+  }
+
+  function refreshTierDependentUi() {
+    renderScoreOptions();
+    renderTierEditor();
+    renderGameList();
+    const game = selectedGame();
+    if (game) {
+      fieldScore.value = String(game.score);
+      fieldLabel.value = tierForScore(game.score)?.label || '';
+      renderReviewPreview(game);
+    }
+    updateDirtyUi();
+    clearNotice();
+  }
+
+  function tierEditorPreviewStyle(row) {
+    const size = Math.max(12, Math.min(42, Number(row.fontSize) || 20));
+    const weight = row.bold === true ? 900 : row.bold === false ? 500 : 850;
+    const style = row.italic === true ? 'italic' : 'normal';
+    const color = row.textColor || '#101318';
+    return `--tier-preview:${esc(row.color || '#888888')};--tier-preview-text:${esc(color)};--tier-preview-size:${size}px;--tier-preview-weight:${weight};--tier-preview-style:${style}`;
+  }
+
   function renderTierEditor() {
     tierEditor.innerHTML = scale.map((row, index) => `
-      <label class="tier-row">
-        <span class="tier-score">${esc(row.score)}</span>
-        <input type="text" data-tier-index="${index}" value="${esc(row.label)}" aria-label="Nombre del tier ${esc(row.score)}">
-        <input type="color" data-tier-color="${index}" value="${esc(row.color)}" aria-label="Color del tier ${esc(row.score)}">
-      </label>`).join('');
+      <section class="tier-edit-card" data-tier-card="${index}">
+        <div class="tier-edit-head">
+          <div class="tier-edit-preview tier-editor-font-${esc(tierFontValue(row))}" style="${tierEditorPreviewStyle(row)}">
+            <strong>${esc(row.label || 'Sin nombre')}</strong><span>${esc(row.score)}</span>
+          </div>
+          <div class="tier-edit-move" aria-label="Reordenar tier ${esc(row.label)}">
+            <button type="button" class="icon-button" data-tier-move="up" data-tier-index="${index}" ${index === 0 ? 'disabled' : ''} title="Subir tier">↑</button>
+            <button type="button" class="icon-button" data-tier-move="down" data-tier-index="${index}" ${index === scale.length - 1 ? 'disabled' : ''} title="Bajar tier">↓</button>
+            <button type="button" class="icon-button danger" data-tier-delete="${index}" title="Eliminar tier">✕</button>
+          </div>
+        </div>
+        <div class="tier-edit-grid">
+          <label class="field"><span>Nota</span><input type="number" step="0.1" data-tier-score="${index}" value="${esc(row.score)}"></label>
+          <label class="field tier-name-field"><span>Nombre</span><input type="text" data-tier-index="${index}" value="${esc(row.label)}" aria-label="Nombre del tier ${esc(row.score)}"></label>
+          <label class="field"><span>Fondo</span><input type="color" data-tier-color="${index}" value="${esc(row.color || '#888888')}" aria-label="Color del tier ${esc(row.score)}"></label>
+          <label class="field"><span>Texto</span><input type="color" data-tier-text-color="${index}" value="${esc(row.textColor || '#101318')}" aria-label="Color del texto del tier ${esc(row.score)}"></label>
+          <label class="field"><span>Tipografía</span><select data-tier-font="${index}">${TIER_FONT_OPTIONS.map(([value,label]) => `<option value="${value}" ${tierFontValue(row) === value ? 'selected' : ''}>${label}</option>`).join('')}</select></label>
+          <label class="field"><span>Tamaño</span><input type="number" min="12" max="42" step="1" data-tier-size="${index}" value="${esc(Number(row.fontSize) || 20)}"></label>
+          <label class="field"><span>Alineación</span><select data-tier-align="${index}">${['left','center','right'].map(value => `<option value="${value}" ${(row.align || 'center') === value ? 'selected' : ''}>${value === 'left' ? 'Izquierda' : value === 'right' ? 'Derecha' : 'Centro'}</option>`).join('')}</select></label>
+          <div class="tier-style-toggles">
+            <button type="button" class="format-button ${row.bold === true ? 'is-active' : ''}" data-tier-bold="${index}" aria-pressed="${row.bold === true}"><strong>B</strong></button>
+            <button type="button" class="format-button ${row.italic === true ? 'is-active' : ''}" data-tier-italic="${index}" aria-pressed="${row.italic === true}"><em>I</em></button>
+          </div>
+        </div>
+      </section>`).join('');
   }
 
   function renderCatalogControls() {
@@ -1648,6 +1710,8 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     if (!row) return;
     const label = input.value.trim();
     row.label = label;
+    const previewLabel = tierEditor.querySelector(`[data-tier-card="${index}"] .tier-edit-preview strong`);
+    if (previewLabel) previewLabel.textContent = label || 'Sin nombre';
     games.forEach((game) => {
       if (Number(game.score) === Number(row.score)) game.label = label;
     });
@@ -1662,8 +1726,104 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     clearNotice();
   }
 
+  function updateTierEditorCardPreview(index) {
+    const row = scale[index];
+    const card = tierEditor.querySelector(`[data-tier-card="${index}"]`);
+    const preview = card?.querySelector('.tier-edit-preview');
+    if (!row || !preview) return;
+    const size = Math.max(12, Math.min(42, Number(row.fontSize) || 20));
+    preview.style.setProperty('--tier-preview', row.color || '#888888');
+    preview.style.setProperty('--tier-preview-text', row.textColor || '#101318');
+    preview.style.setProperty('--tier-preview-size', size + 'px');
+    preview.style.setProperty('--tier-preview-weight', row.bold === true ? '900' : row.bold === false ? '500' : '850');
+    preview.style.setProperty('--tier-preview-style', row.italic === true ? 'italic' : 'normal');
+    preview.classList.remove('tier-editor-font-default','tier-editor-font-serif','tier-editor-font-sans','tier-editor-font-rounded','tier-editor-font-mono');
+    preview.classList.add('tier-editor-font-' + tierFontValue(row));
+    preview.style.textAlign = ['left','center','right'].includes(row.align) ? row.align : 'center';
+  }
+
+  function syncTierProperty(target, refresh = true) {
+    const dataKey = ['tierColor','tierTextColor','tierFont','tierSize','tierAlign','tierScore'].find((key) => target.dataset[key] !== undefined);
+    if (!dataKey) return false;
+    const index = Number(target.dataset[dataKey]);
+    const row = scale[index];
+    if (!row) return true;
+
+    if (dataKey === 'tierColor') row.color = target.value;
+    else if (dataKey === 'tierTextColor') row.textColor = target.value;
+    else if (dataKey === 'tierFont') row.fontFamily = target.value;
+    else if (dataKey === 'tierSize') row.fontSize = Math.max(12, Math.min(42, Number(target.value) || 20));
+    else if (dataKey === 'tierAlign') row.align = ['left','center','right'].includes(target.value) ? target.value : 'center';
+    else if (dataKey === 'tierScore') {
+      if (!refresh) return true;
+      const previous = Number(row.score);
+      const next = Number(target.value);
+      if (!Number.isFinite(next) || scale.some((item, itemIndex) => itemIndex !== index && Number(item.score) === next)) {
+        target.value = String(previous);
+        showNotice('Cada tier necesita una nota numérica única.', true);
+        return true;
+      }
+      row.score = next;
+      games.forEach((game) => { if (Number(game.score) === previous) game.score = next; });
+    }
+
+    if (refresh) refreshTierDependentUi();
+    else { updateTierEditorCardPreview(index); renderReviewPreview(); updateDirtyUi(); clearNotice(); }
+    return true;
+  }
+
+  function createTier() {
+    const rawScore = prompt('Nota del nuevo tier (debe ser única):', '5.5');
+    if (rawScore === null) return;
+    const score = Number(String(rawScore).replace(',', '.'));
+    if (!Number.isFinite(score) || scale.some((row) => Number(row.score) === score)) {
+      showNotice('La nota debe ser un número y no puede repetirse.', true);
+      return;
+    }
+    const rawLabel = prompt('Nombre del nuevo tier:', 'Nuevo tier');
+    if (rawLabel === null) return;
+    const label = rawLabel.trim() || 'Nuevo tier';
+    const insertAt = scale.findIndex((row) => Number(row.score) < score);
+    const row = { score, label, tone: 'default', color: '#9aa4ae', textColor: '#101318', fontFamily: 'default', fontSize: 20, bold: true, italic: false, align: 'center' };
+    scale.splice(insertAt === -1 ? scale.length : insertAt, 0, row);
+    refreshTierDependentUi();
+  }
+
+  function deleteTier(index) {
+    const row = scale[index];
+    if (!row || scale.length <= 1) {
+      showNotice('Debe existir al menos un tier.', true);
+      return;
+    }
+    const affected = games.filter((game) => Number(game.score) === Number(row.score));
+    const remaining = scale.filter((_, itemIndex) => itemIndex !== index);
+    const fallback = remaining.slice().sort((a, b) => Math.abs(Number(a.score) - Number(row.score)) - Math.abs(Number(b.score) - Number(row.score)) || Number(b.score) - Number(a.score))[0];
+    const detail = affected.length ? `\n\n${affected.length} juego(s) están en este tier. Se moverán a “${fallback.label}” (${fallback.score}). No se eliminará ningún juego.` : '';
+    if (!confirm(`¿Eliminar el tier “${row.label}” (${row.score})?${detail}`)) return;
+    scale.splice(index, 1);
+    affected.forEach((game) => { game.score = fallback.score; game.label = fallback.label; game.tierOrder = 999; });
+    normalizeTierOrdersForScore(fallback.score);
+    refreshTierDependentUi();
+  }
+
+  function moveTier(index, direction) {
+    const target = direction === 'up' ? index - 1 : index + 1;
+    if (index < 0 || target < 0 || index >= scale.length || target >= scale.length) return;
+    [scale[index], scale[target]] = [scale[target], scale[index]];
+    refreshTierDependentUi();
+  }
+
   function validateData() {
     contentEditor.validate();
+    if (!Array.isArray(scale) || !scale.length) throw new Error('Debe existir al menos un tier.');
+    const tierScores = new Set();
+    for (const row of scale) {
+      const score = Number(row.score);
+      if (!Number.isFinite(score) || tierScores.has(score)) throw new Error(`Nota de tier inválida o duplicada: ${row.score}`);
+      if (!String(row.label || '').trim()) throw new Error(`El tier ${row.score} necesita un nombre.`);
+      if (!/^#[0-9a-f]{6}$/i.test(String(row.color || ''))) throw new Error(`El color del tier ${row.label} no es válido.`);
+      tierScores.add(score);
+    }
     const ids = new Set();
     for (const game of games) {
       if (!game.id || ids.has(game.id)) throw new Error(`ID inválido o duplicado: ${game.id || '(vacío)'}`);
@@ -2059,10 +2219,23 @@ const ADMIN_CURATED_REVIEW_SPECS = {
   });
 
   tierEditor.addEventListener('input', event => {
-    if (event.target.dataset.tierColor === undefined) return;
-    scale[Number(event.target.dataset.tierColor)].color = event.target.value;
-    renderReviewPreview(); updateDirtyUi();
+    if (event.target.matches('[data-tier-index]')) { syncTierLabel(event.target); return; }
+    if (event.target.matches('[data-tier-color],[data-tier-text-color],[data-tier-size]')) syncTierProperty(event.target, false);
   });
+  tierEditor.addEventListener('change', event => {
+    syncTierProperty(event.target, true);
+  });
+  tierEditor.addEventListener('click', event => {
+    const move = event.target.closest('[data-tier-move]');
+    if (move) { moveTier(Number(move.dataset.tierIndex), move.dataset.tierMove); return; }
+    const remove = event.target.closest('[data-tier-delete]');
+    if (remove) { deleteTier(Number(remove.dataset.tierDelete)); return; }
+    const bold = event.target.closest('[data-tier-bold]');
+    if (bold) { const row = scale[Number(bold.dataset.tierBold)]; if (row) { row.bold = row.bold !== true; refreshTierDependentUi(); } return; }
+    const italic = event.target.closest('[data-tier-italic]');
+    if (italic) { const row = scale[Number(italic.dataset.tierItalic)]; if (row) { row.italic = row.italic !== true; refreshTierDependentUi(); } }
+  });
+  addTierButton?.addEventListener('click', createTier);
   $('deleteGameButton').addEventListener('click', () => {
     const game = selectedGame();
     if (!game || !confirm('¿Eliminar «' + game.title + '»? Se aplicará cuando publiques. Los archivos del juego se conservarán.')) return;
@@ -2090,7 +2263,6 @@ const ADMIN_CURATED_REVIEW_SPECS = {
 
   gameForm.addEventListener('input', (event) => {
     if (event.target.matches('[data-field]')) syncFormField(event.target);
-    if (event.target.matches('[data-tier-index]')) syncTierLabel(event.target);
     if (event.target.matches('[data-music-field]')) syncMusicField(event.target);
   });
   gameForm.addEventListener('change', (event) => {

@@ -8,7 +8,7 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://api.github.com https://maus-huellas.enriquegonzalvezastiz.workers.dev; img-src 'self' data: blob: https://avatars.githubusercontent.com; media-src 'self' blob:; style-src 'self'; script-src 'self'; base-uri 'self'; form-action 'none';">
   <title>Editor privado · Tier List de Maus</title>
   <link rel="stylesheet" href="css/review-shared.css?v=5.3.0">
-  <link rel="stylesheet" href="css/admin.css?v=5.3.5">
+  <link rel="stylesheet" href="css/admin.css?v=5.3.6">
   <link rel="stylesheet" href="css/content-editor.css?v=5.3.0">
 </head>
 <body>
@@ -386,9 +386,12 @@
             <div class="form-card-head">
               <div>
                 <span class="eyebrow">ESCALA</span>
-                <h2>Nombres de los tiers</h2>
+                <h2>Editar tiers</h2>
               </div>
-              <span class="muted-note">Cambiar un nombre actualiza todos los juegos de esa nota.</span>
+              <div class="tier-editor-actions">
+                <span class="muted-note">Los cambios reorganizan automáticamente toda la tier list.</span>
+                <button id="addTierButton" class="ghost-button" type="button">＋ Crear tier</button>
+              </div>
             </div>
             <div id="tierEditor" class="tier-editor"></div>
           </section>
@@ -430,7 +433,7 @@
   <script src="js/review-renderer.js?v=5.3.0"></script>
   <script src="js/content-model.js?v=5.3.0"></script>
   <script src="js/content-editor.js?v=5.3.0"></script>
-  <script src="js/admin.js?v=5.3.0"></script>
+  <script src="js/admin.js?v=5.3.6"></script>
   <script src="js/huellas-admin.js?v=5.3.5"></script>
 </body>
 </html>

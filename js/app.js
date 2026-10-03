@@ -877,6 +877,29 @@
     return String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
   }
 
+  function tierFontClass(row) {
+    const value = String(row?.fontFamily || 'default');
+    return ['serif','sans','rounded','mono'].includes(value) ? ` tier-custom-font-${value}` : '';
+  }
+
+  function tierLabelStyle(row) {
+    const css = [];
+    if (/^#[0-9a-f]{6}$/i.test(String(row?.textColor || ''))) css.push(`color:${row.textColor}`);
+    const size = Number(row?.fontSize);
+    if (Number.isFinite(size)) css.push(`font-size:${Math.max(12, Math.min(42, size))}px`);
+    if (row?.bold === true) css.push('font-weight:900');
+    else if (row?.bold === false) css.push('font-weight:500');
+    if (row?.italic === true) css.push('font-style:italic');
+    else if (row?.italic === false && row?.fontFamily) css.push('font-style:normal');
+    return css.length ? ` style=\"${css.join(';')}\"` : '';
+  }
+
+  function tierLabelContainerStyle(row) {
+    const align = ['left','center','right'].includes(row?.align) ? row.align : 'center';
+    const items = align === 'left' ? 'flex-start' : align === 'right' ? 'flex-end' : 'center';
+    return `--tier:${esc(row?.color || '#888888')};text-align:${align};align-items:${items}`;
+  }
+
   function formatTime(seconds) {
     if (!Number.isFinite(seconds) || seconds < 0) return '0:00';
     return `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`;
@@ -2238,8 +2261,8 @@
       <div><strong>${esc(topScore)}/10</strong><span>NOTA MÁS ALTA</span></div>`;
     presentationTiers.innerHTML = rows.length ? rows.map((row) => `
       <section class="presentation-tier" style="--tier:${esc(row.color)}">
-        <div class="presentation-tier-label">
-          <strong class="tier-font-${esc(row.tone)}">${esc(row.label)}</strong>
+        <div class="presentation-tier-label" style="text-align:${['left','center','right'].includes(row.align) ? row.align : 'center'}">
+          <strong class="tier-font-${esc(row.tone)}${tierFontClass(row)}"${tierLabelStyle(row)}>${esc(row.label)}</strong>
           <span>${esc(row.score)}/10</span>
         </div>
         <div class="presentation-tier-games">
@@ -2383,7 +2406,7 @@
     const normalized = normalizeCatalog(catalog);
     const isOnline = normalized === 'online';
     const ranked = visibleTierGames(normalized);
-    const rows = scale.filter((row) => Number(row.score) >= 3);
+    const rows = scale;
     const topScore = ranked.length ? Math.max(...ranked.map((game) => Number(game.score))) : 0;
 
     const prefix = isOnline ? 'online' : 'offline';
@@ -2421,7 +2444,7 @@
       <div class="tier-list">${rows.map((row) => {
         const tierGames = ranked.filter((game) => Number(game.score) === Number(row.score)).sort((a, b) => ((a.tierOrder ?? 999) - (b.tierOrder ?? 999)) || a.title.localeCompare(b.title, 'es'));
         return `<section class="tier-row" style="--tier:${esc(row.color)}">
-          <div class="tier-label"><strong class="tier-font-${esc(row.tone)}" ${editMode && !isOnline ? `contenteditable="true" spellcheck="true" data-edit-tier-score="${esc(row.score)}"` : ''}>${esc(row.label)}</strong><span>${esc(row.score)}</span></div>
+          <div class="tier-label" style="${tierLabelContainerStyle(row)}"><strong class="tier-font-${esc(row.tone)}${tierFontClass(row)}"${tierLabelStyle(row)} ${editMode && !isOnline ? `contenteditable="true" spellcheck="true" data-edit-tier-score="${esc(row.score)}"` : ''}>${esc(row.label)}</strong><span>${esc(row.score)}</span></div>
           <div class="tier-games">${tierGames.length ? tierGames.map((game, index) => tierCard(game, index, row)).join('') : `<div class="tier-empty">${isOnline ? 'Sin juegos online todavía' : 'Sin juegos todavía'}</div>`}</div>
         </section>`;
       }).join('')}</div>
