@@ -1817,13 +1817,13 @@
     "score": 6,
     "label": "Bueno",
     "tone": "good",
-    "color": "#74f37c"
+    "color": "#58fd63"
   },
   {
     "score": 5.5,
     "label": "Decente+",
     "tone": "default",
-    "color": "#4bd600",
+    "color": "#66e981",
     "textColor": "#101318",
     "fontFamily": "default",
     "fontSize": 20,
@@ -1835,7 +1835,7 @@
     "score": 5,
     "label": "Decente",
     "tone": "decent",
-    "color": "#66e981"
+    "color": "#4bd600"
   },
   {
     "score": 4,
