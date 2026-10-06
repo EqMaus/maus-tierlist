@@ -302,28 +302,28 @@
         ]
       },
       {
-        "title": "Música y sonido",
+        "title": "Boss final, música y doblaje",
         "verdict": false,
         "paragraphs": [
           "Y el boss final es **la mayor mierda** de la saga, aunque gran parte de la culpa es la dificultad a la que lo he jugado, que convierte la batalla en algo que, simplemente, te quita todas tus opciones para que sea injusto y no tengas mucho que hacer. La música es **GOD**, para variar. La actuación de voz es normalita, algunas partes mejor dobladas que otras... Es inconsistente."
         ]
       },
       {
-        "title": "Jugabilidad y combate",
+        "title": "Exploración, secretos y dificultad",
         "verdict": false,
         "paragraphs": [
           "Los cofres secretos de este juego son mejores que los del 3 pero peores que los del 2. Muy fácil llegar con toda la vida y toda la magia (Y necesario en el modo Dios si no quieres perder. Especialmente lo de la magia). El feedback del juego es bueno, cumple genial. Ninguna queja. Y luego, el modo Dios (Es el más difícil), me ha **decepcionado**. Ha sido sin duda el más fácil de los 3."
         ]
       },
       {
-        "title": "Historia y personajes",
+        "title": "Dificultad",
         "verdict": false,
         "paragraphs": [
           "No me ha costado NADA más fuera del boss final (Por injusto) y ya. Los orbes verdes curan demasiado, los azules dan demasiada magia, y hay demasiados orbes rojos en general para mejorar todo lo que necesites. Muy mal ahí, es el que menos reto me ha supuesto. Aún con eso, lo he disfrutado."
         ]
       },
       {
-        "title": "Jugabilidad y combate",
+        "title": "Dificultad y puzzles",
         "verdict": false,
         "paragraphs": [
           "También decir que los enemigos quitan muy poca vida a exepción de un par de bosses, lo cual, si vienes de los otros 2 donde un golpe te pavimentaba la puta cabeza contra la mesa, pues se siente excesivamente sencillo. Ah, y este juego tiene los mejores puzzles de la trilogía, eso es importante para mí. Y también tiene las mejores presentaciones de... \"Sucesos\" en el juego, también. La música con la que te presentan ciertas cosas, es super buena, además."
