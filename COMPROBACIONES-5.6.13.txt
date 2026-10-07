@@ -1,0 +1,5 @@
+v5.6.13
+- Base: v5.6.12 de GitHub reconstruida sobre la copia local estable.
+- Navegación editorial anterior/siguiente al final de las reviews, con portada, nota y tier.
+- Breadcrumbs en reviews y fichas de Fonoteca.
+- No se añadieron buscador, filtros, atajos, modo lectura ni otras mejoras.

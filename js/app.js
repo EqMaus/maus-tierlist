@@ -2344,7 +2344,14 @@
     const cover = coverSrc(game);
 
     app.innerHTML = `<div class="page game-page">
-      <div class="detail-top"><button class="back-button" type="button" data-go="${catalogHome(catalog)}">← Volver a la tier list ${isOnline ? 'online' : 'offline'}</button><span class="eyebrow">${rankingMode ? `${isOnline ? 'ONLINE' : 'OFFLINE'} · RANKING · LECTURA EN ORDEN` : `${isOnline ? 'ONLINE' : 'OFFLINE'} · REVIEW PERSONAL`}</span></div>
+      <div class="detail-top">
+        <nav class="collection-breadcrumbs" aria-label="Ruta de navegación">
+          <span>COLECCIÓN</span><i aria-hidden="true">/</i>
+          <button type="button" data-go="${catalogHome(catalog)}">${isOnline ? 'ONLINE' : 'OFFLINE'}</button><i aria-hidden="true">/</i>
+          <strong>${esc(game.title)}</strong>
+        </nav>
+        <span class="eyebrow">${rankingMode ? `${isOnline ? 'ONLINE' : 'OFFLINE'} · RANKING · LECTURA EN ORDEN` : `${isOnline ? 'ONLINE' : 'OFFLINE'} · REVIEW PERSONAL`}</span>
+      </div>
       <section class="detail-hero review-editorial-hero" style="--tier:${esc(tier.color)}">
         ${cover ? `<div class="detail-cover-frame"><img class="detail-cover" src="${esc(cover)}" alt="Portada de ${esc(game.title)}"><span>${String(tierIndex + 1).padStart(2,'0')}</span></div>` : ''}
         <div class="detail-hero-copy">
@@ -2442,15 +2449,33 @@
     window.addEventListener('resize', scheduleUpdate, { passive: true, signal: reviewIndexAbort.signal });
   }
 
+  function journeyPreview(game, direction, attrName) {
+    if (!game) return '';
+    const tier = tierInfo(game.score);
+    const cover = coverSrc(game);
+    const isNext = direction === 'next';
+    return `<button class="journey-link ${isNext ? 'journey-link-next' : 'journey-link-prev'}" type="button" ${attrName}="${esc(game.id)}" style="--journey-tier:${esc(tier.color)}">
+      <span class="journey-direction">${isNext ? 'SIGUIENTE EN EL RANKING →' : '← ANTERIOR EN EL RANKING'}</span>
+      <div class="journey-preview">
+        ${cover ? `<img src="${esc(cover)}" alt="" loading="lazy">` : `<span class="journey-cover-fallback" aria-hidden="true">${esc(game.title.slice(0,1))}</span>`}
+        <div class="journey-preview-copy">
+          <small>${esc(game.score)} · ${esc(tier.label)}</small>
+          <strong>${esc(game.title)}</strong>
+          <em>${isNext ? 'Continuar la lectura' : 'Volver a la anterior'}</em>
+        </div>
+      </div>
+    </button>`;
+  }
+
   function reviewJourneyNav(previous, current, next, rankingMode) {
     const prevAttr = rankingMode ? 'data-ranking-open' : 'data-open-game';
     const nextAttr = rankingMode ? 'data-ranking-open' : 'data-open-game';
-    return `<nav class="review-journey-nav" aria-label="Navegación entre reviews">
-      <div class="review-journey-head"><span>SEGUIR RECORRIENDO</span><small>Ordenado según la tier list actual</small></div>
+    return `<nav class="review-journey-nav review-journey-editorial" aria-label="Navegación entre reviews">
+      <div class="review-journey-head"><span>CONTINUAR POR LA COLECCIÓN</span><small>Ordenado según la tier list actual</small></div>
       <div class="review-journey-links">
-        ${previous ? `<button class="journey-link journey-link-prev" type="button" ${prevAttr}="${esc(previous.id)}"><span>← ANTERIOR</span><strong>${esc(previous.title)}</strong><small>${esc(previous.score)}/10</small></button>` : `<span class="journey-edge">Estás en el primer juego del ranking.</span>`}
-        <div class="journey-current"><small>AHORA</small><strong>${esc(current.title)}</strong></div>
-        ${next ? `<button class="journey-link journey-link-next" type="button" ${nextAttr}="${esc(next.id)}"><span>SIGUIENTE →</span><strong>${esc(next.title)}</strong><small>${esc(next.score)}/10</small></button>` : `<span class="journey-edge journey-edge-end">Has llegado al final del ranking.</span>`}
+        ${previous ? journeyPreview(previous, 'prev', prevAttr) : `<span class="journey-edge"><small>INICIO DEL RANKING</small>Esta es la primera review de la colección.</span>`}
+        <div class="journey-current"><small>AHORA</small><strong>${esc(current.title)}</strong><span>${esc(current.score)}/10</span></div>
+        ${next ? journeyPreview(next, 'next', nextAttr) : `<span class="journey-edge journey-edge-end"><small>FINAL DEL RANKING</small>Has llegado a la última review.</span>`}
       </div>
     </nav>`;
   }

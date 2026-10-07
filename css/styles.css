@@ -3462,3 +3462,40 @@ body:not(.music-space) .review-card-head h2{font-family:Georgia,'Times New Roman
 @media(prefers-reduced-motion:reduce){
   .app-shell,.app-shell.is-route-leaving,.app-shell.is-route-entering,body:not(.music-space) .page,body:not(.music-space) .tier-row,body:not(.music-space) .tier-cover,body:not(.music-space) .tier-card::after{animation:none!important;transition:none!important;transform:none!important;filter:none!important}
 }
+
+
+/* ============================================================
+   v5.6.13 · NAVEGACIÓN EDITORIAL + BREADCRUMBS
+   ============================================================ */
+.collection-breadcrumbs{display:flex;align-items:center;min-width:0;gap:9px;color:#77736b;font-family:Arial,Helvetica,sans-serif;font-size:.61rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+.collection-breadcrumbs i{color:rgba(218,207,186,.26);font-style:normal;font-weight:400}
+.collection-breadcrumbs button{appearance:none;border:0;background:transparent;padding:3px 0;color:#a7a094;font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer}
+.collection-breadcrumbs button:hover{color:#eee7db}
+.collection-breadcrumbs strong{min-width:0;max-width:42vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:color-mix(in srgb,var(--accent) 32%,#c9b991);font-weight:850}
+.review-journey-editorial{margin-top:34px;padding:24px 0 0!important;border:0!important;border-top:1px solid var(--gentle-line)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+.review-journey-editorial .review-journey-head{margin-bottom:17px;padding:0}
+.review-journey-editorial .review-journey-head>span{color:color-mix(in srgb,var(--accent) 36%,var(--gentle-brass));font-size:.61rem;letter-spacing:.19em}
+.review-journey-editorial .review-journey-head>small{color:#77736b}
+.review-journey-editorial .review-journey-links{grid-template-columns:minmax(0,1fr) 116px minmax(0,1fr);gap:14px}
+.review-journey-editorial .journey-link{min-height:138px;padding:15px 16px;border:1px solid var(--gentle-line);border-radius:2px;background:linear-gradient(145deg,rgba(255,255,255,.018),rgba(255,255,255,.006));box-shadow:none;overflow:hidden}
+.review-journey-editorial .journey-link::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--journey-tier,#999);opacity:.45;transform:scaleX(.22);transform-origin:left;transition:transform .22s ease,opacity .22s ease}
+.review-journey-editorial .journey-link-next::after{transform-origin:right}
+.review-journey-editorial .journey-link:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--journey-tier,#999) 30%,var(--gentle-line));background:rgba(255,255,255,.024)}
+.review-journey-editorial .journey-link:hover::after{transform:scaleX(1);opacity:.78}
+.review-journey-editorial .journey-direction{display:block;color:#878177!important;font-size:.56rem!important;font-weight:850!important;letter-spacing:.15em!important}
+.review-journey-editorial .journey-preview{display:grid;grid-template-columns:62px minmax(0,1fr);gap:14px;align-items:center;margin-top:11px}
+.review-journey-editorial .journey-link-next .journey-preview{grid-template-columns:minmax(0,1fr) 62px}
+.review-journey-editorial .journey-link-next .journey-preview img,.review-journey-editorial .journey-link-next .journey-cover-fallback{grid-column:2;grid-row:1}
+.review-journey-editorial .journey-link-next .journey-preview-copy{grid-column:1;grid-row:1;text-align:right}
+.review-journey-editorial .journey-preview img,.review-journey-editorial .journey-cover-fallback{width:62px;height:84px;object-fit:cover;border:1px solid rgba(255,255,255,.07);border-radius:1px;box-shadow:0 8px 22px rgba(0,0,0,.24)}
+.review-journey-editorial .journey-cover-fallback{display:grid;place-items:center;background:#151817;color:#9d9689;font:500 1.4rem Georgia,serif}
+.review-journey-editorial .journey-preview-copy{min-width:0}
+.review-journey-editorial .journey-preview-copy small{display:block;margin:0 0 5px;color:color-mix(in srgb,var(--journey-tier,#aaa) 60%,#bdb3a0);font-size:.61rem}
+.review-journey-editorial .journey-preview-copy strong{display:block;margin:0;color:#eee8dc;font-family:Georgia,'Times New Roman',serif;font-size:1.08rem;font-weight:500;line-height:1.12;white-space:normal}
+.review-journey-editorial .journey-preview-copy em{display:block;margin-top:8px;color:#817c73;font-size:.65rem;font-style:normal}
+.review-journey-editorial .journey-current{border-color:var(--gentle-line);padding-inline:10px}
+.review-journey-editorial .journey-current small{color:#6f6a62}.review-journey-editorial .journey-current strong{color:#a9a298;font-family:Georgia,'Times New Roman',serif;font-weight:500}.review-journey-editorial .journey-current span{margin-top:5px;color:#777168;font-size:.64rem}
+.review-journey-editorial .journey-edge{display:flex;flex-direction:column;justify-content:center;min-height:138px;padding:18px;border:1px solid rgba(218,207,186,.08);color:#77736b;font-family:Georgia,'Times New Roman',serif;font-size:.87rem;line-height:1.45}
+.review-journey-editorial .journey-edge small{margin-bottom:6px;color:#69655e;font-family:Arial,sans-serif;font-size:.55rem;font-weight:850;letter-spacing:.14em}.review-journey-editorial .journey-edge-end{text-align:right}
+@media(max-width:760px){.detail-top{align-items:flex-start!important}.collection-breadcrumbs{flex-wrap:wrap;gap:6px 8px;line-height:1.45}.collection-breadcrumbs strong{max-width:72vw}.review-journey-editorial .review-journey-links{grid-template-columns:1fr 1fr;gap:10px}.review-journey-editorial .journey-current{display:none}.review-journey-editorial .journey-link{min-height:126px;padding:12px}.review-journey-editorial .journey-preview{grid-template-columns:48px minmax(0,1fr);gap:10px}.review-journey-editorial .journey-link-next .journey-preview{grid-template-columns:minmax(0,1fr) 48px}.review-journey-editorial .journey-preview img,.review-journey-editorial .journey-cover-fallback{width:48px;height:66px}.review-journey-editorial .journey-preview-copy strong{font-size:.92rem}.review-journey-editorial .journey-preview-copy em{display:none}}
+@media(max-width:520px){.review-journey-editorial .review-journey-links{grid-template-columns:1fr}.review-journey-editorial .journey-link-next .journey-preview{grid-template-columns:48px minmax(0,1fr)}.review-journey-editorial .journey-link-next .journey-preview img,.review-journey-editorial .journey-link-next .journey-cover-fallback{grid-column:1;grid-row:1}.review-journey-editorial .journey-link-next .journey-preview-copy{grid-column:2;grid-row:1;text-align:left}.review-journey-editorial .journey-link-next,.review-journey-editorial .journey-edge-end{text-align:left}}

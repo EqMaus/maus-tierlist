@@ -432,3 +432,11 @@ body.music-space .theme-info-panel.is-resonance-info::-webkit-scrollbar-thumb:ho
     border-right:0!important;border-bottom:1px solid var(--res-line)!important;
   }
 }
+
+
+/* v5.6.13 · Breadcrumbs de Fonoteca */
+.music-breadcrumbs{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:0 0 24px;color:#716d66;font-family:Arial,Helvetica,sans-serif;font-size:.59rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase}
+.music-breadcrumbs i{color:rgba(218,207,186,.2);font-style:normal;font-weight:400}
+.music-breadcrumbs a{color:#a19a8e;text-decoration:none}.music-breadcrumbs a:hover{color:#eee8dc}
+.music-breadcrumbs strong{color:var(--music-accent);font-weight:850;max-width:62vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:760px){.music-breadcrumbs{margin-bottom:18px}.music-breadcrumbs strong{max-width:72vw}}
