@@ -448,7 +448,7 @@ code { padding: 2px 5px; border-radius: 5px; background: rgba(255,255,255,.06); 
 .review-preview-viewport{margin:0 auto;width:100%;transition:width .25s ease,max-width .25s ease;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.08);background:#061018;box-shadow:0 22px 60px rgba(0,0,0,.24)}
 .review-preview-viewport.is-desktop{max-width:1180px}
 .review-preview-viewport.is-mobile{width:min(390px,100%);max-width:390px}
-.review-preview-scene{position:relative;min-height:640px;padding:46px 28px 72px;background-image:linear-gradient(180deg,rgba(3,9,14,.20),rgba(3,9,14,.57)),var(--preview-bg);background-size:cover;background-position:center;isolation:isolate}
+.review-preview-scene{position:relative;min-height:640px;padding:46px 28px 72px;background-image:linear-gradient(180deg,rgba(3,9,14,.20),rgba(3,9,14,.57)),var(--preview-bg);background-size:cover;background-position:var(--preview-bg-position, center);isolation:isolate}
 .review-preview-scene::before{content:'';position:absolute;inset:0;z-index:-1;background:radial-gradient(circle at 50% 18%,transparent 0 28%,rgba(0,0,0,.32) 90%);pointer-events:none}
 .review-preview-card{width:min(850px,100%);margin:0 auto;padding:26px 26px 30px;border:1px solid rgba(255,255,255,.07);border-radius:20px;background:linear-gradient(180deg,rgba(7,18,27,.78),rgba(6,15,22,.68));box-shadow:0 18px 50px rgba(0,0,0,.14);color:#f5f8fb;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 .review-preview-card-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}.review-preview-card-head h3{margin:5px 0 0;font-size:1.65rem}.review-preview-card .eyebrow{color:#91c9ee;font-size:.7rem}
@@ -513,3 +513,16 @@ code { padding: 2px 5px; border-radius: 5px; background: rgba(255,255,255,.06); 
 
 /* Orden de juegos: posición normalizada, no número libre. */
 .tier-order-control{display:grid;grid-template-columns:auto minmax(72px,1fr) auto;gap:8px;align-items:center}.tier-order-control input{text-align:center}.tier-order-control .icon-button{min-width:40px;height:40px}
+
+
+/* v5.6.17 · Encuadre manual de portadas y fondos */
+.media-position-preview{cursor:grab;touch-action:none;user-select:none}
+.media-position-preview.is-dragging{cursor:grabbing;border-color:rgba(99,221,181,.55);box-shadow:0 0 0 3px rgba(99,221,181,.08)}
+.media-position-preview img{pointer-events:none;user-select:none;-webkit-user-drag:none}
+.media-drag-hint{position:absolute;left:50%;bottom:9px;z-index:3;transform:translateX(-50%);max-width:calc(100% - 18px);padding:5px 8px;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:rgba(3,10,15,.76);backdrop-filter:blur(8px);color:rgba(235,246,249,.82);font-size:.58rem;font-weight:850;letter-spacing:.08em;white-space:nowrap;pointer-events:none;opacity:.76;transition:opacity .18s ease}
+.media-position-preview:hover .media-drag-hint,.media-position-preview.is-dragging .media-drag-hint{opacity:1}
+.asset-preview:has(img[hidden]) .media-drag-hint{display:none}
+.media-position-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;width:100%;margin-top:2px}
+.media-position-status{flex:1 1 170px;color:#9eb0bb!important;font-variant-numeric:tabular-nums}
+.media-position-reset{min-height:30px;padding:5px 9px}
+.media-position-reset:disabled{opacity:.42;cursor:default}

@@ -134,11 +134,15 @@
   const coverStatus = $('coverStatus');
   const coverFile = $('coverFile');
   const clearCoverButton = $('clearCoverButton');
+  const coverPositionStatus = $('coverPositionStatus');
+  const resetCoverPositionButton = $('resetCoverPositionButton');
   const backgroundPreview = $('backgroundPreview');
   const backgroundPlaceholder = $('backgroundPlaceholder');
   const backgroundStatus = $('backgroundStatus');
   const backgroundFile = $('backgroundFile');
   const clearBackgroundButton = $('clearBackgroundButton');
+  const backgroundPositionStatus = $('backgroundPositionStatus');
+  const resetBackgroundPositionButton = $('resetBackgroundPositionButton');
   const musicFile = $('musicFile');
   const musicFileName = $('musicFileName');
   const musicFileStatus = $('musicFileStatus');
@@ -181,6 +185,7 @@
   let reviewPreviewDevice = 'desktop';
   let reviewFocusSnapshot = '';
   let reviewDragState = null;
+  let mediaPositionDrag = null;
   const reviewHistory = new Map();
 
   function esc(value) {
@@ -1023,6 +1028,8 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     reviewPreviewScene.style.setProperty('--tier', tier?.color || '#7aa7c6');
     reviewPreviewScene.style.setProperty('--review-tier', tier?.color || '#7aa7c6');
     reviewPreviewScene.style.setProperty('--preview-bg', background ? `url("${String(background).replace(/"/g, '%22')}")` : 'none');
+    const backgroundPosition = normalizedMediaPosition(game, 'background');
+    reviewPreviewScene.style.setProperty('--preview-bg-position', `${backgroundPosition.x}% ${backgroundPosition.y}%`);
     if (reviewPreviewAtmosphere) {
       const effect = String(game.ambientEffect || 'none');
       reviewPreviewAtmosphere.dataset.effect = effect;
@@ -1617,6 +1624,98 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     }
   }
 
+  function clampMediaPosition(value) {
+    return Math.max(0, Math.min(100, Number(value) || 0));
+  }
+
+  function normalizedMediaPosition(game, kind) {
+    const key = kind === 'background' ? 'backgroundPosition' : 'coverPosition';
+    const raw = game && game[key];
+    if (!raw || typeof raw !== 'object') return { x: 50, y: 50 };
+    const x = Number(raw.x);
+    const y = Number(raw.y);
+    return {
+      x: Number.isFinite(x) ? clampMediaPosition(x) : 50,
+      y: Number.isFinite(y) ? clampMediaPosition(y) : 50
+    };
+  }
+
+  function mediaPositionLabel(position) {
+    const x = Math.round(position.x);
+    const y = Math.round(position.y);
+    if (x === 50 && y === 50) return 'Encuadre: centrado';
+    return `Encuadre: ${x}% horizontal · ${y}% vertical`;
+  }
+
+  function applyMediaPositionPreview(kind, game = selectedGame()) {
+    if (!game) return;
+    const position = normalizedMediaPosition(game, kind);
+    const img = kind === 'background' ? backgroundPreview : coverPreview;
+    const status = kind === 'background' ? backgroundPositionStatus : coverPositionStatus;
+    const reset = kind === 'background' ? resetBackgroundPositionButton : resetCoverPositionButton;
+    if (img) img.style.objectPosition = `${position.x}% ${position.y}%`;
+    if (kind === 'background' && reviewPreviewScene) reviewPreviewScene.style.setProperty('--preview-bg-position', `${position.x}% ${position.y}%`);
+    if (status) status.textContent = mediaPositionLabel(position);
+    if (reset) reset.disabled = position.x === 50 && position.y === 50;
+  }
+
+  function setMediaPosition(kind, x, y) {
+    const game = selectedGame();
+    if (!game) return;
+    const key = kind === 'background' ? 'backgroundPosition' : 'coverPosition';
+    const next = { x: Math.round(clampMediaPosition(x) * 10) / 10, y: Math.round(clampMediaPosition(y) * 10) / 10 };
+    if (Math.abs(next.x - 50) < .05 && Math.abs(next.y - 50) < .05) delete game[key];
+    else game[key] = next;
+    applyMediaPositionPreview(kind, game);
+    updateDirtyUi();
+    clearNotice();
+  }
+
+  function resetMediaPosition(kind) {
+    const game = selectedGame();
+    if (!game) return;
+    const key = kind === 'background' ? 'backgroundPosition' : 'coverPosition';
+    delete game[key];
+    applyMediaPositionPreview(kind, game);
+    updateDirtyUi();
+    clearNotice();
+  }
+
+  function beginMediaPositionDrag(event) {
+    const preview = event.target.closest('[data-media-position]');
+    if (!preview) return;
+    const kind = preview.dataset.mediaPosition;
+    const img = kind === 'background' ? backgroundPreview : coverPreview;
+    const game = selectedGame();
+    if (!game || !img || img.hidden || !img.src) return;
+    event.preventDefault();
+    const position = normalizedMediaPosition(game, kind);
+    mediaPositionDrag = { kind, preview, pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, originX: position.x, originY: position.y };
+    preview.classList.add('is-dragging');
+    try { preview.setPointerCapture(event.pointerId); } catch (_) {}
+  }
+
+  function moveMediaPositionDrag(event) {
+    const drag = mediaPositionDrag;
+    if (!drag || event.pointerId !== drag.pointerId) return;
+    event.preventDefault();
+    const rect = drag.preview.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+    // Se invierte el porcentaje para que el gesto sea natural: arrastrar la
+    // propia imagen hacia la derecha/abajo desplaza el contenido en esa dirección.
+    const x = drag.originX - ((event.clientX - drag.startX) / rect.width) * 100;
+    const y = drag.originY - ((event.clientY - drag.startY) / rect.height) * 100;
+    setMediaPosition(drag.kind, x, y);
+  }
+
+  function endMediaPositionDrag(event) {
+    const drag = mediaPositionDrag;
+    if (!drag || (event.pointerId !== undefined && event.pointerId !== drag.pointerId)) return;
+    drag.preview.classList.remove('is-dragging');
+    try { drag.preview.releasePointerCapture(drag.pointerId); } catch (_) {}
+    mediaPositionDrag = null;
+  }
+
   function renderMedia() {
     const game = selectedGame();
     if (!game) return;
@@ -1624,6 +1723,7 @@ const ADMIN_CURATED_REVIEW_SPECS = {
 
     const coverSrc = pending.cover ? previewUrls[`${game.id}:cover`] : legacyOrCustomCover(game);
     setImagePreview(coverPreview, coverPlaceholder, coverSrc);
+    applyMediaPositionPreview('cover', game);
     coverStatus.textContent = pending.cover
       ? `${pending.cover.name} · ${(pending.cover.size / 1024 / 1024).toFixed(2)} MB · pendiente de publicar`
       : (legacyOrCustomCover(game) ? `Actual: ${legacyOrCustomCover(game)}` : 'Usa JPG, PNG, WEBP o AVIF.');
@@ -1631,6 +1731,7 @@ const ADMIN_CURATED_REVIEW_SPECS = {
 
     const backgroundSrc = pending.background ? previewUrls[`${game.id}:background`] : legacyOrCustomBackground(game);
     setImagePreview(backgroundPreview, backgroundPlaceholder, backgroundSrc);
+    applyMediaPositionPreview('background', game);
     backgroundStatus.textContent = pending.background
       ? `${pending.background.name} · ${(pending.background.size / 1024 / 1024).toFixed(2)} MB · pendiente de publicar`
       : (legacyOrCustomBackground(game) ? `Actual: ${legacyOrCustomBackground(game)}` : 'Imagen horizontal recomendada.');
@@ -1923,6 +2024,15 @@ const ADMIN_CURATED_REVIEW_SPECS = {
       if (!tierForScore(game.score)) throw new Error(`La nota ${game.score} de ${game.title} no existe en la escala.`);
       if (game.music?.startAt !== undefined && (!Number.isFinite(Number(game.music.startAt)) || Number(game.music.startAt) < 0)) {
         throw new Error(`El segundo inicial de la música de ${game.title} no es válido.`);
+      }
+      for (const [positionKey, positionLabel] of [['coverPosition', 'portada'], ['backgroundPosition', 'fondo']]) {
+        if (game[positionKey] === undefined) continue;
+        const position = game[positionKey];
+        const x = Number(position?.x);
+        const y = Number(position?.y);
+        if (!position || typeof position !== 'object' || !Number.isFinite(x) || !Number.isFinite(y) || x < 0 || x > 100 || y < 0 || y > 100) {
+          throw new Error(`El encuadre de ${positionLabel} de ${game.title} no es válido.`);
+        }
       }
     }
     for (const catalog of ['offline', 'online']) {
@@ -2722,6 +2832,17 @@ const ADMIN_CURATED_REVIEW_SPECS = {
   clearCoverButton.addEventListener('click', () => unstageFile('cover'));
   clearBackgroundButton.addEventListener('click', () => unstageFile('background'));
   clearMusicButton.addEventListener('click', () => unstageFile('music'));
+
+
+  document.querySelectorAll('[data-media-position]').forEach((preview) => {
+    preview.addEventListener('pointerdown', beginMediaPositionDrag);
+    preview.addEventListener('pointermove', moveMediaPositionDrag);
+    preview.addEventListener('pointerup', endMediaPositionDrag);
+    preview.addEventListener('pointercancel', endMediaPositionDrag);
+    preview.addEventListener('lostpointercapture', endMediaPositionDrag);
+  });
+  resetCoverPositionButton?.addEventListener('click', () => resetMediaPosition('cover'));
+  resetBackgroundPositionButton?.addEventListener('click', () => resetMediaPosition('background'));
 
   addGameButton.addEventListener('click', openNewGameModal);
   cancelNewGameButton.addEventListener('click', closeNewGameModal);

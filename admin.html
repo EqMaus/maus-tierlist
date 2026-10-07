@@ -7,9 +7,9 @@
   <meta name="theme-color" content="#071018">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://api.github.com https://maus-huellas.enriquegonzalvezastiz.workers.dev; img-src 'self' data: blob: https://avatars.githubusercontent.com; media-src 'self' blob:; style-src 'self'; script-src 'self'; base-uri 'self'; form-action 'none';">
   <title>Editor privado · Tier List de Maus</title>
-  <link rel="stylesheet" href="css/review-shared.css?v=5.6.16">
-  <link rel="stylesheet" href="css/admin.css?v=5.6.16">
-  <link rel="stylesheet" href="css/content-editor.css?v=5.6.16">
+  <link rel="stylesheet" href="css/review-shared.css?v=5.6.17">
+  <link rel="stylesheet" href="css/admin.css?v=5.6.17">
+  <link rel="stylesheet" href="css/content-editor.css?v=5.6.17">
 </head>
 <body>
   <header class="admin-header">
@@ -170,27 +170,31 @@
             </div>
             <div class="media-grid">
               <div class="asset-panel">
-                <div class="asset-preview cover-preview">
-                  <img id="coverPreview" alt="Previsualización de portada" hidden>
+                <div class="asset-preview cover-preview media-position-preview" data-media-position="cover" title="Arrastra la imagen para recolocarla">
+                  <img id="coverPreview" alt="Previsualización de portada" draggable="false" hidden>
                   <span id="coverPlaceholder">Sin portada</span>
+                  <span class="media-drag-hint" aria-hidden="true">↕ ARRASTRA PARA ENCUADRAR ↔</span>
                 </div>
                 <div class="asset-copy">
                   <strong>Portada</strong>
                   <small id="coverStatus">Usa JPG, PNG, WEBP o AVIF.</small>
                   <label class="file-button">Elegir portada<input id="coverFile" type="file" accept="image/jpeg,image/png,image/webp,image/avif" hidden></label>
+                  <div class="media-position-row"><small id="coverPositionStatus" class="media-position-status">Encuadre: centrado</small><button id="resetCoverPositionButton" class="mini-button media-position-reset" type="button">Centrar</button></div>
                   <button id="clearCoverButton" class="mini-button" type="button" hidden>Cancelar cambio</button>
                 </div>
               </div>
 
               <div class="asset-panel">
-                <div class="asset-preview background-preview">
-                  <img id="backgroundPreview" alt="Previsualización de fondo" hidden>
+                <div class="asset-preview background-preview media-position-preview" data-media-position="background" title="Arrastra la imagen para recolocarla">
+                  <img id="backgroundPreview" alt="Previsualización de fondo" draggable="false" hidden>
                   <span id="backgroundPlaceholder">Sin fondo</span>
+                  <span class="media-drag-hint" aria-hidden="true">↕ ARRASTRA PARA ENCUADRAR ↔</span>
                 </div>
                 <div class="asset-copy">
                   <strong>Fondo de la review</strong>
                   <small id="backgroundStatus">Imagen horizontal recomendada.</small>
                   <label class="file-button">Elegir fondo<input id="backgroundFile" type="file" accept="image/jpeg,image/png,image/webp,image/avif" hidden></label>
+                  <div class="media-position-row"><small id="backgroundPositionStatus" class="media-position-status">Encuadre: centrado</small><button id="resetBackgroundPositionButton" class="mini-button media-position-reset" type="button">Centrar</button></div>
                   <button id="clearBackgroundButton" class="mini-button" type="button" hidden>Cancelar cambio</button>
                 </div>
               </div>
@@ -402,9 +406,9 @@
     </div>
   </div>
 
-  <script src="js/review-renderer.js?v=5.6.16"></script>
-  <script src="js/content-model.js?v=5.6.16"></script>
-  <script src="js/content-editor.js?v=5.6.16"></script>
-  <script src="js/admin.js?v=5.6.16"></script>
+  <script src="js/review-renderer.js?v=5.6.17"></script>
+  <script src="js/content-model.js?v=5.6.17"></script>
+  <script src="js/content-editor.js?v=5.6.17"></script>
+  <script src="js/admin.js?v=5.6.17"></script>
 </body>
 </html>

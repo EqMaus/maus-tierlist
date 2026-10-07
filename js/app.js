@@ -307,7 +307,7 @@
     body.style.setProperty('--scene-light-a-color', profile.lightA);
     body.style.setProperty('--scene-light-b-color', profile.lightB);
     body.style.setProperty('--scene-depth-strength', String(profile.depth));
-    body.style.setProperty('--scene-object-position', profile.pos);
+    body.style.setProperty('--scene-object-position', backgroundPositionFor(gameId, profile.pos));
     body.style.setProperty('--scene-depth-back-solid', profile.backSolid || '42%');
     body.style.setProperty('--scene-depth-back-fade', profile.backFade || '70%');
     body.style.setProperty('--scene-depth-front-solid', profile.frontSolid || '24%');
@@ -951,6 +951,25 @@
     if (game && typeof game.cover === 'string' && game.cover.trim()) return game.cover.trim();
     const file = game && coverFiles[game.id];
     return file ? `assets/covers/${file}` : '';
+  }
+
+  function normalizedImagePosition(value) {
+    if (!value || typeof value !== 'object') return null;
+    const rawX = Number(value.x);
+    const rawY = Number(value.y);
+    if (!Number.isFinite(rawX) || !Number.isFinite(rawY)) return null;
+    return { x: Math.max(0, Math.min(100, rawX)), y: Math.max(0, Math.min(100, rawY)) };
+  }
+
+  function coverPositionStyle(game) {
+    const pos = normalizedImagePosition(game && game.coverPosition);
+    return pos ? ` style="object-position:${pos.x}% ${pos.y}%"` : '';
+  }
+
+  function backgroundPositionFor(gameId, fallback) {
+    const game = gameById.get(gameId);
+    const pos = normalizedImagePosition(game && game.backgroundPosition);
+    return pos ? `${pos.x}% ${pos.y}%` : fallback;
   }
 
   function backgroundSrcFor(gameId) {
@@ -2096,7 +2115,7 @@
             const cover = coverSrc(game);
             return `<button class="presentation-game" type="button" data-presentation-game="${esc(game.id)}" title="Abrir review de ${esc(game.title)}">
               <span class="presentation-rank">#${game.globalRank}</span>
-              ${cover ? `<img src="${esc(cover)}" alt="Portada de ${esc(game.title)}">` : ''}
+              ${cover ? `<img src="${esc(cover)}" alt="Portada de ${esc(game.title)}"${coverPositionStyle(game)}>` : ''}
               <span class="presentation-game-copy"><strong>${esc(game.title)}</strong><small>${esc(game.score)}/10 · ${esc(row.label)}</small></span>
             </button>`;
           }).join('')}
@@ -2288,7 +2307,7 @@
     const cover = coverSrc(game);
     const meta = [game.year, game.platform].filter(Boolean).map(esc).join(' · ');
     return `<button class="tier-card" type="button" data-open-game="${esc(game.id)}" style="--tier:${esc(row.color)};--card-index:${index}" aria-label="Abrir review de ${esc(game.title)}">
-      ${cover ? `<img class="tier-cover" src="${esc(cover)}" alt="" loading="lazy">` : `<div class="tier-cover cover-fallback">${esc(game.title.slice(0, 1))}</div>`}
+      ${cover ? `<img class="tier-cover" src="${esc(cover)}" alt="" loading="lazy"${coverPositionStyle(game)}>` : `<div class="tier-cover cover-fallback">${esc(game.title.slice(0, 1))}</div>`}
       <div class="tier-card-copy">
         <div class="tier-card-rank"><span>#${index + 1} EN EL TIER</span><span class="tier-card-score">${esc(game.score)}/10</span></div>
         <h3>${esc(game.title)}</h3>
@@ -2353,7 +2372,7 @@
         <span class="eyebrow">${rankingMode ? `${isOnline ? 'ONLINE' : 'OFFLINE'} · RANKING · LECTURA EN ORDEN` : `${isOnline ? 'ONLINE' : 'OFFLINE'} · REVIEW PERSONAL`}</span>
       </div>
       <section class="detail-hero review-editorial-hero" style="--tier:${esc(tier.color)}">
-        ${cover ? `<div class="detail-cover-frame"><img class="detail-cover" src="${esc(cover)}" alt="Portada de ${esc(game.title)}"><span>${String(tierIndex + 1).padStart(2,'0')}</span></div>` : ''}
+        ${cover ? `<div class="detail-cover-frame"><img class="detail-cover" src="${esc(cover)}" alt="Portada de ${esc(game.title)}"${coverPositionStyle(game)}><span>${String(tierIndex + 1).padStart(2,'0')}</span></div>` : ''}
         <div class="detail-hero-copy">
           <div class="review-hero-kicker"><span>${isOnline ? 'ARCHIVO ONLINE' : 'ARCHIVO OFFLINE'}</span><i></i><span>${game.reviewDate ? esc(game.reviewDate) : 'REVIEW PERSONAL'}</span></div>
           <span class="eyebrow">${esc(tier.label)}</span>
@@ -2457,7 +2476,7 @@
     return `<button class="journey-link ${isNext ? 'journey-link-next' : 'journey-link-prev'}" type="button" ${attrName}="${esc(game.id)}" style="--journey-tier:${esc(tier.color)}">
       <span class="journey-direction">${isNext ? 'SIGUIENTE EN EL RANKING →' : '← ANTERIOR EN EL RANKING'}</span>
       <div class="journey-preview">
-        ${cover ? `<img src="${esc(cover)}" alt="" loading="lazy">` : `<span class="journey-cover-fallback" aria-hidden="true">${esc(game.title.slice(0,1))}</span>`}
+        ${cover ? `<img src="${esc(cover)}" alt="" loading="lazy"${coverPositionStyle(game)}>` : `<span class="journey-cover-fallback" aria-hidden="true">${esc(game.title.slice(0,1))}</span>`}
         <div class="journey-preview-copy">
           <small>${esc(game.score)} · ${esc(tier.label)}</small>
           <strong>${esc(game.title)}</strong>
