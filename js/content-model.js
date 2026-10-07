@@ -11,8 +11,6 @@
     ['Navegación','navOffline','Enlace offline','OFFLINE'],
     ['Navegación','navOnline','Enlace online','ONLINE'],
     ['Navegación','navMusic','Enlace musical','Resonancias'],
-    ['Navegación','navReviews','Enlace a críticas','Reviews'],
-    ['Navegación','navFeatures','Enlace a la guía','Features'],
     ['Navegación','navPresentation','Botón de presentación','Modo presentación'],
     ['Navegación','navAppearance','Botón de apariencia','Apariencia'],
     ['Portada offline','offlineEyebrow','Antetítulo','TIER LIST · OFFLINE'],
@@ -26,16 +24,9 @@
     ['Portada online','onlineNote','Nota bajo los botones','La posición de un juego online no afecta a su posición en la tier list offline.','textarea'],
     ['Portada online','onlineStats','Texto del resumen','ranking multijugador independiente'],
     ['Portadas y botones','readRanking','Botón para leer el ranking','▶ Leer ranking de arriba a abajo'],
-    ['Portadas y botones','offlineReviewsButton','Botón de reviews offline','Ver reviews offline'],
-    ['Portadas y botones','onlineReviewsButton','Botón de reviews online','Ver reviews online'],
     ['Portadas y botones','offlineSwitch','Descripción de offline','Campañas · single player'],
     ['Portadas y botones','onlineSwitch','Descripción de online','Competitivo · coop · multijugador'],
     ['Portadas y botones','musicSwitch','Descripción de la sección musical','Una colección para escuchar y leer'],
-    ['Bibliotecas','offlineReviewsTitle','Título de reviews offline','Mis juegos offline.'],
-    ['Bibliotecas','offlineReviewsLead','Introducción offline','Campañas y experiencias principalmente offline.','textarea'],
-    ['Bibliotecas','onlineReviewsTitle','Título de reviews online','Mis juegos online.'],
-    ['Bibliotecas','onlineReviewsLead','Introducción online','Biblioteca independiente para juegos multijugador y competitivos.','textarea'],
-    ['Bibliotecas','reviewSearch','Texto del buscador','Buscar una review…'],
     ['Música: portada','musicEyebrow','Antetítulo','EL ARCHIVO SONORO DE MAUS'],
     ['Música: portada','musicTitle','Título de la colección','Resonancias'],
     ['Música: portada','musicSubtitle','Frase principal','Hay músicas que no se quedan en el juego.','textarea'],
@@ -49,8 +40,6 @@
     ['Presentación','onlinePresentationTitle','Título online','Mi ranking de videojuegos online'],
     ['Presentación','onlinePresentationLead','Introducción online','Experiencias multijugador, competitivas y cooperativas.'],
     ['Presentación','presentationFooter','Pie de presentación','Dentro de cada tier, el orden va de izquierda a derecha.'],
-    ['Guía','featuresTitle','Título de la guía','Qué hay aquí y dónde tocar.'],
-    ['Guía','featuresLead','Introducción','Una guía rápida para saber qué puedes explorar sin tener que descubrir cada función por accidente.','textarea'],
     ['Música: textos','musicKicker','Línea sobre el título','VIDEOJUEGOS / MÚSICA / MEMORIA'],
     ['Música: textos','musicExplore','Enlace a la colección','Explorar la colección'],
     ['Música: textos','musicShelf','Título de la colección','La colección'],
@@ -68,19 +57,12 @@
     ['Apariencia','musicAccent','Acento musical','#9b4225','color'],
     ['Apariencia','musicColumns','Columnas de fichas en escritorio','3','select',['2','3','4']]
   ];
-  const defaults = () => ({ schema: 1, settings: Object.fromEntries(fields.map(([,key,,value])=>[key,value])), tracks: [], features: [
-    {title:'Dos rankings, dos formas de jugar',text:'Offline y online tienen su propio ranking, sus reviews y su recorrido.',route:'tierlist',label:'Explorar los juegos'},
-    {title:'Un archivo para la música',text:'Fichas dedicadas a músicas de videojuegos: escuchar, leer y descubrir sus detalles, sin puntuaciones.',route:'music',label:'Abrir el archivo sonoro'},
-    {title:'Una escena para cada juego',text:'Fondos, ambiente y música acompañan las críticas. Desde Apariencia puedes elegir todos los efectos, ambiente reducido o un fondo sin efectos.',route:'games/offline',label:'Explorar las reviews'},
-    {title:'Escucha a tu ritmo',text:'Pausa y reanuda sin perder la posición, ajusta el volumen o salta a otra parte de la canción. Los efectos musicales siguen el instante que estás escuchando.',route:'music',label:'Escuchar'},
-    {title:'Presentación y fondo',text:'Modo presentación reúne las portadas del ranking. Ver fondo oculta la interfaz para disfrutar de la escena.',route:'tierlist',label:'Volver al ranking'}
-  ] });
+  const defaults = () => ({ schema: 1, settings: Object.fromEntries(fields.map(([,key,,value])=>[key,value])), tracks: [] });
   function normalize(value) {
     const base=defaults();
     if(!value || typeof value!=='object' || Array.isArray(value)) return base;
     for(const [,key] of fields) if(typeof value.settings?.[key]==='string') base.settings[key]=value.settings[key];
     base.tracks=Array.isArray(value.tracks)?JSON.parse(JSON.stringify(value.tracks)):[];
-    if(Array.isArray(value.features)) base.features=JSON.parse(JSON.stringify(value.features));
     return base;
   }
   function safeAsset(value, preview=false) {

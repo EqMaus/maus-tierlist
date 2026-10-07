@@ -1,0 +1,5 @@
+v5.5.3
+- Decente+ 5.5: bold=false
+- Basura 2: bold=true
+- Vomitivo 1: bold=true
+- Ningún otro dato de juego/review modificado.

@@ -32,17 +32,6 @@
   const appearanceButton = byId('appearanceButton');
   const appearancePopover = byId('appearancePopover');
   const appearanceCloseButton = byId('appearanceCloseButton');
-  const editModeButton = byId('editModeButton');
-  const adminGate = byId('adminGate');
-  const adminGateForm = byId('adminGateForm');
-  const adminGateClose = byId('adminGateClose');
-  const adminPassword = byId('adminPassword');
-  const adminGateError = byId('adminGateError');
-  const editToolbar = byId('editToolbar');
-  const exitEditButton = byId('exitEditButton');
-  const exportEditsButton = byId('exportEditsButton');
-  const importEditsButton = byId('importEditsButton');
-  const importEditsInput = byId('importEditsInput');
   const saveToast = byId('saveToast');
 
   const offlineGames = (Array.isArray(window.MAUS_GAMES) ? window.MAUS_GAMES : []).map((game) => ({ ...game, _catalog: 'offline' }));
@@ -94,8 +83,6 @@
     'majoras-mask': 'assets/backgrounds/majoras-mask-real-bg.webp'
   };
 
-  const EDIT_STORAGE_KEY = 'mausTierPermanentEditsV1';
-  const ADMIN_SESSION_KEY = 'mausTierEditUnlocked';
   const THEME_META_KEY = 'mausTierThemeMetaV1';
   const AUDIO_DB_NAME = 'mausTierAudioDbV1';
   const AUDIO_DB_STORE = 'themes';
@@ -106,7 +93,6 @@
   }
 
   const localStore = getStorage('localStorage');
-  const sessionStore = getStorage('sessionStorage');
 
   function safeGet(storage, key, fallback = null) {
     try {
@@ -126,10 +112,6 @@
     }
   }
 
-  function safeRemove(storage, key) {
-    try { storage?.removeItem(key); } catch (_) {}
-  }
-
   function readJsonStorage(storage, key, fallback = {}) {
     try {
       const raw = safeGet(storage, key, '');
@@ -141,9 +123,7 @@
     }
   }
 
-  let editStore = {};
   let themeMeta = readJsonStorage(localStore, THEME_META_KEY, {});
-  let editMode = false;
   const MUSIC_VOLUME_KEY = 'mausTierVolumeV2';
   const MUSIC_WIDGET_POS_KEY = 'mausTierMusicWidgetPositionV1';
   const UI_THEME_KEY = 'mausTierUiThemeV1';
@@ -644,7 +624,7 @@
     setText('.brand-copy strong', copy('brand')); setText('.brand-copy small', copy('tagline'));
     const brand = document.querySelector('.brand'); if (brand) brand.href = '#' + copy('homeRoute');
     const logo = document.querySelector('.brand-mark'); if (logo) { if (copy('logo')) logo.src = copy('logo'); logo.alt = copy('brand'); logo.hidden = !copy('logo'); }
-    for (const [nav,key] of [['offline','navOffline'],['online','navOnline'],['music','navMusic'],['games','navReviews'],['features','navFeatures']]) setText('[data-nav="'+nav+'"]',copy(key));
+    for (const [nav,key] of [['offline','navOffline'],['online','navOnline'],['music','navMusic']]) setText('[data-nav="'+nav+'"]',copy(key));
     setText('#presentationModeButton',copy('navPresentation')); setText('#appearanceButton',copy('navAppearance'));
     setText('.presentation-footer span',copy('presentationFooter'));
     document.title = copy('documentTitle') + ' — v' + window.MAUS_BUILD_VERSION;
@@ -981,17 +961,27 @@
     return gamesForCatalog(catalog).filter((game) => game.tierVisible !== false);
   }
 
+  function tierRank(score) {
+    const index = scale.findIndex((row) => Number(row.score) === Number(score));
+    return index === -1 ? Number.MAX_SAFE_INTEGER : index;
+  }
+
+  function compareGamesWithinTier(a, b) {
+    return ((Number(a.tierOrder) || 999) - (Number(b.tierOrder) || 999)) || String(a.title).localeCompare(String(b.title), 'es');
+  }
+
+  function compareGamesByRanking(a, b) {
+    return (tierRank(a.score) - tierRank(b.score)) || compareGamesWithinTier(a, b);
+  }
+
   function rankedJourney(catalog = 'offline') {
-    return [...visibleTierGames(catalog)].sort((a, b) => (b.score - a.score) || ((a.tierOrder ?? 999) - (b.tierOrder ?? 999)) || a.title.localeCompare(b.title, 'es'));
+    return [...visibleTierGames(catalog)].sort(compareGamesByRanking);
   }
 
   function catalogHome(catalog) {
     return normalizeCatalog(catalog) === 'online' ? 'online' : 'tierlist';
   }
 
-  function catalogReviewsRoute(catalog) {
-    return `games/${normalizeCatalog(catalog)}`;
-  }
 
   function applyCatalogMode(catalog) {
     const normalized = normalizeCatalog(catalog);
@@ -1000,7 +990,7 @@
   }
 
   function sortGames(list) {
-    return [...list].sort((a, b) => (b.score - a.score) || ((a.tierOrder ?? 999) - (b.tierOrder ?? 999)) || a.title.localeCompare(b.title, 'es'));
+    return [...list].sort(compareGamesByRanking);
   }
 
   function preview(value, max = 170) {
@@ -1664,8 +1654,7 @@
   function structuredReviewSections(gameId) {
     const game = gameById.get(gameId);
     const sections = game?.reviewSections;
-    const hasLocalReviewOverride = Boolean(editStore?.games?.[gameId]?.review);
-    if (hasLocalReviewOverride || !Array.isArray(sections) || !sections.length) return null;
+    if (!Array.isArray(sections) || !sections.length) return null;
 
     const normalized = sections.map((section, index) => {
       if (!section || typeof section !== 'object') return null;
@@ -1700,185 +1689,6 @@
       if (section.verdict) return `<section class="review-verdict"><span>Veredicto final</span><div class="review-verdict-body">${inlineMarkdown(section.text).replace(/\n/g, '<br>')}</div></section>`;
       return `<section class="review-section"><div class="review-section-head">${esc(section.title)}</div><div class="review-copy">${paragraphHtml(proseParagraphs(section.text))}</div></section>`;
     }).join('')}</div>`;
-  }
-
-  function editableParagraphHtml(paragraph, gameId, index) {
-    return `<p class="review-inline-editor" contenteditable="true" spellcheck="true" data-review-edit-part="${index}" data-edit-game="${esc(gameId)}">${inlineMarkdown(paragraph).replace(/\n/g, '<br>')}</p>`;
-  }
-
-  function reviewEditorHtml(value, gameId) {
-    const sections = reviewSectionsFor(gameId, value);
-    if (!sections.length) return '<div class="review-layout"><p class="empty-review">Sin review todavía.</p></div>';
-    let partIndex = 0;
-    const html = sections.map((section) => {
-      if (section.verdict) {
-        const index = partIndex++;
-        return `<section class="review-verdict"><span>Veredicto final</span><div class="review-verdict-body review-inline-editor review-inline-verdict" contenteditable="true" spellcheck="true" data-review-edit-part="${index}" data-edit-game="${esc(gameId)}">${inlineMarkdown(section.text).replace(/\n/g, '<br>')}</div></section>`;
-      }
-      const paragraphs = proseParagraphs(section.text);
-      const content = paragraphs.map((paragraph) => editableParagraphHtml(paragraph, gameId, partIndex++)).join('');
-      return `<section class="review-section"><div class="review-section-head">${esc(section.title)}</div><div class="review-copy">${content}</div></section>`;
-    }).join('');
-    return `<div class="review-layout review-layout-editable">${html}</div>`;
-  }
-
-  function editableNodeToMarkdown(element) {
-    const walk = (node) => {
-      if (node.nodeType === Node.TEXT_NODE) return node.nodeValue || '';
-      if (node.nodeType !== Node.ELEMENT_NODE) return '';
-      const tag = node.tagName.toLowerCase();
-      const inner = Array.from(node.childNodes).map(walk).join('');
-      if (tag === 'br') return '\n';
-      if (tag === 'strong' || tag === 'b') return `**${inner}**`;
-      if (tag === 'em' || tag === 'i') return `*${inner}*`;
-      if (tag === 'div' || tag === 'p') return `${inner}\n`;
-      return inner;
-    };
-    return Array.from(element.childNodes).map(walk).join('').replace(/\u00a0/g, ' ').replace(/\n{3,}/g, '\n\n').trim();
-  }
-
-  function collectInlineReview(gameId) {
-    const parts = Array.from(app.querySelectorAll('[data-review-edit-part][data-edit-game]'))
-      .filter((element) => element.dataset.editGame === gameId)
-      .sort((a, b) => Number(a.dataset.reviewEditPart) - Number(b.dataset.reviewEditPart))
-      .map(editableNodeToMarkdown)
-      .filter(Boolean);
-    return parts.join('\n\n').trim();
-  }
-
-  function applyStoredEdits() {
-    const storedGames = editStore.games && typeof editStore.games === 'object' ? editStore.games : {};
-    games.forEach((game) => {
-      const patch = storedGames[game.id];
-      if (!patch || typeof patch !== 'object') return;
-      if (typeof patch.title === 'string' && patch.title.trim()) game.title = patch.title.trim();
-      if (typeof patch.review === 'string' && patch.review.trim()) game.review = patch.review.trim();
-      const score = Number(patch.score);
-      if (Number.isFinite(score) && scale.some((row) => Number(row.score) === score)) game.score = score;
-    });
-
-    const storedTiers = editStore.tiers && typeof editStore.tiers === 'object' ? editStore.tiers : {};
-    scale.forEach((row) => {
-      const patch = storedTiers[String(row.score)];
-      if (patch && typeof patch.label === 'string' && patch.label.trim()) row.label = patch.label.trim();
-    });
-  }
-
-  function persistEditStore() {
-    safeSet(localStore, EDIT_STORAGE_KEY, JSON.stringify(editStore));
-  }
-
-  function saveGameField(gameId, field, value) {
-    const game = gameById.get(gameId);
-    if (!game) return false;
-    editStore.games ||= {};
-    editStore.games[gameId] ||= {};
-
-    if (field === 'score') {
-      const score = Number(value);
-      if (!scale.some((row) => Number(row.score) === score)) return false;
-      game.score = score;
-      editStore.games[gameId].score = score;
-    } else if (field === 'title' || field === 'review') {
-      const text = String(value ?? '').trim();
-      if (!text) return false;
-      game[field] = text;
-      editStore.games[gameId][field] = text;
-    } else {
-      return false;
-    }
-
-    persistEditStore();
-    showSavedToast();
-    return true;
-  }
-
-  function saveTierLabel(score, value) {
-    const row = scale.find((item) => Number(item.score) === Number(score));
-    const label = String(value ?? '').trim();
-    if (!row || !label) return false;
-    row.label = label;
-    editStore.tiers ||= {};
-    editStore.tiers[String(row.score)] ||= {};
-    editStore.tiers[String(row.score)].label = label;
-    persistEditStore();
-    showSavedToast();
-    return true;
-  }
-
-  function showSavedToast(message = 'Guardado') {
-    if (!saveToast) return;
-    saveToast.textContent = message;
-    saveToast.hidden = false;
-    saveToast.classList.remove('show');
-    void saveToast.offsetWidth;
-    saveToast.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = window.setTimeout(() => {
-      saveToast.classList.remove('show');
-      window.setTimeout(() => { saveToast.hidden = true; }, 220);
-    }, 1500);
-  }
-
-  function updateEditUi() {
-    body.classList.toggle('edit-mode', editMode);
-    if (editModeButton) {
-      editModeButton.classList.toggle('is-unlocked', editMode);
-      editModeButton.innerHTML = editMode ? '🔓 <span>Edición activa</span>' : '🔒 <span>Editar</span>';
-      editModeButton.setAttribute('aria-label', editMode ? 'Salir del modo edición' : 'Abrir modo edición');
-    }
-    if (editToolbar) editToolbar.hidden = !editMode;
-  }
-
-  async function passwordMatches() { return false; }
-
-  function openAdminGate() {
-    if (!adminGate) return;
-    adminGate.hidden = false;
-    adminGateError.textContent = '';
-    adminPassword.value = '';
-    requestAnimationFrame(() => adminPassword.focus());
-  }
-
-  function closeAdminGate() {
-    if (!adminGate) return;
-    adminGate.hidden = true;
-    adminGateError.textContent = '';
-    adminPassword.value = '';
-  }
-
-  function exitEditMode() {
-    editMode = false;
-    safeRemove(sessionStore, ADMIN_SESSION_KEY);
-    updateEditUi();
-    renderRoute();
-  }
-
-  function exportEdits() {
-    const payload = { exportedAt: new Date().toISOString(), version: 1, edits: editStore };
-    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'tier-list-maus-edits-backup.json';
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-  }
-
-  async function importEditsFile(file) {
-    if (!file) return;
-    try {
-      const parsed = JSON.parse(await file.text());
-      const incoming = parsed?.edits && typeof parsed.edits === 'object' ? parsed.edits : parsed;
-      if (!incoming || typeof incoming !== 'object' || Array.isArray(incoming)) throw new Error('invalid');
-      editStore = incoming;
-      persistEditStore();
-      location.reload();
-    } catch (_) {
-      showSavedToast('La copia no es válida');
-    }
   }
 
   function openAudioDb() {
@@ -2104,7 +1914,6 @@
         updateSceneScrollDepth();
         if (currentGameSceneId) scheduleAutonomousCamera(currentGameSceneId, true);
       }));
-      if (adminGate && !adminGate.hidden) closeAdminGate();
       return;
     }
 
@@ -2233,7 +2042,7 @@
         ...row,
         games: ranked
           .filter((game) => Number(game.score) === Number(row.score))
-          .sort((a, b) => ((a.tierOrder ?? 999) - (b.tierOrder ?? 999)) || a.title.localeCompare(b.title, 'es'))
+          .sort(compareGamesWithinTier)
           .map((game) => ({ ...game, globalRank: rankById.get(game.id) || 0 }))
       }))
       .filter((row) => row.games.length);
@@ -2261,7 +2070,7 @@
       <div><strong>${esc(topScore)}/10</strong><span>NOTA MÁS ALTA</span></div>`;
     presentationTiers.innerHTML = rows.length ? rows.map((row) => `
       <section class="presentation-tier" style="--tier:${esc(row.color)}">
-        <div class="presentation-tier-label" style="text-align:${['left','center','right'].includes(row.align) ? row.align : 'center'}">
+        <div class="presentation-tier-label" style="${tierLabelContainerStyle(row)}">
           <strong class="tier-font-${esc(row.tone)}${tierFontClass(row)}"${tierLabelStyle(row)}>${esc(row.label)}</strong>
           <span>${esc(row.score)}/10</span>
         </div>
@@ -2370,22 +2179,24 @@
         renderGame(route.id, true);
       } else if (route.section === 'games') {
         const catalog = normalizeCatalog(route.id);
+        history.replaceState(null, '', '#' + catalogHome(catalog));
         applyCatalogMode(catalog);
-        updateNav('games', catalog);
-        renderGames(catalog);
+        updateNav(catalogHome(catalog), catalog);
+        renderTierList(catalog);
       } else if (route.section === 'online') {
         applyCatalogMode('online');
         updateNav('online', 'online');
         renderTierList('online');
       } else if (route.section === 'features') {
+        history.replaceState(null, '', '#tierlist');
         applyCatalogMode('offline');
-        updateNav('features', 'offline');
-        renderFeatures();
+        updateNav('tierlist', 'offline');
+        renderTierList('offline');
       } else if (route.section === 'huellas') {
+        history.replaceState(null, '', '#tierlist');
         applyCatalogMode('offline');
-        updateNav('huellas', 'offline');
-        if (window.MausHuellas) window.MausHuellas.render(app);
-        else app.innerHTML = '<div class="page"><section class="recovery-card"><h1>Deja tu huella</h1><p>No se pudo cargar esta sección.</p></section></div>'; 
+        updateNav('tierlist', 'offline');
+        renderTierList('offline');
       } else {
         if (route.section !== 'tierlist' || route.id) history.replaceState(null, '', '#tierlist');
         applyCatalogMode('offline');
@@ -2428,7 +2239,6 @@
           <p class="page-lead">${lead}</p>
           <div class="hero-actions">
             <button class="primary-button" type="button" data-start-ranking="${normalized}">${esc(copy('readRanking'))}</button>
-            <button class="secondary-button" type="button" data-go="${catalogReviewsRoute(normalized)}">${esc(copy(isOnline ? 'onlineReviewsButton' : 'offlineReviewsButton'))}</button>
           </div>
           <p class="tour-explainer">${textLines(copy(prefix+'Note'))}</p>
         </div>
@@ -2442,9 +2252,9 @@
       </section>
       ${isOnline && !ranked.length ? `<section class="online-empty-intro"><span>LISTA NUEVA</span><strong>La tier list online está preparada.</strong><p>Los juegos online se añaden desde el editor privado y quedan completamente separados de los juegos offline.</p></section>` : ''}
       <div class="tier-list">${rows.map((row) => {
-        const tierGames = ranked.filter((game) => Number(game.score) === Number(row.score)).sort((a, b) => ((a.tierOrder ?? 999) - (b.tierOrder ?? 999)) || a.title.localeCompare(b.title, 'es'));
+        const tierGames = ranked.filter((game) => Number(game.score) === Number(row.score)).sort(compareGamesWithinTier);
         return `<section class="tier-row" style="--tier:${esc(row.color)}">
-          <div class="tier-label" style="${tierLabelContainerStyle(row)}"><strong class="tier-font-${esc(row.tone)}${tierFontClass(row)}"${tierLabelStyle(row)} ${editMode && !isOnline ? `contenteditable="true" spellcheck="true" data-edit-tier-score="${esc(row.score)}"` : ''}>${esc(row.label)}</strong><span>${esc(row.score)}</span></div>
+          <div class="tier-label" style="${tierLabelContainerStyle(row)}"><strong class="tier-font-${esc(row.tone)}${tierFontClass(row)}"${tierLabelStyle(row)}>${esc(row.label)}</strong><span>${esc(row.score)}</span></div>
           <div class="tier-games">${tierGames.length ? tierGames.map((game, index) => tierCard(game, index, row)).join('') : `<div class="tier-empty">${isOnline ? 'Sin juegos online todavía' : 'Sin juegos todavía'}</div>`}</div>
         </section>`;
       }).join('')}</div>
@@ -2459,32 +2269,6 @@
     </button>`;
   }
 
-  function renderGames(catalog = 'offline') {
-    stopGameTheme(true);
-    const normalized = normalizeCatalog(catalog);
-    const isOnline = normalized === 'online';
-    const sorted = sortGames(gamesForCatalog(normalized));
-    app.innerHTML = `<div class="page review-library-page${isOnline ? ' online-library-page' : ''}">
-      <div class="catalog-switch compact" aria-label="Elegir biblioteca de reviews">
-        <button type="button" class="catalog-switch-button offline${!isOnline ? ' is-active' : ''}" data-go="games/offline"><span>REVIEWS OFFLINE</span><small>${offlineGames.length} juegos</small></button>
-        <button type="button" class="catalog-switch-button online${isOnline ? ' is-active' : ''}" data-go="games/online"><span>REVIEWS ONLINE</span><small>${onlineGames.length} juegos</small></button>
-      </div>
-      <div class="library-top"><div><span class="eyebrow">${isOnline ? 'REVIEWS · ONLINE' : 'REVIEWS · OFFLINE'}</span><h1 class="page-title">${textLines(copy(isOnline ? 'onlineReviewsTitle' : 'offlineReviewsTitle'))}</h1><p class="page-lead">${textLines(copy(isOnline ? 'onlineReviewsLead' : 'offlineReviewsLead'))}</p></div></div>
-      <div class="library-toolbar"><label class="search-field"><input id="gameSearch" type="search" autocomplete="off" placeholder="${esc(copy('reviewSearch'))}"></label><span id="gameCount" class="library-count">${sorted.length} reviews</span></div>
-      <div id="gameGrid" class="game-grid" data-catalog="${normalized}" style="margin-top:18px">${sorted.length ? sorted.map(gameCard).join('') : `<div class="library-empty-state"><strong>No hay reviews online todavía.</strong><span>Añádelas desde el editor privado.</span></div>`}</div>
-    </div>`;
-  }
-
-  function renderFeatures() {
-    stopGameTheme(true);
-    app.innerHTML = '<div class="page features-page"><section class="features-hero"><div><span class="eyebrow">GUÍA DE LA WEB</span><h1 class="page-title">'+textLines(copy('featuresTitle'))+'</h1><p class="page-lead">'+textLines(copy('featuresLead'))+'</p></div></section><div class="features-grid">'+editorial.features.map((item,i)=>'<article class="feature-card"><span class="feature-index">'+String(i+1).padStart(2,'0')+'</span><h2>'+esc(item.title)+'</h2><p>'+textLines(item.text)+'</p><button type="button" data-go="'+esc(item.route||'tierlist')+'">'+esc(item.label||'Explorar')+' →</button></article>').join('')+'</div></div>';
-  }
-
-  function gameCard(game) {
-    const tier = tierInfo(game.score);
-    const cover = coverSrc(game);
-    return `<article class="game-card" style="--tier:${esc(tier.color)}"><button type="button" data-open-game="${esc(game.id)}" aria-label="Abrir review de ${esc(game.title)}"><span class="card-arrow">↗</span>${cover ? `<img class="game-card-cover" src="${esc(cover)}" alt="" loading="lazy">` : `<div class="game-card-cover cover-fallback">${esc(game.title.slice(0, 1))}</div>`}<div class="game-card-content"><div class="game-score"><b>${esc(game.score)}</b><small>/10</small></div><span class="game-tier tier-font-${esc(tier.tone)}">${esc(tier.label)}</span><h3>${esc(game.title)}</h3><p>${esc(preview(game.review, 235))}</p></div></button></article>`;
-  }
 
   function preloadSceneBackgrounds(ids) {
     ids.filter(Boolean).slice(0, 2).forEach((gameId) => {
@@ -2509,7 +2293,7 @@
     applyCatalogMode(catalog);
     applyScene(game.id);
     const tier = tierInfo(game.score);
-    const inTier = visibleTierGames(catalog).filter((item) => Number(item.score) === Number(game.score)).sort((a, b) => ((a.tierOrder ?? 999) - (b.tierOrder ?? 999)) || a.title.localeCompare(b.title, 'es'));
+    const inTier = visibleTierGames(catalog).filter((item) => Number(item.score) === Number(game.score)).sort(compareGamesWithinTier);
     const tierIndex = inTier.findIndex((item) => item.id === game.id);
     const tierPrev = tierIndex > 0 ? inTier[tierIndex - 1] : null;
     const tierNext = tierIndex >= 0 && tierIndex < inTier.length - 1 ? inTier[tierIndex + 1] : null;
@@ -2522,15 +2306,12 @@
     preloadSceneBackgrounds([journeyPrev?.id, journeyNext?.id]);
 
     const reviewRead = reviewHtml(game.review, game.id);
-    const reviewEditor = reviewEditorHtml(game.review, game.id);
     const hasSpoilers = Boolean(game.spoilers);
-    const reviewDisplay = editMode
-      ? reviewEditor
-      : hasSpoilers
-        ? `<details class="spoiler-review"><summary><span class="spoiler-open-label">⚠ Esta review contiene spoilers · abrir review</span><span class="spoiler-close-label">Cerrar review</span></summary>${reviewRead}</details>`
-        : reviewRead;
-    const scoreEditor = editMode ? `<select class="score-editor" data-edit-game="${esc(game.id)}" data-edit-field="score">${scale.map((row) => `<option value="${esc(row.score)}" ${Number(row.score) === Number(game.score) ? 'selected' : ''}>${esc(row.score)} · ${esc(row.label)}</option>`).join('')}</select>` : `<strong>${esc(game.score)}/10</strong>`;
-    const titleDisplay = editMode ? `<input class="title-editor" data-edit-game="${esc(game.id)}" data-edit-field="title" value="${esc(game.title)}" aria-label="Título del juego">` : esc(game.title);
+    const reviewDisplay = hasSpoilers
+      ? `<details class="spoiler-review"><summary><span class="spoiler-open-label">⚠ Esta review contiene spoilers · abrir review</span><span class="spoiler-close-label">Cerrar review</span></summary>${reviewRead}</details>`
+      : reviewRead;
+    const scoreEditor = `<strong>${esc(game.score)}/10</strong>`;
+    const titleDisplay = esc(game.title);
     const cover = coverSrc(game);
 
     app.innerHTML = `<div class="page game-page">
@@ -2545,7 +2326,7 @@
           <section class="side-card" style="--tier:${esc(tier.color)}"><h3>Nota actual</h3><div class="big-score">${esc(game.score)}<small>/10</small></div><strong class="side-tier tier-font-${esc(tier.tone)}">${esc(tier.label)}</strong></section>
           ${tierIndex >= 0 && (tierPrev || tierNext) ? `<section class="side-card"><h3>Dentro de este tier</h3><div class="rank-nav">${tierPrev ? `<button type="button" data-open-game="${esc(tierPrev.id)}"><small>← Por encima</small>${esc(tierPrev.title)}</button>` : ''}${tierNext ? `<button type="button" data-open-game="${esc(tierNext.id)}"><small>Por debajo →</small>${esc(tierNext.title)}</button>` : ''}</div></section>` : ''}
           ${rankingMode && journeyIndex >= 0 ? rankingPanel(journey, journeyIndex, journeyPrev, journeyNext, catalog) : ''}
-          ${editMode ? themeEditor(game, themeTitle) : ''}
+
         </aside>
       </div>
       ${journeyIndex >= 0 ? reviewJourneyNav(journeyPrev, game, journeyNext, rankingMode) : ''}
@@ -3012,11 +2793,6 @@
 
   function handleAppChange(event) {
     const target = event.target;
-    if (target.matches('[data-edit-game][data-edit-field="score"]')) {
-      if (saveGameField(target.dataset.editGame, 'score', target.value)) renderRoute();
-      else showSavedToast('Esa nota no es válida');
-      return;
-    }
     if (target.matches('[data-theme-file]')) {
       void saveThemeFromInput(target);
     }
@@ -3024,33 +2800,6 @@
 
   function handleAppBlur(event) {
     const target = event.target;
-    if (target.matches('[data-edit-game][data-edit-field="title"]')) {
-      if (!saveGameField(target.dataset.editGame, 'title', target.value)) {
-        showSavedToast('El título no puede quedar vacío');
-        renderRoute();
-      }
-      return;
-    }
-    if (target.matches('[data-review-edit-part][data-edit-game]')) {
-      const gameId = target.dataset.editGame;
-      const review = collectInlineReview(gameId);
-      if (!saveGameField(gameId, 'review', review)) {
-        showSavedToast('La review no puede quedar vacía');
-        renderRoute();
-      }
-      return;
-    }
-    if (target.matches('[data-edit-game][data-edit-field="review"]')) {
-      if (!saveGameField(target.dataset.editGame, 'review', target.value)) {
-        showSavedToast('La review no puede quedar vacía');
-        renderRoute();
-      }
-      return;
-    }
-    if (target.matches('[data-edit-tier-score]')) {
-      if (!saveTierLabel(target.dataset.editTierScore, target.textContent)) renderRoute();
-      return;
-    }
     if (target.matches('[data-theme-title]')) {
       const gameId = target.dataset.themeTitle;
       const title = String(target.value || '').trim();
@@ -3063,13 +2812,6 @@
     }
   }
 
-  function handleAppKeydown(event) {
-    const target = event.target;
-    if (target.matches('[data-edit-tier-score]') && event.key === 'Enter') {
-      event.preventDefault();
-      target.blur();
-    }
-  }
 
   function bindStaticEvents() {
     const lowPower = mobilePerformance || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
@@ -3088,7 +2830,6 @@
     app.addEventListener('input', handleAppInput);
     app.addEventListener('change', handleAppChange);
     app.addEventListener('focusout', handleAppBlur);
-    app.addEventListener('keydown', handleAppKeydown);
 
     // Navegación de secciones: si no caben todas, la rueda del ratón
     // desplaza la banda horizontalmente. En móvil el swipe sigue siendo nativo.
@@ -3214,32 +2955,6 @@
       if (event.key === UI_THEME_KEY) applyUiTheme(event.newValue || 'default', false);
     });
 
-    editModeButton?.addEventListener('click', () => editMode ? exitEditMode() : openAdminGate());
-    adminGateClose?.addEventListener('click', closeAdminGate);
-    adminGate?.addEventListener('click', (event) => { if (event.target === adminGate) closeAdminGate(); });
-    adminGateForm?.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      adminGateError.textContent = '';
-      const valid = await passwordMatches(adminPassword.value);
-      if (!valid) {
-        adminGateError.textContent = 'Contraseña incorrecta.';
-        adminPassword.select();
-        return;
-      }
-      editMode = true;
-      safeSet(sessionStore, ADMIN_SESSION_KEY, 'true');
-      closeAdminGate();
-      updateEditUi();
-      renderRoute();
-    });
-    exitEditButton?.addEventListener('click', exitEditMode);
-    exportEditsButton?.addEventListener('click', exportEdits);
-    importEditsButton?.addEventListener('click', () => importEditsInput?.click());
-    importEditsInput?.addEventListener('change', () => {
-      const file = importEditsInput.files?.[0];
-      void importEditsFile(file);
-      importEditsInput.value = '';
-    });
 
     window.addEventListener('hashchange', renderRoute);
     window.addEventListener('beforeunload', () => {
@@ -3250,10 +2965,25 @@
 
   function validateInitialData() {
     const ids = new Set();
+    const tierIds = new Set();
+    const tierScores = new Set();
+    for (const row of scale) {
+      const tierId = String(row?.id || '').trim();
+      const score = Number(row?.score);
+      if (!tierId || tierIds.has(tierId)) throw new Error(`ID de tier inválido o duplicado: ${tierId || 'vacío'}`);
+      if (!Number.isFinite(score) || tierScores.has(score)) throw new Error(`Nota de tier inválida o duplicada: ${row?.score}`);
+      tierIds.add(tierId); tierScores.add(score);
+    }
     for (const game of games) {
       if (!game?.id || ids.has(game.id)) throw new Error(`ID de juego inválido o duplicado: ${game?.id || 'vacío'}`);
       ids.add(game.id);
       if (!scale.some((row) => Number(row.score) === Number(game.score))) throw new Error(`La nota ${game.score} de ${game.title} no existe en la escala`);
+    }
+    for (const catalog of ['offline', 'online']) {
+      for (const row of scale) {
+        const positions = gamesForCatalog(catalog).filter((game) => Number(game.score) === Number(row.score)).map((game) => Number(game.tierOrder)).sort((a,b) => a-b);
+        positions.forEach((position, index) => { if (!Number.isInteger(position) || position !== index + 1) throw new Error(`Orden inválido en ${catalog}, tier ${row.label}`); });
+      }
     }
   }
 
@@ -3277,7 +3007,6 @@
   validateInitialData();
   applyUiTheme(uiTheme, false);
   bindStaticEvents();
-  updateEditUi();
   if (!location.hash) history.replaceState(null, '', '#' + copy('homeRoute'));
   updateSceneMotionVars();
   updateSceneScrollDepth();

@@ -1,0 +1,64 @@
+MAUS TIER LIST v5.4.9 — SANEAMIENTO DEL EDITOR DE TIERS
+
+CORRECCIONES APLICADAS
+
+1. El ranking ya no asume que una nota numérica mayor implica un tier superior.
+   - El orden real de MAUS_SCALE manda en ranking, recorrido, bibliotecas y presentación.
+   - Se centralizaron los comparadores de ranking y de orden dentro del tier.
+
+2. tierOrder está completamente separado entre Offline y Online.
+   - Normalización independiente por catálogo + tier.
+   - Las posiciones siempre quedan 1, 2, 3... sin huecos ni duplicados.
+
+3. tierOrder deja de ser un número editable libre.
+   - El editor muestra la posición como solo lectura.
+   - Se añadieron botones ↑ / ↓ para mover el juego dentro de su tier.
+   - Cambiar de tier, cambiar de catálogo, borrar un juego o borrar un tier vuelve a normalizar las posiciones afectadas.
+
+4. Se eliminó del frontend público la infraestructura antigua del editor local de tiers/reviews.
+   - Eliminados passwordMatches, editStore, almacenamiento de parches locales, import/export del editor antiguo y listeners asociados.
+   - admin.html queda como editor oficial.
+
+5. Se eliminaron los game.label duplicados.
+   - El nombre de cada tier vive únicamente en MAUS_SCALE.
+   - El editor elimina automáticamente el label legado al cargar datos antiguos.
+   - La serialización pública ya no vuelve a generarlo.
+
+6. Cada tier tiene un ID estable.
+   - Ejemplos: obra-maestra, sublime, brutal, increible...
+   - El editor genera IDs compatibles automáticamente si abre datos antiguos.
+   - Se valida que sean únicos y correctos.
+
+7. Validación de tiers reforzada.
+   - Score único y numérico.
+   - ID único y válido.
+   - Nombre obligatorio.
+   - Color válido.
+   - textColor, fontFamily, fontSize, align, bold e italic se validan cuando existen.
+   - Se valida también que tierOrder sea continuo dentro de cada catálogo/tier.
+
+8. Estilos de tier unificados.
+   - La alineación del tier se respeta también en modo presentación.
+   - La preview del editor refleja la alineación desde el primer render.
+
+9. Caché/versionado del editor corregidos.
+   - admin.html usa la misma versión que el resto del proyecto.
+   - Al publicar, admin.html también se incluye en el control de concurrencia y en el commit.
+   - El publicador actualiza automáticamente los ?v=... de admin.html junto con la versión.
+
+10. Versión del proyecto incrementada a v5.4.9.
+
+COMPROBACIONES AUTOMÁTICAS REALIZADAS
+
+- Sintaxis correcta en todos los archivos js/*.js con node --check.
+- 11 tiers con IDs únicos.
+- 16 juegos Offline y 4 juegos Online.
+- Ningún juego conserva game.label.
+- IDs de juegos únicos.
+- Scores de tiers únicos.
+- tierOrder continuo e independiente en Offline y Online.
+- Ranking comprobado contra el orden de MAUS_SCALE.
+- Sin restos principales del editor local antiguo en js/app.js.
+- version.json, index.html y admin.html sincronizados en v5.4.9.
+- Todos los assets cover/background/music declarados en site-data.js existen.
+

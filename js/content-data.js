@@ -11,8 +11,6 @@ window.MAUS_CONTENT = {
     "navOffline": "OFFLINE",
     "navOnline": "ONLINE",
     "navMusic": "Resonancias",
-    "navReviews": "Reviews",
-    "navFeatures": "Features",
     "navPresentation": "Modo presentación",
     "navAppearance": "Apariencia",
     "offlineEyebrow": "TIER LIST · OFFLINE",
@@ -26,16 +24,9 @@ window.MAUS_CONTENT = {
     "onlineNote": "La posición de un juego online no afecta a su posición en la tier list offline.",
     "onlineStats": "ranking multijugador independiente",
     "readRanking": "▶ Leer ranking de arriba a abajo",
-    "offlineReviewsButton": "Ver reviews offline",
-    "onlineReviewsButton": "Ver reviews online",
     "offlineSwitch": "Campañas · single player",
     "onlineSwitch": "Competitivo · coop · multijugador",
     "musicSwitch": "Una colección para escuchar y leer",
-    "offlineReviewsTitle": "Mis juegos offline.",
-    "offlineReviewsLead": "Campañas y experiencias principalmente offline.",
-    "onlineReviewsTitle": "Mis juegos online.",
-    "onlineReviewsLead": "Biblioteca independiente para juegos multijugador y competitivos.",
-    "reviewSearch": "Buscar una review…",
     "musicEyebrow": "EL ARCHIVO SONORO DE MAUS",
     "musicTitle": "Resonancias",
     "musicSubtitle": "Hay músicas que no se quedan en el juego.",
@@ -49,8 +40,6 @@ window.MAUS_CONTENT = {
     "onlinePresentationTitle": "Mi ranking de videojuegos online",
     "onlinePresentationLead": "Experiencias multijugador, competitivas y cooperativas.",
     "presentationFooter": "Dentro de cada tier, el orden va de izquierda a derecha.",
-    "featuresTitle": "Qué hay aquí y dónde tocar.",
-    "featuresLead": "Una guía rápida para saber qué puedes explorar sin tener que descubrir cada función por accidente.",
     "musicKicker": "VIDEOJUEGOS / MÚSICA / MEMORIA",
     "musicExplore": "Explorar la colección",
     "musicShelf": "La colección",
@@ -145,38 +134,6 @@ window.MAUS_CONTENT = {
       "id": "musica-mu7uily8-mchy",
       "published": true,
       "featured": true
-    }
-  ],
-  "features": [
-    {
-      "title": "Dos rankings, dos formas de jugar",
-      "text": "Offline y online tienen su propio ranking, sus reviews y su recorrido.",
-      "route": "tierlist",
-      "label": "Explorar los juegos"
-    },
-    {
-      "title": "Un archivo para la música",
-      "text": "Fichas dedicadas a músicas de videojuegos: escuchar, leer y descubrir sus detalles, sin puntuaciones.",
-      "route": "music",
-      "label": "Abrir el archivo sonoro"
-    },
-    {
-      "title": "Una escena para cada juego",
-      "text": "Fondos, ambiente y música acompañan las críticas. Desde Apariencia puedes elegir todos los efectos, ambiente reducido o un fondo sin efectos.",
-      "route": "games/offline",
-      "label": "Explorar las reviews"
-    },
-    {
-      "title": "Escucha a tu ritmo",
-      "text": "Pausa y reanuda sin perder la posición, ajusta el volumen o salta a otra parte de la canción. Los efectos musicales siguen el instante que estás escuchando.",
-      "route": "music",
-      "label": "Escuchar"
-    },
-    {
-      "title": "Presentación y fondo",
-      "text": "Modo presentación reúne las portadas del ranking. Ver fondo oculta la interfaz para disfrutar de la escena.",
-      "route": "tierlist",
-      "label": "Volver al ranking"
     }
   ]
 };

@@ -1,0 +1,10 @@
+MAUS TIER LIST v5.5.0 — cambios
+
+- Eliminado el apartado independiente Reviews de la navegación.
+- Eliminado el botón "Ver reviews" de las portadas offline/online.
+- Las reviews individuales se mantienen accesibles desde cada juego y desde el recorrido del ranking.
+- Eliminado completamente Features/Guía de la web pública y del editor de contenido.
+- Los hashes antiguos #games/offline, #games/online y #features redirigen de forma segura a la tier list correspondiente.
+- El scrollbar principal ya no es rojo fijo: usa var(--accent), por lo que cambia con Original / Negro & Rojo / Azul & Amarillo.
+- El scrollbar especial de la ficha de Resonancias conserva su estilo de papel/terracota porque pertenece a esa interfaz propia.
+- Versión actualizada a 5.5.0.

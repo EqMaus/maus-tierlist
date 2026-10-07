@@ -1,0 +1,9 @@
+v5.5.1 — corrección de base de datos
+
+- Restauradas las reviews actualizadas de la v5.4.14 para Resident Evil 3: Nemesis, God of War, Resident Evil Remastered y Medievil 2.
+- Restaurado el tier 5.5 Decente+.
+- Resident Evil Remastered vuelve a 5.5.
+- Medievil 2 vuelve a 5.
+- Conservadas las correcciones estructurales de v5.4.9/v5.5.0.
+- Reviews y Features continúan eliminados como apartados independientes.
+- El scrollbar continúa sincronizado con el color del tema.

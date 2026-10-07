@@ -1,0 +1,10 @@
+v5.5.4
+
+- Restaurados los 4 juegos ONLINE desde la v5.4.14 de GitHub.
+- Smash Ultimate: 9
+- Paladins: 9
+- Apex Legends: 9
+- League of Legends: 6.5
+- Reviews reconstruidas exactamente desde reviewSections (la concatenación fue verificada contra review en la v5.4.14).
+- Portadas, fondos, música y efectos conservados.
+- No se han modificado los 16 juegos OFFLINE.

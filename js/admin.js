@@ -94,6 +94,8 @@
   const fieldScore = $('fieldScore');
   const fieldLabel = $('fieldLabel');
   const fieldTierOrder = $('fieldTierOrder');
+  const tierOrderUpButton = $('tierOrderUpButton');
+  const tierOrderDownButton = $('tierOrderDownButton');
   const fieldTierVisible = $('fieldTierVisible');
   const fieldReviewDate = $('fieldReviewDate');
   const fieldSpoilers = $('fieldSpoilers');
@@ -170,7 +172,7 @@
   let selectedId = '';
   let currentVersion = '';
   let baseSnapshot = '';
-  let baseShas = { siteData: '', index: '', version: '' };
+  let baseShas = { siteData: '', index: '', admin: '', version: '', editorial: '' };
   let pendingFiles = {};
   let previewUrls = {};
   let newGameIds = new Set();
@@ -1357,6 +1359,8 @@ const ADMIN_CURATED_REVIEW_SPECS = {
   function publicGameData(game) {
     const copy = clone(game);
     delete copy._catalog;
+    // El nombre del tier vive únicamente en MAUS_SCALE.
+    delete copy.label;
     return copy;
   }
 
@@ -1396,6 +1400,11 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     return next;
   }
 
+  function bumpAssetVersion(source, fromVersion, toVersion) {
+    void fromVersion;
+    return String(source).replace(/(\?v=)\d+\.\d+\.\d+/g, `$1${toVersion}`);
+  }
+
   function tierForScore(score) {
     return scale.find((row) => Number(row.score) === Number(score)) || null;
   }
@@ -1409,8 +1418,21 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     return games.filter((game) => normalizeCatalog(game._catalog) === normalized);
   }
 
+  function tierRank(score) {
+    const index = scale.findIndex((row) => Number(row.score) === Number(score));
+    return index === -1 ? Number.MAX_SAFE_INTEGER : index;
+  }
+
+  function compareGamesWithinTier(a, b) {
+    return ((Number(a.tierOrder) || 999) - (Number(b.tierOrder) || 999)) || String(a.title).localeCompare(String(b.title), 'es');
+  }
+
+  function compareGamesByRanking(a, b) {
+    return (tierRank(a.score) - tierRank(b.score)) || compareGamesWithinTier(a, b);
+  }
+
   function sortedGames(catalog = activeCatalog) {
-    return [...gamesInCatalog(catalog)].sort((a, b) => (b.score - a.score) || ((a.tierOrder ?? 999) - (b.tierOrder ?? 999)) || String(a.title).localeCompare(String(b.title), 'es'));
+    return [...gamesInCatalog(catalog)].sort(compareGamesByRanking);
   }
 
   function selectedGame() {
@@ -1433,11 +1455,41 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     return TIER_FONT_OPTIONS.some(([value]) => value === row.fontFamily) ? row.fontFamily : 'default';
   }
 
-  function normalizeTierOrdersForScore(score) {
+  function normalizeTierOrdersForScore(score, catalog = activeCatalog) {
+    const normalizedCatalog = normalizeCatalog(catalog);
     const items = games
-      .filter((game) => Number(game.score) === Number(score))
-      .sort((a, b) => ((a.tierOrder ?? 999) - (b.tierOrder ?? 999)) || String(a.title).localeCompare(String(b.title), 'es'));
-    items.forEach((game, index) => { game.tierOrder = index; });
+      .filter((game) => normalizeCatalog(game._catalog) === normalizedCatalog && Number(game.score) === Number(score))
+      .sort(compareGamesWithinTier);
+    items.forEach((game, index) => { game.tierOrder = index + 1; });
+  }
+
+  function normalizeAllTierOrders() {
+    ['offline', 'online'].forEach((catalog) => {
+      scale.forEach((row) => normalizeTierOrdersForScore(row.score, catalog));
+    });
+  }
+
+  function moveSelectedGameWithinTier(direction) {
+    const game = selectedGame();
+    if (!game) return;
+    const catalog = normalizeCatalog(game._catalog);
+    normalizeTierOrdersForScore(game.score, catalog);
+    const items = gamesInCatalog(catalog)
+      .filter((item) => Number(item.score) === Number(game.score))
+      .sort(compareGamesWithinTier);
+    const index = items.findIndex((item) => item.id === game.id);
+    const target = direction === 'up' ? index - 1 : index + 1;
+    if (index < 0 || target < 0 || target >= items.length) return;
+    const other = items[target];
+    const currentOrder = game.tierOrder;
+    game.tierOrder = other.tierOrder;
+    other.tierOrder = currentOrder;
+    normalizeTierOrdersForScore(game.score, catalog);
+    fieldTierOrder.value = String(game.tierOrder);
+    renderGameList();
+    renderSelectedGame();
+    updateDirtyUi();
+    clearNotice();
   }
 
   function refreshTierDependentUi() {
@@ -1459,7 +1511,8 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     const weight = row.bold === true ? 900 : row.bold === false ? 500 : 850;
     const style = row.italic === true ? 'italic' : 'normal';
     const color = row.textColor || '#101318';
-    return `--tier-preview:${esc(row.color || '#888888')};--tier-preview-text:${esc(color)};--tier-preview-size:${size}px;--tier-preview-weight:${weight};--tier-preview-style:${style}`;
+    const align = ['left','center','right'].includes(row.align) ? row.align : 'center';
+    return `--tier-preview:${esc(row.color || '#888888')};--tier-preview-text:${esc(color)};--tier-preview-size:${size}px;--tier-preview-weight:${weight};--tier-preview-style:${style};text-align:${align}`;
   }
 
   function renderTierEditor() {
@@ -1628,8 +1681,12 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     fieldPlatform.value = game.platform || '';
     fieldFranchise.value = game.franchise || '';
     fieldScore.value = String(game.score);
-    fieldLabel.value = tierForScore(game.score)?.label || game.label || '';
+    fieldLabel.value = tierForScore(game.score)?.label || '';
     fieldTierOrder.value = Number.isFinite(Number(game.tierOrder)) ? String(game.tierOrder) : '';
+    const tierPeers = gamesInCatalog(game._catalog).filter((item) => Number(item.score) === Number(game.score)).sort(compareGamesWithinTier);
+    const tierPosition = tierPeers.findIndex((item) => item.id === game.id);
+    if (tierOrderUpButton) tierOrderUpButton.disabled = tierPosition <= 0;
+    if (tierOrderDownButton) tierOrderDownButton.disabled = tierPosition < 0 || tierPosition >= tierPeers.length - 1;
     fieldTierVisible.checked = game.tierVisible !== false;
     fieldReviewDate.value = game.reviewDate || '';
     fieldSpoilers.checked = Boolean(game.spoilers);
@@ -1658,19 +1715,29 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     const game = selectedGame();
     if (!game || !target.dataset.field) return;
     const field = target.dataset.field;
+    const previousScore = Number(game.score);
+    const previousCatalog = normalizeCatalog(game._catalog);
     if (target.type === 'checkbox') game[field] = target.checked;
     else if (field === 'score') {
       const score = Number(target.value);
       game.score = score;
+      game.tierOrder = 999;
       const tier = tierForScore(score);
-      if (tier) game.label = tier.label;
       fieldLabel.value = tier?.label || '';
+      normalizeTierOrdersForScore(previousScore, previousCatalog);
+      normalizeTierOrdersForScore(score, previousCatalog);
     } else if (field === 'tierOrder') {
-      const parsed = Number.parseInt(target.value, 10);
-      game.tierOrder = Number.isFinite(parsed) ? parsed : 0;
+      // La posición se gestiona con los botones subir/bajar, no como número libre.
+      fieldTierOrder.value = String(game.tierOrder || 1);
     } else game[field] = target.value;
 
-    if (field === '_catalog') activeCatalog = normalizeCatalog(game._catalog);
+    if (field === '_catalog') {
+      activeCatalog = normalizeCatalog(game._catalog);
+      game.tierOrder = 999;
+      normalizeTierOrdersForScore(previousScore, previousCatalog);
+      normalizeTierOrdersForScore(game.score, activeCatalog);
+    }
+    fieldTierOrder.value = String(game.tierOrder || 1);
     editorTitle.textContent = game.title || game.id;
     editorSubtitle.textContent = `${game._catalog === 'online' ? 'ONLINE' : 'OFFLINE'} · ${game.platform || 'Sin plataforma'} · ${game.year || 'Sin año'}`;
     updateCounts();
@@ -1712,9 +1779,6 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     row.label = label;
     const previewLabel = tierEditor.querySelector(`[data-tier-card="${index}"] .tier-edit-preview strong`);
     if (previewLabel) previewLabel.textContent = label || 'Sin nombre';
-    games.forEach((game) => {
-      if (Number(game.score) === Number(row.score)) game.label = label;
-    });
     renderScoreOptions();
     const game = selectedGame();
     if (game) {
@@ -1772,6 +1836,14 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     return true;
   }
 
+  function slugifyTierId(value) {
+    const base = String(value || 'tier').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'tier';
+    let id = base;
+    let suffix = 2;
+    while (scale.some((row) => row.id === id)) id = `${base}-${suffix++}`;
+    return id;
+  }
+
   function createTier() {
     const rawScore = prompt('Nota del nuevo tier (debe ser única):', '5.5');
     if (rawScore === null) return;
@@ -1784,7 +1856,7 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     if (rawLabel === null) return;
     const label = rawLabel.trim() || 'Nuevo tier';
     const insertAt = scale.findIndex((row) => Number(row.score) < score);
-    const row = { score, label, tone: 'default', color: '#9aa4ae', textColor: '#101318', fontFamily: 'default', fontSize: 20, bold: true, italic: false, align: 'center' };
+    const row = { id: slugifyTierId(label), score, label, tone: 'default', color: '#9aa4ae', textColor: '#101318', fontFamily: 'default', fontSize: 20, bold: true, italic: false, align: 'center' };
     scale.splice(insertAt === -1 ? scale.length : insertAt, 0, row);
     refreshTierDependentUi();
   }
@@ -1801,8 +1873,9 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     const detail = affected.length ? `\n\n${affected.length} juego(s) están en este tier. Se moverán a “${fallback.label}” (${fallback.score}). No se eliminará ningún juego.` : '';
     if (!confirm(`¿Eliminar el tier “${row.label}” (${row.score})?${detail}`)) return;
     scale.splice(index, 1);
-    affected.forEach((game) => { game.score = fallback.score; game.label = fallback.label; game.tierOrder = 999; });
-    normalizeTierOrdersForScore(fallback.score);
+    affected.forEach((game) => { game.score = fallback.score; game.tierOrder = 999; });
+    normalizeTierOrdersForScore(fallback.score, 'offline');
+    normalizeTierOrdersForScore(fallback.score, 'online');
     refreshTierDependentUi();
   }
 
@@ -1817,12 +1890,27 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     contentEditor.validate();
     if (!Array.isArray(scale) || !scale.length) throw new Error('Debe existir al menos un tier.');
     const tierScores = new Set();
+    const tierIds = new Set();
+    const validFonts = new Set(TIER_FONT_OPTIONS.map(([value]) => value));
+    const validAlignments = new Set(['left', 'center', 'right']);
     for (const row of scale) {
       const score = Number(row.score);
+      const tierId = String(row.id || '').trim();
+      if (!tierId || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(tierId) || tierIds.has(tierId)) throw new Error(`ID de tier inválido o duplicado: ${tierId || '(vacío)'}`);
       if (!Number.isFinite(score) || tierScores.has(score)) throw new Error(`Nota de tier inválida o duplicada: ${row.score}`);
       if (!String(row.label || '').trim()) throw new Error(`El tier ${row.score} necesita un nombre.`);
       if (!/^#[0-9a-f]{6}$/i.test(String(row.color || ''))) throw new Error(`El color del tier ${row.label} no es válido.`);
+      if (row.textColor !== undefined && !/^#[0-9a-f]{6}$/i.test(String(row.textColor))) throw new Error(`El color de texto del tier ${row.label} no es válido.`);
+      if (row.fontFamily !== undefined && !validFonts.has(String(row.fontFamily))) throw new Error(`La tipografía del tier ${row.label} no es válida.`);
+      if (row.align !== undefined && !validAlignments.has(String(row.align))) throw new Error(`La alineación del tier ${row.label} no es válida.`);
+      if (row.fontSize !== undefined) {
+        const fontSize = Number(row.fontSize);
+        if (!Number.isFinite(fontSize) || fontSize < 12 || fontSize > 42) throw new Error(`El tamaño de texto del tier ${row.label} debe estar entre 12 y 42.`);
+      }
+      if (row.bold !== undefined && typeof row.bold !== 'boolean') throw new Error(`La negrita del tier ${row.label} no es válida.`);
+      if (row.italic !== undefined && typeof row.italic !== 'boolean') throw new Error(`La cursiva del tier ${row.label} no es válida.`);
       tierScores.add(score);
+      tierIds.add(tierId);
     }
     const ids = new Set();
     for (const game of games) {
@@ -1835,8 +1923,16 @@ const ADMIN_CURATED_REVIEW_SPECS = {
         throw new Error(`El segundo inicial de la música de ${game.title} no es válido.`);
       }
     }
-    for (const row of scale) {
-      if (!String(row.label || '').trim()) throw new Error(`El tier ${row.score} no puede quedarse sin nombre.`);
+    for (const catalog of ['offline', 'online']) {
+      for (const row of scale) {
+        const positions = gamesInCatalog(catalog)
+          .filter((game) => Number(game.score) === Number(row.score))
+          .map((game) => Number(game.tierOrder))
+          .sort((a, b) => a - b);
+        positions.forEach((position, index) => {
+          if (!Number.isInteger(position) || position !== index + 1) throw new Error(`El orden de ${catalog} en el tier ${row.label} no está normalizado.`);
+        });
+      }
     }
   }
 
@@ -1890,18 +1986,22 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     try {
       const branch = await apiFetch(API + '/git/ref/heads/' + BRANCH);
       const head = branch.object.sha;
-      const [siteDataFile, indexFile, versionFile, editorialFile] = await Promise.all([
-        getFile('js/site-data.js',head), getFile('index.html',head), getFile('version.json',head), getEditorialFile(head)
+      const [siteDataFile, indexFile, adminFile, versionFile, editorialFile] = await Promise.all([
+        getFile('js/site-data.js',head), getFile('index.html',head), getFile('admin.html',head), getFile('version.json',head), getEditorialFile(head)
       ]);
       const parsed = parseSiteData(siteDataFile.content);
       games = clone(parsed.games);
       scale = clone(parsed.scale);
+      // Compatibilidad con versiones antiguas: genera IDs estables una sola vez.
+      scale.forEach((row) => { if (!row.id) row.id = slugifyTierId(row.label || `tier-${row.score}`); });
+      games.forEach((game) => { delete game.label; });
+      normalizeAllTierOrders();
       contentEditor.load(window.MausContentModel.parse(editorialFile.content));
       activeCatalog = 'offline';
       reviewHistory.clear();
       reviewFocusSnapshot = '';
       currentVersion = parseVersion(versionFile.content);
-      baseShas = { siteData: siteDataFile.sha, index: indexFile.sha, version: versionFile.sha, editorial: editorialFile.sha };
+      baseShas = { siteData: siteDataFile.sha, index: indexFile.sha, admin: adminFile.sha, version: versionFile.sha, editorial: editorialFile.sha };
       baseSnapshot = currentSnapshot();
       newGameIds = new Set();
       resetPendingFiles();
@@ -1951,7 +2051,7 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     selectedId = '';
     currentVersion = '';
     baseSnapshot = '';
-    baseShas = { siteData: '', index: '', version: '' };
+    baseShas = { siteData: '', index: '', admin: '', version: '', editorial: '' };
     newGameIds = new Set();
     resetPendingFiles();
     clearSavedToken();
@@ -2063,6 +2163,7 @@ const ADMIN_CURATED_REVIEW_SPECS = {
 
   async function publish() {
     if (!isDirty()) return;
+    normalizeAllTierOrders();
     try {
       validateData();
       Object.values(pendingFiles).forEach((entry) => {
@@ -2083,12 +2184,12 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     try {
       const branch = await apiFetch(API + '/git/ref/heads/' + BRANCH);
       const head = branch.object.sha;
-      const [freshSiteData, freshIndex, freshVersion, freshEditorial] = await Promise.all([
-        getFile('js/site-data.js', head), getFile('index.html', head), getFile('version.json', head), getEditorialFile(head)
+      const [freshSiteData, freshIndex, freshAdmin, freshVersion, freshEditorial] = await Promise.all([
+        getFile('js/site-data.js', head), getFile('index.html', head), getFile('admin.html', head), getFile('version.json', head), getEditorialFile(head)
       ]);
       publicationEntries = [];
 
-      if (freshSiteData.sha !== baseShas.siteData || freshIndex.sha !== baseShas.index || freshVersion.sha !== baseShas.version || freshEditorial.sha !== baseShas.editorial) {
+      if (freshSiteData.sha !== baseShas.siteData || freshIndex.sha !== baseShas.index || freshAdmin.sha !== baseShas.admin || freshVersion.sha !== baseShas.version || freshEditorial.sha !== baseShas.editorial) {
         throw new Error('El repositorio cambió desde que abriste el editor. Pulsa “Descartar” para recargar la versión actual y vuelve a aplicar tu cambio.');
       }
 
@@ -2108,17 +2209,19 @@ const ADMIN_CURATED_REVIEW_SPECS = {
       const publishEditorial = await contentEditor.prepare(nextVersion, (path,file) => putBinaryFile(path,file));
       const nextEditorial = window.MausContentModel.serialize(publishEditorial);
       const nextIndex = window.MausContentModel.applyHtml(bumpIndexVersion(freshIndex.content, remoteVersion, nextVersion),publishEditorial,nextVersion);
+      const nextAdmin = bumpAssetVersion(freshAdmin.content, remoteVersion, nextVersion);
       const nextSiteData = serializeSiteData(publishGames, scale);
       const nextVersionJson = `${JSON.stringify({ version: nextVersion }, null, 2)}\n`;
 
       busyText.textContent = 'Publicando todos los cambios en un único commit…';
       const entries = [...publicationEntries,
         { path: 'index.html', mode: '100644', type: 'blob', content: nextIndex },
+        { path: 'admin.html', mode: '100644', type: 'blob', content: nextAdmin },
         { path: 'js/site-data.js', mode: '100644', type: 'blob', content: nextSiteData },
         { path: 'version.json', mode: '100644', type: 'blob', content: nextVersionJson },
         { path: 'js/content-data.js', mode: '100644', type: 'blob', content: nextEditorial }
       ];
-      const nextShas = { siteData: await gitBlobSha(nextSiteData), index: await gitBlobSha(nextIndex), version: await gitBlobSha(nextVersionJson), editorial: await gitBlobSha(nextEditorial) };
+      const nextShas = { siteData: await gitBlobSha(nextSiteData), index: await gitBlobSha(nextIndex), admin: await gitBlobSha(nextAdmin), version: await gitBlobSha(nextVersionJson), editorial: await gitBlobSha(nextEditorial) };
       await commitPublication(head, entries, 'Editor: publica v' + nextVersion);
       games = publishGames;
       contentEditor.accept(publishEditorial);
@@ -2180,7 +2283,7 @@ const ADMIN_CURATED_REVIEW_SPECS = {
 
     const defaultTier = scale.find((row) => Number(row.score) === 7) || scale[0];
     const score = Number(defaultTier?.score ?? 7);
-    const order = Math.max(0, ...gamesInCatalog(activeCatalog).filter((game) => Number(game.score) === score).map((game) => Number(game.tierOrder) || 0)) + 1;
+    const order = gamesInCatalog(activeCatalog).filter((game) => Number(game.score) === score).length + 1;
     const game = {
       _catalog: activeCatalog,
       id,
@@ -2189,7 +2292,6 @@ const ADMIN_CURATED_REVIEW_SPECS = {
       platform: '',
       franchise: '',
       score,
-      label: defaultTier?.label || 'Muy bueno',
       tierOrder: order,
       tierVisible: true,
       reviewDate: '',
@@ -2209,6 +2311,9 @@ const ADMIN_CURATED_REVIEW_SPECS = {
     updateDirtyUi();
     showNotice('Borrador creado. Completa la ficha, añade los archivos que quieras y pulsa <strong>Guardar y publicar</strong>.');
   }
+
+  tierOrderUpButton?.addEventListener('click', () => moveSelectedGameWithinTier('up'));
+  tierOrderDownButton?.addEventListener('click', () => moveSelectedGameWithinTier('down'));
 
   const contentEditor = window.MausContentEditor.create({
     getGames: () => games,
@@ -2239,7 +2344,10 @@ const ADMIN_CURATED_REVIEW_SPECS = {
   $('deleteGameButton').addEventListener('click', () => {
     const game = selectedGame();
     if (!game || !confirm('¿Eliminar «' + game.title + '»? Se aplicará cuando publiques. Los archivos del juego se conservarán.')) return;
+    const deletedScore = game.score;
+    const deletedCatalog = normalizeCatalog(game._catalog);
     games = games.filter(item => item.id !== game.id);
+    normalizeTierOrdersForScore(deletedScore, deletedCatalog);
     delete pendingFiles[game.id];
     Object.keys(previewUrls).filter(key => key.startsWith(game.id + ':')).forEach(revokePreview);
     contentEditor.removeGameReference(game.id);
