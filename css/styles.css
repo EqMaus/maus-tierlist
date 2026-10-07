@@ -3499,3 +3499,12 @@ body:not(.music-space) .review-card-head h2{font-family:Georgia,'Times New Roman
 .review-journey-editorial .journey-edge small{margin-bottom:6px;color:#69655e;font-family:Arial,sans-serif;font-size:.55rem;font-weight:850;letter-spacing:.14em}.review-journey-editorial .journey-edge-end{text-align:right}
 @media(max-width:760px){.detail-top{align-items:flex-start!important}.collection-breadcrumbs{flex-wrap:wrap;gap:6px 8px;line-height:1.45}.collection-breadcrumbs strong{max-width:72vw}.review-journey-editorial .review-journey-links{grid-template-columns:1fr 1fr;gap:10px}.review-journey-editorial .journey-current{display:none}.review-journey-editorial .journey-link{min-height:126px;padding:12px}.review-journey-editorial .journey-preview{grid-template-columns:48px minmax(0,1fr);gap:10px}.review-journey-editorial .journey-link-next .journey-preview{grid-template-columns:minmax(0,1fr) 48px}.review-journey-editorial .journey-preview img,.review-journey-editorial .journey-cover-fallback{width:48px;height:66px}.review-journey-editorial .journey-preview-copy strong{font-size:.92rem}.review-journey-editorial .journey-preview-copy em{display:none}}
 @media(max-width:520px){.review-journey-editorial .review-journey-links{grid-template-columns:1fr}.review-journey-editorial .journey-link-next .journey-preview{grid-template-columns:48px minmax(0,1fr)}.review-journey-editorial .journey-link-next .journey-preview img,.review-journey-editorial .journey-link-next .journey-cover-fallback{grid-column:1;grid-row:1}.review-journey-editorial .journey-link-next .journey-preview-copy{grid-column:2;grid-row:1;text-align:left}.review-journey-editorial .journey-link-next,.review-journey-editorial .journey-edge-end{text-align:left}}
+
+/* ============================================================
+   v5.6.14 · REVIEWS LIGERAMENTE MÁS PANORÁMICAS
+   ============================================================ */
+/* Amplía únicamente las fichas/reviews en escritorio. El resto de la web
+   conserva el ancho anterior y la lectura en móvil/tablet no cambia. */
+@media(min-width:1100px){
+  body:not(.music-space) .app-shell:has(.game-page){max-width:1340px}
+}

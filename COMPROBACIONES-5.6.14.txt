@@ -1,0 +1,8 @@
+v5.6.14 · Reviews ligeramente más panorámicas
+
+- Partiendo de v5.6.13.
+- Solo se amplía el ancho máximo del app-shell cuando la vista actual es una review (.game-page).
+- Nuevo máximo en escritorio: 1340px frente a 1220px generales.
+- El resto de páginas conserva exactamente el ancho anterior.
+- El cambio solo entra a partir de 1100px; tablet y móvil quedan intactos.
+- site-data.js no se modifica.
