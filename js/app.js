@@ -133,6 +133,9 @@
   let themeRequestId = 0;
   let currentGameSceneId = null;
   let presentationCatalog = 'offline';
+  let themeTransitionTimer = 0;
+  let routeTransitionTimer = 0;
+  let reviewSectionObserver = null;
 
   let sceneMotionFrame = 0;
   let sceneDriftFrame = 0;
@@ -908,13 +911,26 @@
   }
 
   function applyUiTheme(value, persist = true) {
-    uiTheme = normalizeUiTheme(value);
+    const nextTheme = normalizeUiTheme(value);
+    const changed = nextTheme !== uiTheme;
+    if (changed && persist && effectsMotionAllowed()) {
+      window.clearTimeout(themeTransitionTimer);
+      body.classList.add('theme-switching');
+      document.documentElement.classList.add('theme-switching');
+    }
+    uiTheme = nextTheme;
     body.dataset.uiTheme = uiTheme;
     document.documentElement.dataset.uiTheme = uiTheme;
     const themeColor = document.querySelector('meta[name="theme-color"]');
     if (themeColor) themeColor.setAttribute('content', UI_THEMES[uiTheme].color);
     if (persist) safeSet(localStore, UI_THEME_KEY, uiTheme);
     syncAppearanceUi();
+    if (changed && persist && effectsMotionAllowed()) {
+      themeTransitionTimer = window.setTimeout(() => {
+        body.classList.remove('theme-switching');
+        document.documentElement.classList.remove('theme-switching');
+      }, 420);
+    }
   }
 
   function setAppearanceOpen(open) {
@@ -1682,7 +1698,7 @@
   function reviewHtml(value, gameId) {
     const sections = reviewSectionsFor(gameId, value);
     if (window.MausReviewRenderer) {
-      return window.MausReviewRenderer.render(sections, { navigator: true, idPrefix: `review-${gameId}` });
+      return window.MausReviewRenderer.render(sections, { navigator: 'sidebar', idPrefix: `review-${gameId}` });
     }
     if (!sections.length) return '<div class="review-layout"><p class="empty-review">Sin review todavía.</p></div>';
     return `<div class="review-layout">${sections.map((section) => {
@@ -2131,8 +2147,11 @@
 
   function go(path) {
     const next = path.startsWith('#') ? path : `#${path}`;
-    if (location.hash === next) renderRoute();
-    else location.hash = next;
+    if (location.hash === next) { renderRoute(); return; }
+    if (!effectsMotionAllowed()) { location.hash = next; return; }
+    window.clearTimeout(routeTransitionTimer);
+    app.classList.add('is-route-leaving');
+    routeTransitionTimer = window.setTimeout(() => { location.hash = next; }, 115);
   }
 
   function updateNav(section, catalog = body.dataset.catalog || 'offline') {
@@ -2159,6 +2178,8 @@
   function renderRoute() {
     try {
       setAppearanceOpen(false);
+      app.classList.remove('is-route-leaving');
+      app.classList.add('is-route-entering');
       const route = parseRoute();
       clearScene();
       body.classList.toggle('music-space', route.section === 'music');
@@ -2207,6 +2228,7 @@
       // An embedded preview must never steal the editor's typing focus.
       if (app && !new URL(location.href).searchParams.has('preview')) app.focus({ preventScroll: true });
       window.scrollTo(0, 0);
+      requestAnimationFrame(() => requestAnimationFrame(() => app.classList.remove('is-route-entering')));
     } catch (error) {
       renderFallback(error);
     }
@@ -2251,9 +2273,9 @@
         </aside>
       </section>
       ${isOnline && !ranked.length ? `<section class="online-empty-intro"><span>LISTA NUEVA</span><strong>La tier list online está preparada.</strong><p>Los juegos online se añaden desde el editor privado y quedan completamente separados de los juegos offline.</p></section>` : ''}
-      <div class="tier-list">${rows.map((row) => {
+      <div class="tier-list">${rows.map((row, rowIndex) => {
         const tierGames = ranked.filter((game) => Number(game.score) === Number(row.score)).sort(compareGamesWithinTier);
-        return `<section class="tier-row" style="--tier:${esc(row.color)}">
+        return `<section class="tier-row" style="--tier:${esc(row.color)};--row-index:${rowIndex}">
           <div class="tier-label" style="${tierLabelContainerStyle(row)}"><strong class="tier-font-${esc(row.tone)}${tierFontClass(row)}"${tierLabelStyle(row)}>${esc(row.label)}</strong><span>${esc(row.score)}</span></div>
           <div class="tier-games">${tierGames.length ? tierGames.map((game, index) => tierCard(game, index, row)).join('') : `<div class="tier-empty">${isOnline ? 'Sin juegos online todavía' : 'Sin juegos todavía'}</div>`}</div>
         </section>`;
@@ -2263,9 +2285,15 @@
 
   function tierCard(game, index, row) {
     const cover = coverSrc(game);
-    return `<button class="tier-card" type="button" data-open-game="${esc(game.id)}" style="--tier:${esc(row.color)}" aria-label="Abrir review de ${esc(game.title)}">
+    const meta = [game.year, game.platform].filter(Boolean).map(esc).join(' · ');
+    return `<button class="tier-card" type="button" data-open-game="${esc(game.id)}" style="--tier:${esc(row.color)};--card-index:${index}" aria-label="Abrir review de ${esc(game.title)}">
       ${cover ? `<img class="tier-cover" src="${esc(cover)}" alt="" loading="lazy">` : `<div class="tier-cover cover-fallback">${esc(game.title.slice(0, 1))}</div>`}
-      <div class="tier-card-copy"><div class="tier-card-rank"><span>#${index + 1} EN EL TIER</span><span class="tier-card-score">${esc(game.score)}/10</span></div><h3>${esc(game.title)}</h3><p>${esc(preview(game.review, 115))}</p></div>
+      <div class="tier-card-copy">
+        <div class="tier-card-rank"><span>#${index + 1} EN EL TIER</span><span class="tier-card-score">${esc(game.score)}/10</span></div>
+        <h3>${esc(game.title)}</h3>
+        <p>${esc(preview(game.review, 115))}</p>
+        <div class="tier-card-hover-meta"><span>${meta || 'Ficha personal'}</span><em>Abrir review →</em></div>
+      </div>
     </button>`;
   }
 
@@ -2316,9 +2344,20 @@
 
     app.innerHTML = `<div class="page game-page">
       <div class="detail-top"><button class="back-button" type="button" data-go="${catalogHome(catalog)}">← Volver a la tier list ${isOnline ? 'online' : 'offline'}</button><span class="eyebrow">${rankingMode ? `${isOnline ? 'ONLINE' : 'OFFLINE'} · RANKING · LECTURA EN ORDEN` : `${isOnline ? 'ONLINE' : 'OFFLINE'} · REVIEW PERSONAL`}</span></div>
-      <section class="detail-hero" style="--tier:${esc(tier.color)}">
-        ${cover ? `<img class="detail-cover" src="${esc(cover)}" alt="Portada de ${esc(game.title)}">` : ''}
-        <div class="detail-hero-copy"><span class="eyebrow">${esc(tier.label)}</span><h1>${titleDisplay}</h1><div class="detail-scoreline"><span class="score-badge">${scoreEditor}</span><span class="tier-badge tier-font-${esc(tier.tone)}">${esc(tier.label)}</span>${themeTitle ? `<span class="music-badge">♫ ${esc(themeTitle)}</span>` : ''}</div></div>
+      <section class="detail-hero review-editorial-hero" style="--tier:${esc(tier.color)}">
+        ${cover ? `<div class="detail-cover-frame"><img class="detail-cover" src="${esc(cover)}" alt="Portada de ${esc(game.title)}"><span>${String(tierIndex + 1).padStart(2,'0')}</span></div>` : ''}
+        <div class="detail-hero-copy">
+          <div class="review-hero-kicker"><span>${isOnline ? 'ARCHIVO ONLINE' : 'ARCHIVO OFFLINE'}</span><i></i><span>${game.reviewDate ? esc(game.reviewDate) : 'REVIEW PERSONAL'}</span></div>
+          <span class="eyebrow">${esc(tier.label)}</span>
+          <h1>${titleDisplay}</h1>
+          <div class="review-hero-meta">
+            ${game.year ? `<span><small>AÑO</small>${esc(game.year)}</span>` : ''}
+            ${game.platform ? `<span><small>PLATAFORMA</small>${esc(game.platform)}</span>` : ''}
+            ${game.franchise ? `<span><small>FRANQUICIA</small>${esc(game.franchise)}</span>` : ''}
+            <span><small>POSICIÓN</small>#${tierIndex + 1} en ${esc(tier.label)}</span>
+          </div>
+          <div class="detail-scoreline"><span class="score-badge">${scoreEditor}</span><span class="tier-badge tier-font-${esc(tier.tone)}">${esc(tier.label)}</span>${themeTitle ? `<span class="music-badge">♫ ${esc(themeTitle)}</span>` : ''}</div>
+        </div>
       </section>
       <div class="detail-grid">
         <article class="review-card" style="--tier:${esc(tier.color)};--review-tier:${esc(tier.color)}"><div class="review-card-head"><div><span class="eyebrow">MI REVIEW</span><h2>Review</h2></div></div>${reviewDisplay}</article>
@@ -2332,7 +2371,34 @@
       ${journeyIndex >= 0 ? reviewJourneyNav(journeyPrev, game, journeyNext, rankingMode) : ''}
     </div>`;
 
+    requestAnimationFrame(() => initReviewSectionIndex());
     void startGameTheme(game.id);
+  }
+
+  function initReviewSectionIndex() {
+    reviewSectionObserver?.disconnect();
+    reviewSectionObserver = null;
+    const root = app.querySelector('.review-render-root');
+    if (!root) return;
+    const sections = Array.from(root.querySelectorAll('.review-render-section'));
+    const buttons = Array.from(root.querySelectorAll('[data-review-nav-index]'));
+    const summary = root.querySelector('.review-section-index-mobile summary span');
+    if (!sections.length || !buttons.length) return;
+
+    const setActive = (index) => {
+      buttons.forEach((button) => button.classList.toggle('is-active', Number(button.dataset.reviewNavIndex) === Number(index)));
+      const activeButton = buttons.find((button) => Number(button.dataset.reviewNavIndex) === Number(index));
+      if (summary && activeButton) summary.textContent = activeButton.textContent.trim();
+    };
+    setActive(0);
+
+    if (!('IntersectionObserver' in window)) return;
+    reviewSectionObserver = new IntersectionObserver((entries) => {
+      const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => Math.abs(a.boundingClientRect.top - 150) - Math.abs(b.boundingClientRect.top - 150));
+      if (!visible.length) return;
+      setActive(Number(visible[0].target.dataset.reviewRenderIndex || 0));
+    }, { rootMargin: '-110px 0px -62% 0px', threshold: [0, .08, .2] });
+    sections.forEach((section) => reviewSectionObserver.observe(section));
   }
 
   function reviewJourneyNav(previous, current, next, rankingMode) {
@@ -2754,7 +2820,8 @@
     const reviewJump = event.target.closest('[data-review-jump]');
     if (reviewJump && app.contains(reviewJump)) {
       const target = document.getElementById(reviewJump.dataset.reviewJump);
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (target) target.scrollIntoView({ behavior: effectsMotionAllowed() ? 'smooth' : 'auto', block: 'start' });
+      reviewJump.closest('details')?.removeAttribute('open');
       return;
     }
     const action = event.target.closest('[data-go],[data-open-game],[data-start-ranking],[data-ranking-open],[data-theme-remove]');

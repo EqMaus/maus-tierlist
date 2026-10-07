@@ -1,0 +1,13 @@
+v5.6.8
+
+Mejoras aplicadas:
+1. Transiciones suaves entre vistas.
+2. Cambio de paleta con transición visual.
+3. Hover enriquecido de juegos en tiers.
+4. Cabecera de cada review convertida en ficha editorial.
+5. Índice lateral de secciones en escritorio y desplegable en móvil, con sección activa.
+
+Integridad:
+- js/site-data.js: sin cambios.
+- js/content-data.js: sin cambios.
+- No se han modificado juegos, notas, reviews, música ni fichas de Fonoteca.

@@ -38,3 +38,33 @@
 .review-section-nav-button.is-verdict{color:#d7c384}
 @media(max-width:700px){.review-section-nav{top:58px;margin-inline:-4px}.review-render-root .review-section{padding:16px}.review-render-root .review-verdict{padding:16px}.review-render-root .review-verdict-body{font-size:1.15rem}.review-section-nav-button{font-size:.68rem;padding:7px 9px}.review-section-nav-track{scrollbar-width:none}.review-section-nav-track::-webkit-scrollbar{display:none}}
 @media(prefers-reduced-motion:reduce){.review-section-nav-button{transition:none}}
+
+
+/* v5.6.8 · Índice editorial de reviews */
+.review-render-with-index .review-reading-grid{display:grid;grid-template-columns:minmax(142px,178px) minmax(0,1fr);gap:28px;align-items:start}
+.review-render-with-index .review-section-nav-sidebar{position:sticky;top:92px;z-index:5;margin:0;padding:0 18px 0 0;border:0;border-right:1px solid rgba(216,207,188,.12);border-radius:0;background:transparent;backdrop-filter:none;box-shadow:none}
+.review-render-with-index .review-index-kicker{display:block;margin-bottom:15px;color:#817c73;font-size:.58rem;font-weight:800;letter-spacing:.2em}
+.review-render-with-index .review-section-nav-sidebar .review-section-nav-track{display:grid;gap:2px;overflow:visible;padding:0}
+.review-render-with-index .review-section-nav-sidebar .review-section-nav-button{display:grid;grid-template-columns:24px minmax(0,1fr);gap:7px;width:100%;padding:8px 4px;border:0;border-radius:0;text-align:left;color:#8f8a81;font-family:Georgia,'Times New Roman',serif;font-size:.78rem;font-weight:500;line-height:1.25}
+.review-render-with-index .review-section-nav-sidebar .review-section-nav-button span{color:#625e57;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.58rem;letter-spacing:.03em;padding-top:2px}
+.review-render-with-index .review-section-nav-sidebar .review-section-nav-button:hover{color:#d8d0c2;background:transparent}
+.review-render-with-index .review-section-nav-sidebar .review-section-nav-button.is-active{color:#f1eadf;background:transparent}
+.review-render-with-index .review-section-nav-sidebar .review-section-nav-button.is-active::after{content:'';position:absolute;right:-19px;width:1px;height:24px;background:var(--review-tier)}
+.review-render-with-index .review-section-nav-sidebar .review-section-nav-button{position:relative}
+.review-render-with-index .review-section-nav-sidebar .review-section-nav-button.is-verdict{color:#c7b68e}
+.review-section-index-mobile{display:none}
+@media(max-width:980px){
+  .review-render-with-index .review-reading-grid{grid-template-columns:1fr;gap:0}
+  .review-render-with-index .review-section-nav-sidebar{display:none}
+  .review-section-index-mobile{display:block;margin:0 0 18px;border-top:1px solid rgba(216,207,188,.12);border-bottom:1px solid rgba(216,207,188,.12)}
+  .review-section-index-mobile summary{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 2px;cursor:pointer;list-style:none;color:#d8d0c2}
+  .review-section-index-mobile summary::-webkit-details-marker{display:none}
+  .review-section-index-mobile summary small{color:#77736c;font-size:.56rem;font-weight:800;letter-spacing:.18em}
+  .review-section-index-mobile summary span{font-family:Georgia,'Times New Roman',serif;font-size:.82rem;font-style:italic;text-align:right}
+  .review-section-index-mobile summary::after{content:'+';color:#817c73;font-family:Georgia,serif;font-size:1.1rem;margin-left:4px}
+  .review-section-index-mobile[open] summary::after{content:'−'}
+  .review-section-nav-mobile-list{display:grid;padding:2px 0 11px}
+  .review-section-nav-mobile-list .review-section-nav-button{display:grid;grid-template-columns:28px minmax(0,1fr);gap:8px;width:100%;padding:8px 2px;border:0;border-radius:0;background:transparent;color:#908b82;text-align:left;font-family:Georgia,'Times New Roman',serif;font-size:.8rem}
+  .review-section-nav-mobile-list .review-section-nav-button span{color:#5f5b54;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.58rem;padding-top:2px}
+  .review-section-nav-mobile-list .review-section-nav-button.is-active{color:#eee7dc}
+}

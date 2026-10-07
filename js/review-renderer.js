@@ -50,18 +50,36 @@
     return `<section id="${esc(id)}" class="review-section review-render-section" data-review-render-index="${index}"><div class="review-section-head">${esc(section.title)}</div><div class="review-copy">${section.paragraphs.map((paragraph) => `<p>${inlineMarkdown(paragraph).replace(/\n/g, '<br>')}</p>`).join('')}</div></section>`;
   }
 
+  function navigatorButtons(sections, options) {
+    return sections.map((section, index) => {
+      const id = sectionId(section, index, options.idPrefix);
+      return `<button type="button" data-review-jump="${esc(id)}" data-review-nav-index="${index}" class="review-section-nav-button${section.verdict ? ' is-verdict' : ''}"><span>${String(index + 1).padStart(2, '0')}</span>${esc(section.verdict ? 'Veredicto' : section.title)}</button>`;
+    }).join('');
+  }
+
   function renderNavigator(sections, options) {
     if (options.navigator === false || sections.length < 2) return '';
-    return `<nav class="review-section-nav" aria-label="Secciones de la review"><div class="review-section-nav-track">${sections.map((section, index) => {
-      const id = sectionId(section, index, options.idPrefix);
-      return `<button type="button" data-review-jump="${esc(id)}" data-review-nav-index="${index}" class="review-section-nav-button${section.verdict ? ' is-verdict' : ''}">${esc(section.verdict ? 'Veredicto' : section.title)}</button>`;
-    }).join('')}</div></nav>`;
+    const buttons = navigatorButtons(sections, options);
+    if (options.navigator === 'sidebar') {
+      return `<nav class="review-section-nav review-section-nav-sidebar" aria-label="Índice de la review"><span class="review-index-kicker">ÍNDICE</span><div class="review-section-nav-track">${buttons}</div></nav>`;
+    }
+    return `<nav class="review-section-nav" aria-label="Secciones de la review"><div class="review-section-nav-track">${buttons}</div></nav>`;
+  }
+
+  function renderMobileNavigator(sections, options) {
+    if (options.navigator !== 'sidebar' || sections.length < 2) return '';
+    return `<details class="review-section-index-mobile"><summary><small>ÍNDICE DE LA REVIEW</small><span>${esc(sections[0].verdict ? 'Veredicto' : sections[0].title)}</span></summary><div class="review-section-nav-mobile-list">${navigatorButtons(sections, options)}</div></details>`;
   }
 
   function render(sections, options = {}) {
     const normalized = normalizeSections(sections);
     if (!normalized.length) return '<div class="review-render-root"><div class="review-layout"><p class="empty-review">Sin review todavía.</p></div></div>';
-    return `<div class="review-render-root">${renderNavigator(normalized, options)}<div class="review-layout">${normalized.map((section, index) => renderSection(section, index, options)).join('')}</div></div>`;
+    const nav = renderNavigator(normalized, options);
+    const mobileNav = renderMobileNavigator(normalized, options);
+    if (options.navigator === 'sidebar') {
+      return `<div class="review-render-root review-render-with-index">${mobileNav}<div class="review-reading-grid">${nav}<div class="review-layout">${normalized.map((section, index) => renderSection(section, index, options)).join('')}</div></div></div>`;
+    }
+    return `<div class="review-render-root">${nav}<div class="review-layout">${normalized.map((section, index) => renderSection(section, index, options)).join('')}</div></div>`;
   }
 
   function legacyText(sections) {
