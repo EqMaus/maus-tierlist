@@ -868,38 +868,34 @@
     "year": "2006",
     "platform": "Nintendo DS",
     "franchise": "Pokémon",
-    "score": 3,
-    "tierOrder": 2,
+    "score": 2.5,
+    "tierOrder": 1,
     "tierVisible": true,
     "reviewDate": "18/12/2025",
     "spoilers": false,
     "excerpt": "Buena estructura de aventura, pero un ritmo que para ti queda destrozado por los encuentros constantes y la lentitud general.",
-    "review": "Faltan aliens\n\nTractores\n\nY canelones\n\nPero bueno\n\n***Lo bueno:*** -La sensación de aventura está bien lograda -El final del juego tiene una dificultad **atrevida** -Tiene muchos pokémons muy molones\n\n*Lo malo:* -El juego es soporífero y sin cámara rápida no hubiese jugado más de 1 hora. -La variedad de pokémons ANTES del post game, es muy pobre. -Te obligan a llevar ataques en los pokémons que no quieres usar. -La historia es correcta, pero muy insulsa. Unos notas que se hacen llamar los CONOS GALÁCTICOS dicen querer controlar el espacio-tiempo y tal, pero poco más.\n\n-Y los encuentros con pokémons salvajes están programados por una manada de hijos de puta. No se te ocurra girar sobre tu propio eje encima de un matojo, en el agua o en una cueva (Que son sitios en los que te pasas el 70% del juego). Tirarse 1 repelente cada 15 segundos es una puta mierda. Esto es lo **peor** del juego, junto al ritmo, con diferencia arrolladora.\n\nBuen juego **en estructura**, a nivel de mundo muy bien construido, pero vas en muletas y lo de que te obliguen a pelear ochenta millones de veces sin que tú quieras hace que el juego sea el que lleva el ritmo, y no el jugador\n\n**Notita:** Con la cámara rápida, un 3",
+    "review": "Pokémon Diamante tiene una base que **no me parece del todo mala**, pero jugarlo me resulta un coñazo monumental. El mundo está bien construido y consigue transmitir cierta sensación de aventura, pero prácticamente todo lo que haces está lastrado por un ritmo **desesperadamente lento**. Combates constantes, animaciones eternas, encuentros salvajes cada dos putos pasos... El juego no para de interrumpirte y hacerte perder el tiempo. Sin cámara rápida **no hubiese durado ni una hora jugando**. Hay cosas que hace bien, pero la experiencia de jugarlo como tal me resulta tremendamente pesada, y ese problema está presente durante prácticamente **toda** la aventura.\n\n**La sensación de aventura está bastante bien conseguida.** Sinnoh funciona bien como mundo y el viaje tiene esa sensación constante de estar avanzando y descubriendo sitios nuevos.**El tramo final se atreve bastante con la dificultad.** Después de un juego generalmente poco exigente, agradezco que al final decida apretar de verdad.**Hay muchos Pokémon muy molones.** La cuarta generación tiene bastantes diseños que me gustan mucho, aunque el propio juego tarda demasiado en darte acceso a buena parte de su variedad.\n\n**El ritmo es soporífero.** Sin cámara rápida probablemente no hubiese jugado más de una hora. Todo tarda demasiado y convierte acciones que deberían ser ágiles en una constante pérdida de tiempo.**La variedad de Pokémon antes del Post-Game es sorprendentemente pobre.** Hay muchos Pokémon que me gustan, pero durante la aventura principal la selección disponible se queda bastante corta.**Te obliga a desperdiciar ataques de tus Pokémon en movimientos que no quieres utilizar.** Tener que sacrificar huecos simplemente para poder avanzar por determinadas zonas me parece un coñazo.**La historia es correcta, pero tremendamente insulsa.** Unos notas que se hacen llamar los **CONOS GALÁCTICOS** quieren controlar el espacio-tiempo y poco más. Está ahí, cumple su función y prácticamente no me provoca nada.**Los encuentros aleatorios son una puta pesadilla.** No se te ocurra girar sobre tu propio eje encima de un matojo, meterte en el agua o entrar en una cueva, casualmente sitios en los que te pasas medio juego, porque cada dos pasos tienes otro combate. Tener que estar tirándote repelentes constantemente para que el juego simplemente te deje caminar tranquilo es una puta mierda.\n\nBuen juego **en estructura**, a nivel de mundo muy bien construido, pero vas en muletas y lo de que te obliguen a pelear ochenta millones de veces sin que tú quieras hace que el juego sea el que lleva el ritmo, y no el jugador\n\nPokémon Diamante me parece un juego **bueno en estructura**. El mundo está bien construido, la sensación de aventura funciona y la base sobre la que está montado no me parece tampoco algo catastrófico.\nEl problema es que estás recorriendo ese mundo **de la forma menos divertida posible.**\nEl ritmo extremadamente lento y la cantidad enfermiza de encuentros aleatorios hacen que demasiadas veces sea **el juego el que decide a qué ritmo puedes jugar, y no tú**. Quiero llegar a un sitio, explorar o simplemente caminar, y constantemente aparece algo que me obliga a detenerme y entrar en otro combate que no quería tener.\nY para mí ese problema pesa muchísimo. No basta con tener una buena estructura si recorrerla acaba siendo un coñazo.\n\nEcharse repelentes cada minuto tampoco ayuda a disfrutar de la experiencia.\n\nUn 2.5",
     "ambientEffect": "crystal-sparkles",
     "reviewSections": [
       {
         "title": "Primera impresión",
         "verdict": false,
         "paragraphs": [
-          "Faltan aliens",
-          "Tractores",
-          "Y canelones",
-          "Pero bueno"
+          "Pokémon Diamante tiene una base que **no me parece del todo mala**, pero jugarlo me resulta un coñazo monumental. El mundo está bien construido y consigue transmitir cierta sensación de aventura, pero prácticamente todo lo que haces está lastrado por un ritmo **desesperadamente lento**. Combates constantes, animaciones eternas, encuentros salvajes cada dos putos pasos... El juego no para de interrumpirte y hacerte perder el tiempo. Sin cámara rápida **no hubiese durado ni una hora jugando**. Hay cosas que hace bien, pero la experiencia de jugarlo como tal me resulta tremendamente pesada, y ese problema está presente durante prácticamente **toda** la aventura."
         ]
       },
       {
         "title": "Lo bueno",
         "verdict": false,
         "paragraphs": [
-          "***Lo bueno:*** -La sensación de aventura está bien lograda -El final del juego tiene una dificultad **atrevida** -Tiene muchos pokémons muy molones"
+          "**La sensación de aventura está bastante bien conseguida.** Sinnoh funciona bien como mundo y el viaje tiene esa sensación constante de estar avanzando y descubriendo sitios nuevos.**El tramo final se atreve bastante con la dificultad.** Después de un juego generalmente poco exigente, agradezco que al final decida apretar de verdad.**Hay muchos Pokémon muy molones.** La cuarta generación tiene bastantes diseños que me gustan mucho, aunque el propio juego tarda demasiado en darte acceso a buena parte de su variedad."
         ]
       },
       {
         "title": "Lo malo",
         "verdict": false,
         "paragraphs": [
-          "*Lo malo:* -El juego es soporífero y sin cámara rápida no hubiese jugado más de 1 hora. -La variedad de pokémons ANTES del post game, es muy pobre. -Te obligan a llevar ataques en los pokémons que no quieres usar. -La historia es correcta, pero muy insulsa. Unos notas que se hacen llamar los CONOS GALÁCTICOS dicen querer controlar el espacio-tiempo y tal, pero poco más.",
-          "-Y los encuentros con pokémons salvajes están programados por una manada de hijos de puta. No se te ocurra girar sobre tu propio eje encima de un matojo, en el agua o en una cueva (Que son sitios en los que te pasas el 70% del juego). Tirarse 1 repelente cada 15 segundos es una puta mierda. Esto es lo **peor** del juego, junto al ritmo, con diferencia arrolladora."
+          "**El ritmo es soporífero.** Sin cámara rápida probablemente no hubiese jugado más de una hora. Todo tarda demasiado y convierte acciones que deberían ser ágiles en una constante pérdida de tiempo.**La variedad de Pokémon antes del Post-Game es sorprendentemente pobre.** Hay muchos Pokémon que me gustan, pero durante la aventura principal la selección disponible se queda bastante corta.**Te obliga a desperdiciar ataques de tus Pokémon en movimientos que no quieres utilizar.** Tener que sacrificar huecos simplemente para poder avanzar por determinadas zonas me parece un coñazo.**La historia es correcta, pero tremendamente insulsa.** Unos notas que se hacen llamar los **CONOS GALÁCTICOS** quieren controlar el espacio-tiempo y poco más. Está ahí, cumple su función y prácticamente no me provoca nada.**Los encuentros aleatorios son una puta pesadilla.** No se te ocurra girar sobre tu propio eje encima de un matojo, meterte en el agua o entrar en una cueva, casualmente sitios en los que te pasas medio juego, porque cada dos pasos tienes otro combate. Tener que estar tirándote repelentes constantemente para que el juego simplemente te deje caminar tranquilo es una puta mierda."
         ]
       },
       {
@@ -910,10 +906,17 @@
         ]
       },
       {
+        "title": "Conclusión",
+        "verdict": false,
+        "paragraphs": [
+          "Pokémon Diamante me parece un juego **bueno en estructura**. El mundo está bien construido, la sensación de aventura funciona y la base sobre la que está montado no me parece tampoco algo catastrófico.\nEl problema es que estás recorriendo ese mundo **de la forma menos divertida posible.**\nEl ritmo extremadamente lento y la cantidad enfermiza de encuentros aleatorios hacen que demasiadas veces sea **el juego el que decide a qué ritmo puedes jugar, y no tú**. Quiero llegar a un sitio, explorar o simplemente caminar, y constantemente aparece algo que me obliga a detenerme y entrar en otro combate que no quería tener.\nY para mí ese problema pesa muchísimo. No basta con tener una buena estructura si recorrerla acaba siendo un coñazo.\n\nEcharse repelentes cada minuto tampoco ayuda a disfrutar de la experiencia."
+        ]
+      },
+      {
         "title": "Veredicto final",
         "verdict": true,
         "paragraphs": [
-          "**Notita:** Con la cámara rápida, un 3"
+          "Un 2.5"
         ]
       }
     ]
@@ -930,44 +933,42 @@
     "reviewDate": "21/12/2025",
     "spoilers": false,
     "excerpt": "Te gustan más sus sprites y algunos temas de la OST, pero arrastra los mismos problemas de ritmo que te sacaron de Diamante.",
-    "review": "Faltan aliens\n\nNo hay aliens\n\n***Lo bueno*** -Los sprites de los pokémons y sus animaciones están bastante bien hechas. -La música del Overworld se hace notar. (Aunque en las peleas es bastante meh). -Los efectos de sonido cumplen. -Me parece que tiene un Post-Game que ofrece bien. -La historia no está **mal**. No es una mierda, dejémoslo ahí.\n\n-La música de \"Pueblo Arcilla\" es bastante potente, especialmente después de pasarte el juego. Mola. -Y la música de la Ruta 10 también mola mucho.\n\n***Lo malo:*** -La historia resulta predecible. -Igual que Diamante y que todos los pokémons, sin cámara rápida prefieres cortarte la polla en trocitos para servirlos de tapa en un bar junto a unas aceitunas. -Varios pokémons de esta generación tardan demasiado en evolucionar. -Repite los mismos errores que Pokémon Diamante, por razones evidentes, así que tampoco me voy a extender mucho más.\n\nNo dista mucho del Pokémon Diamante, al final los 2 son \"lo mismo\" pero como este tiene sprites y animaciones que me gustan más, le voy a poner mejor nota.\n\n**Notita:** Un 3",
+    "review": "Pokémon Negro me gustó **un poquitín más que Diamante**, principalmente porque los sprites y las animaciones de los Pokémon están bastante más chulos y hacen que los combates tengan algo más de vida. Aun así, arrastra prácticamente todos los problemas que tengo con Pokémon: es **extremadamente lento**, hasta el punto de que tuve que jugarlo en cámara rápida porque si no siento que de 50 horas de juego, 47 me las paso mirando combates Pokémon.\nY fuera de esa mejora visual, tampoco siento que me ofreciese demasiado. Diamante y Negro son juegos diferentes, obviamente, pero **la sensación que me dejan al jugarlos es prácticamente la misma**: repiten una fórmula que a mí se me hace pesada y ninguno consigue darme motivos para querer volver.\n\n**Los sprites de los Pokémon y sus animaciones están bastante bien conseguidos.** Le dan mucha más vida a los combates que en Diamante.**La música del overworld destaca bastante**, aunque durante los combates me parece mucho más *meh*.**Los efectos de sonido cumplen bien.** No destacan especialmente, pero tampoco tengo ninguna pega importante.**El Post-Game tiene bastante contenido** y ofrece motivos para seguir jugando después de terminar la historia principal.**La historia no está mal.** Tampoco me parece especialmente buena, pero al menos intenta hacer algo más que servir de excusa para ir de gimnasio en gimnasio.**El tema de Pueblo Arcilla es bastante potente**, especialmente cuando vuelves después de haberte pasado el juego. Ahí gana bastante.**La música de la Ruta 10 también mola muchísimo.** Es el tema que más recuerdo del juego.\n\n**La historia resulta bastante predecible.** Aunque tenga más presencia que en otros Pokémon, tampoco consigue sorprender prácticamente nada.**El ritmo es desesperadamente lento.** Igual que con Diamante —y prácticamente con cualquier Pokémon—, sin cámara rápida prefieres cortarte la polla. Combates, animaciones, transiciones... todo tarda más de lo que debería y alarga el juego de manera innecesaria consiguiendo que el ritmo lo lleve el videojuego y no el jugador.**Varios Pokémon de esta generación tardan demasiado en evolucionar**, haciendo que algunos lleguen a sus evoluciones finales absurdamente tarde o simplemente nunca lleguen antes de pasarte el juego.**Arrastra prácticamente los mismos problemas que Pokémon Diamante.** La estructura y la fórmula son tan parecidas que muchas de las cosas que no me funcionaban allí tampoco me funcionan aquí, así que tampoco merece la pena repetir exactamente las mismas quejas.\n\nNo dista demasiado de Pokémon Diamante. Evidentemente cambian la región, Pokémons, historia y demás, pero **la experiencia que me dejan ambos es muy parecida**, tanto para bien como para mal. Negro simplemente consigue gustarme un poco más gracias, sobre todo, a unos sprites y animaciones que me parecen bastante mejores. **No es una diferencia enorme, pero sí suficiente para que lo coloque ligeramente por encima.**\n\nUn 3",
     "ambientEffect": "dark-motes",
     "reviewSections": [
       {
-        "title": "Primera impresión",
+        "title": "Primeras impresiones",
         "verdict": false,
         "paragraphs": [
-          "Faltan aliens",
-          "No hay aliens"
+          "Pokémon Negro me gustó **un poquitín más que Diamante**, principalmente porque los sprites y las animaciones de los Pokémon están bastante más chulos y hacen que los combates tengan algo más de vida. Aun así, arrastra prácticamente todos los problemas que tengo con Pokémon: es **extremadamente lento**, hasta el punto de que tuve que jugarlo en cámara rápida porque si no siento que de 50 horas de juego, 47 me las paso mirando combates Pokémon.\nY fuera de esa mejora visual, tampoco siento que me ofreciese demasiado. Diamante y Negro son juegos diferentes, obviamente, pero **la sensación que me dejan al jugarlos es prácticamente la misma**: repiten una fórmula que a mí se me hace pesada y ninguno consigue darme motivos para querer volver."
         ]
       },
       {
         "title": "Lo bueno",
         "verdict": false,
         "paragraphs": [
-          "***Lo bueno*** -Los sprites de los pokémons y sus animaciones están bastante bien hechas. -La música del Overworld se hace notar. (Aunque en las peleas es bastante meh). -Los efectos de sonido cumplen. -Me parece que tiene un Post-Game que ofrece bien. -La historia no está **mal**. No es una mierda, dejémoslo ahí.",
-          "-La música de \"Pueblo Arcilla\" es bastante potente, especialmente después de pasarte el juego. Mola. -Y la música de la Ruta 10 también mola mucho."
+          "**Los sprites de los Pokémon y sus animaciones están bastante bien conseguidos.** Le dan mucha más vida a los combates que en Diamante.**La música del overworld destaca bastante**, aunque durante los combates me parece mucho más *meh*.**Los efectos de sonido cumplen bien.** No destacan especialmente, pero tampoco tengo ninguna pega importante.**El Post-Game tiene bastante contenido** y ofrece motivos para seguir jugando después de terminar la historia principal.**La historia no está mal.** Tampoco me parece especialmente buena, pero al menos intenta hacer algo más que servir de excusa para ir de gimnasio en gimnasio.**El tema de Pueblo Arcilla es bastante potente**, especialmente cuando vuelves después de haberte pasado el juego. Ahí gana bastante.**La música de la Ruta 10 también mola muchísimo.** Es el tema que más recuerdo del juego."
         ]
       },
       {
         "title": "Lo malo",
         "verdict": false,
         "paragraphs": [
-          "***Lo malo:*** -La historia resulta predecible. -Igual que Diamante y que todos los pokémons, sin cámara rápida prefieres cortarte la polla en trocitos para servirlos de tapa en un bar junto a unas aceitunas. -Varios pokémons de esta generación tardan demasiado en evolucionar. -Repite los mismos errores que Pokémon Diamante, por razones evidentes, así que tampoco me voy a extender mucho más."
+          "**La historia resulta bastante predecible.** Aunque tenga más presencia que en otros Pokémon, tampoco consigue sorprender prácticamente nada.**El ritmo es desesperadamente lento.** Igual que con Diamante —y prácticamente con cualquier Pokémon—, sin cámara rápida prefieres cortarte la polla. Combates, animaciones, transiciones... todo tarda más de lo que debería y alarga el juego de manera innecesaria consiguiendo que el ritmo lo lleve el videojuego y no el jugador.**Varios Pokémon de esta generación tardan demasiado en evolucionar**, haciendo que algunos lleguen a sus evoluciones finales absurdamente tarde o simplemente nunca lleguen antes de pasarte el juego.**Arrastra prácticamente los mismos problemas que Pokémon Diamante.** La estructura y la fórmula son tan parecidas que muchas de las cosas que no me funcionaban allí tampoco me funcionan aquí, así que tampoco merece la pena repetir exactamente las mismas quejas."
         ]
       },
       {
-        "title": "Comparación con Diamante",
+        "title": "Comparación con Pokémon Diamante",
         "verdict": false,
         "paragraphs": [
-          "No dista mucho del Pokémon Diamante, al final los 2 son \"lo mismo\" pero como este tiene sprites y animaciones que me gustan más, le voy a poner mejor nota."
+          "No dista demasiado de Pokémon Diamante. Evidentemente cambian la región, Pokémons, historia y demás, pero **la experiencia que me dejan ambos es muy parecida**, tanto para bien como para mal. Negro simplemente consigue gustarme un poco más gracias, sobre todo, a unos sprites y animaciones que me parecen bastante mejores. **No es una diferencia enorme, pero sí suficiente para que lo coloque ligeramente por encima.**"
         ]
       },
       {
         "title": "Veredicto final",
         "verdict": true,
         "paragraphs": [
-          "**Notita:** Un 3"
+          "Un 3"
         ]
       }
     ]
@@ -1841,6 +1842,19 @@
     "tone": "bad",
     "color": "#7dbdf2",
     "id": "malo"
+  },
+  {
+    "id": "malo-2",
+    "score": 2.5,
+    "label": "MALO+",
+    "tone": "default",
+    "color": "#493b54",
+    "textColor": "#101318",
+    "fontFamily": "default",
+    "fontSize": 20,
+    "bold": true,
+    "italic": false,
+    "align": "center"
   },
   {
     "score": 2,
