@@ -136,6 +136,7 @@
   let themeTransitionTimer = 0;
   let routeTransitionTimer = 0;
   let reviewSectionObserver = null;
+  let reviewIndexAbort = new AbortController();
 
   let sceneMotionFrame = 0;
   let sceneDriftFrame = 0;
@@ -2376,29 +2377,69 @@
   }
 
   function initReviewSectionIndex() {
+    reviewIndexAbort.abort();
+    reviewIndexAbort = new AbortController();
     reviewSectionObserver?.disconnect();
     reviewSectionObserver = null;
-    const root = app.querySelector('.review-render-root');
-    if (!root) return;
-    const sections = Array.from(root.querySelectorAll('.review-render-section'));
-    const buttons = Array.from(root.querySelectorAll('[data-review-nav-index]'));
-    const summary = root.querySelector('.review-section-index-mobile summary span');
+    const reviewRoot = app.querySelector('.review-render-root');
+    if (!reviewRoot) return;
+    const sections = Array.from(reviewRoot.querySelectorAll('.review-render-section'));
+    const buttons = Array.from(reviewRoot.querySelectorAll('[data-review-nav-index]'));
+    const summary = reviewRoot.querySelector('.review-section-index-mobile summary span');
+    const sidebarTrack = reviewRoot.querySelector('.review-section-nav-sidebar .review-section-nav-track');
     if (!sections.length || !buttons.length) return;
 
-    const setActive = (index) => {
-      buttons.forEach((button) => button.classList.toggle('is-active', Number(button.dataset.reviewNavIndex) === Number(index)));
-      const activeButton = buttons.find((button) => Number(button.dataset.reviewNavIndex) === Number(index));
-      if (summary && activeButton) summary.textContent = activeButton.textContent.trim();
-    };
-    setActive(0);
+    let activeIndex = -1;
+    let scrollFrame = 0;
 
-    if (!('IntersectionObserver' in window)) return;
-    reviewSectionObserver = new IntersectionObserver((entries) => {
-      const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => Math.abs(a.boundingClientRect.top - 150) - Math.abs(b.boundingClientRect.top - 150));
-      if (!visible.length) return;
-      setActive(Number(visible[0].target.dataset.reviewRenderIndex || 0));
-    }, { rootMargin: '-110px 0px -62% 0px', threshold: [0, .08, .2] });
-    sections.forEach((section) => reviewSectionObserver.observe(section));
+    const moveIndicator = (index) => {
+      if (!sidebarTrack) return;
+      const button = sidebarTrack.querySelector(`[data-review-nav-index="${index}"]`);
+      if (!button) return;
+      sidebarTrack.style.setProperty('--review-indicator-y', `${button.offsetTop}px`);
+      sidebarTrack.style.setProperty('--review-indicator-h', `${button.offsetHeight}px`);
+      sidebarTrack.classList.add('has-indicator');
+    };
+
+    const setActive = (index) => {
+      const nextIndex = Math.max(0, Math.min(sections.length - 1, Number(index) || 0));
+      if (nextIndex === activeIndex) return;
+      activeIndex = nextIndex;
+      buttons.forEach((button) => button.classList.toggle('is-active', Number(button.dataset.reviewNavIndex) === nextIndex));
+      const activeButton = buttons.find((button) => Number(button.dataset.reviewNavIndex) === nextIndex);
+      if (summary && activeButton) summary.textContent = activeButton.textContent.trim();
+      moveIndicator(nextIndex);
+    };
+
+    const updateFromScroll = () => {
+      scrollFrame = 0;
+      // Punto de lectura fijo: una sección pasa a activa únicamente al cruzar
+      // esta línea. Evita el parpadeo entre dos secciones contiguas.
+      const anchor = Math.min(190, Math.max(118, window.innerHeight * .19));
+      let nextIndex = 0;
+      for (let index = 0; index < sections.length; index += 1) {
+        if (sections[index].getBoundingClientRect().top <= anchor) nextIndex = index;
+        else break;
+      }
+      // Al llegar prácticamente al final, garantiza que el veredicto/última
+      // sección pueda activarse aunque sea más corta que el viewport.
+      const nearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 8;
+      if (nearBottom) nextIndex = sections.length - 1;
+      setActive(nextIndex);
+    };
+
+    const scheduleUpdate = () => {
+      if (scrollFrame) return;
+      scrollFrame = requestAnimationFrame(updateFromScroll);
+    };
+
+    setActive(0);
+    requestAnimationFrame(() => {
+      moveIndicator(activeIndex < 0 ? 0 : activeIndex);
+      updateFromScroll();
+    });
+    window.addEventListener('scroll', scheduleUpdate, { passive: true, signal: reviewIndexAbort.signal });
+    window.addEventListener('resize', scheduleUpdate, { passive: true, signal: reviewIndexAbort.signal });
   }
 
   function reviewJourneyNav(previous, current, next, rankingMode) {

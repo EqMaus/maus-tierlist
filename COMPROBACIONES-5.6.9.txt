@@ -1,0 +1,5 @@
+v5.6.9
+- Índice lateral de reviews: detección estable por línea de lectura.
+- Indicador vertical animado suavemente entre secciones.
+- Se eliminan saltos de IntersectionObserver al hacer scroll.
+- Sin cambios en datos, reviews o contenido.
