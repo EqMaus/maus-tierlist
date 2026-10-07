@@ -440,3 +440,13 @@ body.music-space .theme-info-panel.is-resonance-info::-webkit-scrollbar-thumb:ho
 .music-breadcrumbs a{color:#a19a8e;text-decoration:none}.music-breadcrumbs a:hover{color:#eee8dc}
 .music-breadcrumbs strong{color:var(--music-accent);font-weight:850;max-width:62vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media(max-width:760px){.music-breadcrumbs{margin-bottom:18px}.music-breadcrumbs strong{max-width:72vw}}
+
+
+/* v5.6.19 · tarjetas de secciones dentro de Fonoteca */
+.music-essay .review-section-nav.review-section-nav-cards{padding:0;border:0;background:none}
+.music-essay .review-section-nav.review-section-nav-cards .review-section-nav-track{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(175px,100%),1fr));gap:10px}
+.music-essay .review-section-nav.review-section-nav-cards .review-section-nav-card{color:#d7d0c4;border-color:var(--music-line);background:rgba(255,255,255,.015);font:400 .9rem/1.26 Georgia,serif;border-radius:1px}
+.music-essay .review-section-nav.review-section-nav-cards .review-section-nav-card::before{background:color-mix(in srgb,var(--music-accent) 42%,transparent)}
+.music-essay .review-section-nav.review-section-nav-cards .review-section-nav-card::after{color:rgba(238,232,222,.38)}
+.music-essay .review-section-nav.review-section-nav-cards .review-section-nav-card:hover,.music-essay .review-section-nav.review-section-nav-cards .review-section-nav-card.is-active{color:#f4eee4;background:rgba(255,255,255,.028);border-color:color-mix(in srgb,var(--music-accent) 40%,var(--music-line))}
+.music-essay .review-section-nav.review-section-nav-cards .review-section-nav-card.is-active::after{color:var(--music-accent)}

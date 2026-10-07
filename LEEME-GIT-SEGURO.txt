@@ -1,0 +1,45 @@
+MAUS TIER LIST · FLUJO GIT SEGURO
+
+OBJETIVO
+-------
+Evitar que los cambios publicados directamente desde el editor web dejen tu
+carpeta local por detrás de GitHub y provoquen errores "non-fast-forward".
+
+USO NORMAL
+----------
+
+ANTES DE INSTALAR CUALQUIER ZIP / ACTUALIZACIÓN NUEVA:
+1. Haz doble clic en:
+   SINCRONIZAR-ANTES-DE-ACTUALIZAR.bat
+2. Debe terminar diciendo que tu carpeta ya está igual que GitHub.
+3. Solo entonces copia/reemplaza los archivos de la actualización.
+
+DESPUÉS DE COPIAR LA ACTUALIZACIÓN:
+1. Haz doble clic en:
+   PUBLICAR-CAMBIOS.bat
+2. Escribe el nombre del commit cuando lo pida.
+3. El script comprobará que GitHub no tenga cambios más nuevos antes de publicar.
+
+TAMBIÉN PUEDES ABRIR:
+   MAUS-GIT.bat
+y usar el menú.
+
+PROTECCIONES INCLUIDAS
+----------------------
+- Solo trabaja sobre la rama main.
+- Comprueba GitHub antes de sincronizar o publicar.
+- Solo actualiza mediante fast-forward.
+- No hace Force Push.
+- No hace merges automáticos.
+- No resetea archivos.
+- Si detecta historial divergente, se detiene.
+- Si GitHub está por delante al publicar, se detiene ANTES de crear el commit.
+- Si hay cambios locales al sincronizar, no los toca.
+
+IMPORTANTE
+----------
+Que el editor web aumente 5.6.17 -> 5.6.18 -> 5.6.19 no es un problema.
+Cada publicación del editor crea un commit remoto. El script de sincronización
+trae esos commits a tu carpeta local antes de que instales el siguiente cambio.
+
+Estos scripts no cambian la versión pública de la web ni tocan site-data.js.

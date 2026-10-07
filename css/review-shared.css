@@ -69,3 +69,24 @@
   .review-section-nav-mobile-list .review-section-nav-button span{color:#5f5b54;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.58rem;padding-top:2px}
   .review-section-nav-mobile-list .review-section-nav-button.is-active{color:#eee7dc}
 }
+
+
+/* ============================================================
+   v5.6.19 · Navegación superior de secciones más elegante
+   El orden ya lo da la disposición de las tarjetas: eliminamos
+   los 01/02/03 visibles en la navegación horizontal.
+   ============================================================ */
+.review-section-nav.review-section-nav-cards{position:static;margin:0 0 16px;padding:0;border:0;border-radius:0;background:none;backdrop-filter:none;box-shadow:none}
+.review-section-nav.review-section-nav-cards .review-section-nav-track{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(180px,100%),1fr));gap:12px;overflow:visible;padding:0}
+.review-section-nav.review-section-nav-cards .review-section-nav-card{position:relative;display:block;min-height:56px;width:100%;padding:13px 38px 14px 14px;border:1px solid rgba(255,255,255,.11);border-radius:2px;background:rgba(8,13,17,.44);color:#d7d1c7;text-align:left;font-family:Georgia,'Times New Roman',serif;font-size:.92rem;font-weight:500;line-height:1.24;box-shadow:none;transition:border-color .18s ease,background .18s ease,color .18s ease,transform .18s ease}
+.review-section-nav.review-section-nav-cards .review-section-nav-card::before{content:'';position:absolute;left:14px;right:14px;top:-1px;height:1px;background:color-mix(in srgb,var(--review-tier) 28%,rgba(255,255,255,.16))}
+.review-section-nav.review-section-nav-cards .review-section-nav-card::after{content:'↗';position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:.75rem;color:rgba(235,227,214,.4);transition:color .18s ease,transform .18s ease}
+.review-section-nav.review-section-nav-cards .review-section-nav-card:hover{color:#f5efe4;border-color:color-mix(in srgb,var(--review-tier) 35%,rgba(255,255,255,.16));background:rgba(255,255,255,.045);transform:translateY(-1px)}
+.review-section-nav.review-section-nav-cards .review-section-nav-card:hover::after{color:rgba(245,239,228,.88);transform:translate(2px,-50%)}
+.review-section-nav.review-section-nav-cards .review-section-nav-card.is-active{color:#fff;border-color:color-mix(in srgb,var(--review-tier) 45%,rgba(255,255,255,.18));background:color-mix(in srgb,var(--review-tier) 10%,rgba(255,255,255,.03))}
+.review-section-nav.review-section-nav-cards .review-section-nav-card.is-active::after{color:var(--review-tier)}
+.review-section-nav.review-section-nav-cards .review-section-nav-card.is-verdict::before{background:color-mix(in srgb,#d8c48a 58%,rgba(255,255,255,.18))}
+.review-section-nav.review-section-nav-cards .review-section-nav-card.is-verdict.is-active{border-color:rgba(216,196,138,.34)}
+.review-section-nav.review-section-nav-cards .review-section-nav-card-title{display:block;padding-right:4px}
+@media(max-width:700px){.review-section-nav.review-section-nav-cards .review-section-nav-track{grid-template-columns:1fr 1fr;gap:10px}.review-section-nav.review-section-nav-cards .review-section-nav-card{min-height:54px;padding:12px 32px 12px 12px;font-size:.84rem}}
+@media(max-width:520px){.review-section-nav.review-section-nav-cards .review-section-nav-track{grid-template-columns:1fr}}

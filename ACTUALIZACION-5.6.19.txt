@@ -1,0 +1,4 @@
+v5.6.19
+- Mejora visual de las tarjetas horizontales de navegación de secciones.
+- Se elimina el 01/02/03 visible en esas tarjetas; el orden lo marca la disposición visual.
+- No incluye js/site-data.js ni js/content-data.js: se aplica encima de la v5.6.18 actual.

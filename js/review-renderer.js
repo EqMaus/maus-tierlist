@@ -50,20 +50,24 @@
     return `<section id="${esc(id)}" class="review-section review-render-section" data-review-render-index="${index}"><div class="review-section-head">${esc(section.title)}</div><div class="review-copy">${section.paragraphs.map((paragraph) => `<p>${inlineMarkdown(paragraph).replace(/\n/g, '<br>')}</p>`).join('')}</div></section>`;
   }
 
-  function navigatorButtons(sections, options) {
+  function navigatorButtons(sections, options, variant = 'cards') {
     return sections.map((section, index) => {
       const id = sectionId(section, index, options.idPrefix);
-      return `<button type="button" data-review-jump="${esc(id)}" data-review-nav-index="${index}" class="review-section-nav-button${section.verdict ? ' is-verdict' : ''}"><span>${String(index + 1).padStart(2, '0')}</span>${esc(section.verdict ? 'Veredicto' : section.title)}</button>`;
+      if (variant === 'index') {
+        return `<button type="button" data-review-jump="${esc(id)}" data-review-nav-index="${index}" class="review-section-nav-button review-section-nav-index-button${section.verdict ? ' is-verdict' : ''}"><span>${String(index + 1).padStart(2, '0')}</span>${esc(section.verdict ? 'Veredicto' : section.title)}</button>`;
+      }
+      return `<button type="button" data-review-jump="${esc(id)}" data-review-nav-index="${index}" class="review-section-nav-button review-section-nav-card${section.verdict ? ' is-verdict' : ''}"><span class="review-section-nav-card-title">${esc(section.verdict ? 'Veredicto' : section.title)}</span></button>`;
     }).join('');
   }
 
   function renderNavigator(sections, options) {
     if (options.navigator === false || sections.length < 2) return '';
-    const buttons = navigatorButtons(sections, options);
     if (options.navigator === 'sidebar') {
+      const buttons = navigatorButtons(sections, options, 'index');
       return `<nav class="review-section-nav review-section-nav-sidebar" aria-label="Índice de la review"><span class="review-index-kicker">ÍNDICE</span><div class="review-section-nav-track">${buttons}</div></nav>`;
     }
-    return `<nav class="review-section-nav" aria-label="Secciones de la review"><div class="review-section-nav-track">${buttons}</div></nav>`;
+    const buttons = navigatorButtons(sections, options, 'cards');
+    return `<nav class="review-section-nav review-section-nav-cards" aria-label="Secciones de la review"><div class="review-section-nav-track">${buttons}</div></nav>`;
   }
 
   function renderMobileNavigator(sections, options) {
