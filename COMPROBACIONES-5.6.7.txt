@@ -1,0 +1,4 @@
+v5.6.7
+- Corrige desincronización interna de versión en index.html.
+- title, MAUS_BUILD_VERSION, cache-busters y version.json quedan en 5.6.7.
+- El publicador del editor normaliza cualquier semver encontrada antes de publicar, evitando bloquearse por una build parcialmente desincronizada.

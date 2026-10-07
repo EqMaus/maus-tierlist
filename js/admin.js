@@ -1389,10 +1389,12 @@ const ADMIN_CURATED_REVIEW_SPECS = {
 
   function bumpIndexVersion(source, fromVersion, toVersion) {
     let next = String(source);
-    const from = escapeRegExp(fromVersion);
-    next = next.replace(new RegExp(`(<title>Tier List de Maus — v)${from}(</title>)`), `$1${toVersion}$2`);
-    next = next.replace(new RegExp(`(window\\.MAUS_BUILD_VERSION\\s*=\\s*['"])${from}(['"])`), `$1${toVersion}$2`);
-    next = next.replace(new RegExp(`(\\?v=)${from}`, 'g'), `$1${toVersion}`);
+    // El HTML puede quedar parcialmente desincronizado si una build manual solo
+    // actualizó algunos números de versión. Para publicar, la versión de destino
+    // manda: normalizamos título, MAUS_BUILD_VERSION y todos los cache-busters.
+    next = next.replace(/(<title>Tier List de Maus — v)\d+\.\d+\.\d+(<\/title>)/, `$1${toVersion}$2`);
+    next = next.replace(/(window\.MAUS_BUILD_VERSION\s*=\s*['"])\d+\.\d+\.\d+(['"])/, `$1${toVersion}$2`);
+    next = next.replace(/(\?v=)\d+\.\d+\.\d+/g, `$1${toVersion}`);
     if (next === source) throw new Error(`No pude actualizar index.html de ${fromVersion} a ${toVersion}.`);
     if (!next.includes(`window.MAUS_BUILD_VERSION = '${toVersion}'`) && !next.includes(`window.MAUS_BUILD_VERSION = "${toVersion}"`)) {
       throw new Error('No pude confirmar la nueva versión dentro de index.html.');
