@@ -1825,7 +1825,8 @@
     "label": "Decente",
     "tone": "decent",
     "color": "#4bd600",
-    "id": "decente"
+    "id": "decente",
+    "bold": false
   },
   {
     "score": 4,
@@ -1843,7 +1844,7 @@
   },
   {
     "score": 2,
-    "label": "Basura",
+    "label": "BASURA",
     "tone": "default",
     "color": "#9e8cff",
     "bold": true,
@@ -1851,7 +1852,7 @@
   },
   {
     "score": 1,
-    "label": "Vomitivo",
+    "label": "VOMITIVO",
     "tone": "default",
     "color": "#d77bf3",
     "bold": true,
