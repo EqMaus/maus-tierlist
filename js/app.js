@@ -887,8 +887,8 @@
 
   const UI_THEMES = {
     default: { label: 'Original', color: '#071018' },
-    'black-red': { label: 'Negro & Rojo', color: '#08090c' },
-    'blue-yellow': { label: 'Azul & Amarillo', color: '#07142c' }
+    'black-red': { label: 'Borgoña & Marfil', color: '#120b0d' },
+    'blue-yellow': { label: 'Medianoche & Oro', color: '#070b12' }
   };
 
   function normalizeUiTheme(value) {
@@ -2515,7 +2515,7 @@
       const tags = (track.tags || []).map(tag => `<span>${esc(tag)}</span>`).join('');
       themeInfoContent.innerHTML = `
         <div class="resonance-info-head">
-          <span class="resonance-info-kicker">RESONANCIAS</span>
+          <span class="resonance-info-kicker">FONOTECA</span>
           <h2 id="themeInfoHeading">${esc(track.title || 'Pieza')}</h2>
           <p class="resonance-info-game">${esc(track.game || '')}${track.year ? ` · ${esc(String(track.year).match(/\d{4}/)?.[0] || track.year)}` : ''}</p>
           ${resonance.quote ? `<blockquote>${esc(resonance.quote)}</blockquote>` : ''}
@@ -2652,7 +2652,7 @@
     audio.dataset.sceneGameId = gameById.get(gameId)?._sceneGameId || gameId;
     audio.src = source;
     audio.muted = false;
-    if (playerSeek) playerSeek.value = '0';
+    if (playerSeek) { playerSeek.value = '0'; syncRangeFill(playerSeek); }
     if (playerCurrentTime) playerCurrentTime.textContent = '0:00';
     if (playerDuration) playerDuration.textContent = '0:00';
     player.hidden = false;
@@ -2660,6 +2660,7 @@
     playerTitle.textContent = theme.title || 'Música del juego';
     playerGame.textContent = gameById.get(gameId)?.title || '';
     playerVolume.value = String(Math.round(volume * 100));
+    syncRangeFill(playerVolume);
     restoreMusicWidgetPosition();
     syncPlaybackUi();
     const initialStart = currentThemeStartAt;
@@ -2721,7 +2722,7 @@
       currentThemeSignature = '';
       playerTitle.textContent = '—';
       playerGame.textContent = '—';
-      if (playerSeek) playerSeek.value = '0';
+      if (playerSeek) { playerSeek.value = '0'; syncRangeFill(playerSeek); }
       if (playerCurrentTime) playerCurrentTime.textContent = '0:00';
       if (playerDuration) playerDuration.textContent = '0:00';
       if (activeObjectUrl) {
@@ -2813,6 +2814,17 @@
   }
 
 
+  function syncRangeFill(input) {
+    if (!input) return;
+    const min = Number(input.min || 0);
+    const max = Number(input.max || 100);
+    const value = Number(input.value || min);
+    const span = max - min;
+    const ratio = span > 0 ? (value - min) / span : 0;
+    const percent = Math.min(100, Math.max(0, ratio * 100));
+    input.style.setProperty('--range-fill', `${percent}%`);
+  }
+
   function bindStaticEvents() {
     const lowPower = mobilePerformance || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
     body.classList.toggle('low-power', Boolean(lowPower));
@@ -2855,7 +2867,9 @@
 
     if (playerSeek) {
       playerSeek.value = '0';
+      syncRangeFill(playerSeek);
       playerSeek.addEventListener('input', () => {
+        syncRangeFill(playerSeek);
         const duration = audio.duration;
         if (!Number.isFinite(duration) || duration <= 0) return;
         const next = (Number(playerSeek.value) / 1000) * duration;
@@ -2871,6 +2885,7 @@
       if (playerSeek) {
         const ratio = Number.isFinite(duration) && duration > 0 ? current / duration : 0;
         playerSeek.value = String(Math.round(Math.min(1, Math.max(0, ratio)) * 1000));
+        syncRangeFill(playerSeek);
       }
     };
     audio.addEventListener('loadedmetadata', syncMusicTimeline);
@@ -2880,7 +2895,9 @@
 
     if (playerVolume) {
       playerVolume.value = String(Math.round(volume * 100));
+      syncRangeFill(playerVolume);
       playerVolume.addEventListener('input', () => {
+        syncRangeFill(playerVolume);
         cancelVolumeFade();
         volume = clamp(Number(playerVolume.value) / 100, 0, 1, .52);
         audio.muted = false;

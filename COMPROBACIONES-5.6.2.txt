@@ -1,0 +1,11 @@
+v5.6.2 — Ficha elegante de "Información del tema"
+
+- Rediseñado únicamente el modal de información musical asociado a cada juego.
+- El contenido de las fichas no se ha modificado.
+- Fonoteca / ficha profunda de Fonoteca (.is-resonance-info) conserva su diseño v5.6.1.
+- Créditos y contexto pasan de tarjetas a ficha bibliográfica con divisores.
+- "Lectura del tema" pasa a entradilla editorial.
+- Secciones musicales pasan a retícula editorial con reglas finas, sin tarjetas redondeadas.
+- Tipografía serif y acentos discretos coherentes con v5.6.x.
+- Diseño responsive adaptado a una columna en móvil.
+- site-data.js y content-data.js no se modifican.

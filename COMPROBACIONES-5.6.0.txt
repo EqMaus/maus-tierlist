@@ -1,0 +1,10 @@
+COMPROBACIONES v5.6.0
+
+- Base: v5.5.4 estable.
+- js/site-data.js es idéntico byte por byte al de v5.5.4.
+- Se conservan 16 juegos Offline + 4 Online.
+- Se conservan reviews, músicas, fondos, efectos y notas.
+- Resonancias pasa a llamarse Fonoteca en navegación, portada musical y editor de contenido.
+- El interior de Fonoteca y su ficha editorial no se han rediseñado.
+- Rediseño general: cabecera, navegación, títulos, selectores, hero, tiers, fichas/reviews, modales y presentación.
+- Todos los JS principales pasan node --check.

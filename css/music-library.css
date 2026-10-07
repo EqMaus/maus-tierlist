@@ -112,3 +112,323 @@ body.music-space.background-only #player{visibility:hidden}
 }
 @media(prefers-reduced-motion:reduce){body.music-space #player::before{animation:none}}
 @media(max-width:760px){.main-nav .catalog-nav{grid-column:1/-1}.main-nav>a{grid-column:span 2;min-width:0;overflow-wrap:anywhere}body.music-space .main-nav .nav-appearance-button{grid-column:1/-1}}
+
+/* ============================================================
+   v5.6.1 · FONOTECA — salón fonográfico / archivo privado
+   Integra la antigua estética editorial de papel en el lenguaje
+   elegante y oscuro del resto de la colección.
+   ============================================================ */
+body.music-space{
+  --music-paper:#0b0d0e;
+  --music-paper-soft:#101312;
+  --music-card:#111412;
+  --music-ink:#eee9df;
+  --music-muted:#aaa398;
+  --music-line:rgba(218,207,186,.14);
+  --music-brass:#b8a57d;
+  --music-accent:color-mix(in srgb,var(--accent,#8fb79b) 38%,var(--music-brass));
+  --text:var(--music-ink);
+  --muted:var(--music-muted);
+  --border:var(--music-line);
+  --panel-strong:var(--music-card);
+  --bg2:var(--music-paper-soft);
+  color:var(--music-ink);
+  background:
+    radial-gradient(circle at 73% -12%,color-mix(in srgb,var(--accent,#8fb79b) 5%,transparent),transparent 30%),
+    radial-gradient(circle at 8% 36%,rgba(184,165,125,.035),transparent 34%),
+    linear-gradient(180deg,#0a0c0d,#0c0f0f 55%,#090b0c);
+}
+body.music-space .site-header{
+  background:rgba(8,10,10,.9);border-bottom:1px solid var(--music-line);backdrop-filter:blur(20px) saturate(92%);
+  box-shadow:0 1px 0 rgba(255,255,255,.018),0 12px 40px rgba(0,0,0,.12)
+}
+body.music-space .site-header::after{
+  content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;pointer-events:none;
+  background:linear-gradient(90deg,transparent 0 9%,var(--music-accent) 35%,color-mix(in srgb,var(--music-accent) 38%,transparent) 65%,transparent 91%);opacity:.46
+}
+body.music-space .site-header .brand,body.music-space .main-nav a{color:#aaa69d}
+body.music-space .main-nav a.is-active{color:#f2ede3!important;box-shadow:none;background:transparent}
+body.music-space .nav-appearance-button,body.music-space .nav-presentation-button,body.music-space .background-view-button{color:#aaa69d;background:transparent;border-color:var(--music-line)}
+body.music-space .app-shell{max-width:1320px;padding:54px 44px 96px}
+body.music-space .scene-art{opacity:.12!important;mix-blend-mode:luminosity;filter:saturate(.45) contrast(1.06)}
+body.music-space.background-only .scene-art{opacity:.62!important;mix-blend-mode:normal;filter:none}
+
+.music-page{color:var(--music-ink)}
+.music-masthead{
+  color:#8f8a81;border-color:var(--music-line);padding-bottom:15px;
+  font-family:ui-sans-serif,system-ui,sans-serif;font-size:.61rem;letter-spacing:.19em;text-transform:uppercase
+}
+.music-masthead span:last-child{color:var(--music-accent)}
+.music-intro{grid-template-columns:1.25fr .9fr;gap:86px;padding:76px 0 82px}
+.music-small{color:var(--music-accent);font-size:.62rem;letter-spacing:.22em;text-transform:uppercase}
+.music-intro h1{
+  color:#f1ece2;font-family:Georgia,'Times New Roman',serif;font-size:clamp(3.8rem,7.8vw,7.8rem);
+  font-weight:500;line-height:.92;letter-spacing:-.058em;margin:25px 0 30px;text-wrap:balance
+}
+.music-intro h2{color:#d8d1c4;font-size:clamp(1.35rem,2.25vw,2rem);line-height:1.28}
+.music-intro-copy{color:var(--music-muted);opacity:1;font-size:.93rem;line-height:1.9}
+.music-text-link{
+  color:#d2cabc;border-color:color-mix(in srgb,var(--music-accent) 46%,var(--music-line));
+  padding:10px 0;font-size:.71rem;letter-spacing:.09em;text-transform:uppercase
+}
+.music-text-link:hover{color:#fff0; color:#f4efe5;border-color:var(--music-accent)}
+
+/* Pieza destacada: funda de disco sobria en vez de papel claro. */
+.music-featured{
+  padding:13px 13px 0;transform:rotate(1deg);
+  background:linear-gradient(145deg,#171a18,#101311);
+  border:1px solid var(--music-line);box-shadow:0 24px 64px rgba(0,0,0,.34),0 0 0 1px rgba(255,255,255,.015)
+}
+.record-art{background:#090b0b;border:1px solid rgba(218,207,186,.08)}
+.record-disc{background:repeating-radial-gradient(circle at center,#101211 0 2px,#292b27 3px 4px);box-shadow:14px 18px 30px #0009}
+.record-disc:before{background:var(--music-accent)}
+.record-disc:after{background:#ddd2be;border-color:#171916}
+.record-disc span{color:#eee4d3}
+.record-corner{color:#efe8da;background:#0a0c0bd9;border:1px solid rgba(239,232,218,.12)}
+.music-featured-caption{padding:17px 3px 20px}
+.music-featured-caption>span{color:var(--music-accent);letter-spacing:.22em}
+.music-featured-caption strong{color:#ede7dc;font-weight:500}
+.music-featured-caption small{color:#9d978d;opacity:1}
+
+.music-shelf{border-color:var(--music-line);padding-top:27px}
+.music-shelf-head h2{color:#dfd8cc;font-weight:500}
+.music-shelf-head h2 span{color:#77736c;opacity:1}
+.music-shelf-head h2 small{color:#8f8a82}
+.music-search input{color:#ded8cd;border-color:var(--music-line);letter-spacing:.02em}
+.music-search input::placeholder{color:#77736c}
+.music-search input:focus{outline:none;border-color:var(--music-accent)}
+.music-search-count{color:#827e76}
+
+/* Catálogo: cada pieza como entrada de colección, sin tarjetas de app. */
+.music-grid{gap:42px 30px}
+.music-card{position:relative;border-color:var(--music-line);padding-bottom:22px}
+.music-card::after{
+  content:"";position:absolute;left:0;right:100%;bottom:-1px;height:1px;background:var(--music-accent);transition:right .24s ease
+}
+.music-card:hover::after{right:0}
+.music-card .record-art{box-shadow:0 16px 38px rgba(0,0,0,.22)}
+.music-card-meta{color:var(--music-accent);font-size:.58rem;letter-spacing:.11em}
+.music-card h2{color:#ece6dc;font-weight:500;font-size:1.48rem}
+.music-card p{color:#9e998f;opacity:1;line-height:1.76}
+.music-card-link{color:#c6bfb3;font-size:.67rem;letter-spacing:.06em;text-transform:uppercase}
+.music-card:hover .music-card-link{color:#eee8dd}
+.music-empty>span{color:var(--music-accent)}
+.music-empty h3{color:#e8e1d5;font-weight:500}
+.music-empty p{color:#9d978d;opacity:1}
+.music-colophon{border-color:var(--music-line);color:#7f7b74}
+
+/* Ficha individual de una pieza. */
+.music-detail-hero{gap:72px;padding:65px 0 70px}
+.music-detail-art{
+  border:1px solid var(--music-line);padding:10px;background:#101311;
+  box-shadow:0 24px 66px rgba(0,0,0,.34);transform:rotate(-.45deg)
+}
+.music-detail-heading h1{color:#f0eae0;font-weight:500;letter-spacing:-.044em}
+.music-deck{color:#b6afa3;opacity:1;font-size:1.05rem;line-height:1.72}
+.music-credits{border-top:1px solid var(--music-line);border-bottom:1px solid var(--music-line);padding:17px 0;margin:25px 0}
+.music-credits span{color:#c9c2b6}
+.music-credits small{color:#7e7a73;opacity:1;letter-spacing:.17em}
+.music-play-button{
+  color:#eee9df;background:transparent;border:1px solid color-mix(in srgb,var(--music-accent) 55%,var(--music-line));
+  padding:14px 24px;border-radius:2px;font-size:.71rem;letter-spacing:.1em;text-transform:uppercase;transition:background .18s,color .18s,border-color .18s
+}
+.music-play-button:hover{background:color-mix(in srgb,var(--music-accent) 12%,transparent);border-color:var(--music-accent);color:#fff}
+.music-tags span{color:#9d978e;border-color:var(--music-line);padding:6px 9px;border-radius:1px}
+.music-essay-layout{border-color:var(--music-line);gap:54px}
+.music-margin-note{color:#8f8a81}.music-margin-note>span{color:var(--music-accent)}
+.music-essay :is(.review-section,.review-verdict){border-color:var(--music-line)!important}
+.music-essay .review-section-head{color:#d9d2c6;font-weight:500}
+.music-essay :is(.review-copy p,.review-verdict-body){color:#cac3b8!important;font-weight:400}
+.music-essay .review-copy strong,.music-essay .review-verdict-body strong{color:#f0e9df!important}
+.music-essay .review-section-nav{border-color:var(--music-line)}
+.music-essay .review-section-nav-button{color:#aaa49a;border-color:var(--music-line);border-radius:1px}
+.music-essay .review-section-nav-button:hover,.music-essay .review-section-nav-button.is-active{color:#eee8de;background:rgba(255,255,255,.025);border-color:color-mix(in srgb,var(--music-accent) 42%,var(--music-line))}
+.music-next{border-color:var(--music-line)}
+.music-next a{color:#a9a399}.music-next a:hover{color:#eee8de}.music-next small{color:var(--music-accent)}.music-next strong{font-weight:500}
+
+/* El reproductor pasa de tocadiscos de papel a pequeño mueble fonográfico oscuro. */
+body.music-space #player{
+  color:#e8e2d8;background:linear-gradient(155deg,rgba(18,21,19,.98),rgba(9,11,11,.98));
+  border:1px solid var(--music-line);border-radius:3px;box-shadow:0 20px 62px rgba(0,0,0,.42);padding:16px
+}
+body.music-space #player::before{
+  background:
+    radial-gradient(circle,#d8ccb7 0 2.5%,#292823 3% 5%,transparent 5.5%),
+    radial-gradient(circle,transparent 0 13%,rgba(223,210,187,.38) 13.5% 14%,transparent 14.5%),
+    radial-gradient(circle,var(--music-accent) 0 28%,transparent 29%),
+    repeating-radial-gradient(circle,transparent 0 2px,rgba(208,194,168,.08) 2.5px 3px,transparent 3.5px 4px),
+    conic-gradient(from 25deg,#171916,#3a3a34 15%,#171916 27%,#111310 52%,#414039 66%,#111310 80%,#171916);
+  box-shadow:0 7px 18px rgba(0,0,0,.42),inset 0 0 0 1px #070908
+}
+body.music-space #player .music-widget-title{color:#ece6dc;font-weight:500}
+body.music-space #player .music-widget-game{color:#8f8a82;opacity:1}
+body.music-space #player :is(.music-widget-volume,.music-widget-times,.music-time-separator,#playerCurrentTime){color:#9b958b}
+body.music-space #player .range{accent-color:var(--music-accent)}
+body.music-space #player :is(.theme-info-button,.mobile-music-toggle-button){color:#c9c2b6;background:transparent;border:1px solid var(--music-line);border-radius:2px}
+body.music-space #player :is(.theme-info-button,.mobile-music-toggle-button):hover{color:#f1ebe0;background:rgba(255,255,255,.025);border-color:var(--music-accent)}
+
+/* La ficha profunda deja también el papel claro. */
+body.music-space .theme-info-modal.is-resonance-info{background:rgba(0,0,0,.7);backdrop-filter:blur(14px) saturate(75%)}
+body.music-space .theme-info-panel.is-resonance-info{
+  --paper:#0d100f;--ink:#ece6dc;--accent:var(--music-accent);--paper-muted:#aaa398;
+  color:var(--ink);background:
+    radial-gradient(circle at 90% 4%,color-mix(in srgb,var(--music-accent) 5%,transparent),transparent 28%),
+    radial-gradient(circle at 6% 87%,rgba(184,165,125,.028),transparent 32%),
+    linear-gradient(180deg,#101311,#0b0e0d);
+  border:1px solid var(--music-line);border-radius:3px;box-shadow:0 30px 100px rgba(0,0,0,.55)
+}
+body.music-space .theme-info-panel.is-resonance-info .theme-info-close{color:#c9c2b7;background:transparent;border-color:var(--music-line);border-radius:2px;box-shadow:none}
+body.music-space .theme-info-panel.is-resonance-info .theme-info-close:hover{color:#fff;border-color:var(--music-accent);background:rgba(255,255,255,.02)}
+body.music-space .theme-info-panel.is-resonance-info .resonance-info-kicker,
+body.music-space .theme-info-panel.is-resonance-info .resonance-info-facts dt{color:var(--music-accent)}
+body.music-space .theme-info-panel.is-resonance-info .resonance-info-head h2,
+body.music-space .theme-info-panel.is-resonance-info .resonance-paper-section h3{color:#eee8dd}
+body.music-space .theme-info-panel.is-resonance-info .resonance-info-game,
+body.music-space .theme-info-panel.is-resonance-info .resonance-info-facts dd,
+body.music-space .theme-info-panel.is-resonance-info .resonance-paper-section p,
+body.music-space .theme-info-panel.is-resonance-info .resonance-curiosities ul{color:#aaa399}
+body.music-space .theme-info-panel.is-resonance-info .resonance-info-head blockquote{color:#c9b99c}
+body.music-space .theme-info-panel.is-resonance-info .resonance-info-left,
+body.music-space .theme-info-panel.is-resonance-info .resonance-paper-section,
+body.music-space .theme-info-panel.is-resonance-info .resonance-info-footer{border-color:var(--music-line)}
+body.music-space .theme-info-panel.is-resonance-info .resonance-paper-section h3{border-bottom-color:color-mix(in srgb,var(--music-accent) 70%,transparent)}
+body.music-space .theme-info-panel.is-resonance-info .resonance-tags span{color:#bfb6a8;border-color:var(--music-line);background:rgba(255,255,255,.018);border-radius:1px}
+body.music-space .theme-info-panel.is-resonance-info{scrollbar-color:var(--music-accent) #121512}
+body.music-space .theme-info-panel.is-resonance-info::-webkit-scrollbar-track{background:#121512}
+body.music-space .theme-info-panel.is-resonance-info::-webkit-scrollbar-thumb{background:var(--music-accent);border:2px solid #121512}
+
+.music-essay .review-render-root :is(.review-copy,.review-copy p,.review-copy strong,.review-copy em,.review-verdict-body){color:#cac3b8;text-shadow:none}
+.music-essay .review-render-root .review-section-head{color:#d9d2c6}
+.music-essay .review-render-root .review-section-nav-button:hover,.music-essay .review-render-root .review-section-nav-button.is-active{color:#eee8de;background:rgba(255,255,255,.025)}
+body.music-space.mobile-performance .site-header{background:rgba(8,10,10,.94)!important}
+
+@media(max-width:900px){
+  .music-intro{gap:38px;padding-block:50px}.music-detail-hero{gap:38px}
+}
+@media(max-width:760px){
+  body.music-space .app-shell{padding:36px 20px 108px}
+  .music-intro{padding:38px 0 44px}.music-featured{transform:none}
+  .music-detail-art{transform:none}
+  body.music-space #player{border-radius:3px}
+}
+
+
+/* ============================================================
+   v5.6.4 · FONOTECA — ficha “Más información sobre esta pieza”
+   Integración definitiva con la estética elegante/caballerosa.
+   Fuerza overrides porque la versión editorial antigua tenía reglas
+   con !important en styles.css.
+   ============================================================ */
+body.music-space .theme-info-modal.is-resonance-info{
+  background:rgba(2,4,5,.78)!important;
+  backdrop-filter:blur(16px) saturate(72%)!important;
+}
+body.music-space .theme-info-panel.is-resonance-info,
+body.music-space[data-ui-theme] .theme-info-panel.is-resonance-info{
+  --res-ink:#efe9dd;
+  --res-muted:#aaa395;
+  --res-line:rgba(220,209,186,.13);
+  --res-line-strong:rgba(220,209,186,.22);
+  --res-deep:#0b0e0e;
+  --res-surface:#101413;
+  --res-surface-2:#141918;
+  --res-accent:color-mix(in srgb,var(--music-accent) 72%,var(--gentle-brass,#b99a62));
+  color:var(--res-ink)!important;
+  font-family:Georgia,'Times New Roman',serif!important;
+  border:1px solid var(--res-line)!important;
+  border-radius:4px!important;
+  background:
+    radial-gradient(circle at 84% 8%,color-mix(in srgb,var(--res-accent) 7%,transparent),transparent 26%),
+    radial-gradient(circle at 12% 82%,rgba(255,255,255,.028),transparent 31%),
+    linear-gradient(180deg,var(--res-surface-2),var(--res-deep) 58%,#090b0c)!important;
+  box-shadow:0 36px 110px rgba(0,0,0,.56), 0 0 0 1px rgba(255,255,255,.018) inset!important;
+  scrollbar-color:var(--res-accent) #101312!important;
+}
+body.music-space .theme-info-panel.is-resonance-info::before{
+  content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;z-index:0;
+  background:
+    linear-gradient(90deg,rgba(255,255,255,.03),transparent 12%,transparent 88%,rgba(255,255,255,.02)),
+    linear-gradient(180deg,rgba(255,255,255,.015),transparent 18%,transparent 84%,rgba(255,255,255,.012));
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.01), inset 0 1px 0 rgba(255,255,255,.03);
+}
+body.music-space .theme-info-panel.is-resonance-info > *{position:relative;z-index:1}
+body.music-space .theme-info-panel.is-resonance-info .theme-info-close{
+  color:#d1cabb!important;
+  background:rgba(255,255,255,.018)!important;
+  border:1px solid var(--res-line)!important;
+  border-radius:2px!important;
+  box-shadow:none!important;
+}
+body.music-space .theme-info-panel.is-resonance-info .theme-info-close:hover{
+  color:#fff!important;
+  background:rgba(255,255,255,.04)!important;
+  border-color:color-mix(in srgb,var(--res-accent) 65%,var(--res-line))!important;
+}
+body.music-space .theme-info-panel.is-resonance-info .resonance-info-head{
+  border-bottom:1px solid var(--res-line-strong)!important;
+  padding-bottom:22px!important;
+}
+body.music-space .theme-info-panel.is-resonance-info .resonance-info-kicker,
+body.music-space .theme-info-panel.is-resonance-info .resonance-info-facts dt{
+  color:var(--res-accent)!important;
+  font-family:Arial,Helvetica,sans-serif!important;
+  letter-spacing:.16em!important;
+}
+body.music-space .theme-info-panel.is-resonance-info .resonance-info-kicker:before{background:var(--res-accent)!important}
+body.music-space .theme-info-panel.is-resonance-info .resonance-info-head h2{
+  color:var(--res-ink)!important;
+  text-shadow:none!important;
+}
+body.music-space .theme-info-panel.is-resonance-info .resonance-info-game,
+body.music-space .theme-info-panel.is-resonance-info .resonance-info-facts dd,
+body.music-space .theme-info-panel.is-resonance-info .resonance-paper-section p,
+body.music-space .theme-info-panel.is-resonance-info .resonance-curiosities ul{
+  color:var(--res-muted)!important;
+}
+body.music-space .theme-info-panel.is-resonance-info .resonance-info-head blockquote{
+  color:color-mix(in srgb,var(--res-accent) 82%,#f1dfc0)!important;
+  font-style:italic!important;
+}
+body.music-space .theme-info-panel.is-resonance-info .resonance-info-left{
+  border-right:1px solid var(--res-line)!important;
+}
+body.music-space .theme-info-panel.is-resonance-info .resonance-paper-section,
+body.music-space .theme-info-panel.is-resonance-info .resonance-info-footer{
+  border-top:1px solid var(--res-line)!important;
+  border-color:var(--res-line)!important;
+  background:none!important;
+}
+body.music-space .theme-info-panel.is-resonance-info .resonance-paper-section h3{
+  display:inline-block!important;
+  color:var(--res-ink)!important;
+  border-bottom:1px solid color-mix(in srgb,var(--res-accent) 78%,transparent)!important;
+  padding-bottom:7px!important;
+}
+body.music-space .theme-info-panel.is-resonance-info .resonance-info-cover{
+  border:1px solid rgba(255,255,255,.07)!important;
+  box-shadow:0 24px 54px rgba(0,0,0,.34)!important;
+}
+body.music-space .theme-info-panel.is-resonance-info .resonance-tags span{
+  color:#cdc4b6!important;
+  background:rgba(255,255,255,.022)!important;
+  border:1px solid var(--res-line)!important;
+  border-radius:1px!important;
+}
+body.music-space .theme-info-panel.is-resonance-info .resonance-curiosities li::marker,
+body.music-space .theme-info-panel.is-resonance-info .resonance-info-footer{color:var(--res-accent)!important}
+body.music-space .theme-info-panel.is-resonance-info .resonance-info-footer span:before{
+  background:color-mix(in srgb,var(--res-accent) 52%,transparent)!important;
+}
+body.music-space .theme-info-panel.is-resonance-info::-webkit-scrollbar{width:10px}
+body.music-space .theme-info-panel.is-resonance-info::-webkit-scrollbar-track{
+  background:#101312!important;border-radius:999px!important;
+}
+body.music-space .theme-info-panel.is-resonance-info::-webkit-scrollbar-thumb{
+  background:var(--res-accent)!important;border:2px solid #101312!important;border-radius:999px!important;
+}
+body.music-space .theme-info-panel.is-resonance-info::-webkit-scrollbar-thumb:hover{filter:brightness(1.08)}
+@media(max-width:900px){
+  body.music-space .theme-info-panel.is-resonance-info .resonance-info-left{
+    border-right:0!important;border-bottom:1px solid var(--res-line)!important;
+  }
+}

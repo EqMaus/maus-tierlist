@@ -1,0 +1,4 @@
+v5.6.6
+- Corregida la barra iluminada fija de los sliders del reproductor de reviews.
+- Progreso y volumen actualizan dinámicamente --range-fill según su valor real.
+- Sin cambios visuales adicionales ni cambios de contenido.

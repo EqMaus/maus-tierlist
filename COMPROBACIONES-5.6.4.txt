@@ -1,0 +1,4 @@
+v5.6.4
+- La ficha "Más información sobre esta pieza" de Fonoteca ahora usa estética elegante oscura.
+- El rótulo interno cambia de RESONANCIAS a FONOTECA.
+- Solo se han tocado js/app.js, css/music-library.css, index.html, admin.html y version.json.

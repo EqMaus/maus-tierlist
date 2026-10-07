@@ -1,0 +1,4 @@
+v5.6.5
+- Reproductor musical de reviews retocado para la estética elegante.
+- Sliders personalizados (seek y volumen), tiempos y botones revisados.
+- Sin cambios en contenido de juegos, reviews o Fonoteca.

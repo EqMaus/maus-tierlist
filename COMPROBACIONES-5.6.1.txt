@@ -1,0 +1,8 @@
+MAUS TIER LIST v5.6.1 — Fonoteca integrada
+
+- Partiendo de v5.6.0 elegante.
+- Fonoteca adopta el mismo lenguaje visual oscuro, editorial y caballeroso.
+- Se conserva la estructura y funcionalidad de la Fonoteca.
+- Rediseñados portada, catálogo, ficha de pieza, ensayo, reproductor y ficha profunda musical.
+- Los colores del tema siguen actuando como acento.
+- MAUS_GAMES / MAUS_ONLINE_GAMES / MAUS_SCALE y contenido musical no se modifican.
