@@ -201,7 +201,11 @@
           "La nota a día de hoy es un 8.5."
         ]
       }
-    ]
+    ],
+    "coverPosition": {
+      "x": 17.3,
+      "y": 47.6
+    }
   },
   {
     "id": "gow3",
@@ -547,7 +551,11 @@
           "Nota: 7 — Bastante bueno / Muy bueno. (De momento lo dejo en 7 y ya veremos en un futuro). Juego muy ágil, muy disfrutable y con un ritmo de la hostia. No tiene mucha tensión ni enemigos memorables, pero se juega de lujo y te lo pasas genial. Muy por encima del RE1 en sensaciones."
         ]
       }
-    ]
+    ],
+    "coverPosition": {
+      "x": 38.2,
+      "y": 49.7
+    }
   },
   {
     "id": "re4-og",
@@ -714,7 +722,11 @@
           "Nota: 7 — Muy bueno No es un juego especialmente refinado ni uno de los mejores que he jugado, pero sí uno con muchísimo encanto."
         ]
       }
-    ]
+    ],
+    "coverPosition": {
+      "x": 77.7,
+      "y": 54.8
+    }
   },
   {
     "id": "re3-remake",
@@ -919,7 +931,11 @@
           "Un 2.5"
         ]
       }
-    ]
+    ],
+    "coverPosition": {
+      "x": 49.6,
+      "y": 53.8
+    }
   },
   {
     "id": "pokemon-black",
@@ -971,7 +987,11 @@
           "Un 3"
         ]
       }
-    ]
+    ],
+    "coverPosition": {
+      "x": 80.5,
+      "y": 50.3
+    }
   },
   {
     "id": "twilight-princess",
@@ -1157,7 +1177,11 @@
       "src": "assets/audio/medievil-2-theme-v5-4-5.mp3"
     },
     "cover": "assets/covers/medievil-2-v5-4-5.jpg",
-    "background": "assets/backgrounds/medievil-2-bg-v5-4-5.webp"
+    "background": "assets/backgrounds/medievil-2-bg-v5-4-5.webp",
+    "coverPosition": {
+      "x": 45.9,
+      "y": 50
+    }
   }
 ];
 
