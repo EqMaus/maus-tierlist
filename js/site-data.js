@@ -366,7 +366,11 @@
           "**8/10 — Increíble****Muy igualado con God of War 1 y un escalón por debajo de God of War 2.**"
         ]
       }
-    ]
+    ],
+    "coverPosition": {
+      "x": 48.5,
+      "y": 35.2
+    }
   },
   {
     "id": "gow1",
@@ -1100,7 +1104,7 @@
     ],
     "coverPosition": {
       "x": 49.6,
-      "y": 53.8
+      "y": 54.6
     }
   },
   {
@@ -1155,7 +1159,7 @@
       }
     ],
     "coverPosition": {
-      "x": 80.5,
+      "x": 70.4,
       "y": 50.3
     }
   },
