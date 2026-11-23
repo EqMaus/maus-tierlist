@@ -1,5 +1,5 @@
 @echo off
-setlocal EnableExtensions
+setlocal EnableExtensions EnableDelayedExpansion
 chcp 65001 >nul
 cd /d "%~dp0"
 
@@ -222,7 +222,7 @@ if defined HAS_CHANGES (
     exit /b 1
   )
 
-  git commit -m "%COMMIT_MSG%"
+  git commit -m "!COMMIT_MSG!"
   if errorlevel 1 (
     echo.
     echo ERROR: No se pudo crear el commit.
