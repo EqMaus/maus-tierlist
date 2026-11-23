@@ -21,6 +21,16 @@
     return html;
   }
 
+  // Paragraphs can be separated with a blank line or legacy U+2800 spacer.
+  // A single newline stays a soft line break (Shift+Enter).
+  function splitParagraphs(value) {
+    const normalized = String(value ?? '')
+      .replace(/\r/g, '')
+      .replace(/(?:^|\n)[ \t]*\u2800[ \t]*(?=\n|$)/g, '\n')
+      .trim();
+    return normalized ? normalized.split(/\n[ \t]*\n+/).map((part) => part.trim()).filter(Boolean) : [];
+  }
+
   function normalizeSections(sections) {
     if (!Array.isArray(sections)) return [];
     return sections.map((section, index) => {
@@ -28,10 +38,10 @@
       const verdict = Boolean(section.verdict);
       const title = verdict ? 'Veredicto final' : String(section.title || `Sección ${index + 1}`).trim();
       let paragraphs = Array.isArray(section.paragraphs)
-        ? section.paragraphs.map((paragraph) => String(paragraph || '').replace(/\r/g, '').trim()).filter(Boolean)
+        ? section.paragraphs.flatMap(splitParagraphs)
         : [];
       if (!paragraphs.length && section.text) {
-        paragraphs = String(section.text).replace(/\r/g, '').split(/\n\s*\n/).map((part) => part.trim()).filter(Boolean);
+        paragraphs = splitParagraphs(section.text);
       }
       if (!paragraphs.length) return null;
       return { title, verdict, paragraphs };
@@ -98,6 +108,7 @@
     slug,
     inlineMarkdown,
     normalizeSections,
+    splitParagraphs,
     render,
     legacyText,
     sectionId

@@ -861,9 +861,9 @@ const ADMIN_CURATED_REVIEW_SPECS = {
       return game.reviewSections.map((section, index) => {
         const verdict = Boolean(section?.verdict);
         let paragraphs = Array.isArray(section?.paragraphs)
-          ? section.paragraphs.map((paragraph) => String(paragraph || '').trim()).filter(Boolean)
+          ? section.paragraphs.flatMap((paragraph) => window.MausReviewRenderer?.splitParagraphs(paragraph) || [String(paragraph || '').trim()].filter(Boolean))
           : [];
-        if (!paragraphs.length && section?.text) paragraphs = proseParagraphs(section.text);
+        if (!paragraphs.length && section?.text) paragraphs = window.MausReviewRenderer?.splitParagraphs(section.text) || proseParagraphs(section.text);
         if (!paragraphs.length) paragraphs = [''];
         return {
           title: verdict ? 'Veredicto final' : String(section?.title || `Sección ${index + 1}`).trim(),
@@ -2564,6 +2564,36 @@ const ADMIN_CURATED_REVIEW_SPECS = {
   reviewVisualEditor?.addEventListener('keyup', () => {
     rememberReviewSelection();
     positionReviewFloatingToolbar();
+  });
+
+  // Paste separate paragraphs as separate editable elements, not as one block.
+  reviewVisualEditor?.addEventListener('paste', (event) => {
+    const paragraph = event.target.closest('[data-review-paragraph]');
+    const raw = event.clipboardData?.getData('text/plain');
+    if (!paragraph || !raw) return;
+    const incoming = window.MausReviewRenderer?.splitParagraphs(raw) || [];
+    if (incoming.length < 2) return;
+    const selection = window.getSelection();
+    const range = selection?.rangeCount ? selection.getRangeAt(0) : null;
+    if (!range || !paragraph.contains(range.commonAncestorContainer)) return;
+
+    const beforeRange = document.createRange();
+    beforeRange.selectNodeContents(paragraph);
+    beforeRange.setEnd(range.startContainer, range.startOffset);
+    const afterRange = document.createRange();
+    afterRange.selectNodeContents(paragraph);
+    afterRange.setStart(range.endContainer, range.endOffset);
+    const before = fragmentToMarkdown(beforeRange.cloneContents());
+    const after = fragmentToMarkdown(afterRange.cloneContents());
+    const sectionIndex = Number(paragraph.closest('[data-review-section]')?.dataset.reviewSection);
+    const paragraphIndex = Number(paragraph.dataset.reviewParagraph);
+    if (!Number.isFinite(sectionIndex) || !Number.isFinite(paragraphIndex)) return;
+
+    event.preventDefault();
+    const replacements = [before + incoming[0], ...incoming.slice(1, -1), incoming[incoming.length - 1] + after];
+    mutateVisualSections((sections) => {
+      sections[sectionIndex]?.paragraphs.splice(paragraphIndex, 1, ...replacements);
+    }, { section: sectionIndex, paragraph: paragraphIndex + replacements.length - 1 });
   });
 
   reviewVisualEditor?.addEventListener('input', (event) => {
